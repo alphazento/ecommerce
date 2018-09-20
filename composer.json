@@ -28,7 +28,7 @@
         },
         "laravel": {
             "providers": [
-                "\\Zento\\eCommerce\\PaymentGateway\\Providers\\Entry"
+                "\\Zento\\PaymentGateway\\Providers\\Main"
             ],
             "aliases": {
             },
