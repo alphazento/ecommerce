@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "alphazento/zento": "dev-master",
+        "alphazento/zento": "dev-master"
     },
     "autoload": {
         "psr-4": {
