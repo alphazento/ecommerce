@@ -1,0 +1,44 @@
+{
+    "name": "alphazento/ecommerce",
+    "description": "A zento ecommerce framework base on Laravel",
+    "keywords": ["laravel", "alphazento", "ecommerce"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yongcheng Chen",
+            "email": "yongcheng.chen@live.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "alphazento/zento": "dev-master",
+    },
+    "autoload": {
+        "psr-4": {
+            "Zento\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "\\Zento\\eCommerce\\PaymentGateway\\Providers\\Entry"
+            ],
+            "aliases": {
+            },
+            "zento": {
+                "Zento_PaymentGateway":{
+                    "version" : "0.0.1",
+                    "commands" : [
+                    ]
+                }
+            }
+        }
+    }
+}
