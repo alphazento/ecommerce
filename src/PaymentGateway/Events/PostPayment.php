@@ -2,7 +2,7 @@
 
 namespace Zento\PaymentGateway\Events;
 
-class PrePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
+class PostPayment extends \Zento\Kernel\Booster\Events\BaseEvent {
     public $method;
     public $data;
     /**
