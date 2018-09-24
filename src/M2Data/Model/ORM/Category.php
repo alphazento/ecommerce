@@ -10,7 +10,7 @@ use Zento\M2Data\Model\ORM\Eavs\Category\CategoryVarcharAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Category\CategoryDatetimeAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Category\CategoryDecimalAttribute;
 
-class Category extends \Illuminate\Database\Eloquent\Model
+class Category extends Magento2Model
 {
     protected $table = 'catalog_category_entity';
     protected $primaryKey = 'entity_id';
@@ -31,7 +31,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany(CategoryDatetimeAttribute::class, 'entity_id');
     }
 
-    public function decimaltimeattrs() {
+    public function decimalattrs() {
         return $this->hasMany(CategoryDecimalAttribute::class, 'entity_id');
     }
 }

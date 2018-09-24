@@ -4,7 +4,7 @@ namespace Zento\M2Data\Model\ORM\Eavs;
 
 use Zento\M2Data\Model\ORM\EavAttribute;
 
-class AttrBase  extends \Illuminate\Database\Eloquent\Model
+class AttrBase  extends \Zento\M2Data\Model\ORM\Magento2Model
 {
     protected $primaryKey = 'value_id';
     public function codedesc() {
