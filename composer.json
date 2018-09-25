@@ -38,9 +38,10 @@
                     "commands" : [
                     ]
                 },
-		"Zento_Catalog":{
+		        "Zento_Catalog":{
                     "version" : "0.0.1",
                     "commands" : [
+                        "\\Zento\\M2Data\\Console\\Commands\\M2Migrate"
                     ]
                 }
             }

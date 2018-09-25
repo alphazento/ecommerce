@@ -31,8 +31,8 @@ class M2Migrate extends \Zento\Kernel\PackageManager\Console\Commands\Base
      */
     public function handle()
     {
-        // $seeder = new \Zento\M2Data\Seeders\CategorySeeder();
-        // $seeder->run();
+        $seeder = new \Zento\M2Data\Seeders\CategorySeeder();
+        $seeder->run();
 
         $seeder = new \Zento\M2Data\Seeders\ProductSeeder();
         $seeder->run();
