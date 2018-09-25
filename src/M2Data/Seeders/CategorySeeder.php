@@ -39,22 +39,15 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     $intItem->codedesc->attribute_code, ['integer'], 
                     $isSingle);
                 
+                $this->getRealType($intItem);
                 if ($intItem->value) {
-                    echo sprintf('%s code:%s value:%s' . PHP_EOL, $item->entity_id, $intItem->codedesc->attribute_code, $intItem->value);
                     DynaColumnFactory::single($category, $intItem->codedesc->attribute_code)->new($intItem->value);
                 }
             }
         }
     }
 
-    protected function getRealType($fieldType, $inputType) {
-        // DynaColumnFactory::createRelationShipORM(\Zento\Kernel\TestModel::class, 
-        //     'new_column', ['char', 32], true);
-        // DynaColumnFactory::createRelationShipORM(\Zento\Kernel\TestModel::class, 
-        //     'new_column1', ['char', 32], false);
-
-                // DynaColumnFactory::single($collection, 'new_column')->new('OKOK');
-        // DynaColumnFactory::option($collection, 'new_column1')->new('this is a test');
-        // DynaColumnFactory::option($collection, 'new_column1')->setValues(['this is a test', 'newvalue']);
+    protected function getRealType($item) {
+        echo sprintf('%s code:%s value:%s' . PHP_EOL, $item->entity_id, $item->codedesc->attribute_code, $item->value);
     }
 }

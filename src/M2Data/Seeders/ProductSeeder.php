@@ -34,16 +34,27 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                 if (!$intItem->codedesc) {
                     continue;
                 }
+                $this->getRealType($intItem);
                 $isSingle = $intItem->codedesc->front_input !== 'select';
                 DynaColumnFactory::createRelationShipORM($product,
                     $intItem->codedesc->attribute_code, ['integer'], 
                     $isSingle);
                 
                 if ($intItem->value) {
-                    echo sprintf('product %s code:%s value:%s' . PHP_EOL, $item->entity_id, $intItem->codedesc->attribute_code, $intItem->value);
                     DynaColumnFactory::single($product, $intItem->codedesc->attribute_code)->new($intItem->value);
                 }
             }
+        }
+    }
+
+    protected function getRealType($item) {
+        if ($item->codedesc->options && count(($item->codedesc->options))) {
+            // print_r($item->codedesc->options);
+            echo sprintf('product %s code:%s value:%s input[%s] option' . PHP_EOL, 
+                $item->entity_id, $item->codedesc->attribute_code, $item->value, $item->codedesc->frontend_input);
+        } else {
+            echo sprintf('product %s code:%s value:%s input[%s] single' . PHP_EOL, 
+            $item->entity_id, $item->codedesc->attribute_code, $item->value, $item->codedesc->frontend_input);
         }
     }
 }
