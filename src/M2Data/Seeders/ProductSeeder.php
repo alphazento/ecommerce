@@ -8,11 +8,14 @@ use Zento\Kernel\Facades\DynaColumnFactory;
 class ProductSeeder extends \Illuminate\Database\Seeder {
     public function run()
     {
-        $collection = \Zento\M2Data\Model\ORM\Product::with(['integerattrs.codedesc',
-            'varcharattrs.codedesc', 
-            'textattrs.codedesc',
-            'datetimeattrs.codedesc',
-            'decimalattrs.codedesc'])
+        $collection = \Zento\M2Data\Model\ORM\Product::with(
+            [
+                'integerattrs.codedesc',
+                'varcharattrs.codedesc', 
+                'textattrs.codedesc',
+                'datetimeattrs.codedesc',
+                'decimalattrs.codedesc'
+            ])
             ->get();
         foreach($collection as $item) {
             $product = Product::find($item->entity_id);
@@ -30,21 +33,43 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             $product->description = '';
             $product->save();
 
-            foreach($item->integerattrs as $intItem) {
-                if (!$intItem->codedesc) {
-                    continue;
-                }
-                $this->getRealType($intItem);
-                $isSingle = $intItem->codedesc->front_input !== 'select';
-                DynaColumnFactory::createRelationShipORM($product,
-                    $intItem->codedesc->attribute_code, ['integer'], 
-                    $isSingle);
-                
-                if ($intItem->value) {
-                    DynaColumnFactory::single($product, $intItem->codedesc->attribute_code)->new($intItem->value);
+            foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
+                $relation = $ftype .'attrs';
+                foreach($item->{$relation} ?? [] as $eavItem) {
+                    if (!$eavItem->codedesc) {
+                        continue;
+                    }
+                    $this->getRealType($eavItem);
+                    DynaColumnFactory::createRelationShipORM($product,
+                        $eavItem->codedesc->attribute_code, [$ftype], 
+                        $this->isSingleEav($eavItem->codedesc->frontend_input));
+                    
+                    if ($eavItem->value) {
+                        DynaColumnFactory::single($product, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                    }
                 }
             }
         }
+    }
+
+    protected function isSingleEav($frontend_input) {
+        switch($frontend_input) {
+            case 'text':
+            case 'hidden':
+            case 'select':
+            case 'multiline':
+            case 'textarea':
+            case 'price':
+            case 'weight':
+            case 'media_image':
+            case 'date':
+            case 'boolean':
+                return true;
+            case 'multiselect':
+            case 'gallery':
+                return false;
+        }
+        return true;
     }
 
     protected function getRealType($item) {
