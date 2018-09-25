@@ -15,7 +15,10 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             'decimalattrs.codedesc'])
             ->get();
         foreach($collection as $item) {
-            $product = new Product();
+            $product = Product::find($item->entity_id);
+            if (!$product) {
+                $product = new Product();
+            }
             $product->id = $item->entity_id;
             $product->dynacolumn_set_id = $item->attribute_set_id;
             $product->type_id = $item->type_id;
@@ -25,7 +28,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             $product->active = true;
             $product->name = 'product' . $product->id;
             $product->description = '';
-            // $product->save();
+            $product->save();
 
             foreach($item->integerattrs as $intItem) {
                 if (!$intItem->codedesc) {

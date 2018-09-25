@@ -15,7 +15,10 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             'decimalattrs.codedesc'])
             ->get();
         foreach($collection as $item) {
-            $category = new Category();
+            $category = Category::find($item->entity_id);
+            if (!$category) {
+                $category = new Category();
+            }
             $category->id = $item->entity_id;
             $category->dynacolumn_set_id = $item->attribute_set_id;
             $category->parent_id = $item->parent_id;
@@ -28,7 +31,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             $category->name = 'category' . $category->id;
             $category->image = '';
             $category->description = '';
-            // $category->save();
+            $category->save();
 
             foreach($item->integerattrs as $intItem) {
                 $isSingle = $intItem->codedesc->front_input !== 'select';
