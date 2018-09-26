@@ -8,7 +8,7 @@ use Store;
 use PrinterCategory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Product
+class ProductService
 {
 
     const CURRENT_FREE_SHIPPING_CONFIGS = 'sales/free_shipping/%/active';

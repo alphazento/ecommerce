@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\M2Data\Model\ORM;
+namespace Zento\M2Data\Model\ORM\Catalog;
 
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
@@ -10,7 +10,7 @@ use Zento\M2Data\Model\ORM\Eavs\Product\ProductVarcharAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Product\ProductDatetimeAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Product\ProductDecimalAttribute;
 
-class Product extends Magento2Model
+class Product extends \Zento\M2Data\Model\ORM\Magento2Model
 {
     protected $table = 'catalog_product_entity';
     protected $primaryKey = 'entity_id';

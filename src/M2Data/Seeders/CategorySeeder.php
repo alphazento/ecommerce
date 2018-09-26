@@ -6,9 +6,11 @@ use Zento\Catalog\Model\ORM\Category;
 use Zento\Kernel\Facades\DynaColumnFactory;
 
 class CategorySeeder extends \Illuminate\Database\Seeder {
+    use TraitEavHelper;
+
     public function run()
     {
-        $collection = \Zento\M2Data\Model\ORM\Category::with(['integerattrs.codedesc',
+        $collection = \Zento\M2Data\Model\ORM\Catalog\Category::with(['integerattrs.codedesc',
             'varcharattrs.codedesc', 
             'textattrs.codedesc',
             'datetimeattrs.codedesc',
@@ -30,24 +32,27 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             $category->active = true;
             $category->name = 'category' . $category->id;
             $category->image = '';
-            $category->description = '';
             $category->save();
 
-            foreach($item->integerattrs as $intItem) {
-                $isSingle = $intItem->codedesc->front_input !== 'select';
-                DynaColumnFactory::createRelationShipORM($category,
-                    $intItem->codedesc->attribute_code, ['integer'], 
-                    $isSingle);
-                
-                $this->getRealType($intItem);
-                if ($intItem->value) {
-                    DynaColumnFactory::single($category, $intItem->codedesc->attribute_code)->new($intItem->value);
+            foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
+                $relation = $ftype .'attrs';
+                foreach($item->{$relation} ?? [] as $eavItem) {
+                    if (!$eavItem->codedesc) {
+                        continue;
+                    }
+                    if ($eavItem->codedesc->attribute_code == 'name') {
+                        $category->name = $eavItem->value;
+                        $category->update();
+                    }
+                    DynaColumnFactory::createRelationShipORM($category,
+                        $eavItem->codedesc->attribute_code, [$ftype], 
+                        $this->isSingleEav($eavItem->codedesc->frontend_input));
+                    
+                    if ($eavItem->value) {
+                        DynaColumnFactory::single($category, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                    }
                 }
             }
         }
-    }
-
-    protected function getRealType($item) {
-        echo sprintf('%s code:%s value:%s' . PHP_EOL, $item->entity_id, $item->codedesc->attribute_code, $item->value);
     }
 }

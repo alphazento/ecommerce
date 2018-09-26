@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\M2Data\Model\ORM;
+namespace Zento\M2Data\Model\ORM\Catalog;
 
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
@@ -10,7 +10,7 @@ use Zento\M2Data\Model\ORM\Eavs\Category\CategoryVarcharAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Category\CategoryDatetimeAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Category\CategoryDecimalAttribute;
 
-class Category extends Magento2Model
+class Category extends \Zento\M2Data\Model\ORM\Magento2Model
 {
     protected $table = 'catalog_category_entity';
     protected $primaryKey = 'entity_id';

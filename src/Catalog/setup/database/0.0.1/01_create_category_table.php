@@ -24,7 +24,6 @@ class CreateCategoryTable extends Migration
             $table->boolean('active');
             $table->string('name', 255);
             $table->string('image')->nullable();
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

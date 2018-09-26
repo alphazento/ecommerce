@@ -21,7 +21,6 @@ class CreateProductTable extends Migration
             $table->boolean('active');
             $table->string('sku', 255);
             $table->string('name', 255);
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -6,9 +6,11 @@ use Zento\Catalog\Model\ORM\Product;
 use Zento\Kernel\Facades\DynaColumnFactory;
 
 class ProductSeeder extends \Illuminate\Database\Seeder {
+    use TraitEavHelper;
+
     public function run()
     {
-        $collection = \Zento\M2Data\Model\ORM\Product::with(
+        $collection = \Zento\M2Data\Model\ORM\Catalog\Product::with(
             [
                 'integerattrs.codedesc',
                 'varcharattrs.codedesc', 
@@ -30,7 +32,6 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             $product->sku = $item->sku;
             $product->active = true;
             $product->name = 'product' . $product->id;
-            $product->description = '';
             $product->save();
 
             foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
@@ -39,7 +40,10 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     if (!$eavItem->codedesc) {
                         continue;
                     }
-                    $this->getRealType($eavItem);
+                    if ($eavItem->codedesc->attribute_code == 'name') {
+                        $product->name = $eavItem->value;
+                        $product->update();
+                    }
                     DynaColumnFactory::createRelationShipORM($product,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input));
@@ -52,25 +56,6 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
         }
     }
 
-    protected function isSingleEav($frontend_input) {
-        switch($frontend_input) {
-            case 'text':
-            case 'hidden':
-            case 'select':
-            case 'multiline':
-            case 'textarea':
-            case 'price':
-            case 'weight':
-            case 'media_image':
-            case 'date':
-            case 'boolean':
-                return true;
-            case 'multiselect':
-            case 'gallery':
-                return false;
-        }
-        return true;
-    }
 
     protected function getRealType($item) {
         if ($item->codedesc->options && count(($item->codedesc->options))) {
