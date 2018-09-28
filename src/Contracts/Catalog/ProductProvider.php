@@ -2,7 +2,7 @@
 
 namespace Zento\Contracts\Catalog;
 
-interface CategoryProvider
+interface ProductProvider
 {
     /**
      * Retrieve a user by their unique identifier.
@@ -10,7 +10,7 @@ interface CategoryProvider
      * @param  mixed  $identifier
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function getCategoryById($id);
+    public function getProductById($id);
 
     /**
      * Retrieve a user by their unique identifier and "remember me" token.
@@ -18,30 +18,42 @@ interface CategoryProvider
      * @param  mixed   $identifier
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function getCategoryByName($name);
+    public function getProductySku($sku);
+
 
     /**
      * Retrieve a user by their unique identifier.
      *
-     * @param  mixed  $identifier
+     * @param  array  $identifiers
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function getCategoryByIds($id);
+    public function getProductByIds(array $ids);
 
     /**
      * Retrieve a user by their unique identifier and "remember me" token.
      *
-     * @param  mixed   $identifier
+     * @param  array   $skus
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function getCategoryByNames($name);
+    public function getProductBySkus($sku);
 
     /**
-     * Update the "remember me" token for the given user in storage.
+     * get latest product(new product)
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $token
+     * @param nuberic $limit
      * @return void
      */
-    public function tree();
+    public function getLatestProduct($limit);
+
+    /**
+     * @param nuberic $limit
+     * @return void
+     */
+    public function getPopularProducts($limit);
+
+    /**
+     * @param nuberic $limit
+     * @return void
+     */
+    public function getBestSellerProducts($limit);
 }

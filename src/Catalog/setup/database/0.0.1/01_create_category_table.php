@@ -14,7 +14,7 @@ class CreateCategoryTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('dynacolumn_set_id')->unsigned();
+            $table->integer('attribute_set_id')->unsigned();
             $table->integer('parent_id')->unsigned();
             $table->string('path', 255)->index();
             $table->string('hash', 32)->index();

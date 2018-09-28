@@ -14,7 +14,7 @@ class CreateProductTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('dynacolumn_set_id')->unsigned();
+            $table->integer('attribute_set_id')->unsigned();
             $table->string('type_id', 64);
             $table->boolean('has_options');
             $table->boolean('required_options');

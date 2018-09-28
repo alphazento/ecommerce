@@ -6,5 +6,5 @@ use Illuminate\Support\Collection;
 
 class Product extends \Illuminate\Database\Eloquent\Model
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicColumn\DynamicColumnAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
 }

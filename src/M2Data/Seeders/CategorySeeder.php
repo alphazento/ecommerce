@@ -3,7 +3,7 @@ namespace Zento\M2Data\Seeders;
 
 use Illuminate\Support\Facades\DB;
 use Zento\Catalog\Model\ORM\Category;
-use Zento\Kernel\Facades\DynaColumnFactory;
+use Zento\Kernel\Facades\DanamicAttributeFactory;
 
 class CategorySeeder extends \Illuminate\Database\Seeder {
     use TraitEavHelper;
@@ -22,7 +22,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                 $category = new Category();
             }
             $category->id = $item->entity_id;
-            $category->dynacolumn_set_id = $item->attribute_set_id;
+            $category->attribute_set_id = $item->attribute_set_id;
             $category->parent_id = $item->parent_id;
             $category->path = $item->path;
             $category->hash = md5($item->path);
@@ -44,12 +44,12 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                         $category->name = $eavItem->value;
                         $category->update();
                     }
-                    DynaColumnFactory::createRelationShipORM($category,
+                    DanamicAttributeFactory::createRelationShipORM($category,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input));
                     
                     if ($eavItem->value) {
-                        DynaColumnFactory::single($category, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                        DanamicAttributeFactory::single($category, $eavItem->codedesc->attribute_code)->new($eavItem->value);
                     }
                 }
             }

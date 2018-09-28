@@ -12,7 +12,7 @@ class Seeder extends \Illuminate\Database\Seeder {
         // foreach($collection as $item) {
         //     $category = new Category();
         //     $category->id = $item->entity_id;
-        //     $category->dynacolumn_set_id = $item->attribute_set_id;
+        //     $category->attribute_set_id = $item->attribute_set_id;
         //     $category->parent_id = $item->parent_id;
         //     $category->path = $item->path;
         //     $category->hash = md5($item->path);
@@ -30,7 +30,7 @@ class Seeder extends \Illuminate\Database\Seeder {
         // foreach($collection as $item) {
         //     $product = new Product();
         //     $product->id = $item->entity_id;
-        //     $product->dynacolumn_set_id = $item->attribute_set_id;
+        //     $product->attribute_set_id = $item->attribute_set_id;
         //     $product->type_id = $item->type_id;
         //     $product->has_options = $item->has_options;
         //     $product->required_options = $item->required_options;

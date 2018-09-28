@@ -3,7 +3,7 @@ namespace Zento\M2Data\Seeders;
 
 use Illuminate\Support\Facades\DB;
 use Zento\Catalog\Model\ORM\Product;
-use Zento\Kernel\Facades\DynaColumnFactory;
+use Zento\Kernel\Facades\DanamicAttributeFactory;
 
 class ProductSeeder extends \Illuminate\Database\Seeder {
     use TraitEavHelper;
@@ -25,7 +25,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                 $product = new Product();
             }
             $product->id = $item->entity_id;
-            $product->dynacolumn_set_id = $item->attribute_set_id;
+            $product->attribute_set_id = $item->attribute_set_id;
             $product->type_id = $item->type_id;
             $product->has_options = $item->has_options;
             $product->required_options = $item->required_options;
@@ -44,12 +44,12 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                         $product->name = $eavItem->value;
                         $product->update();
                     }
-                    DynaColumnFactory::createRelationShipORM($product,
+                    DanamicAttributeFactory::createRelationShipORM($product,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input));
                     
                     if ($eavItem->value) {
-                        DynaColumnFactory::single($product, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                        DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->new($eavItem->value);
                     }
                 }
             }
