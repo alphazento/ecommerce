@@ -9,6 +9,18 @@ class Category extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
 
+    protected static $RelationModels = [
+        'description' => [
+            'class' => CategoryDescription::class,
+            'foreignKey' =>'category_id'
+        ]
+    ];
+    use Traits\TraitDescriptionHelper;
+
+    public function getCategoryIdentifierName() {
+        return 'id';
+    }
+    
     public function children() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
     }

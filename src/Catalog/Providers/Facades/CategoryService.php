@@ -2,7 +2,7 @@
 
 namespace Zento\Catalog\Providers\Facades;
 
-class Category extends \Illuminate\Support\Facades\Facade
+class CategoryService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class Category extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'category';
+        return 'categoryservice';
     }
 }

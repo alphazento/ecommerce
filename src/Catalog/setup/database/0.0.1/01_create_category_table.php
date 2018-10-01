@@ -21,12 +21,12 @@ class CreateCategoryTable extends Migration
             $table->integer('position');
             $table->integer('level')->default(0);
             $table->integer('children_count');
-            $table->boolean('active');
-            $table->string('name', 255);
-            $table->string('image')->nullable();
+            $table->boolean('is_active');
+            $table->integer('sort_by')->unsigned()->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

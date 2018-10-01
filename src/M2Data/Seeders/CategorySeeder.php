@@ -8,6 +8,26 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 class CategorySeeder extends \Illuminate\Database\Seeder {
     use TraitEavHelper;
 
+    protected $attrsInMainTable = [
+        'default_sort_by' => 'sort_by',         //m2 attr => zento
+        'is_active' => 'is_active',
+    // ];
+
+    // protected $attrsInDescriptionTable = [
+        'name' => 'name',         //m2 attr => zento
+        'description' => 'description',
+        'meta_description' => 'meta_description',         //m2 attr => zento
+        'meta_keyword' => 'meta_keyword',
+        'meta_title' => 'meta_title',
+    ];
+
+    protected $attrsIgnore = [
+        'thumbnail',
+        'small_image',
+        'small_image_label',
+    ];
+
+
     public function run()
     {
         $collection = \Zento\M2Data\Model\ORM\Catalog\Category::with(['integerattrs.codedesc',
@@ -29,9 +49,10 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             $category->position = $item->position;
             $category->level = $item->level;
             $category->children_count = $item->children_count;
-            $category->active = true;
-            $category->name = 'category' . $category->id;
-            $category->image = '';
+            $category->is_active = true;
+            $category->sort_by = 0;
+            // $category->name = 'category' . $category->id;
+            // $category->image = '';
             $category->save();
 
             foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
@@ -40,10 +61,14 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     if (!$eavItem->codedesc) {
                         continue;
                     }
-                    if ($eavItem->codedesc->attribute_code == 'name') {
-                        $category->name = $eavItem->value;
-                        $category->update();
+                    
+                    $attrKeysInMainTable = array_keys($this->attrsInMainTable);
+                    if (in_array($eavItem->codedesc->attribute_code, $attrKeysInMainTable)) {
+                        $zentoKey = $this->attrsInMainTable[$eavItem->codedesc->attribute_code];
+                        $category->{$zentoKey} = $eavItem->value;
+                        continue;
                     }
+
                     DanamicAttributeFactory::createRelationShipORM($category,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input));
@@ -53,6 +78,8 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     }
                 }
             }
+
+            $category->push();
         }
     }
 }
