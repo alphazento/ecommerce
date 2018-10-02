@@ -30,7 +30,7 @@ class CatalogController extends Controller
             'lang' => 'en', 
             'logo'=>'', 
             'name' =>'Zento',
-            'products' => \Zento\Catalog\Model\ORM\Product::limit(5)->get(),
+            'products' => \Zento\Catalog\Model\ORM\Product::with(['desccontainer', 'pricecontainer', 'specialpricecontainer'])->limit(5)->get(),
             'content_top_modules' => ['extension.module.featured']
         ]);
     }

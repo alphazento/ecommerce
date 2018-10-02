@@ -6,7 +6,7 @@
       <div class="image"><a href="{{ $product->url_path }}"><img src="{{ $product->image }}" alt="{{ $product->name }}" title="{{ $product->name }}" class="img-responsive" /></a></div>
       <div class="caption">
         <h4><a href="{{ $product->url_path }}">{{ $product->name }}</a></h4>
-        <p>{{ $product->description }}</p>
+        <p>{!! $product->description !!}</p>
         @if($product->rating)
         <div class="rating">
           @for($i =1; $i<6; $i++)

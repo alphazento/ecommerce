@@ -21,7 +21,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
         return 'id';
     }
     
-    public function children() {
+    public function childrenCategories() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
     }
 

@@ -27,9 +27,6 @@
             "dev-master": "1.0-dev"
         },
         "laravel": {
-            "providers": [
-                "\\Zento\\PaymentGateway\\Providers\\Main"
-            ],
             "aliases": {
             },
             "zento": {
@@ -42,6 +39,9 @@
                     "version" : "0.0.1",
                     "commands" : [
                         "\\Zento\\M2Data\\Console\\Commands\\M2Migrate"
+                    ],
+                    "providers": [
+                        "\\Zento\\Catalog\\Providers\\Entry"
                     ]
                 }
             }

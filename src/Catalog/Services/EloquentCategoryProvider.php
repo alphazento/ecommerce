@@ -21,7 +21,6 @@ class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvi
 
     public function getCategoriesByLevel($level, $withs = [], $parent_id = -1) {
         return Category::where('level', $level)
-            ->withDynamicSingleAttribute('url_path')
             ->orderBy('sort_by')
             ->get();
     }

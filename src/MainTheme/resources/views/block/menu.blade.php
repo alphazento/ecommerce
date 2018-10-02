@@ -9,22 +9,20 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
         @foreach($categories as $category)
-        @if($category->children)
-        <li class="dropdown"><a href="{{ DanamicAttributeFactory::single($category, 'url_path')->getValue() }}" class="dropdown-toggle" data-toggle="dropdown">{{ $category->name }}</a>
+        @if($category->childrenCategories)
+        <li class="dropdown"><a href="{{ $category->url_path }}" class="dropdown-toggle" data-toggle="dropdown">{{ $category->name }}</a>
           <div class="dropdown-menu">
             <div class="dropdown-inner">
-              @foreach($category->children as $children)
+              @foreach($category->childrenCategories as $children)
               <ul class="list-unstyled">
-                @foreach($children->children ?? [$children]  as $child)
-                <li><a href="{{ DanamicAttributeFactory::single($child, 'url_path')->getValue() }}">{{ $child->name }}({{ $child->children_count }})</a></li>
+                @foreach($children->childrenCategories ?? [$children]  as $child)
+                @if ($child) 
+                <li><a href="{{ $child->url_path }}">{{ $child->name }}({{ $child->children_count }})</a></li>
+                @endif
                 @endforeach
               </ul>
               @endforeach
             </div>
-            {{
-              json_encode($category)
-            }}
-            <?php die; ?>
             <a href="{{ $category->url_path }}" class="see-all">{{ __('all categories') }} </a> </div>
         </li>
         @else
