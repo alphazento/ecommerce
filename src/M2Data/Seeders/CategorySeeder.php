@@ -4,6 +4,7 @@ namespace Zento\M2Data\Seeders;
 use Illuminate\Support\Facades\DB;
 use Zento\Catalog\Model\ORM\Category;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
+use Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\ORM\AttributeInSet;
 
 class CategorySeeder extends \Illuminate\Database\Seeder {
     use TraitEavHelper;
@@ -69,9 +70,19 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                         continue;
                     }
 
-                    DanamicAttributeFactory::createRelationShipORM($category,
+                    $attrId = DanamicAttributeFactory::createRelationShipORM($category,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input));
+                    
+                    $attrInSet = AttributeInSet::where('attribute_set_id', $category->attribute_set_id)
+                        ->where('attribute_id', $attrId)
+                        ->first();
+                    if (!$attrInSet) {
+                        $attrInSet = new AttributeInSet();
+                    }
+                    $attrInSet->attribute_set_id = $category->attribute_set_id;
+                    $attrInSet->attribute_id = $attrId;
+                    $attrInSet->save();
                     
                     if ($eavItem->value) {
                         DanamicAttributeFactory::single($category, $eavItem->codedesc->attribute_code)->new($eavItem->value);
