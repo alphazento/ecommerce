@@ -22,8 +22,16 @@ use ThemeManager;
 class CatalogController extends Controller
 {
     public function home() {
-        return \Zento\Catalog\Model\ORM\Product::limit(50)->get()->toArray();
-        ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/MainTheme/resources/views'));
+        // return \Zento\Catalog\Model\ORM\Product::limit(50)->get()->toArray();
+        ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/TwigTheme/resources/views'));
+        $data['column_left'] = View::make('common/column_left');
+		$data['column_right'] = View::make('common/column_right');
+		$data['content_top'] = View::make('common/content_top');
+		$data['content_bottom'] = View::make('common/content_bottom');
+		$data['footer'] = View::make('common/footer');
+        $data['header'] = View::make('common/header');
+        
+        return View::make('common.home', $data);
         // echo base_path('vendor/alphazento/ecommerce/src/TwigTheme/resources/views');die;
         return view('page.home', 
         [
