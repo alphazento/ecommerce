@@ -22,6 +22,7 @@ use ThemeManager;
 class CatalogController extends Controller
 {
     public function home() {
+        return \Zento\Catalog\Model\ORM\Product::limit(50)->get()->toArray();
         ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/MainTheme/resources/views'));
         // echo base_path('vendor/alphazento/ecommerce/src/TwigTheme/resources/views');die;
         return view('page.home', 
@@ -30,7 +31,7 @@ class CatalogController extends Controller
             'lang' => 'en', 
             'logo'=>'', 
             'name' =>'Zento',
-            'products' => \Zento\Catalog\Model\ORM\Product::with(['desccontainer', 'pricecontainer', 'specialpricecontainer'])->limit(50)->get(),
+            'products' => \Zento\Catalog\Model\ORM\Product::limit(50)->get(),
             'content_top_modules' => ['extension.module.featured']
         ]);
     }

@@ -3,7 +3,11 @@
  @foreach($products as $product)
   <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="product-thumb transition">
-      <div class="image"><a href="{{ $product->url_path }}"><img src="{{ $product->image }}" alt="{{ $product->name }}" title="{{ $product->name }}" class="img-responsive" /></a></div>
+      <div class="image">
+        <a href="{{ $product->url_path }}">
+          <img src="{{ '/images/catalog/product/1/'. $product->image }}" alt="{{ $product->name }}" title="{{ $product->name }}" class="img-responsive" />
+        </a>
+      </div>
       <div class="caption">
         <h4><a href="{{ $product->url_path }}">{{ $product->name }}</a></h4>
         <p>{!! $product->description !!}</p>

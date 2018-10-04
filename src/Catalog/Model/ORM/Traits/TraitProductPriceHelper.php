@@ -6,84 +6,84 @@ use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Model\ORM\ProductSpecialPrice;
 
 trait TraitProductPriceHelper {
-    public function pricecontainer() {
+    public function priceDataset() {
         return $this->hasOne(ProductPrice::class, 'product_id');
     }
 
-    public function specialpricecontainer() {
+    public function specialPriceDataset() {
         return $this->hasOne(ProductSpecialPrice::class, 'product_id');
     }
 
-    protected function getPriceContainerRelation() {
-        if (!$this->pricecontainer) {
+    protected function getPriceDatasetRelation() {
+        if (!$this->priceDataset) {
             $instance = new ProductPrice();
             $instance->product_id = $this->id;
-            $this->relations['pricecontainer'] = $instance;
+            $this->relations['priceDataset'] = $instance;
         }
-        return $this->pricecontainer;
+        return $this->priceDataset;
     }
 
-    protected function getSpecialPriceContainerRelation() {
-        if (!$this->specialpricecontainer) {
+    protected function getSpecialPriceDatasetRelation() {
+        if (!$this->specialPriceDataset) {
             $instance = new ProductSpecialPrice();
             $instance->product_id = $this->id;
-            $this->relations['specialpricecontainer'] = $instance;
+            $this->relations['specialPriceDataset'] = $instance;
         }
-        return $this->specialpricecontainer;
+        return $this->specialPriceDataset;
     }
 
     public function getRrpAttribute() {
-        return $this->pricecontainer ? $this->pricecontainer->rrp : null;
+        return $this->priceDataset ? $this->priceDataset->rrp : null;
     }
 
     public function getCostAttribute() {
-        return $this->pricecontainer ? $this->pricecontainer->cost : null;
+        return $this->priceDataset ? $this->priceDataset->cost : null;
     }
 
     public function getPriceAttribute() {
-        return $this->pricecontainer ? $this->pricecontainer->price : null;
+        return $this->priceDataset ? $this->priceDataset->price : null;
     }
 
     public function setRrpAttribute($value) {
-        $this->getPriceContainerRelation()->name = $value;
+        $this->getPriceDatasetRelation()->name = $value;
         return $this;
     }
 
     public function setCostAttribute($value) {
-        $this->getPriceContainerRelation()->cost = $value;
+        $this->getPriceDatasetRelation()->cost = $value;
         return $this;
     }
 
     public function setPriceAttribute($value) {
-        $this->getPriceContainerRelation()->price = $value;
+        $this->getPriceDatasetRelation()->price = $value;
         return $this;
     }
 
 
     public function getSpecialPriceAttribute() {
-        return $this->specialpricecontainer ? $this->specialpricecontainer->price : null;
+        return $this->specialPriceDataset ? $this->specialPriceDataset->price : null;
     }
 
     public function setSpecialPriceAttribute($value) {
-        $this->getSpecialPriceContainerRelation()->price = $value;
+        $this->getSpecialPriceDatasetRelation()->price = $value;
         return $this;
     }
 
     public function getSpecialFromAttribute() {
-        return $this->specialpricecontainer ? $this->specialpricecontainer->from_date : null;
+        return $this->specialPriceDataset ? $this->specialPriceDataset->from_date : null;
     }
 
     public function setSpecialFromAttribute($value) {
-        $this->getSpecialPriceContainerRelation()->from_date = $value;
+        $this->getSpecialPriceDatasetRelation()->from_date = $value;
         return $this;
     }
 
     public function getSpecialToAttribute() {
-        return $this->specialpricecontainer ? $this->specialpricecontainer->to_date : null;
+        return $this->specialPriceDataset ? $this->specialPriceDataset->to_date : null;
     }
 
     public function setSpecialToAttribute($value) {
-        $this->getSpecialPriceContainerRelation()->to_date = $value;
+        $this->getSpecialPriceDatasetRelation()->to_date = $value;
         return $this;
     }
 }

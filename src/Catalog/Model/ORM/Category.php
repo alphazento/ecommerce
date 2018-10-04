@@ -8,16 +8,16 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 class Category extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-
-    protected static $RelationModels = [
-        'description' => [
-            'class' => CategoryDescription::class,
-            'foreignKey' =>'category_id'
-        ]
-    ];
     use Traits\TraitDescriptionHelper;
-
-    public function getCategoryIdentifierName() {
+ 
+    protected $desciptionModel = CategoryDescription::class;
+    protected $desciptionModelForeignKey = 'category_id';
+    public $preload_relations = [
+        'descriptionDataset',
+        'childrenCategories'
+    ];
+   
+    public function getIdentifierName() {
         return 'id';
     }
     

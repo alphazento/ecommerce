@@ -7,7 +7,7 @@ use Zento\Catalog\Model\DB\Category\Description;
 use DB;
 
 class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvider {
-     /**
+    /**
      * Retrieve a user by their unique identifier.
      *
      * @param  mixed  $identifier
@@ -15,7 +15,7 @@ class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvi
      */
     public function getCategoryById($identifier)
     {
-        return Category::where($model->getCategoryIdentifierName(), $identifier)
+        return Category::where($model->getIdentifierName(), $identifier)
             ->first();
     }
 
