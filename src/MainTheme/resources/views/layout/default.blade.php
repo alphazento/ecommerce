@@ -17,6 +17,11 @@
   <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
   <link href="/zento/maintheme/stylesheet/stylesheet.css" rel="stylesheet">
   <script src="/zento/maintheme/javascript/common.js" type="text/javascript"></script>
+
+  <link href='/zento/maintheme/catalog/view/javascript/jquery/swiper/css/swiper.min.css' rel="stylesheet" type="text/css" />
+	<link href='/zento/maintheme/catalog/view/javascript/jquery/swiper/css/opencart.css' rel="stylesheet" type="text/css" />
+	<script src="/zento/maintheme/catalog/view/javascript/jquery/swiper/js/swiper.jquery.js" type="text/javascript"></script>
+		
   @stack('styles')
   @stack('scripts')
   @stack('links')

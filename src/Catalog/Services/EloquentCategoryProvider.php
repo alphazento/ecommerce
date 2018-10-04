@@ -19,8 +19,9 @@ class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvi
             ->first();
     }
 
-    public function getCategoriesByLevel($level, $withs = [], $parent_id = -1) {
+    public function getCategoriesByLevel($level, $activeOnly = true, $parent_id = -1) {
         return Category::where('level', $level)
+            ->whereIn('is_active', $activeOnly ? [1]:[0,1])
             ->orderBy('sort_by')
             ->get();
     }

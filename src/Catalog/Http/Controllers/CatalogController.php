@@ -22,17 +22,24 @@ use ThemeManager;
 class CatalogController extends Controller
 {
     public function home() {
+        // echo '<pre>';
+        // print_r((new \Zento\CMS\View\Banner)->load(7, 100, 100));die;
+
         // return \Zento\Catalog\Model\ORM\Product::limit(50)->get()->toArray();
-        ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/TwigTheme/resources/views'));
-        $data['column_left'] = View::make('common/column_left');
-		$data['column_right'] = View::make('common/column_right');
-		$data['content_top'] = View::make('common/content_top');
-		$data['content_bottom'] = View::make('common/content_bottom');
-		$data['footer'] = View::make('common/footer');
-        $data['header'] = View::make('common/header');
+        ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/MainTheme/resources/views'));
+        // $data['column_left'] = View::make('common/column_left');
+		// $data['column_right'] = View::make('common/column_right');
+		// $data['content_top'] = View::make('common/content_top');
+		// $data['content_bottom'] = View::make('common/content_bottom');
+		// $data['footer'] = View::make('common/footer');
+        // $data['header'] = View::make('common/header');
         
-        return View::make('common.home', $data);
+        // return View::make('common.home', $data);
         // echo base_path('vendor/alphazento/ecommerce/src/TwigTheme/resources/views');die;
+        $content_top_modules = [];
+        $content_top_modules[] = (new \Zento\CMS\View\Banner)->load(7, 100, 100, 'extension.module.slideshow');
+        $content_top_modules[] = ['extension.module.featured', []];
+
         return view('page.home', 
         [
             'direction' => 'ltr', 
@@ -40,7 +47,7 @@ class CatalogController extends Controller
             'logo'=>'', 
             'name' =>'Zento',
             'products' => \Zento\Catalog\Model\ORM\Product::limit(50)->get(),
-            'content_top_modules' => ['extension.module.featured']
+            'content_top_modules' => $content_top_modules
         ]);
     }
 }
