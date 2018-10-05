@@ -32,17 +32,39 @@
   @include(config('block.header', 'block.header'))
   @include(config('block.menu', 'block.menu'))
 
-  <div id="common-home" class="container">
+  <div id="{{ $page_name }}" class="container">
+    @if ($breadcrumb ?? false)
+      <ul class="breadcrumbs">
+        @foreach($breadcrumbs of $breadcrumb %}
+        <li><a href="{{ $breadcrumb->href }}">{{ $breadcrumb->text }}</a></li>
+        @endforeach
+      </ul>
+    @endif
     <div class="row">
+    @if($column_left ?? false)
       <aside id="column-left" class="col-sm-3 hidden-xs">
+        @foreach($column_left  as $module)
+          @include($module[0], $module[1])
+        @endforeach
       </aside>
-      <div id="content" class="{{ config('html.content.class', 'col-sm-12') }}">
-         <!-- content_top 
-         content_bottom  -->
-         @yield('content')
-      </div>
+    @endif
+    @if(($column_left ?? false) && ($column_right ?? false))
+      @php $class = 'col-sm-6'; @endphp
+    @elseif(($column_left ?? false) || ($column_right ?? false))
+      @php $class = 'col-sm-9'; @endphp
+    @else
+      @php $class = 'col-sm-12'; @endphp
+    @endif
+    <div id="content" class="{{ $class }}">
+      @yield('content')
+    </div>
+    @if($column_right ?? false)
       <aside id="column-right" class="col-sm-3 hidden-xs">
+        @foreach($column_right as $module)
+          @include($module[0], $module[1])
+        @endforeach
       </aside>
+    @endif
     </div>
   </div>
 

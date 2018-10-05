@@ -5,7 +5,7 @@
     <div class="product-thumb transition">
       <div class="image">
         <a href="{{ $product->url_path }}">
-          <img src="{{ '/images/catalog/product/1/'. $product->image }}" alt="{{ $product->name }}" title="{{ $product->name }}" class="img-responsive" />
+          <img src="{{ '/images/catalog/product/'. $product->image }}" alt="{{ $product->name }}" title="{{ $product->name }}" class="img-responsive" />
         </a>
       </div>
       <div class="caption">
