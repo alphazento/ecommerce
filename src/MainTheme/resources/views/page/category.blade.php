@@ -42,9 +42,9 @@
   @endif
   @include('block.catalog.product.list')
   @if($not categories and not products)
-  <p>{{ text_empty }}</p>
+  <p>{{ __('text_empty') }}</p>
   <div class="buttons">
-    <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+    <div class="pull-right"><a href="{{ 'continue' }}" class="btn btn-primary">{{ __('button_continue') }}</a></div>
   </div>
   @endif
 @endsection
