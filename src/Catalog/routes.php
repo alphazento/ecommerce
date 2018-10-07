@@ -133,5 +133,9 @@ Route::group(
         '/newsletter',
         ['as' => 'newsletter', 'uses' => 'CatalogController@home']
     );
-    
+
+    Route::get(
+        '/category/{ids}/',
+        ['as' => 'category', 'uses' => 'CatalogController@category']
+    )->where('ids', '([\d\/]+)?');
 });

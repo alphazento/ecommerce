@@ -9,8 +9,8 @@ class LayoutService {
         $layout = Layout::where('name', $name)->first();
         $this->positions = [];
         foreach($layout->modules as $layoutModule) {
+            $position = $layoutModule->position;
             if ($designModule = $layoutModule->getDesignModule()) {
-                $position = $layoutModule->position;
                 switch($designModule->code) {
                     case 'slideshow':
                     case 'carousel':
@@ -21,6 +21,13 @@ class LayoutService {
                     case 'featured':
                         $this->appendToPosition($position,
                             (new \Zento\CMS\View\Featured)->load(json_decode($designModule->setting, true)));
+                    break;
+                }
+            } else {
+                switch($layoutModule->code) {
+                    case 'category':
+                    $this->appendToPosition($position,
+                        (new \Zento\CMS\View\Category)->load('category', null, $extraData));
                     break;
                 }
             }

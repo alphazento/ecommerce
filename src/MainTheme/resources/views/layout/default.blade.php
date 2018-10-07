@@ -35,7 +35,7 @@
   <div id="{{ $page_name }}" class="container">
     @if ($breadcrumb ?? false)
       <ul class="breadcrumbs">
-        @foreach($breadcrumbs of $breadcrumb %}
+        @foreach($breadcrumbs as $breadcrumb)
         <li><a href="{{ $breadcrumb->href }}">{{ $breadcrumb->text }}</a></li>
         @endforeach
       </ul>
