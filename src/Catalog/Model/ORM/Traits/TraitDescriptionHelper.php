@@ -2,16 +2,22 @@
 
 namespace Zento\Catalog\Model\ORM\Traits;
 
+/**
+ * a trait to handle category or product description
+ * Descripiton is a relation to category class or product class
+ * This trait turn relationship's properties to some mutators
+ * The class which use this trait need to define static properties: $DesciptionModel and $DesciptionModelForeignKey
+ */
 trait TraitDescriptionHelper {
     public function descriptionDataset() {
-        return $this->hasOne($this->desciptionModel, $this->desciptionModelForeignKey);
+        return $this->hasOne(static::$DesciptionModel, static::$DesciptionModelForeignKey);
     }
 
     protected function getDescriptionDatasetRelation() {
         if (!$this->descriptionDataset) {
-            $class = $this->desciptionModel;
+            $class = static::$DesciptionModel;
             $instance = new $class();
-            $instance->{$this->desciptionModelForeignKey} = $this->id;
+            $instance->{static::$DesciptionModelForeignKey} = $this->id;
             $this->relations['descriptionDataset'] = $instance;
         }
         return $this->descriptionDataset;

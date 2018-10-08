@@ -10,18 +10,21 @@ class Category extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use Traits\TraitDescriptionHelper;
+    use Traits\TraitRealationMutatorHelper;
  
-    protected $desciptionModel = CategoryDescription::class;
-    protected $desciptionModelForeignKey = 'category_id';
+    protected static $DesciptionModel = CategoryDescription::class;
+    protected static $DesciptionModelForeignKey = 'category_id';
+    protected static $RelationToMutators = [
+        'description_dataset' => ['description', 'name', 'meta_title', 'meta_description', 'meta_keyword'],
+    ];
+
     public $preload_relations = [
         'descriptionDataset',
         'childrenCategories'
     ];
-
     public $preload_relation_withcounts = [
         'products',
     ];
-   
 
     public function getIdentifierName() {
         return 'id';
@@ -78,13 +81,10 @@ class Category extends \Illuminate\Database\Eloquent\Model
 		$children_data = [];
 		$children = $category->childrenCategories;
 		foreach($children as $child) {
-			// $filter_data = array('filter_category_id' => $child->id, 'filter_sub_category' => true);
-
 			$item = [
 				'category_id' => $child->id,
 				'name' => $child->name . (config('config_product_count', true) ? ' (' . $child->products_count. ')' : ''),
 				'href' => $child->url_path,
-				// 'filter_data' => $filter_data
 			];
 			if ($child->childrenCategories && $child->childrenCategories->count() > 0) {
 				$item['children'] = $this->loadChildren($child);

@@ -10,8 +10,8 @@ class Product extends \Illuminate\Database\Eloquent\Model
     use Traits\TraitDescriptionHelper;
     use Traits\TraitProductPriceHelper;
 
-    protected $desciptionModel = ProductDescription::class;
-    protected $desciptionModelForeignKey = 'product_id';
+    protected static $DesciptionModel = ProductDescription::class;
+    protected static $DesciptionModelForeignKey = 'product_id';
 
     public $preload_relations = [
         'descriptionDataset',

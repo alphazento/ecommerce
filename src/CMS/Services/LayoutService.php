@@ -1,8 +1,11 @@
 <?php
 
 namespace Zento\CMS\Services;
+
+use CategoryService;
 use Zento\CMS\Model\ORM\Layout;
 use Zento\CMS\View\Banner as BannerView;
+
 class LayoutService {
     protected $positions;
 	public function render($name, $pageView, $extraData) {
@@ -27,11 +30,12 @@ class LayoutService {
                 switch($layoutModule->code) {
                     case 'category':
                     $this->appendToPosition($position,
-                        (new \Zento\CMS\View\Category)->load('category', null, $extraData));
+                        (new \Zento\CMS\View\Category)->load('category', null, $extraData['category_ids']));
                     break;
                 }
             }
         }
+        $extraData['categories'] = CategoryService::tree();
         return view($pageView, array_merge($this->positions, $extraData));
     }
     
