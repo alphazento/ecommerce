@@ -14,16 +14,12 @@ class Category extends \Illuminate\Database\Eloquent\Model
  
     protected static $DesciptionModel = CategoryDescription::class;
     protected static $DesciptionModelForeignKey = 'category_id';
-    protected static $RelationToMutators = [
-        'description_dataset' => ['description', 'name', 'meta_title', 'meta_description', 'meta_keyword'],
-    ];
-
-    public $preload_relations = [
-        'descriptionDataset',
-        'childrenCategories'
-    ];
-    public $preload_relation_withcounts = [
-        'products',
+    public static $preload_relations = [
+        'description_dataset' =>[
+            'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
+        ],
+        'childrenCategories',
+        'withcount' => ['products']
     ];
 
     public function getIdentifierName() {

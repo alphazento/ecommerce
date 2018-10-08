@@ -9,38 +9,38 @@ namespace Zento\Catalog\Model\ORM\Traits;
  * The class which use this trait need to define static properties: $DesciptionModel and $DesciptionModelForeignKey
  */
 trait TraitDescriptionHelper {
-    public function descriptionDataset() {
+    public function description_dataset() {
         return $this->hasOne(static::$DesciptionModel, static::$DesciptionModelForeignKey);
     }
 
     protected function getDescriptionDatasetRelation() {
-        if (!$this->descriptionDataset) {
+        if (!$this->description_dataset) {
             $class = static::$DesciptionModel;
             $instance = new $class();
             $instance->{static::$DesciptionModelForeignKey} = $this->id;
-            $this->relations['descriptionDataset'] = $instance;
+            $this->relations['description_dataset'] = $instance;
         }
-        return $this->descriptionDataset;
+        return $this->description_dataset;
     }
 
     public function getDescriptionAttribute() {
-        return $this->descriptionDataset ? $this->descriptionDataset->description : null;
+        return $this->description_dataset ? $this->description_dataset->description : null;
     }
 
     public function getNameAttribute() {
-        return $this->descriptionDataset ? $this->descriptionDataset->name : null;
+        return $this->description_dataset ? $this->description_dataset->name : null;
     }
 
     public function getMetaTitleAttribute() {
-        return $this->descriptionDataset ? $this->descriptionDataset->meta_title : null;
+        return $this->description_dataset ? $this->description_dataset->meta_title : null;
     }
 
     public function getMetaDescriptionAttribute() {
-        return $this->descriptionDataset ? $this->descriptionDataset->meta_description : null;
+        return $this->description_dataset ? $this->description_dataset->meta_description : null;
     }
 
     public function getMetaKeywordAttribute() {
-        return $this->descriptionDataset ? $this->descriptionDataset->meta_keyword : null;
+        return $this->description_dataset ? $this->description_dataset->meta_keyword : null;
     }
 
     public function setDescriptionAttribute($value) {

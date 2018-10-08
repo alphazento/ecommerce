@@ -10,42 +10,42 @@ use Zento\Catalog\Model\ORM\ProductSpecialPrice;
  * This trait turn relationship's properties to some mutators
  */
 trait TraitProductPriceHelper {
-    public function priceDataset() {
+    public function price_dataset() {
         return $this->hasOne(ProductPrice::class, 'product_id');
     }
 
-    public function specialPriceDataset() {
+    public function special_price_dataset() {
         return $this->hasOne(ProductSpecialPrice::class, 'product_id');
     }
 
     protected function getPriceDatasetRelation() {
-        if (!$this->priceDataset) {
+        if (!$this->price_dataset) {
             $instance = new ProductPrice();
             $instance->product_id = $this->id;
-            $this->relations['priceDataset'] = $instance;
+            $this->relations['price_dataset'] = $instance;
         }
-        return $this->priceDataset;
+        return $this->price_dataset;
     }
 
     protected function getSpecialPriceDatasetRelation() {
-        if (!$this->specialPriceDataset) {
+        if (!$this->special_price_dataset) {
             $instance = new ProductSpecialPrice();
             $instance->product_id = $this->id;
-            $this->relations['specialPriceDataset'] = $instance;
+            $this->relations['special_price_dataset'] = $instance;
         }
-        return $this->specialPriceDataset;
+        return $this->special_price_dataset;
     }
 
     public function getRrpAttribute() {
-        return $this->priceDataset ? $this->priceDataset->rrp : null;
+        return $this->price_dataset ? $this->price_dataset->rrp : null;
     }
 
     public function getCostAttribute() {
-        return $this->priceDataset ? $this->priceDataset->cost : null;
+        return $this->price_dataset ? $this->price_dataset->cost : null;
     }
 
     public function getPriceAttribute() {
-        return $this->priceDataset ? $this->priceDataset->price : null;
+        return $this->price_dataset ? $this->price_dataset->price : null;
     }
 
     public function setRrpAttribute($value) {
@@ -65,7 +65,7 @@ trait TraitProductPriceHelper {
 
 
     public function getSpecialPriceAttribute() {
-        return $this->specialPriceDataset ? $this->specialPriceDataset->price : null;
+        return $this->special_price_dataset ? $this->special_price_dataset->price : null;
     }
 
     public function setSpecialPriceAttribute($value) {
@@ -74,7 +74,7 @@ trait TraitProductPriceHelper {
     }
 
     public function getSpecialFromAttribute() {
-        return $this->specialPriceDataset ? $this->specialPriceDataset->from_date : null;
+        return $this->special_price_dataset ? $this->special_price_dataset->from_date : null;
     }
 
     public function setSpecialFromAttribute($value) {
@@ -83,7 +83,7 @@ trait TraitProductPriceHelper {
     }
 
     public function getSpecialToAttribute() {
-        return $this->specialPriceDataset ? $this->specialPriceDataset->to_date : null;
+        return $this->special_price_dataset ? $this->special_price_dataset->to_date : null;
     }
 
     public function setSpecialToAttribute($value) {
