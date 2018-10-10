@@ -8,7 +8,7 @@ use Zento\CMS\View\Banner as BannerView;
 
 class LayoutService {
     protected $positions;
-	public function render($name, $pageView, $extraData) {
+	public function render($name, $pageView, $extraData = []) {
         $layout = Layout::where('name', $name)->first();
         $this->positions = [];
         foreach($layout->modules as $layoutModule) {
@@ -36,7 +36,7 @@ class LayoutService {
             }
         }
         $extraData['categories'] = CategoryService::tree();
-        return view($pageView, array_merge($this->positions, $extraData));
+        return view($pageView, array_merge($this->positions, $extraData, $this->getHtmlParameters()));
     }
     
     protected function appendToPosition($position, $combination) {
@@ -46,5 +46,15 @@ class LayoutService {
             }
             $this->positions[$position][] = $combination;
         }
+    }
+
+    protected function getHtmlParameters() {
+        return [
+            'page_name' => 'category',
+            'direction' => 'ltr', 
+            'lang' => 'en', 
+            'logo'=>'', 
+            'name' =>'Zento',
+        ];
     }
 }

@@ -59,5 +59,9 @@ class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvi
 			$tree = $this->getCategoriesByLevel($this->treeLevelFrom);
 		}
 		return $tree;
-	}
+    }
+    
+    public function getName($category, $withProductCount = false) {
+        return $category->name . ($withProductCount ? sprintf('(%s)', $category->products_count) : '');
+    }
 }

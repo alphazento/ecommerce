@@ -5,9 +5,9 @@
       @if($category->childrenCategories)
         @foreach($category->childrenCategories as $child)
           @if($child->id == $child_id)
-          <a href="{{ $child->url_path }}" class="list-group-item active">&nbsp;&nbsp;&nbsp;- {{ $child->name }}</a> 
+          <a href="{{ $child->url_path }}" class="list-group-item active">&nbsp;&nbsp;&nbsp;- {{ CategoryService::getName($child, true)  }}</a> 
           @else
-          <a href="{{ $child->url_path }}" class="list-group-item">&nbsp;&nbsp;&nbsp;- {{ $child->name }}</a>
+          <a href="{{ $child->url_path }}" class="list-group-item">&nbsp;&nbsp;&nbsp;- {{ CategoryService::getName($child, true) }}</a>
           @endif
         @endforeach
       @endif

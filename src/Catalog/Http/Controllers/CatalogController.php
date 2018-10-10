@@ -25,41 +25,19 @@ class CatalogController extends Controller
     }
 
     public function home() {
-        // $content_top_modules = [];
-        // $content_top_modules[] = (new \Zento\CMS\View\Banner)->load(7, 100, 100, 'extension.module.slideshow');
-        // $content_top_modules[] = ['extension.module.featured', ['products' => \Zento\Catalog\Model\ORM\Product::limit(10)->get()]];
-
-        return (new \Zento\CMS\Services\LayoutService)->render('home', 'page.home', [
-            'page_name' => 'home',
-            'direction' => 'ltr', 
-            'lang' => 'en', 
-            'logo'=>'', 
-            'name' =>'Zento']);
-        // return view('page.home', 
-        // [
-        //     'direction' => 'ltr', 
-        //     'lang' => 'en', 
-        //     'logo'=>'', 
-        //     'name' =>'Zento',
-        //     'content_top' => $content_top_modules
-        // ]);
+        return (new \Zento\CMS\Services\LayoutService)->render('home', 'page.home');
     }
 
     public function category() {
         $ids = explode('/', Route::input('ids'));
-        // CategoryService::getCategoryById($id);
+        $category = CategoryService::getCategoryById(last($ids));
+dd($category->products);
         return (new \Zento\CMS\Services\LayoutService)->render('category', 'page.category', 
         [
-            'page_name' => 'category',
-            'direction' => 'ltr', 
-            'lang' => 'en', 
-            'logo'=>'', 
-            'name' =>'Zento',
-
-            'heading_title' => 'category',
-            'description' => 'category description',
+            'heading_title' => $category->name,
+            'description' => $category->description,
             'thumb' => null,
-            'products' => null,
+            'products' => $category->products,
             'category_ids' => $ids
         ]);
     }
