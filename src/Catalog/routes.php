@@ -9,6 +9,11 @@ Route::group(
         '/', 
         ['as' => 'home', 'uses' => 'CatalogController@home']
     );
+
+    Route::get(
+        '/product/{id}', 
+        ['as' => 'product', 'uses' => 'CatalogController@product']
+    );
     // Route::get(
     //     '/home', 
     //     ['uses' => 'CatalogController@home']
