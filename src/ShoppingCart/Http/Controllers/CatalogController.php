@@ -32,9 +32,6 @@ class CatalogController extends Controller
         $ids = explode('/', Route::input('ids'));
         $category = CategoryService::getCategoryById(last($ids));
 // dd($category->products);
-        $product = \Zento\Catalog\Model\ORM\Product::first();
-        $product->model = 'test';
-dd($product);
         return (new \Zento\CMS\Services\LayoutService)->render('category', 'page.category', 
         [
             'heading_title' => $category->name,

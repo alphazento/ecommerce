@@ -1,0 +1,33 @@
+<?php
+
+namespace Zento\Catalog\Providers;
+
+use Zento\Catalog\Services\EloquentCategoryProvider;
+use Zento\Catalog\Services\Product;
+
+use Illuminate\Support\ServiceProvider;
+
+class Entry extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->singleton('categoryservice', function ($app) {
+            return new EloquentCategoryProvider('\Zento\Catalog\Model\ORM\Category');
+        });
+
+        $this->app->singleton('product', function ($app) {
+            return new Product();
+        });
+        class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ['categoryservice', 'product'];
+    }
+}

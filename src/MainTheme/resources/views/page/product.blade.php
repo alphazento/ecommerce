@@ -10,101 +10,10 @@
         @else
         <?php $class = 'col-sm-8' ?>
         @endif
-        <div class="{{ $class }}"> @if($product->thumb || $product->mages)
-          <ul class="thumbnails">
-            @if($product->thumb ?? false)
-            <li><a class="thumbnail" href="{{ 'popup' }}" title="{{ 'heading_title' }}"><img src="{{ $product->thumb }}" title="{{ 'heading_title' }}" alt="{{ 'heading_title' }}" /></a></li>
-            @endif
-            @foreach($product->images ?? [] as $image)
-            <li class="image-additional"><a class="thumbnail" href="{{ $image->popup }}" title="{{ 'heading_title' }}"> <img src="{{ $image->thumb }}" title="{{ 'heading_title' }}" alt="{{ 'heading_title' }}" /></a></li>
-            @endforeach
-          </ul>
-          @endif
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-description" data-toggle="tab">{{ 'tab_description' }}</a></li>
-            @if($product->attribute_groups)
-            <li><a href="#tab-specification" data-toggle="tab">{{ 'tab_attribute' }}</a></li>
-            @endif
-            @if($product->review_status)
-            <li><a href="#tab-review" data-toggle="tab">{{ 'tab_review' }}</a></li>
-            @endif
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab-description">{!! $product->description !!}</div>
-            @if($product->attribute_groups)
-            <div class="tab-pane" id="tab-specification">
-              <table class="table table-bordered">
-                @foreach($product->attribute_groups ?? [] as $attribute_group)
-                <thead>
-                  <tr>
-                    <td colspan="2"><strong>{{ $attribute_group->name }}</strong></td>
-                  </tr>
-                </thead>
-                <tbody>
-                @foreach($product->attribute_group->attribute as $attribute)
-                <tr>
-                  <td>{{ $attribute->name }}</td>
-                  <td>{{ $attribute->text }}</td>
-                </tr>
-                @endforeach
-                  </tbody>
-                @endforeach
-              </table>
-            </div>
-            @endif
-            @if($product->review_status)
-            <div class="tab-pane" id="tab-review">
-              <form class="form-horizontal" id="form-review">
-                <div id="review"></div>
-                <h2>{{ 'text_write' }}</h2>
-                @if($product->review_guest)
-                <div class="form-group required">
-                  <div class="col-sm-12">
-                    <label class="control-label" for="input-name">{{ 'entry_name' }}</label>
-                    <input type="text" name="name" value="{{ 'customer_name' }}" id="input-name" class="form-control" />
-                  </div>
-                </div>
-                <div class="form-group required">
-                  <div class="col-sm-12">
-                    <label class="control-label" for="input-review">{{ 'entry_review' }}</label>
-                    <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
-                    <div class="help-block">{{ 'text_note' }}</div>
-                  </div>
-                </div>
-                <div class="form-group required">
-                  <div class="col-sm-12">
-                    <label class="control-label">{{ 'entry_rating' }}</label>
-                    &nbsp;&nbsp;&nbsp; {{ 'entry_bad' }}&nbsp;
-                    <input type="radio" name="rating" value="1" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="2" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="3" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="4" />
-                    &nbsp;
-                    <input type="radio" name="rating" value="5" />
-                    &nbsp;{{ 'entry_good' }}</div>
-                </div>
-                {{ 'captcha' }}
-                <div class="buttons clearfix">
-                  <div class="pull-right">
-                    <button type="button" id="button-review" data-loading-text="{{ 'text_loading' }}" class="btn btn-primary">{{ 'button_continue' }}</button>
-                  </div>
-                </div>
-                @else)
-                {{ 'text_login' }}
-                @endif
-              </form>
-            </div>
-            @endif
-            </div>
+        <div class="{{ $class }}">
+          @include('block.catalog.product.images')
+          @include('tabgroups')
         </div>
-        @if(($column_left ?? false) || ($column_right ?? false))
-        <?php $class = 'col-sm-6' ?>
-        @else
-        <?php $class = 'col-sm-8' ?>
-        @endif
         <div class="{{ $class }}">
           <div class="btn-group">
             <button type="button" data-toggle="tooltip" class="btn btn-default" title="{{ 'button_wishlist' }}" onclick="wishlist.add('{{ 'product_id' }}');"><i class="fa fa-heart"></i></button>

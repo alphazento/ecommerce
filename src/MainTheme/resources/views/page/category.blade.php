@@ -42,7 +42,7 @@
     @endif
   @endif
   @if($products)
-    @include('block.catalog.product.list')
+    @include('block.catalog.category.productlist')
   @endif
   @if(!$categories && !$products)
   <p>{{ __('text_empty') }}</p>
