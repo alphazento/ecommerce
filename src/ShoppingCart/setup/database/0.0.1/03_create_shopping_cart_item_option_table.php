@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryProductTable extends Migration
+class CreateShoppingCartItemOptionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,18 @@ class CreateCategoryProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_products', function (Blueprint $table) {
+        Schema::create('shopping_cart_item_options', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unsigned();
+            $table->integer('item_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            $table->integer('position');
+            $table->string('code', 255);
+            $table->text('value');
             $table->timestamps();
+            // 'taxes',//  []
+            // 'options'
         });
     }
+
 
     /**
      * Reverse the migrations.
@@ -28,6 +32,6 @@ class CreateCategoryProductTable extends Migration
      */
     public function down()
     {
-        Schema::drop('category_products');
+        Schema::drop('shopping_cart_item_options');
     }
 }

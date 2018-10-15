@@ -17,9 +17,7 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model
         'withcount' => ['items']
     ];
 
-
     protected $fillable = [
-        'guid',
         'email',
         'mode',   //test, stag, live
         'status',
@@ -31,22 +29,14 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model
         "currency",
         "total_weight",
         "total",
-        
     ];
 
-    // {
-    //     "discounts": [],
-    //     "customFields": [],
-    //     "plans": [],
-    //     "refunds": [],
-    // }
-
     public function billing_address() {
-        return $this->hasOne(Address::class, 'id', 'billing_address_id');
+        return $this->hasOne(ShoppingCartAddress::class, 'id', 'billing_address_id');
     }
 
     public function shipping_address() {
-        return $this->hasOne(Address::class, 'id', $this->ship_to_billingaddesss ? 'billing_address_id' : 'shipping_address');
+        return $this->hasOne(ShoppingCartAddress::class, 'id', $this->ship_to_billingaddesss ? 'billing_address_id' : 'shipping_address');
     }
 
     public function shipping_information() {
@@ -68,11 +58,11 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model
         //   },
     }
 
-    public function metadata() {
+    // public function metadata() {
 
-    }
+    // }
 
     public function items() {
-        return $this->hasMany(ShoppingCartItem::class, 'cart_guid', 'guid');
+        return $this->hasMany(ShoppingCartItem::class, 'cart_id');
     }
 }

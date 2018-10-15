@@ -9,18 +9,12 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
- 
-    // public static $preload_relations = [
-    //     'items',
-    //     'billing_address',
-    //     'shipping_address',
-    //     'withcount' => ['items']
-    // ];
+    public static $preload_relations = [
+        'options',
+    ];
 
     protected $fillable = [
-        'id',
-        'guid',
-        'cart_guid',
+        'cart_id',
         'name',
         'sku',
         'price',
@@ -37,6 +31,9 @@ class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model
         'duplicatable',
         "unitPrice",
         "totalPrice",
-        'options'
     ];
+
+    public function options() {
+        return $this->hasMany(ShoppingCartItemOption::class, 'item_id');
+    }
 }

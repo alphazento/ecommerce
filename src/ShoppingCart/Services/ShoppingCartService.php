@@ -1,0 +1,28 @@
+<?php
+
+namespace Zento\Catalog\Services;
+
+use Zento\Catalog\Model\DB\Product as ProductModel;
+use DB;
+use Store;
+use PrinterCategory;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+class ShoppingCartService
+{
+    public function cart($id) {
+
+    }
+
+    public function addItem($item) {
+
+    }
+
+    public function deleteItem($item) {
+
+    }
+
+    public function updateItem() {
+        
+    }
+}
