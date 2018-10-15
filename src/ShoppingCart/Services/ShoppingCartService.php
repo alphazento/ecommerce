@@ -14,6 +14,26 @@ class ShoppingCartService
 
     }
 
+    public function carts($filters) {
+
+    }
+
+    public function deleteCart($id) {
+
+    }
+
+    public function setBillingAddress($address) {
+
+    }
+
+    public function setShoppingAddress($address) {
+
+    }
+
+    public function addCoupon($coupon) {
+
+    }
+
     public function addItem($item) {
 
     }
@@ -22,7 +42,7 @@ class ShoppingCartService
 
     }
 
-    public function updateItem() {
+    public function updateItem($item) {
         
     }
 }

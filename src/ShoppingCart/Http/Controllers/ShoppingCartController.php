@@ -23,15 +23,27 @@ class ShoppingCartController extends Controller
     public function index() {
     }
 
-    public function addCartItem() {
+    public function addItem() {
+        ShoppingCartService::addItem();
     }
 
-    public function addCartItem() {
+    public function updateItem() {
+        ShoppingCartService::updateItem();
     }
 
-    public function updateCartItem() {
+    public function removeItem() {
+        ShoppingCartService::updateItem();
     }
 
-    public function removeCartItem() {
+    public function addCoupon() {
+        ShoppingCartService::addCoupon();
+    }
+
+    public function setBillingAddress() {
+
+    }
+
+    public function setShippingAddress() {
+
     }
 }
