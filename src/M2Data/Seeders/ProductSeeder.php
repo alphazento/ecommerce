@@ -82,7 +82,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     $attrInSet->save();
                     
                     if ($eavItem->value) {
-                        DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                        DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
                     }
                 }
             }

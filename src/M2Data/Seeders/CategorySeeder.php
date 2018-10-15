@@ -85,7 +85,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     $attrInSet->save();
                     
                     if ($eavItem->value) {
-                        DanamicAttributeFactory::single($category, $eavItem->codedesc->attribute_code)->new($eavItem->value);
+                        DanamicAttributeFactory::single($category, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
                     }
                 }
             }
