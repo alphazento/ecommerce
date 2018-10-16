@@ -1,8 +1,8 @@
 <?php
 
-namespace Zento\Contracts\Catalog;
+namespace Zento\Contracts\Catalog\Service;
 
-interface ProductProvider
+interface ProductProviderInterface
 {
     /**
      * Retrieve a user by their unique identifier.

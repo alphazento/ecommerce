@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShoppingCartItemTable extends Migration
+class CreateShoppingCartAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateShoppingCartItemTable extends Migration
      */
     public function up()
     {
-        Schema::create('shopping_cart_items', function (Blueprint $table) {
+        Schema::create('shopping_cart_addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id')->unsigned()->nullable();
             $table->string('firstname', 255);
@@ -26,10 +26,8 @@ class CreateShoppingCartItemTable extends Migration
             $table->string('postal_code', 16);
             $table->string('state', 32);
             $table->string('phone', 32)->nullable();
-            $table->string('mobile', 32)->nullable();
-            $table->string('fax', 32)->nullable();
             $table->smallInteger('address_type');
-          
+
             $table->timestamps();
         });
     }
@@ -42,6 +40,6 @@ class CreateShoppingCartItemTable extends Migration
      */
     public function down()
     {
-        Schema::drop('shopping_cart_items');
+        Schema::drop('shopping_cart_addresses');
     }
 }

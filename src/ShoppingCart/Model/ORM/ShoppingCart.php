@@ -6,19 +6,24 @@ use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class ShoppingCart extends \Illuminate\Database\Eloquent\Model
+class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCart
 {
+    use Traits\ParallelShoppingCart;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
- 
+
     public static $preload_relations = [
-        'items',
         'billing_address',
         'shipping_address',
+        'items',
         'withcount' => ['items']
     ];
 
     protected $fillable = [
         'email',
+        'customer_id',
+        'store_id',
+        'applied_rule_ids',
+        'client_ip',
         'mode',   //test, stag, live
         'status',
         'ship_to_billingaddesss', //boolean,
@@ -29,6 +34,9 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model
         "currency",
         "total_weight",
         "total",
+        'grand_total',
+        'subtotal',
+        'subtotal_with_discount'
     ];
 
     public function billing_address() {

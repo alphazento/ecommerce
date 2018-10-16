@@ -1,7 +1,7 @@
 {
-    "name": "alphazento/shoppingcart",
-    "description": "Zento ecommerce shopping cat package",
-    "keywords": ["laravel", "zento", "ecommerce", "shopping cart"],
+    "name": "alphazento/maintheme",
+    "description": "Zento ecommerce maintheme package",
+    "keywords": ["laravel", "zento", "ecommerce", "theme"],
     "license": "MIT",
     "authors": [
         {
@@ -31,12 +31,11 @@
             "aliases": {
             },
             "zento": {
-                "Zento_ShoppingCart":{
+                "Zento_MainTheme":{
                     "version" : "0.0.1",
                     "commands" : [
                     ],
-                    "providers" : [
-                        "\\Zento\\ShoppingCart\\Providers\\Entry"
+                    "providers": [
                     ]
                 }
             }

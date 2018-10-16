@@ -4,8 +4,10 @@ namespace Zento\Catalog\Providers;
 
 use Zento\Catalog\Services\EloquentCategoryProvider;
 use Zento\Catalog\Services\Product;
-
 use Illuminate\Support\ServiceProvider;
+
+use ThemeManager;
+use PackageManager;
 
 class Entry extends ServiceProvider
 {
@@ -18,7 +20,9 @@ class Entry extends ServiceProvider
         $this->app->singleton('product', function ($app) {
             return new Product();
         });
+        
         class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
+        ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
     }
 
     /**

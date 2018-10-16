@@ -6,9 +6,11 @@ use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model
+class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCartItem
 {
+    use Traits\ParallelShoppingCartItem;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
+
     public static $preload_relations = [
         'options',
     ];
@@ -22,15 +24,15 @@ class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model
         'url',
         'image',
         "quantity",
-        "minQuantity",
-        "maxQuantity",
+        "min_quantity",
+        "max_quantity",
         "stackable", //boolean
         'shippable',
         'taxable',
         'taxes',//  []
         'duplicatable',
-        "unitPrice",
-        "totalPrice",
+        "unit_price",
+        "total_price",
     ];
 
     public function options() {

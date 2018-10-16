@@ -6,12 +6,11 @@ use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model
+class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCartAddress
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
+    use Traits\ParallelShoppingCartAddress;
 
     protected $fillable = [
-        'id',
         'customer_id',
         'firstname',  
         'middlename',  
@@ -24,8 +23,6 @@ class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model
         "postal_code",
         "state",
         "phone",
-        "mobile",
-        "fax",
         "address_type"
     ];
 }

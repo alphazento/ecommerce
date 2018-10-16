@@ -6,7 +6,7 @@ use Zento\Catalog\Model\ORM\Category;
 use Zento\Catalog\Model\DB\Category\Description;
 use DB;
 
-class EloquentCategoryProvider implements \Zento\Contracts\Catalog\CategoryProvider 
+class EloquentCategoryProvider implements \Zento\Contracts\Catalog\Service\CategoryProviderInterface 
 {
     protected $rootId;
     protected $treeLevelFrom;

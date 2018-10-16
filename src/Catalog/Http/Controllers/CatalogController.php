@@ -34,7 +34,7 @@ class CatalogController extends Controller
 // dd($category->products);
         $product = \Zento\Catalog\Model\ORM\Product::first();
         $product->model = 'test';
-dd($product);
+dd($product->toArray());
         return (new \Zento\CMS\Services\LayoutService)->render('category', 'page.category', 
         [
             'heading_title' => $category->name,

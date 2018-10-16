@@ -1,8 +1,8 @@
 <?php
 
-namespace Zento\Catalog\Providers\Facades;
+namespace Zento\ShoppingCart\Providers\Facades;
 
-class CategoryService extends \Illuminate\Support\Facades\Facade
+class ShoppingCartService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class CategoryService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'categoryservice';
+        return 'ShoppingCartService';
     }
 }

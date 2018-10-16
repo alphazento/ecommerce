@@ -2,38 +2,60 @@
 
 namespace Zento\ShoppingCart\Http\Controllers;
 
-use CategoryService;
-use Product;
+
 use Route;
 use Request;
 use Registry;
-use View;
-use App\Http\Controllers\Controller;
-use Zento\Catalog\Model\DB\CartridgeSeries;
-use Zento\Catalog\Model\Search\LegacySearch as Adapter;
+use Product;
+use ShoppingCartService;
+
 use Illuminate\Support\Collection;
-use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
-use Zento\Catalog\Model\DB\CartridgeSeries\Description;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use ThemeManager;
-
-class ShoppingCartController extends Controller
+class ShoppingCartController extends \App\Http\Controllers\Controller
 {
-    public function index() {
+    protected function getMyCart() {
+        if ($cart = ShoppingCartService::myCart()) {
+            return $cart;
+        } 
+        if ($cart = ShoppingCartService::newCart()) {
+            return $cart;
+        }
     }
 
-    public function addItem() {
-        ShoppingCartService::addItem();
+    public function index() {
+        return view('pages.cart', ['cart' => ShoppingCartService::myCart()]);
+    }
+
+    public function addProduct() {
+        if ($cart = $this->getMyCart()) {
+            dd($cart);
+            if ($product = \Zento\Catalog\Model\ORM\Product::find(Request::get('product_id'))) {
+                dd($product);
+                ShoppingCartService::addProduct($product, Request::get('quantity'), null);
+            }
+        }
+        return redirect()->to(route('cart.index'));
+    }
+
+    public function updateItemQuantity() {
+        if ($cart = $this->getMyCart()) {
+            ShoppingCartService::updateItemQuantity($cart->getId(), Route::input('item_id'), Route::input('quantity'));
+        }
+        return redirect()->to(route('cart.index'));
+    }
+
+    public function deleteItem() {
+        if ($cart = $this->getMyCart()) {
+            ShoppingCartService::deleteItem(Route::input('id'));
+        }
+        return redirect()->to(route('cart.index'));
     }
 
     public function updateItem() {
         ShoppingCartService::updateItem();
     }
 
-    public function removeItem() {
-        ShoppingCartService::updateItem();
-    }
 
     public function addCoupon() {
         ShoppingCartService::addCoupon();
