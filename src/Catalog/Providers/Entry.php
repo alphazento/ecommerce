@@ -22,7 +22,9 @@ class Entry extends ServiceProvider
         });
         
         class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
-        ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
+        if (!$this->app->runningInConsole()) {
+            ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
+        }
     }
 
     /**

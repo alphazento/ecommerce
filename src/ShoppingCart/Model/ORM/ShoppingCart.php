@@ -44,7 +44,7 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento
     }
 
     public function shipping_address() {
-        return $this->hasOne(ShoppingCartAddress::class, 'id', $this->ship_to_billingaddesss ? 'billing_address_id' : 'shipping_address');
+        return $this->hasOne(ShoppingCartAddress::class, 'id', $this->ship_to_billingaddesss ? 'billing_address_id' : 'shipping_address_id');
     }
 
     public function shipping_information() {
