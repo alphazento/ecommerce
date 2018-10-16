@@ -85,8 +85,25 @@ class ShoppingCartService
 
     }
 
-    public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
+    public function addProductById($product_id, $quantity, $options) {
+        if ($mycart = $this->myCart()) {
+            foreach($mycart->items ?? [] as $item) {
+                if ($item->getProductId() == $product_id) {
+                    if ($item->options == $options) {
+                        $item->quantity += $quantity;
+                        $item->save();
+                        return true;
+                    }
+                }
+            }
+            if ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
+                $this->addProduct($product, $quantity, $options);
+            }
+        }
+    }
 
+    public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
+        // $item = new \Zento\Contracts\Catalog\Model\ShoppingCartItem();
     }
 
     public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCartItem $item) {

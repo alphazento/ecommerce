@@ -10,6 +10,8 @@ interface ShoppingCartItem
 
     public function getName();
 
+    public function getProductId();
+    
     public function getSku();
 
     public function getPrice();

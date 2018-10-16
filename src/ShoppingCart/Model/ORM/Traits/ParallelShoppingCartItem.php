@@ -12,6 +12,10 @@ trait ParallelShoppingCartItem
         return $this->cart_id;
     }
 
+    public function getProductId() {
+        return $this->product_id;
+    }
+
     public function getName() {
         return $this->name;
     }
