@@ -86,6 +86,7 @@ class ShoppingCartService
     }
 
     public function addProductById($product_id, $quantity, $options) {
+<<<<<<< HEAD
         if ($mycart = $this->myCart()) {
             foreach($mycart->items ?? [] as $item) {
                 if ($item->getProductId() == $product_id) {
@@ -101,6 +102,14 @@ class ShoppingCartService
             }
         }
     }
+=======
+        if ($product = ProductService::getProductById($product_id)) {
+            
+        }
+    }
+
+    public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
+>>>>>>> 5c91253561f8e84f353aa6481a9bf24457397a9d
 
     public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
         // $item = new \Zento\Contracts\Catalog\Model\ShoppingCartItem();

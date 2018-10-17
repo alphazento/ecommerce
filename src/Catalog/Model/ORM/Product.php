@@ -7,13 +7,9 @@ use Illuminate\Support\Collection;
 class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\Product
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-    use Traits\TraitDescriptionHelper;
-    use Traits\TraitProductPriceHelper;
-    use Traits\TraitRealationMutatorHelper;
+    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
     use Traits\ParallelProduct;
 
-    protected static $DesciptionModel = ProductDescription::class;
-    protected static $DesciptionModelForeignKey = 'product_id';
     public static $preload_relations = [
         'description_dataset' => [
             'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
@@ -25,4 +21,16 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
             'special_price', 'special_from', 'special_to'
         ]
     ];
+
+    public function description_dataset() {
+        return $this->hasOne(ProductDescription::class, 'product_id');
+    }
+
+    public function price_dataset() {
+        return $this->hasOne(ProductPrice::class, 'product_id');
+    }
+
+    public function special_price_dataset() {
+        return $this->hasOne(ProductSpecialPrice::class, 'product_id');
+    }
 }
