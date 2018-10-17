@@ -8,11 +8,8 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
 {
     use Traits\ParallelCategory;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-    use Traits\TraitDescriptionHelper;
-    use Traits\TraitRealationMutatorHelper;
+    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
  
-    protected static $DesciptionModel = CategoryDescription::class;
-    protected static $DesciptionModelForeignKey = 'category_id';
     public static $preload_relations = [
         'description_dataset' =>[
             'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
@@ -20,6 +17,10 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
         'children_categories',
         'withcount' => ['products']
     ];
+
+    public function description_dataset() {
+        return $this->hasOne(CategoryDescription::class, 'category_id');
+    }
 
     public function children_categories() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
