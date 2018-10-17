@@ -2,7 +2,7 @@
 
 namespace Zento\Contracts\Catalog\Model;
 
-interface Product extends \Zento\Contracts\AssertAbleInterface 
+interface Product extends \Zento\Contracts\AssertAbleInterface
 {
-    public function getId();
+    const PROPERTIES = ['id', 'level', 'url_path', 'path', 'include_in_menu'];
 }

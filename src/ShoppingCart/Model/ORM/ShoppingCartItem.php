@@ -8,7 +8,6 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCartItem
 {
-    use Traits\ParallelShoppingCartItem;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
 
     public static $preload_relations = [

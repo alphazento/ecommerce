@@ -8,7 +8,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
-    use Traits\ParallelProduct;
 
     public static $preload_relations = [
         'description_dataset' => [

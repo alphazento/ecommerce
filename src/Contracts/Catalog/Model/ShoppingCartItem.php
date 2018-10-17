@@ -2,46 +2,10 @@
 
 namespace Zento\Contracts\Catalog\Model;
 
-interface ShoppingCartItem
+interface ShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface 
 {
-    public function getId();
-
-    public function getCartId();
-
-    public function getName();
-
-    public function getProductId();
-    
-    public function getSku();
-
-    public function getPrice();
-
-    public function getDescription();
-
-    public function getUrl();
-
-    public function getImage();
-
-    public function getQuantity();
-
-    public function getMinQuantity();
-
-    public function getMaxQuantity();
-
-    public function getStackable();
-
-    public function getShippable();
-
-    public function getTaxable();
-
-    public function getDuplicatable();
-
-    public function getUnitPrice();
-    
-    public function getTotalPrice();
-
-    // public function getRecurring();
-    public function getCustomFields();
-
-    public function getOptions();
+    const PROPERTIES = ['id', 'cart_id', 'name', 'product_id', 'sku', 'price', 'description',
+        'url', 'image',  'quantity', 'minquantity', 'maxquantity', 'stackable', 'shippable',
+        'taxable', 'duplicatable', 'unit_price', 'total_price',  'options'
+    ];
 }

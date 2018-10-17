@@ -3,11 +3,13 @@
 if (!function_exists('zento_assert')) {
     function zento_assert(\Zento\Contracts\AssertAbleInterface $obj) {
         if (app()->environment(['local', 'staging'])) {
-            $exists = [];
             $diffs = [];
             if ($obj instanceof \Illuminate\Database\Eloquent\Model) {
-                $attributes = array_merge(array_keys($obj->getAttributes()), array_keys($obj->getRelations()));
-                $diffs = array_diff($obj::PROPERTIES, $attributes);
+                $attributes = $obj->getAttributes();
+                if (!empty($attributes)) {
+                    $attributes = array_merge(array_keys($attributes), array_keys($obj->getRelations()));
+                    $diffs = array_diff($obj::PROPERTIES, $attributes);
+                }
             } else {
                 $diffs = $obj::PROPERTIES;
             }

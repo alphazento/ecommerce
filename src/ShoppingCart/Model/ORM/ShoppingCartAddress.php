@@ -8,7 +8,7 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCartAddress
 {
-    use Traits\ParallelShoppingCartAddress;
+    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
 
     protected $fillable = [
         'customer_id',

@@ -2,33 +2,9 @@
 
 namespace Zento\Contracts\Catalog\Model;
 
-interface ShoppingCart
+interface ShoppingCart  extends \Zento\Contracts\AssertAbleInterface 
 {
-    public function getId();
-
-    public function getEmail();
-
-    public function getMode();
-
-    public function getStatus();
-
-    public function shipToBillingAddress();
-
-    public function getBillingAddress();
-
-    public function getShippingAddress();
-
-    public function getInvoiceNumber();
-
-    public function getPaymentMethod();
-
-    public function getCurrency();
-
-    public function getTotalWeight();
-
-    public function getTotal();
-
-    public function getItems();
-
-    public function getItemCount();
+    const PROPERTIES = ['id', 'email', 'mode', 'status', 'ship_to_billingaddesss', 'billing_address', 'shipping_address',
+        'invoice_number', 'payment_method',  'currency', 'total_weight', 'total',  'items', 'items_count'
+    ];
 }

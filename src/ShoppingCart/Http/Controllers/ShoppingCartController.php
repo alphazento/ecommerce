@@ -23,7 +23,14 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         }
     }
 
+    protected  function test(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+        zento_assert($cart);
+        dd($cart);
+    }
+
     public function index() {
+        $this->test(new \Zento\ShoppingCart\Model\ORM\ShoppingCart);
+        dd(\Zento\ShoppingCart\Model\ORM\ShoppingCart::find(1));
         return view('pages.cart', ['cart' => ShoppingCartService::myCart()]);
     }
 

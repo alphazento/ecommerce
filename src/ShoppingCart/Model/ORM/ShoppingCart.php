@@ -8,8 +8,8 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCart
 {
-    use Traits\ParallelShoppingCart;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
 
     public static $preload_relations = [
         'billing_address',
