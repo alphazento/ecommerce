@@ -2,12 +2,11 @@
 
 namespace Zento\Catalog\Model\ORM;
 
-use DB;
-use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class Category extends \Illuminate\Database\Eloquent\Model
+class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\Category
 {
+    use Traits\ParallelCategory;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use Traits\TraitDescriptionHelper;
     use Traits\TraitRealationMutatorHelper;
@@ -18,15 +17,11 @@ class Category extends \Illuminate\Database\Eloquent\Model
         'description_dataset' =>[
             'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
         ],
-        'childrenCategories',
+        'children_categories',
         'withcount' => ['products']
     ];
 
-    public function getIdentifierName() {
-        return 'id';
-    }
-    
-    public function childrenCategories() {
+    public function children_categories() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
     }
 
@@ -57,36 +52,15 @@ class Category extends \Illuminate\Database\Eloquent\Model
     public function products() {
         return $this->hasManyThrough(Product::class, CategoryProduct::class, 'category_id', 'id', 'id', 'product_id');
     }
-
-    public function tree() {
-		$categories = $this->getCategoriesByLevel($this->rootLevel);
-		foreach ($categories as $category) {
-			$children_data = $this->loadChildren($category);
-			$data['categories'][] = array(
-				'category_id' => $category->id,
-				'name' => $category->name . (config('config_product_count', true) ? ' (' . $category->products_count. ')' : ''),
-				'children'    => $children_data,
-				'href'        => $category->url_path,
-				// 'filter_data' => $filter_data
-			);
-		}
-		$extraData['categories'] = $data['categories'];
-	}
-
-	protected function loadChildren($category) {
-		$children_data = [];
-		$children = $category->childrenCategories;
-		foreach($children as $child) {
-			$item = [
-				'category_id' => $child->id,
-				'name' => $child->name . (config('config_product_count', true) ? ' (' . $child->products_count. ')' : ''),
-				'href' => $child->url_path,
-			];
-			if ($child->childrenCategories && $child->childrenCategories->count() > 0) {
-				$item['children'] = $this->loadChildren($child);
-			}
-			$children_data[] = $item;
-		}
-		return $children_data;
-	}
+    
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query, $activeOnly = true)
+    {
+        return $query->whereIn('is_active', $activeOnly ? [1]:[0,1]);
+    }
 }

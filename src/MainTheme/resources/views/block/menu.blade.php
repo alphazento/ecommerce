@@ -9,13 +9,13 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
         @foreach($categories as $category)
-        @if($category->childrenCategories)
+        @if($category->children_categories)
         <li class="dropdown"><a href="{{ $category->url_path }}" class="dropdown-toggle" data-toggle="dropdown">{{ $category->name }}</a>
           <div class="dropdown-menu">
             <div class="dropdown-inner">
-              @foreach($category->childrenCategories as $children)
+              @foreach($category->children_categories as $children)
               <ul class="list-unstyled">
-                @foreach($children->childrenCategories ?? [$children]  as $child)
+                @foreach($children->children_categories ?? [$children]  as $child)
                 @if ($child) 
                 <li><a href="{{ $child->url_path }}">{{ $child->name }}({{ $child->children_count }})</a></li>
                 @endif

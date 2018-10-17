@@ -29,9 +29,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function addProduct() {
         if ($cart = $this->getMyCart()) {
-            if ($product = \Zento\Catalog\Model\ORM\Product::find(Request::get('product_id'))) {
-                ShoppingCartService::addProduct($product, Request::get('quantity'), null);
-            }
+            ShoppingCartService::addProductById(Request::get('product_id'), Request::get('quantity'), null);
         }
         return redirect()->to(route('cart.index'));
     }

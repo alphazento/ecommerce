@@ -85,6 +85,12 @@ class ShoppingCartService
 
     }
 
+    public function addProductById($product_id, $quantity, $options) {
+        if ($product = ProductService::getProductById($product_id)) {
+            
+        }
+    }
+
     public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
 
     }

@@ -2,8 +2,8 @@
   @foreach($categories as $category)
     @if($category->id == $category_id) 
       <a href="{{ $category->url_path }}" class="list-group-item active">{{ $category->name }}</a> 
-      @if($category->childrenCategories)
-        @foreach($category->childrenCategories as $child)
+      @if($category->children_categories)
+        @foreach($category->children_categories as $child)
           @if($child->id == $child_id)
           <a href="{{ $child->url_path }}" class="list-group-item active">&nbsp;&nbsp;&nbsp;- {{ CategoryService::getName($child, true)  }}</a> 
           @else

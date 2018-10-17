@@ -2,7 +2,7 @@
 
 namespace Zento\Catalog\Providers\Facades;
 
-class PrinterCategory extends \Illuminate\Support\Facades\Facade
+class ProductService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class PrinterCategory extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'printercategory';
+        return 'ProductService';
     }
 }
