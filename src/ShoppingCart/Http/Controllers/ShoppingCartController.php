@@ -38,6 +38,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         if ($cart = $this->getMyCart()) {
             ShoppingCartService::addProductById(Request::get('product_id'), Request::get('quantity'), null);
         }
+        if (Request::ajax()) {
+            return  [];
+        }
         return redirect()->to(route('cart.index'));
     }
 
@@ -58,7 +61,6 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function updateItem() {
         ShoppingCartService::updateItem();
     }
-
 
     public function addCoupon() {
         ShoppingCartService::addCoupon();

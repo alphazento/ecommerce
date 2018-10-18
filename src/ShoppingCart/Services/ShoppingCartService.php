@@ -44,9 +44,9 @@ class ShoppingCartService
             'subtotal_with_discount' => 0
         ]);
         $cart->save();
-        $this->cartCache[$cart->getId()] = $cart;
+        $this->cartCache[$cart->id] = $cart;
         $this->myCart = $cart;
-        session()->put('shopping_cart', $cart->getId());
+        session()->put('shopping_cart', $cart->id);
         return $cart;
     }
 
