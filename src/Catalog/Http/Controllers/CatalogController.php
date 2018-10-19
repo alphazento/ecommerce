@@ -35,7 +35,7 @@ class CatalogController extends Controller
         $product = \Zento\Catalog\Model\ORM\Product::first();
         $product->model = 'test';
         $category = CategoryService::where('id', 13)->first();
-        // \zento_assert($category);
+        \zento_assert($category);
         // dd($category);
         $product->price = 10111;
 dd($product->toArray());

@@ -23,23 +23,18 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         }
     }
 
-    protected  function test(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
-        zento_assert($cart);
-        dd($cart);
-    }
-
     public function index() {
-        $this->test(new \Zento\ShoppingCart\Model\ORM\ShoppingCart);
-        dd(\Zento\ShoppingCart\Model\ORM\ShoppingCart::find(1));
-        return view('pages.cart', ['cart' => ShoppingCartService::myCart()]);
+        return (new \Zento\CMS\Services\LayoutService)->render('checkout', 'page.cart',  ['cart'=> ShoppingCartService::myCart()]);
+        // return view('pages.cart', ['cart' => ShoppingCartService::myCart()]);
     }
 
     public function addProduct() {
+        $item = null;
         if ($cart = $this->getMyCart()) {
-            ShoppingCartService::addProductById(Request::get('product_id'), Request::get('quantity'), null);
+            $item =  ShoppingCartService::addProductById(Request::get('product_id'), Request::get('quantity'), []);
         }
         if (Request::ajax()) {
-            return  [];
+            return  ['success' => $item ? sprintf('%s has been added.', $item->name) : false, 'total' => $cart->total ?? 0];
         }
         return redirect()->to(route('cart.index'));
     }

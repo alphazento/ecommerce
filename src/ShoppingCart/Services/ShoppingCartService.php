@@ -108,7 +108,7 @@ class ShoppingCartService
         return null;
     }
 
-    public function addProductById($product_id, $quantity, $options) {
+    public function addProductById($product_id, $quantity, array $options =[]) {
         if ($mycart = $this->myCart()) {
             if ($item = $this->findExistItem($mycart, $product_id, $options)) {
                 $item->quantity += $quantity;
@@ -122,7 +122,7 @@ class ShoppingCartService
         return false;
     }
 
-    protected function addNewItem(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
+    protected function addNewItem(\Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
         zento_assert($product);
         $item = new \Zento\ShoppingCart\Model\ORM\ShoppingCartItem([
             'cart_id' => $this->myCart->id,
@@ -148,7 +148,7 @@ class ShoppingCartService
         return $item;
     }
 
-    public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, $options) {
+    public function addProduct(\Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
         zento_assert($product);
         if ($mycart = $this->myCart()) {
             if ($item = $this->findExistItem($mycart, $product->id, $options)) {
