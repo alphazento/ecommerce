@@ -9,13 +9,15 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
  
-    public static $preload_relations = [
-        'description_dataset' =>[
-            'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
-        ],
-        'children_categories',
-        'withcount' => ['products']
-    ];
+    public static function getPreloadRelations() {
+        return [
+            'description_dataset' =>[
+                'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
+            ],
+            'children_categories',
+            'withcount' => ['products']
+        ];
+    }
 
     public function description_dataset() {
         return $this->hasOne(CategoryDescription::class, 'category_id');

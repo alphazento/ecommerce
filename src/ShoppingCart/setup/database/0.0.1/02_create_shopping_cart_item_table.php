@@ -15,6 +15,7 @@ class CreateShoppingCartItemTable extends Migration
         Schema::create('shopping_cart_items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('cart_id')->unsigned();
+            $table->integer('product_id')->unsigned();
             $table->string('name', 255);
             $table->string('sku', 255);
             $table->decimal('price', 8, 2);
@@ -23,14 +24,14 @@ class CreateShoppingCartItemTable extends Migration
             $table->string('url', 255);
             $table->string('image', 255);
             $table->smallInteger('quantity');
-            $table->smallInteger('minQuantity');
-            $table->smallInteger('maxQuantity');
+            $table->smallInteger('min_quantity');
+            $table->smallInteger('max_quantity');
             $table->boolean('shippable');
             $table->boolean('taxable');
             $table->decimal('tax_amount', 8, 2);
             $table->boolean('duplicatable');
-            $table->decimal('unitPrice', 8, 2);
-            $table->decimal('totalPrice', 8, 2);
+            $table->decimal('unit_price', 8, 2);
+            $table->decimal('total_price', 8, 2);
             $table->timestamps();
             // 'taxes',//  []
             // 'options'

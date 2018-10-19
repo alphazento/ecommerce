@@ -15,7 +15,6 @@ class CreateShoppingCartItemOptionTable extends Migration
         Schema::create('shopping_cart_item_options', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
-            $table->integer('product_id')->unsigned();
             $table->string('code', 255);
             $table->text('value');
             $table->timestamps();

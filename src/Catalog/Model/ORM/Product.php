@@ -9,18 +9,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
 
-    public static $preload_relations = [
-        'description_dataset' => [
-            'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
-        ],
-        'price_dataset' => [
-            'rrp', 'cost', 'price',
-        ],
-        'special_price_dataset' => [
-            'special_price', 'special_from', 'special_to'
-        ]
-    ];
-
     public function description_dataset() {
         return $this->hasOne(ProductDescription::class, 'product_id');
     }
@@ -32,4 +20,18 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     public function special_price_dataset() {
         return $this->hasOne(ProductSpecialPrice::class, 'product_id');
     }
+
+    public static function getPreloadRelations() {
+        return [
+            'description_dataset' => [
+                'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
+            ],
+            'price_dataset' => [
+                'rrp', 'cost', 'price',
+            ],
+            'special_price_dataset' => [
+                'special_price', 'special_from', 'special_to'
+            ]
+        ];
+    } 
 }

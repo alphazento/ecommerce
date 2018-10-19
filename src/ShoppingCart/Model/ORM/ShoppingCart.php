@@ -11,12 +11,14 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
 
-    public static $preload_relations = [
-        'billing_address',
-        'shipping_address',
-        'items',
-        'withcount' => ['items']
-    ];
+    public static function getPreloadRelations() {
+        return [
+            'billing_address',
+            'shipping_address',
+            'items',
+            'withcount' => ['items']
+        ];
+    }
 
     protected $fillable = [
         'email',
