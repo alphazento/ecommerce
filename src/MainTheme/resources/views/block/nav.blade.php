@@ -20,7 +20,7 @@
         </li>
         <li><a href="{{ route('wishlist') }}" id="wishlist-total" title="{{ __('wishlist') }}"><i class="fa fa-heart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ __('wishlist') }}</span></a></li>
         <li><a href="{{ route('shopping_cart') }}" title="{{ __('shopping cart') }}"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ __('shopping cart') }}</span></a></li>
-        <li><a href="{{ route('checkout') }}" title="{{ __('checkout') }}"><i class="fa fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ __('checkout') }}</span></a></li>
+        <li><a href="{{ route('checkout.index') }}" title="{{ __('checkout') }}"><i class="fa fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ __('checkout') }}</span></a></li>
       </ul>
     </div>
   </div>

@@ -1,8 +1,7 @@
 <?php
 
-namespace Zento\ShoppingCart\Providers;
+namespace Zento\Checkout\Providers;
 
-// use Zento\Catalog\Services\CategoryService;
 use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,11 +9,11 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('ShoppingCartService', function ($app) {
-            return new \Zento\ShoppingCart\Services\ShoppingCartService();
-        });
+        // $this->app->singleton('ShoppingCartService', function ($app) {
+        //     return new \Zento\ShoppingCart\Services\ShoppingCartService();
+        // });
        
-        class_alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
+        // class_alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
     }
 
     /**

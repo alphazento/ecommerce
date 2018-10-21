@@ -1,7 +1,7 @@
 {
     "name": "alphazento/checkout",
-    "description": "Zento ecommerce shopping cat package",
-    "keywords": ["laravel", "zento", "ecommerce", "shopping cart"],
+    "description": "Zento ecommerce checkout process package",
+    "keywords": ["laravel", "zento", "ecommerce", "checkout"],
     "license": "MIT",
     "authors": [
         {
@@ -31,12 +31,12 @@
             "aliases": {
             },
             "zento": {
-                "Zento_ShoppingCart":{
+                "Zento_Checkout":{
                     "version" : "0.0.1",
                     "commands" : [
                     ],
                     "providers" : [
-                        "\\Zento\\ShoppingCart\\Providers\\Entry"
+                        "\\Zento\\Checkout\\Providers\\Entry"
                     ]
                 }
             }
