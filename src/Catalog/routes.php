@@ -144,3 +144,28 @@ Route::group(
         ['as' => 'category', 'uses' => 'CatalogController@category']
     )->where('ids', '([\d\/]+)?');
 });
+
+Route::group(
+    [
+        'prefix' => '/rest/v1',
+        'namespace' => '\Zento\Catalog\Http\Controllers',
+        // 'middleware' => ['web']
+        'middleware' => ['cors']
+    ], function () {
+        Route::options('/{all}', ['uses' => 'ApiCatalogController@options'])->where('all', '.*');
+
+        Route::get(
+            '/categories', 
+            ['as' => 'home', 'uses' => 'ApiCatalogController@categories']
+        );
+
+        Route::get(
+            '/categories/{ids}/',
+            ['as' => 'category', 'uses' => 'ApiCatalogController@category']
+        )->where('ids', '([\d\/]+)?');
+
+        Route::get(
+            '/product/{id}', 
+            ['as' => 'product', 'uses' => 'ApiCatalogController@product']
+        );
+});
