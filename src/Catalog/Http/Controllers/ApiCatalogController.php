@@ -34,6 +34,22 @@ class ApiCatalogController extends Controller
 
         return $category;
     }
+    // public function category() {
+    //     $category = CategoryService::getCategoryById(Route::input('id'));
+    //     \zento_assert($category);
+
+    //     return $category;
+    // }
+
+    public function productsOfCategory() {
+        $category = CategoryService::getCategoryById(Route::input('id'));
+        \zento_assert($category);
+        return $category->products;
+    }
+
+    public function products() {
+        return \Zento\Catalog\Model\ORM\Product::limit(12);
+    }
 
     public function product() {
         $category = CategoryService::getCategoryById(30);

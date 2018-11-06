@@ -159,10 +159,20 @@ Route::group(
             ['as' => 'home', 'uses' => 'ApiCatalogController@categories']
         );
 
+        // Route::get(
+        //     '/categories/{id}/',
+        //     ['as' => 'category', 'uses' => 'ApiCatalogController@category']
+        // )->where('ids', '([\d\/]+)?');
+
         Route::get(
             '/categories/{ids}/',
             ['as' => 'category', 'uses' => 'ApiCatalogController@category']
         )->where('ids', '([\d\/]+)?');
+
+        Route::get(
+            '/categories/{id}/products',
+            ['as' => 'category.products', 'uses' => 'ApiCatalogController@productsOfCategory']
+        );
 
         Route::get(
             '/product/{id}', 
