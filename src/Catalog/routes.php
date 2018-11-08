@@ -178,4 +178,14 @@ Route::group(
             '/product/{id}', 
             ['as' => 'product', 'uses' => 'ApiCatalogController@product']
         );
+
+        Route::get(
+            '/section/newproducts', 
+            ['as' => 'section.newproducts', 'uses' => 'ApiCatalogController@newProductSection']
+        );
+
+        Route::get(
+            '/section/shoppingcollection', 
+            ['as' => 'section.shoppingcollection', 'uses' => 'ApiCatalogController@shoppingCollectionSection']
+        );
 });

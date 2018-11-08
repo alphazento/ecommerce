@@ -56,4 +56,39 @@ class ApiCatalogController extends Controller
         $product = $category->products[0];
         return $product;
     }
+
+    public function newProductSection() {
+        // $categories[] = CategoryService::getCategoryById(19);
+        $categories[] = CategoryService::getCategoryById(22);
+        $categories[] = CategoryService::getCategoryById(29);
+        $categories[] = CategoryService::getCategoryById(33);
+        $categories[] = CategoryService::getCategoryById(8);
+
+        $collection = [];
+        foreach($categories as $category) {
+            $collection[] = ['name' => $category->name, 'products' => $category->products()->limit(6)->get()];
+        }
+        return $collection;
+    }
+
+    public function shoppingCollectionSection() {
+        return [
+            [
+                'name' => 'Spring 2018',
+                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+            ],
+            [
+                'name' => 'Productivity',
+                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+            ],
+            [
+                'name' => 'Live boost',
+                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+            ],
+            [
+                'name' => 'Mobile',
+                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+            ]
+            ];
+    }
 }
