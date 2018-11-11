@@ -150,6 +150,7 @@ Route::group(
         'prefix' => '/rest/v1',
         'namespace' => '\Zento\Catalog\Http\Controllers',
         // 'middleware' => ['web']
+        // 'middleware' => ['cors', 'auth:api']
         'middleware' => ['cors']
     ], function () {
         Route::options('/{all}', ['uses' => 'ApiCatalogController@options'])->where('all', '.*');
