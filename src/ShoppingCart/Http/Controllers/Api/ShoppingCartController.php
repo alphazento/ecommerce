@@ -1,10 +1,11 @@
 <?php
 
-namespace Zento\ShoppingCart\Http\Controllers;
+namespace Zento\ShoppingCart\Http\Controllers\Api;
 
 
 use Route;
 use Request;
+use Response;
 use Registry;
 use Product;
 use ShoppingCartService;
@@ -12,41 +13,40 @@ use ShoppingCartService;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ShoppingCartApiController extends \App\Http\Controllers\Controller
+class ShoppingCartController extends \App\Http\Controllers\Controller
 {
-    protected function getMyCart() {
-        if ($cart = ShoppingCartService::myCart()) {
-            return $cart;
-        } 
-        if ($cart = ShoppingCartService::newCart()) {
-            return $cart;
-        }
+    public function getCart() {
+        $cart = $this->retrieveCart();
+        return ['status'=> ($cart ? 200 : 404), 'data' => $cart];
     }
 
-    public function index() {
-        return $this->getMyCart();
+    protected function retrieveCart() {
+        $cart_guid = Route::input('guid');
+        return $cart_guid ? ShoppingCartService::cart($cart_guid) : null;
+    }
+
+    public function newCart() {
+        $cart = ShoppingCartService::newCart();
+        return ['status'=> ($cart ? 201 : 420), 'data' => $cart];
     }
 
     public function addProduct() {
         $item = null;
-        if ($cart = $this->getMyCart()) {
-            $item =  ShoppingCartService::addProductById(Request::get('product_id'), Request::get('quantity'), []);
+        if ($cart = $this->retrieveCart()) {
+            $item =  ShoppingCartService::addProductById($cart, Request::get('product_id'), Request::get('quantity'), []);
         }
-        if (Request::ajax()) {
-            return  ['success' => $item ? sprintf('%s has been added.', $item->name) : false, 'total' => $cart->total ?? 0];
-        }
-        return redirect()->to(route('cart.index'));
+        return ['status'=> ($item ? 201 : 420), 'data' => ['cart_id' => $cart->guid]];
     }
 
     public function updateItemQuantity() {
-        if ($cart = $this->getMyCart()) {
+        if ($cart = $this->retrieveCart()) {
             ShoppingCartService::updateItemQuantity($cart->getId(), Route::input('item_id'), Route::input('quantity'));
         }
         return redirect()->to(route('cart.index'));
     }
 
     public function deleteItem() {
-        if ($cart = $this->getMyCart()) {
+        if ($cart = $this->retrieveCart()) {
             ShoppingCartService::deleteItem(Route::input('id'));
         }
         return redirect()->to(route('cart.index'));

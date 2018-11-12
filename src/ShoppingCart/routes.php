@@ -54,47 +54,57 @@ Route::group(
 Route::group(
     [
         'prefix' => '/rest/v1/cart',
-        'namespace' => '\Zento\ShoppingCart\Http\Controllers',
+        'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
         'middleware' => ['cors']
         // 'middleware' => ['web']
     ], function () {
     Route::get(
-        '/', 
-        ['as' => 'cart.index', 'uses' => 'ShoppingCartApiController@index']
+        '/{guid}', 
+        ['as' => 'cart.get', 'uses' => 'ShoppingCartController@getCart']
     );
 
     Route::post(
-        '/items/add', 
-        ['as' => 'cart.add', 'uses' => 'ShoppingCartApiController@addProduct']
+        '/new', 
+        ['as' => 'cart.new', 'uses' => 'ShoppingCartController@newCart']
+    );
+
+    Route::delete(
+        '/{guid}', 
+        ['as' => 'cart.delete', 'uses' => 'ShoppingCartController@deleteCart']
     );
 
     Route::post(
-        '/items/{item_id}/delete', 
-        ['as' => 'cart.item.delete', 'uses' => 'ShoppingCartApiController@deleteItem']
+        '/{guid}/items/add', 
+        ['as' => 'cart.add', 'uses' => 'ShoppingCartController@addProduct']
+    );
+
+    Route::delete(
+        '/{guid}/items/{item_id}/delete', 
+        ['as' => 'cart.item.delete', 'uses' => 'ShoppingCartController@deleteItem']
     );
 
     Route::post(
-        '/items/{item_id}/update/quantity/{quantity}', 
+        '/{guid}/items/{item_id}/update/quantity/{quantity}', 
         ['as' => 'cart.item.update.quantity', 'uses' => 'ShoppingCartController@updateItemQuantity']
     );
 
     Route::get(
-        '/billing_address', 
+        '/{guid}/billing_address', 
         ['as' => 'cart.billing_address', 'uses' => 'ShoppingCartController@index']
     );
 
     Route::post(
-        '/billing_address', 
+        '/{guid}/billing_address', 
         ['as' => 'cart.billing_address.post', 'uses' => 'ShoppingCartController@index']
     );
 
     Route::get(
-        '/shipping_address', 
+        '/{guid}/shipping_address', 
         ['as' => 'cart.shipping_address', 'uses' => 'ShoppingCartController@index']
     );
 
     Route::post(
-        '/shipping_address', 
+        '/{guid}/shipping_address', 
         ['as' => 'cart.shipping_address.post', 'uses' => 'ShoppingCartController@index']
     );
 });

@@ -14,6 +14,7 @@ class CreateShoppingCartTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('guid', 36)->unique();
             $table->string('email', 255);
             $table->string('customer_id', 255);
             $table->string('store_id', 255);

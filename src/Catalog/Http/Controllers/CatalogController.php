@@ -31,14 +31,14 @@ class CatalogController extends Controller
     public function category() {
         $ids = explode('/', Route::input('ids'));
         $category = CategoryService::getCategoryById(last($ids));
-// dd($category->products);
+        // dd($category->products);
         $product = \Zento\Catalog\Model\ORM\Product::first();
         $product->model = 'test';
         $category = CategoryService::where('id', 13)->first();
         \zento_assert($category);
         // dd($category);
         $product->price = 10111;
-dd($product->toArray());
+        dd($product->toArray());
         return (new \Zento\CMS\Services\LayoutService)->render('category', 'page.category', 
         [
             'heading_title' => $category->name,

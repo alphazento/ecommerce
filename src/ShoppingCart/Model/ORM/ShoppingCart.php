@@ -20,7 +20,10 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento
         ];
     }
 
+    // protected $fillable = self::PROPERTIES;
+
     protected $fillable = [
+        'guid',
         'email',
         'customer_id',
         'store_id',

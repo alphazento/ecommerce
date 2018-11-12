@@ -148,45 +148,45 @@ Route::group(
 Route::group(
     [
         'prefix' => '/rest/v1',
-        'namespace' => '\Zento\Catalog\Http\Controllers',
+        'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         // 'middleware' => ['web']
         // 'middleware' => ['cors', 'auth:api']
         'middleware' => ['cors']
     ], function () {
-        Route::options('/{all}', ['uses' => 'ApiCatalogController@options'])->where('all', '.*');
+        Route::options('/{all}', ['uses' => 'CatalogController@options'])->where('all', '.*');
 
         Route::get(
             '/categories', 
-            ['as' => 'home', 'uses' => 'ApiCatalogController@categories']
+            ['as' => 'home', 'uses' => 'CatalogController@categories']
         );
-
-        // Route::get(
-        //     '/categories/{id}/',
-        //     ['as' => 'category', 'uses' => 'ApiCatalogController@category']
-        // )->where('ids', '([\d\/]+)?');
+        
+        Route::get(
+            '/categories/tree', 
+            ['as' => 'home', 'uses' => 'CatalogController@categoriesTree']
+        );
 
         Route::get(
             '/categories/{ids}/',
-            ['as' => 'category', 'uses' => 'ApiCatalogController@category']
+            ['as' => 'category', 'uses' => 'CatalogController@category']
         )->where('ids', '([\d\/]+)?');
 
         Route::get(
             '/categories/{id}/products',
-            ['as' => 'category.products', 'uses' => 'ApiCatalogController@productsOfCategory']
+            ['as' => 'category.products', 'uses' => 'CatalogController@productsOfCategory']
         );
 
         Route::get(
             '/product/{id}', 
-            ['as' => 'product', 'uses' => 'ApiCatalogController@product']
+            ['as' => 'product', 'uses' => 'CatalogController@product']
         );
 
         Route::get(
             '/section/newproducts', 
-            ['as' => 'section.newproducts', 'uses' => 'ApiCatalogController@newProductSection']
+            ['as' => 'section.newproducts', 'uses' => 'CatalogController@newProductSection']
         );
 
         Route::get(
             '/section/shoppingcollection', 
-            ['as' => 'section.shoppingcollection', 'uses' => 'ApiCatalogController@shoppingCollectionSection']
+            ['as' => 'section.shoppingcollection', 'uses' => 'CatalogController@shoppingCollectionSection']
         );
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Catalog\Http\Controllers;
+namespace Zento\Catalog\Http\Controllers\Api;
 
 use CategoryService;
 use Product;
@@ -16,13 +16,12 @@ use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
 use Zento\Catalog\Model\DB\CartridgeSeries\Description;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ApiCatalogController extends Controller
+class CatalogController extends Controller
 {
-    public function options()
-    {
-        
+    public function categoriesTree() {
+        return CategoryService::tree();
     }
-
+    
     public function categories() {
         return CategoryService::tree();
     }
@@ -34,12 +33,6 @@ class ApiCatalogController extends Controller
 
         return $category;
     }
-    // public function category() {
-    //     $category = CategoryService::getCategoryById(Route::input('id'));
-    //     \zento_assert($category);
-
-    //     return $category;
-    // }
 
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
