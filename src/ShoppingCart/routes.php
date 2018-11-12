@@ -79,12 +79,12 @@ Route::group(
     );
 
     Route::delete(
-        '/{guid}/items/{item_id}/delete', 
+        '/{guid}/items/{item_id}', 
         ['as' => 'cart.item.delete', 'uses' => 'ShoppingCartController@deleteItem']
     );
 
-    Route::post(
-        '/{guid}/items/{item_id}/update/quantity/{quantity}', 
+    Route::patch(
+        '/{guid}/items/{item_id}/quantity/{quantity}', 
         ['as' => 'cart.item.update.quantity', 'uses' => 'ShoppingCartController@updateItemQuantity']
     );
 

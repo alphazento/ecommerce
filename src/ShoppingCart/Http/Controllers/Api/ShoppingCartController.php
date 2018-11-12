@@ -40,16 +40,18 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function updateItemQuantity() {
         if ($cart = $this->retrieveCart()) {
-            ShoppingCartService::updateItemQuantity($cart->getId(), Route::input('item_id'), Route::input('quantity'));
+            $success = ShoppingCartService::updateItemQuantity($cart, Route::input('item_id'), Route::input('quantity'));
+            return ['status'=> ($success ? 200 : 420), 'data' => null];
         }
-        return redirect()->to(route('cart.index'));
+        return ['status'=> ($success ? 200 : 404), 'data' => [ 'cart not found.' . Route::input('guid')]];
     }
 
     public function deleteItem() {
         if ($cart = $this->retrieveCart()) {
-            ShoppingCartService::deleteItem(Route::input('id'));
+            $success = ShoppingCartService::deleteItem($cart, Route::input('item_id'));
+            return ['status'=> ($success ? 200 : 420), 'data' => null];
         }
-        return redirect()->to(route('cart.index'));
+        return ['status'=> ($success ? 200 : 404), 'data' => [ 'cart not found.' . Route::input('guid')]];
     }
 
     public function updateItem() {
