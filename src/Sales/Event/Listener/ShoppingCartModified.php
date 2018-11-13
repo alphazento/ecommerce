@@ -21,7 +21,7 @@ class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseListener
             }
             $event->shoppingCart->grand_total = $total;
             $event->shoppingCart->subtotal = $event->shoppingCart->grand_total + $event->shoppingCart->shipping_fee + $event->shoppingCart->handle_fee;
-
+            $event->shoppingCart->subtotal_with_discount = $event->shoppingCart->subtotal;
         }
     }
 }

@@ -25,8 +25,8 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         return $cart_guid ? ShoppingCartService::cart($cart_guid) : null;
     }
 
-    public function newCart() {
-        $cart = ShoppingCartService::newCart();
+    public function createCart() {
+        $cart = ShoppingCartService::createCart();
         return ['status'=> ($cart ? 201 : 420), 'data' => $cart];
     }
 

@@ -65,7 +65,7 @@ Route::group(
 
     Route::post(
         '/new', 
-        ['as' => 'cart.new', 'uses' => 'ShoppingCartController@newCart']
+        ['as' => 'cart.create', 'uses' => 'ShoppingCartController@createCart']
     );
 
     Route::delete(

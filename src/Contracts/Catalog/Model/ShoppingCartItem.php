@@ -18,7 +18,7 @@ interface ShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface
         'quantity', 
         'min_quantity', 
         'max_quantity', 
-        'stackable', 
+        // 'stackable', 
         'shippable',
         'taxable',
         'duplicatable', 

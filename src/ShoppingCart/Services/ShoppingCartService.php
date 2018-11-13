@@ -23,7 +23,7 @@ class ShoppingCartService
         return $this->myCart;
     }
 
-    public function newCart() {
+    public function createCart() {
         $cart = new ShoppingCart([
             'guid' => guidv4(),
             'email' => Auth::guest() ? '' : Auth::user()->getEmail(),
