@@ -29,7 +29,11 @@ class CreateShoppingCartTable extends Migration
             $table->integer('invoice_number')->unsigned();
             $table->smallInteger('payment_method')->unsigned();
             $table->integer('total_weight')->unsigned();
-            $table->decimal('grand_total', 8, 2)->unsigned();
+
+            $table->decimal('tax_amount', 8, 2)->default(0);
+            $table->decimal('grand_total', 8, 2)->default(0);
+            $table->decimal('shipping_fee', 8, 2)->default(0);
+            $table->decimal('handle_fee', 8, 2)->default(0);
             $table->decimal('subtotal', 8, 2)->unsigned();
             $table->decimal('subtotal_with_discount', 8, 2)->unsigned();
             $table->decimal('total', 8, 2)->unsigned();

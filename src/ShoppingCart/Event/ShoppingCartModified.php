@@ -6,19 +6,18 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Foundation\Events\Dispatchable;
 
 class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseEvent {
-
     /**
-     * @var \Zento\ShoppingCart\Model\ORM\ShoppingCart
+     * @var \Zento\Contracts\Catalog\Model\ShoppingCart
      */
     public $shoppingCart;
     
     /**
      * Create a new event instance.
      *
-     * @param  \Zento\ShoppingCart\Model\ORM\ShoppingCart  $shoppingCart
+     * @param  \Zento\Contracts\Catalog\Model\ShoppingCart  $shoppingCart
      * @return void
      */
-    public function __construct($shoppingCart)
+    public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart)
     {
         $this->shoppingCart = $shoppingCart;
     }

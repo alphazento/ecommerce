@@ -26,10 +26,9 @@ class CreateShoppingCartItemTable extends Migration
             $table->smallInteger('quantity');
             $table->smallInteger('min_quantity');
             $table->smallInteger('max_quantity');
+            $table->boolean('duplicatable');
             $table->boolean('shippable');
             $table->boolean('taxable');
-            $table->decimal('tax_amount', 8, 2);
-            $table->boolean('duplicatable');
             $table->decimal('unit_price', 8, 2);
             $table->decimal('total_price', 8, 2);
             $table->timestamps();

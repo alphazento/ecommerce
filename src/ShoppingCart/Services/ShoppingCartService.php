@@ -6,6 +6,7 @@ use DB;
 use Store;
 use Auth;
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
+use Zento\ShoppingCart\Event\ShoppingCartModified;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ShoppingCartService
@@ -116,13 +117,28 @@ class ShoppingCartService
             $item->quantity += $quantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
+            $this->shoppingCartModified($cart);
             return $item;
         } elseif ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
-            return $this->addNewItem($cart, $product, $quantity, $options);
+            return $this->addProductAsNewItem($cart, $product, $quantity, $options);
         }
     }
 
-    protected function addNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
+    public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
+        zento_assert($cart);
+        zento_assert($product);
+        if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
+            $item->quantity += $quantity;
+            $item->total_price = $item->unit_price * $item->quantity;
+            $item->save();
+            $this->shoppingCartModified($cart);
+            return $item;
+        } else {
+            return $this->addProductAsNewItem($product, $quantity, $options);
+        }
+    }
+
+    protected function addProductAsNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
         zento_assert($cart);
         zento_assert($product);
         $item = new \Zento\ShoppingCart\Model\ORM\ShoppingCartItem([
@@ -149,32 +165,19 @@ class ShoppingCartService
         return $item;
     }
 
-    public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
-        zento_assert($cart);
-        zento_assert($product);
-        if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
-            $item->quantity += $quantity;
-            $item->total_price = $item->unit_price * $item->quantity;
-            $item->save();
-            return $item;
-        } else {
-            return $this->addNewItem($product, $quantity, $options);
-        }
-    }
-
     public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\ShoppingCartItem $cartItem) {
         zento_assert($cart);
         zento_assert($item);
         if ($item = $this->findExistItemByProductOption($cart, $cartItem->product_id, $options)) {
-            $item->quantity += $quantity;
+            $item->quantity += $cartItem->quantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
+            $this->shoppingCartModified($cart);
             return $item;
         } else {
             $cartItem->cart_id = $cart->id;
-            $cartItem->cart_id = $cart->id;
             $cartItem->save();
-            $cart->refresh();
+            $this->shoppingCartModified($cart);
             return $cartItem;
         }
     }
@@ -191,9 +194,12 @@ class ShoppingCartService
         zento_assert($cart);
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
-                $item->quantity = $quantity;
-                $item->total_price = $item->unit_price * $item->quantity;
-                $item->update();
+                if ($item->quantity != $quantity) {
+                    $item->quantity = $quantity;
+                    $item->total_price = $item->unit_price * $item->quantity;
+                    $item->update();
+                    $this->shoppingCartModified($cart);
+                }
                 return true;
             }
         }
@@ -205,9 +211,15 @@ class ShoppingCartService
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
                 $item->delete();
+                $this->shoppingCartModified($cart);
                 return true;
             }
         }
         return false;
+    }
+
+    protected function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+        zento_assert($cart);
+        (new ShoppingCartModified($cart))->fireUntil();
     }
 }
