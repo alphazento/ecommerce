@@ -82,14 +82,14 @@ Route::group(
         '/download',
         ['as' => 'download', 'uses' => 'CatalogController@home']
     );
-    Route::get(
-        '/logout',
-        ['as' => 'logout', 'uses' => 'CatalogController@home']
-    );
-    Route::get(
-        '/register',
-        ['as' => 'register', 'uses' => 'CatalogController@home']
-    );
+    // Route::get(
+    //     '/logout',
+    //     ['as' => 'logout', 'uses' => 'CatalogController@home']
+    // );
+    // Route::get(
+    //     '/register',
+    //     ['as' => 'register', 'uses' => 'CatalogController@home']
+    // );
 
     // Route::get(
     //     '/login',
@@ -153,7 +153,7 @@ Route::group(
         // 'middleware' => ['cors', 'auth:api']
         'middleware' => ['cors']
     ], function () {
-        Route::options('/{all}', ['uses' => 'CatalogController@options'])->where('all', '.*');
+        Route::options('/{all}', function(){ return '';})->where('all', '.*');
 
         Route::get(
             '/categories', 
