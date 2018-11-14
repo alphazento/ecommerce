@@ -91,10 +91,10 @@ Route::group(
         ['as' => 'register', 'uses' => 'CatalogController@home']
     );
 
-    Route::get(
-        '/login',
-        ['as' => 'login', 'uses' => 'CatalogController@home']
-    );
+    // Route::get(
+    //     '/login',
+    //     ['as' => 'login', 'uses' => 'CatalogController@home']
+    // );
     Route::get(
         '/wishlist',
         ['as' => 'wishlist', 'uses' => 'CatalogController@home']

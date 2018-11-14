@@ -20,29 +20,7 @@ class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento
         ];
     }
 
-    // protected $fillable = self::PROPERTIES;
-
-    protected $fillable = [
-        'guid',
-        'email',
-        'customer_id',
-        'store_id',
-        'applied_rule_ids',
-        'client_ip',
-        'mode',   //test, stag, live
-        'status',
-        'ship_to_billingaddesss', //boolean,
-        'billing_address_id',
-        'shipping_address_id',
-        'invoice_number',
-        'payment_method',
-        "currency",
-        "total_weight",
-        "total",
-        'grand_total',
-        'subtotal',
-        'subtotal_with_discount'
-    ];
+    protected $fillable = self::PROPERTIES;
 
     public function billing_address() {
         return $this->hasOne(ShoppingCartAddress::class, 'id', 'billing_address_id');

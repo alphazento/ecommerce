@@ -28,22 +28,8 @@ class ShoppingCartService
             'guid' => guidv4(),
             'email' => Auth::guest() ? '' : Auth::user()->getEmail(),
             'customer_id' => Auth::guest() ? 0 : Auth::user()->getId(),
-            'store_id' => 0,
-            'mode' => '',   //test, stag, live
-            'status' => 1,
-            'applied_rule_ids' => '',
-            'ship_to_billingaddesss' => false, //boolean,
-            'billing_address_id' => 0,
-            'shipping_address_id' => 0,
-            'invoice_number' => 0,
-            'payment_method' => 0,
-            "currency" => '',
-            "total_weight" => 0,
-            "total" => 0,
+            "currency" => 'AUD',
             'client_ip' => '',
-            'grand_total' => 0,
-            'subtotal' => 0,
-            'subtotal_with_discount' => 0
         ]);
         $cart->save();  
         $this->cartCache[$cart->guid] = $cart;
@@ -158,26 +144,27 @@ class ShoppingCartService
             'taxable' => true,
             'duplicatable' => true,
             'unit_price' => $product->price,
-            'total_price' => $product->price * $quantity,
-            'tax_amount' => 0
+            'total_price' => $product->price * $quantity
         ]);
         $item->save();
         return $item;
     }
 
-    public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\ShoppingCartItem $cartItem) {
+    public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
+        \Zento\Contracts\Catalog\Model\ShoppingCartItem $cartItem, 
+        $trigger_event = true) {
         zento_assert($cart);
         zento_assert($item);
         if ($item = $this->findExistItemByProductOption($cart, $cartItem->product_id, $options)) {
             $item->quantity += $cartItem->quantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
-            $this->shoppingCartModified($cart);
+            $trigger_event && $this->shoppingCartModified($cart);
             return $item;
         } else {
             $cartItem->cart_id = $cart->id;
             $cartItem->save();
-            $this->shoppingCartModified($cart);
+            $trigger_event && $this->shoppingCartModified($cart);
             return $cartItem;
         }
     }
@@ -218,7 +205,7 @@ class ShoppingCartService
         return false;
     }
 
-    protected function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+    public function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
         zento_assert($cart);
         (new ShoppingCartModified($cart))->fireUntil();
     }

@@ -1,0 +1,46 @@
+{
+    "name": "alphazento/passport",
+    "description": "Zento ecommerce passport package",
+    "keywords": ["laravel", "zento", "passport"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yongcheng.chen",
+            "email": "yongcheng.chen@live.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "laravel/passport": "^7.0",
+        "alphazento/zento": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+        },
+        "files": [
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+            ],
+            "aliases": {
+            },
+            "zento": {
+                "Zento_Passport":{
+                    "version" : "0.0.1",
+                    "commands" : [
+                    ],
+                    "providers" : [
+                        "\\Zento\\Passport\\Providers\\Entry"
+                    ]
+                }
+            }
+        }
+    }
+}
