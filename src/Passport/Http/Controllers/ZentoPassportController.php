@@ -4,7 +4,6 @@ namespace Zento\Passport\Http\Controllers;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-
 class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
     public function issueToken(ServerRequestInterface $request)
@@ -15,6 +14,9 @@ class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessT
                 $request = $request->withParsedBody(array_merge($configs, $parsedBody));
             }
         }
-        return parent::issueToken($request);
+       
+        $response = parent::issueToken($request);
+        return ['status'=>$response->getStatusCode(),
+            'data'=>json_decode($response->getContent(), true)];
     }
 }
