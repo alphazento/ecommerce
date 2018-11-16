@@ -147,11 +147,6 @@ class ShoppingCartService
             'total_price' => $product->price * $quantity
         ]);
         $item->save();
-        if ($cart->items) {
-            $cart->items->add($item);
-        } else {
-            $cart->load('items');
-        }
         $this->shoppingCartModified($cart);
         return $item;
     }
@@ -213,6 +208,7 @@ class ShoppingCartService
 
     public function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
         zento_assert($cart);
+        $cart->load('items');
         (new ShoppingCartModified($cart))->fireUntil();
         $cart->save();
     }

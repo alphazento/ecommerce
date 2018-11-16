@@ -24,6 +24,6 @@ interface ShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface
         'duplicatable', 
         'unit_price', 
         'total_price',
-        'options'
+        // 'options'
     ];
 }
