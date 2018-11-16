@@ -99,3 +99,16 @@ Route::group(
             );
         }
 });
+
+
+Route::group(
+    [
+        'prefix' => '/rest/v1/test',
+        'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
+        'middleware' => ['cors']
+    ], function () use ($apiRoutes) {
+        Route::post(
+            '/urlrewrite',
+            ['uses' => 'TestController@getUrlRewrite']
+        );
+});
