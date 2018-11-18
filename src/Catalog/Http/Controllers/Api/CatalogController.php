@@ -19,11 +19,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CatalogController extends Controller
 {
     public function categoriesTree() {
-        return CategoryService::tree();
+        return ['status'=>200, 'data'=> CategoryService::tree()];
     }
     
     public function categories() {
-        return CategoryService::tree();
+        return ['status'=>200, 'data'=> CategoryService::tree()];
     }
 
     public function category() {
@@ -31,23 +31,23 @@ class CatalogController extends Controller
         $category = CategoryService::getCategoryById(last($ids));
         \zento_assert($category);
 
-        return $category;
+        return ['status'=>200, 'data'=> $category];
     }
 
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);
-        return $category->products;
+        return ['status'=>200, 'data'=> $category->products];
     }
 
     public function products() {
-        return \Zento\Catalog\Model\ORM\Product::limit(12);
+        return ['status'=>200, 'data'=> \Zento\Catalog\Model\ORM\Product::limit(12)];
     }
 
     public function product() {
         $category = CategoryService::getCategoryById(30);
         $product = $category->products[0];
-        return $product;
+        return ['status'=>200, 'data'=> $product];
     }
 
     public function newProductSection() {
@@ -61,27 +61,29 @@ class CatalogController extends Controller
         foreach($categories as $category) {
             $collection[] = ['name' => $category->name, 'products' => $category->products()->limit(6)->get()];
         }
-        return $collection;
+        return ['status'=>200, 'data'=> $collection];
     }
 
     public function shoppingCollectionSection() {
-        return [
+        return ['status'=>200, 'data'=> 
             [
-                'name' => 'Spring 2018',
-                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-            ],
-            [
-                'name' => 'Productivity',
-                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-            ],
-            [
-                'name' => 'Live boost',
-                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-            ],
-            [
-                'name' => 'Mobile',
-                'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+                [
+                    'name' => 'Spring 2018',
+                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+                ],
+                [
+                    'name' => 'Productivity',
+                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+                ],
+                [
+                    'name' => 'Live boost',
+                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+                ],
+                [
+                    'name' => 'Mobile',
+                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
+                ]
             ]
-            ];
+        ];
     }
 }

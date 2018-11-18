@@ -18,15 +18,15 @@ class CreateShoppingCartAddressTable extends Migration
             $table->string('firstname', 255);
             $table->string('middlename', 255)->nullable();
             $table->string('lastname', 255);
-            $table->string('company', 128);
+            $table->string('company', 128)->nullable();
             $table->string('address1', 255);
-            $table->string('address2', 255);
+            $table->string('address2', 255)->nullable();
             $table->string('city', 64);
             $table->string('country', 64);
             $table->string('postal_code', 16);
             $table->string('state', 32);
             $table->string('phone', 32)->nullable();
-            $table->smallInteger('address_type');
+            $table->smallInteger('address_type')->nullable();
 
             $table->timestamps();
         });

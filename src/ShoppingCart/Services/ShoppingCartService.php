@@ -62,12 +62,35 @@ class ShoppingCartService
         return false;
     }
 
-    public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCartAddress $address) {
+    public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
+        \Zento\Contracts\Catalog\Model\ShoppingCartAddress $address, 
+        $ship_to_billingaddesss = false) {
+        zento_assert($cart);
+        zento_assert($address);
 
+        if ($cart->billing_address_id) {
+            // $cart->billing_address->
+        } else {
+            $address->save();
+            $cart->billing_address_id = $address->id;
+        }
+        $cart->ship_to_billingaddesss = $ship_to_billingaddesss;
+        if ($ship_to_billingaddesss) {
+            $cart->shipping_address_id = $cart->billing_address_id;
+        }
+        $cart->update();
+        return true;
     }
 
-    public function setShoppingAddress(\Zento\Contracts\Catalog\Model\ShoppingCartAddress $address) {
-
+    public function setShippingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\ShoppingCartAddress $address) {
+        zento_assert($cart);
+        zento_assert($address);
+        $address->save();
+        
+        $cart->shipping_address_id = $address->id;
+        $cart->ship_to_billingaddesss = $cart->billing_address_id == $cart->shipping_address_id;
+        $cart->update();
+        return true;
     }
 
     public function addCoupon($coupon) {

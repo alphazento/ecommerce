@@ -10,6 +10,7 @@ use Registry;
 use Product;
 use ShoppingCartService;
 
+use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -73,7 +74,11 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     }
 
     public function setBillingAddress() {
-
+        return $this->tapCart(function($cart) {
+            $address = new ShoppingCartAddress(Request::all());
+            ShoppingCartService::setBillingAddress($cart, $address, Request::get('ship_to_billingaddesss'));
+            return ['status'=> 200, 'data' => null];
+        });
     }
 
     public function getBillingAddress() {
