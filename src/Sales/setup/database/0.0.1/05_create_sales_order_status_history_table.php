@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesOrderTotalTable extends Migration
+class CreateSalesOrderStatusHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,16 @@ class CreateSalesOrderTotalTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_order_totals', function (Blueprint $table) {
+        Schema::create('sales_order_status_histories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
-            $table->string('code', 32);
-            $table->string('title', 255)->nullable();
-            $table->decimal('value', 15, 4)->default(0);
-            $table->smaillInteger('sort_order')->default(0);
+            $table->integer('status_id')->unsigned();
+            $table->string('admin_note', 255)->nullable();
             $table->timestamps();
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('sales_orders');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateSalesOrderTotalTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sales_order_totals');
+        Schema::drop('sales_order_status_histories');
     }
 }

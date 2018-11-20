@@ -46,7 +46,7 @@ Route::group(
         ['as' => 'orders.setcomments', 'uses' => 'SalesController@setComments']
     );
 
-    Route::put(
+    Route::post(
         '/orders/create', 
         ['as' => 'orders.create', 'uses' => 'SalesController@createOrder']
     );

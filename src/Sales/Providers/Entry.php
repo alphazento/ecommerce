@@ -10,20 +10,10 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
-        // $this->app->singleton('ShoppingCartService', function ($app) {
-        //     return new \Zento\ShoppingCart\Services\ShoppingCartService();
-        // });
+        $this->app->singleton('SalesService', function ($app) {
+            return new \Zento\Sales\Services\SalesService();
+        });
        
-        // class_alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
+        class_alias('\Zento\Sales\Providers\Facades\SalesService', 'SalesService');
     }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    // public function provides()
-    // {
-    //     return ['categoryservice', 'product'];
-    // }
 }
