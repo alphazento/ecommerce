@@ -11,7 +11,7 @@ class ShippingMethod extends \Zento\Shipment\Model\ShippingMethod
   protected $extraAttributes = ['threshold', 'fixed_shipping_fee'];
 
   public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-       \Zento\Contracts\Catalog\Model\ShoppingCartAddress $shipping_address, 
+      \Zento\Contracts\Address $shipping_address, 
        $customer,
        $arrivalDate): \Zento\Contracts\Shipment\EstimateResult {
         $result = new EstimateResult();

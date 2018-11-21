@@ -66,7 +66,7 @@ class ShoppingCartService
     }
 
     public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Catalog\Model\ShoppingCartAddress $address, 
+        \Zento\Contracts\AddressAddress $address, 
         $ship_to_billingaddesss = false) {
         zento_assert($cart);
         zento_assert($address);
@@ -85,7 +85,7 @@ class ShoppingCartService
         return true;
     }
 
-    public function setShippingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\ShoppingCartAddress $address) {
+    public function setShippingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Address $address) {
         zento_assert($cart);
         zento_assert($address);
         $address->save();
@@ -97,9 +97,9 @@ class ShoppingCartService
     }
 
     public function setShippingInfo(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Catalog\Model\ShoppingCartAddress $billing_address,
+        \Zento\Contracts\Address $billing_address,
         bool $ship_to_billingaddesss,
-        \Zento\Contracts\Catalog\Model\ShoppingCartAddress $shipping_address,
+        \Zento\Contracts\Address $shipping_address,
         string $shipping_carrier_code,
         string $shipping_method_code) {
         zento_assert($cart);

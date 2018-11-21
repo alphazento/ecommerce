@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCartAddress
+class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Address
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
     public static function getPreloadRelations() {

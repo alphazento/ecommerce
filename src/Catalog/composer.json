@@ -37,10 +37,7 @@
                     "commands": [],
                     "providers": [
                         "\\Zento\\Catalog\\Providers\\Entry"
-                    ],
-                    "middlewares": {
-                        "cors": "\\Zento\\Catalog\\Http\\Middleware\\CORS"
-                    }
+                    ]
                 }
             }
         }

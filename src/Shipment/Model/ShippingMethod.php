@@ -37,7 +37,7 @@ abstract class ShippingMethod implements \Zento\Contracts\Shipment\Method
   }
 
   abstract public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-    \Zento\Contracts\Catalog\Model\ShoppingCartAddress $shipping_address, 
+    \Zento\Contracts\Address $shipping_address, 
     $customer,
     $arrivalDate) : \Zento\Contracts\Shipment\EstimateResult;
 }

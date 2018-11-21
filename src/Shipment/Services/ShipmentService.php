@@ -27,7 +27,7 @@ class ShipmentService
   }
 
   public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-       \Zento\Contracts\Catalog\Model\ShoppingCartAddress $shipping_address, 
+      \Zento\Contracts\Address $shipping_address, 
        $customer,
        $arrivalDate) {
     zento_assert($cart);
