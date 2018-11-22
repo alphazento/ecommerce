@@ -21,7 +21,7 @@ use ThemeManager;
 class CatalogController extends Controller
 {
     public function __construct() {
-        ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/MainTheme/resources/views'));
+        // ThemeManager::prependLocation(base_path('vendor/alphazento/ecommerce/src/MainTheme/resources/views'));
     }
 
     public function home() {

@@ -19,7 +19,7 @@ class CreateCustomerTable extends Migration
             $table->string('firstname', 64);
             $table->string('middlename', 64)->nullable();
             $table->string('lastname', 64);
-            $table->string('email', 255)->unique();
+            $table->string('email', 255);//->unique();
             $table->string('password', 255);
             $table->string('remember_token', 255)->nullable();
             $table->boolean('is_active')->default(1);
@@ -36,17 +36,17 @@ class CreateCustomerTable extends Migration
             $table->timestamp('lock_expires')->nullable();
             $table->timestamps();
 
-            $table->foreign('group_id')
-                ->references('id')
-                ->on('customer_groups');
+            // $table->foreign('group_id')
+            //     ->references('id')
+            //     ->on('customer_groups');
 
-            $table->foreign('default_billing_address_id')
-                ->references('id')
-                ->on('customer_addresses');
+            // $table->foreign('default_billing_address_id')
+            //     ->references('id')
+            //     ->on('customer_addresses');
             
-            $table->foreign('default_shipping_address_id')
-                ->references('id')
-                ->on('customer_addresses');
+            // $table->foreign('default_shipping_address_id')
+            //     ->references('id')
+            //     ->on('customer_addresses');
         });
     }
 

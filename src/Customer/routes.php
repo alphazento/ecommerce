@@ -17,7 +17,7 @@ Route::group(
 
     Route::put(
         '/me/activate', 
-        ['as' => 'customer.get.me', 'uses' => 'CustomerController@me']
+        ['as' => 'customer.get.me', 'uses' => 'CustomerController@activateMe']
     );
 
     Route::get(
@@ -26,8 +26,8 @@ Route::group(
     );
 
     Route::put(
-        '/{customer_id}', 
-        ['as' => 'customer.putbyid', 'uses' => 'CustomerController@setCustomer']
+        '/{customer_id}/activate', 
+        ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
     );
 
     Route::put(

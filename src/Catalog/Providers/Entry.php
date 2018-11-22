@@ -25,7 +25,7 @@ class Entry extends ServiceProvider
         class_alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
 
         if (!$this->app->runningInConsole()) {
-            ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
+            // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
         }
     }
 

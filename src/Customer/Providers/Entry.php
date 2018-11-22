@@ -10,5 +10,10 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
+        $this->app->singleton('CustomerService', function ($app) {
+            return new \Zento\Customer\Services\CustomerService();
+        });
+       
+        class_alias('\Zento\Customer\Providers\Facades\CustomerService', 'CustomerService');
     }
 }
