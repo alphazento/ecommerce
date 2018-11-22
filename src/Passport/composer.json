@@ -43,11 +43,10 @@
                         "cors": "\\Zento\\Passport\\Http\\Middleware\\CORS"
                     },
                     "middlewaregroup": {
-                        "authapi": {
+                        "apipassport": {
                             "main": [
                                 "\\Zento\\Passport\\Http\\Middleware\\CORS",
-                                "\\Zento\\Passport\\Http\\Middleware\\UsePassportUserModel",
-                                "auth:api"
+                                "\\Zento\\Passport\\Http\\Middleware\\UsePassportUserModel"
                             ]
                         }
                     }

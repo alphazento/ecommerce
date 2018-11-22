@@ -9,7 +9,6 @@ use Config;
 
 class UsePassportUserModel
 {
-    public static $USER_MODEL = \Zento\Passport\Model\User::class;
     /**
      * Handle an incoming request.
      *
@@ -20,7 +19,7 @@ class UsePassportUserModel
     public function handle($request, Closure $next)
     {
         // change auth setting for normal request
-        Config::set('auth.providers.users.model', self::$USER_MODEL);
+        Config::set('auth.providers.users.model', \Zento\Passport\Model\User::class);
         return $next($request);
     }
 }

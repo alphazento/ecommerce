@@ -19,7 +19,7 @@ class UseCustomerModel
     public function handle($request, Closure $next)
     {
         // change auth setting for normal request
-        \Zento\Passport\Http\Middleware\UsePassportUserModel::$USER_MODEL = \Zento\Customer\Model\ORM\Customer::class;
+        Config::set('auth.providers.users.model', \Zento\Customer\Model\ORM\Customer::class);
         return $next($request);
     }
 }

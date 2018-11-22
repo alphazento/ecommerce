@@ -90,7 +90,7 @@ Route::group(
     [
         'prefix' => '/rest/v1/cart',
         'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['authapi']
+        'middleware' => ['apipassport', 'auth:api']
     ], function () use ($apiRoutes) {
         foreach($apiRoutes as $name => $route) {
             Route::{$route['method']}(

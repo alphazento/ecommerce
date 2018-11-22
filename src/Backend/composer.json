@@ -41,8 +41,8 @@
                     "listeners":  {
                     },
                     "middlewaregroup": {
-                        "authapi": {
-                            "pre": [
+                        "apipassport": {
+                            "post": [
                                 "\\Zento\\Backend\\Http\\Middleware\\Backend"
                             ]
                         }

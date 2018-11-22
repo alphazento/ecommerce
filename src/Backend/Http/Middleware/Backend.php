@@ -30,7 +30,8 @@ class Backend
 
             // change auth setting for normal request
             Config::set('session.cookie', Config::get('session.cookie') . '_backend');
-            \Zento\Passport\Http\Middleware\UsePassportUserModel::$USER_MODEL = \Zento\Backend\Model\User::class;
+            // Config::set('auth.providers.users.model', \Zento\Backend\Model\ORM\Customer::class);
+            // \Zento\Passport\Passport::$USER_MODEL = \Zento\Backend\Model\User::class;
         }
         
         return $next($request);

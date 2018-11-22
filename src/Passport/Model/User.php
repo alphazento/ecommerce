@@ -35,4 +35,16 @@ class User extends Authenticatable
     public function getId() {
         return $this->id;
     }
+
+    public function getUsernameAttribute($value) {
+        return $this->attribute['email'];
+    }
+
+    public function setUsernameAttribute($value) {
+        $this->attribute['email'] = $value;
+    }
+
+    public function acl($routeName) {
+        return false;
+    }
 }
