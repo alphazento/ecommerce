@@ -66,7 +66,7 @@ class ShoppingCartService
     }
 
     public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\AddressAddress $address, 
+        \Zento\Contracts\Address $address, 
         $ship_to_billingaddesss = false) {
         zento_assert($cart);
         zento_assert($address);
@@ -146,6 +146,7 @@ class ShoppingCartService
 
     public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, array $options =[]) {
         zento_assert($cart);
+        $product = \Zento\Catalog\Model\ORM\Product::find($product_id);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
             $item->total_price = $item->unit_price * $item->quantity;
