@@ -1,42 +1,41 @@
 <?php
-Route::group(
-    [
-        'prefix' => '/rest/v1/customers',
-        'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['apipassport', 'auth:api']
-    ], function () {
-    Route::get(
-        '/me', 
-        ['as' => 'customer.get.me', 'uses' => 'CustomerController@me']
-    );
 
-    Route::put(
-        '/me', 
-        ['as' => 'customer.put.me', 'uses' => 'CustomerController@updateMe']
-    );
+namespace Zento\Customer;
+use Route;
 
-    Route::put(
-        '/me/activate', 
-        ['as' => 'customer.get.me', 'uses' => 'CustomerController@activateMe']
-    );
+class Routes implements \Zento\Contracts\RouteRule
+{
+    public function registerApiRoutes(){
+        $apiRoutes = [
+            'customers.get.me' => [ 'method' => 'get', 'path' => '/me', 'uses' => 'CustomerController@createCart'],
+            'customers.put.me' => [ 'method' => 'put', 'path' =>'/me', 'uses' => 'CustomerController@updateMe'],
+            'customers.active.me' => [ 'method' => 'put', 'path' =>'/me/activate', 'uses' => 'CustomerController@activateMe'],
+            'customers.get.customer' => [ 'method' => 'get', 'path' =>'/{customer_id}', 'uses' => 'CustomerController@getCustomer'],
+            'customers.put.customer' => [ 'method' => 'put', 'path' =>'/{customer_id}', 'uses' => 'CustomerController@setCustomer'],
+            'customers.active.customer' => [ 'method' => 'put', 'path' =>'/{customer_id}', 'uses' => 'CustomerController@activateCustomer'],
+        ];
+        Route::group(
+            [
+                'prefix' => '/rest/v1/customers',
+                'namespace' => '\Zento\Customer\Http\Controllers\Api',
+                'middleware' => ['apipassport', 'auth:api']
+            ], function () use ($apiRoutes) {
+                foreach ($apiRoutes as $name => $route) {
+                    if ($route['allow_guest'] ?? false) {
+                        Route::{$route['method']}(
+                        $route['path'],
+                        ['as' => $name, 'uses' => $route['uses']]
+                    );
+                    }
+                }
+            });
+    }
 
-    Route::get(
-        '/{customer_id}', 
-        ['as' => 'customer.getbyid', 'uses' => 'CustomerController@getCustomer']
-    );
+    public function registerFrontWebRoutes(){
 
-    Route::put(
-        '/{customer_id}/activate', 
-        ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
-    );
+    }
 
-    Route::put(
-        '/{customer_id}', 
-        ['as' => 'customer.putbyid', 'uses' => 'CustomerController@setCustomer']
-    );
+    public function registerAdminWebRoutes(){
 
-    Route::put(
-        '/{customer_id}/activate', 
-        ['as' => 'customer.activate', 'uses' => 'CustomerController@setCustomer']
-    );
-});
+    }
+}

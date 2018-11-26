@@ -73,9 +73,9 @@ class CustomerController extends \App\Http\Controllers\Controller
     }
 
     public function setMyPassword() {
-      Request::validate(['password'=>"string|max:8"]);
+      Request::validate(['old_password'=>"string|max:8", 'new_password'=>"string|max:8"]);
 
-      if (CustomerService::setPassword(Auth::user(), Request::get('password'))) {
+      if (CustomerService::changePassword(Auth::user(), Request::get('old_password'), Request::get('new_password'))) {
           return ['status'=>200];
       } else {
           return ['status'=>400];
@@ -104,5 +104,4 @@ class CustomerController extends \App\Http\Controllers\Controller
           return ['status'=>400, 'data'=> ['error'=>'ACL limit']];
       }
     }
-
 }
