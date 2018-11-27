@@ -13,6 +13,6 @@ class Entry extends ServiceProvider
             return new \Zento\Shipment\Services\ShipmentService();
         });
        
-        class_alias('\Zento\Shipment\Providers\Facades\ShipmentService', 'ShipmentService');
+        $this->app->alias('\Zento\Shipment\Providers\Facades\ShipmentService', 'ShipmentService');
     }
 }

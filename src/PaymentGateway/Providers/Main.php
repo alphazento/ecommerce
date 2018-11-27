@@ -13,7 +13,7 @@ class Main extends ServiceProvider
             return new PaymentGateway($app);
         });
 
-        class_alias('\Zento\PaymentGateway\Providers\Facades\PaymentGateway', 'PaymentGateway');
+        $this->app->alias('\Zento\PaymentGateway\Providers\Facades\PaymentGateway', 'PaymentGateway');
     }
 
     /**

@@ -14,6 +14,6 @@ class Entry extends ServiceProvider
             return new \Zento\Customer\Services\CustomerService();
         });
        
-        class_alias('\Zento\Customer\Providers\Facades\CustomerService', 'CustomerService');
+        $this->app->alias('\Zento\Customer\Providers\Facades\CustomerService', 'CustomerService');
     }
 }

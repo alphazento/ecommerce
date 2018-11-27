@@ -14,7 +14,7 @@ class Entry extends ServiceProvider
             return new \Zento\ShoppingCart\Services\ShoppingCartService();
         });
        
-        class_alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
+        $this->app->alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
     }
 
     /**

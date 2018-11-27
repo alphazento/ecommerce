@@ -21,8 +21,8 @@ class Entry extends ServiceProvider
             return new ProductService();
         });
         
-        class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
-        class_alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
+        $this->app->alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
+        $this->app->alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
 
         if (!$this->app->runningInConsole()) {
             // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
