@@ -2,6 +2,7 @@
 
 namespace Zento\PaymentGateway\Providers;
 
+use Zento\Kernel\Facades\PackageManager;
 use Zento\PaymentGateway\Services\PaymentGateway;
 use Illuminate\Support\ServiceProvider;
 
@@ -9,11 +10,11 @@ class Main extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('paymentgateway', function ($app) {
+        $this->app->singleton('payment_gateway', function ($app) {
             return new PaymentGateway($app);
         });
 
-        $this->app->alias('\Zento\PaymentGateway\Providers\Facades\PaymentGateway', 'PaymentGateway');
+        PackageManager::class_alias('\Zento\PaymentGateway\Providers\Facades\PaymentGateway', 'PaymentGateway');
     }
 
     /**
@@ -23,6 +24,6 @@ class Main extends ServiceProvider
      */
     public function provides()
     {
-        return ['paymentgateway'];
+        return ['payment_gateway'];
     }
 }

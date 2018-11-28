@@ -11,6 +11,6 @@ class ShoppingCartService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ShoppingCartService';
+        return 'shppcart_service';
     }
 }

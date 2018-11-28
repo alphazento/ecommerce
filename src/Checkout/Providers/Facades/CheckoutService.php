@@ -2,7 +2,7 @@
 
 namespace Zento\ShoppingCart\Providers\Facades;
 
-class ShoppingCartService extends \Illuminate\Support\Facades\Facade
+class CheckoutService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class ShoppingCartService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ShoppingCartService';
+        return 'CheckoutService';
     }
 }

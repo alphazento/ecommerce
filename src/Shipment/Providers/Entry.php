@@ -2,6 +2,7 @@
 
 namespace Zento\Shipment\Providers;
 
+use Zento\Kernel\Facades\PackageManager;
 use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
 
@@ -9,10 +10,10 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('ShipmentService', function ($app) {
+        $this->app->singleton('shipment_service', function ($app) {
             return new \Zento\Shipment\Services\ShipmentService();
         });
        
-        $this->app->alias('\Zento\Shipment\Providers\Facades\ShipmentService', 'ShipmentService');
+        PackageManager::class_alias('\Zento\Shipment\Providers\Facades\ShipmentService', 'ShipmentService');
     }
 }

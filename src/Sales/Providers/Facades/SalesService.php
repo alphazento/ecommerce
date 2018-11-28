@@ -11,6 +11,6 @@ class SalesService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'SalesService';
+        return 'sales_service';
     }
 }

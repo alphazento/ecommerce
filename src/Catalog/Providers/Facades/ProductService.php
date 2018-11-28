@@ -11,6 +11,6 @@ class ProductService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ProductService';
+        return 'product_service';
     }
 }

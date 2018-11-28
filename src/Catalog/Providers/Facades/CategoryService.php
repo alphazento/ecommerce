@@ -11,6 +11,6 @@ class CategoryService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'CategoryService';
+        return 'category_service';
     }
 }

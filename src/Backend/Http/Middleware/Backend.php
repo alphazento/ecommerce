@@ -22,7 +22,7 @@ class Backend
     public function handle($request, Closure $next)
     {
         //change default setting as admin setting
-        if (Request::segment(1) == Store::getConfig('backend_url_prefix')) {
+        if (Request::segment(1) == config('backend_url_prefix')) {
             if (config(self::BACKEND_IP_RESTRICT)
              && $this->checkIp($request)) {
                 return response(sprintf('IP %s is not allowed to access backedn.', $request->ip()), 401);
@@ -30,8 +30,6 @@ class Backend
 
             // change auth setting for normal request
             Config::set('session.cookie', Config::get('session.cookie') . '_backend');
-            // Config::set('auth.providers.users.model', \Zento\Backend\Model\ORM\Customer::class);
-            // \Zento\Passport\Passport::$USER_MODEL = \Zento\Backend\Model\User::class;
         }
         
         return $next($request);

@@ -3,6 +3,7 @@
 namespace Zento\Sales\Providers;
 
 // use Zento\Catalog\Services\CategoryService;
+use Zento\Kernel\Facades\PackageManager;
 use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,10 +11,10 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('SalesService', function ($app) {
+        $this->app->singleton('sales_service', function ($app) {
             return new \Zento\Sales\Services\SalesService();
         });
        
-        $this->app->alias('\Zento\Sales\Providers\Facades\SalesService', 'SalesService');
+        PackageManager::class_alias('\Zento\Sales\Providers\Facades\SalesService', 'SalesService');
     }
 }

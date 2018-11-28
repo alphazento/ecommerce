@@ -11,6 +11,6 @@ class CustomerService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'CustomerService';
+        return 'customer_service';
     }
 }

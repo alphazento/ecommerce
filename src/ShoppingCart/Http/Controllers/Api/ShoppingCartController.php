@@ -7,7 +7,6 @@ use Route;
 use Request;
 use Response;
 use Registry;
-use Product;
 use ShoppingCartService;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;

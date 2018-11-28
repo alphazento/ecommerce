@@ -2,19 +2,17 @@
 
 namespace Zento\ShoppingCart\Providers;
 
-// use Zento\Catalog\Services\CategoryService;
-use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
+use Zento\Kernel\Facades\PackageManager;
 
 class Entry extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('ShoppingCartService', function ($app) {
+        $this->app->singleton('shppcart_service', function ($app) {
             return new \Zento\ShoppingCart\Services\ShoppingCartService();
         });
-       
-        $this->app->alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
+        PackageManager::class_alias('\Zento\ShoppingCart\Providers\Facades\ShoppingCartService', 'ShoppingCartService');
     }
 
     /**
@@ -22,8 +20,8 @@ class Entry extends ServiceProvider
      *
      * @return array
      */
-    // public function provides()
-    // {
-    //     return ['categoryservice', 'product'];
-    // }
+    public function provides()
+    {
+        return ['shppcart_service'];
+    }
 }

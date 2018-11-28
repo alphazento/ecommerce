@@ -7,22 +7,23 @@ use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
 
 use ThemeManager;
-use PackageManager;
+
+use Zento\Kernel\Facades\PackageManager;
 
 class Entry extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('CategoryService', function ($app) {
+        $this->app->singleton('category_service', function ($app) {
             return new CategoryService();
         });
 
-        $this->app->singleton('ProductService', function ($app) {
+        $this->app->singleton('product_service', function ($app) {
             return new ProductService();
         });
         
-        $this->app->alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
-        $this->app->alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
+        PackageManager::class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
+        PackageManager::class_alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
 
         if (!$this->app->runningInConsole()) {
             // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
