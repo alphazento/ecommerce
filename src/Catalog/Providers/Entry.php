@@ -30,6 +30,12 @@ class Entry extends ServiceProvider
         }
     }
 
+    public function boot() {
+        if (!$this->app->runningInConsole()) {
+            $this->app['routeandrewriter_svc']->appendRewriteEngine(new \Zento\Catalog\Model\ProductUrlRewriteEngine());
+        }
+    }
+
     /**
      * Get the services provided by the provider.
      *
