@@ -39,7 +39,7 @@
                     "providers": [
                         "\\Zento\\FreeShipping\\Providers\\Entry"
                     ],
-                    "depends_on": [
+                    "depends": [
                         "Zento_Shipment"
                     ]
                 }

@@ -37,6 +37,9 @@
                     "commands": [],
                     "providers": [
                         "\\Zento\\Catalog\\Providers\\Entry"
+                    ],
+                    "depends":[
+                        "Zento_RouteAndRewriter"
                     ]
                 }
             }

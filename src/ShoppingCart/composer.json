@@ -37,6 +37,10 @@
                     ],
                     "providers" : [
                         "\\Zento\\ShoppingCart\\Providers\\Entry"
+                    ],
+                    "depends": [
+                        "Zento_Catalog",
+                        "Zento_Customer"
                     ]
                 }
             }

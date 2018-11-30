@@ -11,6 +11,6 @@ class Entry extends ServiceProvider
 {
     public function boot()
     {
-        // ShipmentService::registerMethod(ShippingMethod::CODE, new ShippingMethod());
+        ShipmentService::registerMethod(ShippingMethod::CODE, new ShippingMethod());
     }
 }

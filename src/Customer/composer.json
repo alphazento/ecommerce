@@ -46,7 +46,10 @@
                                 "\\Zento\\Customer\\Http\\Middleware\\UseCustomerModel"
                             ]
                         }
-                    }
+                    },
+                    "depends": [
+                        "Zento_Passport"
+                    ]
                 }
             }
         }
