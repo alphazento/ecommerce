@@ -33,7 +33,7 @@ class Entry extends ServiceProvider
     public function boot() {
         if (!$this->app->runningInConsole()) {
             $this->app->booted(function ($app) {
-                $app['routeandrewriter_svc']->appendRewriteEngine(new \Zento\Catalog\Model\ProductUrlRewriteEngine());
+                // $app['routeandrewriter_svc']->appendRewriteEngine(new \Zento\Catalog\Model\ProductUrlRewriteEngine());
             });
         }
     }

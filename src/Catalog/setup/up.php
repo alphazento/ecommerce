@@ -2,7 +2,7 @@
 
 require(__DIR__ . '/Seeder.php');
 
-$feed = new Seeder();
+// $feed = new Seeder();
 // $feed->run();
 
 
@@ -15,5 +15,5 @@ $feed = new Seeder();
 // $seeder = new \Zento\M2Data\Seeders\ProductSeeder();
 // $seeder->run();
 
-$seeder = new \Zento\M2Data\Seeders\CategoryProductSeeder();
-$seeder->run();
+// $seeder = new \Zento\M2Data\Seeders\CategoryProductSeeder();
+// $seeder->run();

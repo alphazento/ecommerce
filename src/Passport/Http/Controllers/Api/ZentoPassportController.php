@@ -26,13 +26,14 @@ class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessT
 
     public function register(ServerRequestInterface $request) {
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
-        Request::validate([
-            'firstname' => 'required|string|max:64',
-            'middlename' => 'string|max:64',
-            'lastname' => 'required|string|max:64',
-            'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
-            'password' => 'required|string|min:6'
-        ]);
+
+        // Request::validate([
+        //     'firstname' => 'required|string|max:64',
+        //     'middlename' => 'string|max:64',
+        //     'lastname' => 'required|string|max:64',
+        //     'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
+        //     'password' => 'required|string|min:6'
+        // ]);
      
         $customerAttrs = Request::all();
         $customerAttrs['password'] = bcrypt($customerAttrs['password']);
