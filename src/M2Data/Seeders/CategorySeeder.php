@@ -66,6 +66,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     $attrKeysInMainTable = array_keys($this->attrsInMainTable);
                     if (in_array($eavItem->codedesc->attribute_code, $attrKeysInMainTable)) {
                         $zentoKey = $this->attrsInMainTable[$eavItem->codedesc->attribute_code];
+                        $category->name = 'category' . $category->id;
                         $category->{$zentoKey} = $eavItem->value;
                         continue;
                     }

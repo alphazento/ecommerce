@@ -11,7 +11,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
  
     public static function getPreloadRelations() {
         return [
-            'description_dataset' =>[
+            'category_description' =>[
                 'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
             ],
             'children_categories',
@@ -19,7 +19,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
         ];
     }
 
-    public function description_dataset() {
+    public function category_description() {
         return $this->hasOne(CategoryDescription::class, 'category_id');
     }
 
