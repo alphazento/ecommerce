@@ -56,6 +56,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             // $category->image = '';
             $category->save();
 
+
             foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
                 $relation = $ftype .'attrs';
                 foreach($item->{$relation} ?? [] as $eavItem) {
@@ -66,7 +67,6 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     $attrKeysInMainTable = array_keys($this->attrsInMainTable);
                     if (in_array($eavItem->codedesc->attribute_code, $attrKeysInMainTable)) {
                         $zentoKey = $this->attrsInMainTable[$eavItem->codedesc->attribute_code];
-                        $category->name = 'category' . $category->id;
                         $category->{$zentoKey} = $eavItem->value;
                         continue;
                     }
