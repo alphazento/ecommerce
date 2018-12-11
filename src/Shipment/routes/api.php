@@ -1,7 +1,6 @@
 <?php
-
 $apiRoutes = [
-    'shipment.estimate' => [ 'method' => 'post', 'path' => '/carts/{cart_guid}/estimate', 'uses' => 'ShipmentController@estimateShippingMethods', 'allow_guest' => true],
+    'shipment.estimate' => [ 'method' => 'post', 'path' => '/estimate/carts/{cart_guid}', 'uses' => 'ShipmentController@estimateShippingMethods', 'allow_guest' => true],
    ];
 
 Route::group(
