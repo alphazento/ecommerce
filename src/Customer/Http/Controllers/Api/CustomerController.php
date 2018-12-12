@@ -14,13 +14,17 @@ use Zento\Customer\Providers\Facades\CustomerService;
 
 class CustomerController extends \App\Http\Controllers\Controller
 {
-    public function me() {
-        return ['status'=>200, 'data'=> Auth::user()];
+    protected function isMe() {
+      return Route::input('customer_id') === 'me';
+    }
+
+    protected function _retrieveCustomer() {
+      return $this->isMe() ? Auth::user() : Customer::find(Route::input('customer_id'));
     }
 
     public function getCustomer() {
       return $this->tapAcl(function() {
-        if ($customer = Customer::find(Route::input('customer_id'))){
+        if ($customer = $this->_retrieveCustomer()){
           return ['status'=>200, 'data'=> $customer];
         } else {
           return ['status'=>404, 'data'=> null];
@@ -28,25 +32,9 @@ class CustomerController extends \App\Http\Controllers\Controller
       });
     }
 
-    public function activateMe() {
-      if (CustomerService::activate(Auth::user())) {
-          return ['status'=>200];
-      } else {
-          return ['status'=>400];
-      }
-    }
-
-    public function deactivateMe() {
-      if (CustomerService::deactivate(Auth::user())) {
-          return ['status'=>200];
-      } else {
-          return ['status'=>400];
-      }
-    }
-
     public function activateCustomer() {
       return $this->tapAcl(function() {
-        if ($customer = Customer::find(Route::input('customer_id'))){
+        if ($customer = $this->_retrieveCustomer()){
           if (CustomerService::activate($customer)) {
               return ['status'=>200];
           } else {
@@ -60,7 +48,7 @@ class CustomerController extends \App\Http\Controllers\Controller
 
     public function deactivateCustomer() {
       return $this->tapAcl(function() {
-        if ($customer = Customer::find(Route::input('customer_id'))){
+        if ($customer = $this->_retrieveCustomer()){
           if (CustomerService::deactivate($customer)) {
               return ['status'=>200];
           } else {
@@ -97,20 +85,8 @@ class CustomerController extends \App\Http\Controllers\Controller
       });
     }
 
-    public function addMyAddress() {
-      return $this->addAddress(Auth::user());
-    }
-
-    public function addCustomerAddress() {
-      if ($customer = Customer::find(Route::input('customer_id'))) {
-          return $this->addAddress($customer);
-      } else {
-        return ['status'=>404, 'data'=> 'customer not found'];
-      }
-    }
-
-    protected function addAddress($user) {
-      return $this->tapAcl(function() use ($user) {
+    public function addAddress() {
+      return $this->tapAcl(function() {
         Request::validate([
           'firstname'=>"required|string|max:80",
           'middlename'=>"string|max:80|nullable",
@@ -125,49 +101,59 @@ class CustomerController extends \App\Http\Controllers\Controller
           'phone'=>"required|string|max:32"
         ]);
 
-        if ($address = CustomerService::addAddress($user, Request::all())) {
-            return ['status'=>200, 'data'=>$address];
+        if ($user = $this->_retrieveCustomer()) {
+          if ($address = CustomerService::addAddress($user, Request::all())) {
+              return ['status'=>201, 'data'=>$address];
+          }
+        }
+        return ['status'=>400];
+      });
+    }
+
+    public function getAddresses() {
+      return $this->tapAcl(function() {
+          if ($collection = CustomerService::getCustomerAddresses($this->isMe() ? Auth::user()->id : Route::input('customer_id'))) {
+              return ['status'=>200, 'data'=> $collection];
+          } else {
+              return ['status'=>200, 'data'=> []];
+          }
+      });
+    }
+
+    public function getAddress() {
+      return $this->tapAcl(function() {
+        if ($address = CustomerService::getCustomerAddress($this->isMe() ? Auth::user()->id : Route::input('customer_id'), Route::input('address_id'))) {
+          return ['status'=>200, 'data'=> $address];
         } else {
-            return ['status'=>400];
+          return ['status'=>200, 'data'=> null];
         }
       });
     }
 
-    public function getMyAddresses() {
-      if ($collection = CustomerService::getCustomerAddresses(Auth::user()->id)) {
-        return ['status'=>200, 'data'=> $collection];
-      } else {
-        return ['status'=>200, 'data'=> []];
-      }
+    public function setDefaultBillingAddress() {
+      return $this->tapAcl(function() {
+        if (CustomerService::setDefaultBillingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
+          return ['status'=>200, 'data'=> null];
+        } else {
+          return ['status'=>400, 'data'=> 'Fail to set default billing address'];
+        }
+      });
     }
 
-    public function getMyAddress() {
-      if ($address = CustomerService::getCustomerAddress(Auth::user()->id, Route::input('id'))) {
-        return ['status'=>200, 'data'=> $address];
-      } else {
-        return ['status'=>200, 'data'=> null];
-      }
-    }
-
-    public function setMyDefaultBillingAddress() {
-      if (CustomerService::setDefaultBillingAddress(Auth::user(), Route::input('id'))) {
-        return ['status'=>200, 'data'=> null];
-      } else {
-        return ['status'=>400, 'data'=> 'Fail to set default billing address'];
-      }
-    }
-
-    public function setMyDefaultShippingAddress() {
-      if (CustomerService::setDefaultShippingAddress(Auth::user(), Route::input('id'))) {
-        return ['status'=>200, 'data'=> null];
-      } else {
-        return ['status'=>400, 'data'=> 'Fail to set default billing address'];
-      }
+    public function setDefaultShippingAddress() {
+      return $this->tapAcl(function() {
+        dd($this->_retrieveCustomer());
+        if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
+            return ['status'=>200, 'data'=> null];
+        } else {
+            return ['status'=>400, 'data'=> 'Fail to set default billing address'];
+        }
+      });
     }
 
 
     protected function tapAcl(\Closure $callbak) {
-      if (Auth::user()->acl(Request::route()->getName())) {
+      if (Auth::user()->acl(Request::route()->getName(), $this->isMe())) {
           return \call_user_func($callbak);
       } else {
           return ['status'=>400, 'data'=> ['error'=>'ACL limit']];

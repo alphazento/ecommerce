@@ -38,7 +38,13 @@ class CustomerService
 
   public function addAddress(\Illuminate\Foundation\Auth\User $user, array $address_attributes) {
       $address_attributes['customer_id'] = $user->id;
-      return CustomerAddress::create($address_attributes);
+      $address = new CustomerAddress($address_attributes);
+      if ($existAddress = CustomerAddress::where('hash', $address->uniqueHash())->where('is_active', 1)->first()) {
+        return $existAddress;
+      } else {
+        $address->save();
+        return $address;
+      }
   }
 
   public function setDefaultBillingAddress(\Illuminate\Foundation\Auth\User $user, $address_id) {

@@ -13,6 +13,7 @@ class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Ze
         return [
         ];
     }
+
     protected $fillable = [
         'customer_id',
         'firstname',
@@ -28,4 +29,20 @@ class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Ze
         "phone",
         "address_type"
     ];
+
+    public function uniqueHash() {
+        $strArray = [];
+        $values = $this->toArray();
+        foreach($this->fillable as $key) {
+            $strArray[] = isset($values[$key]) ? $values[$key] : '';
+            unset($values[$key]);
+        }
+        $strArray = array_merge($strArray, $values);
+        return md5(implode('||', array_values($strArray)));
+    }
+
+    public function save(array $options = []) {
+        $this->hash = $this->uniqueHash();
+        return parent::save($options);
+    }
 }

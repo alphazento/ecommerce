@@ -44,7 +44,10 @@ class User extends Authenticatable
         $this->attribute['email'] = $value;
     }
 
-    public function acl($routeName) {
+    public function acl($routeName, $isMe = false) {
+        if ($isMe) {
+            return true;
+        }
         return true;
     }
 }
