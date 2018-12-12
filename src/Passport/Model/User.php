@@ -45,6 +45,6 @@ class User extends Authenticatable
     }
 
     public function acl($routeName) {
-        return false;
+        return true;
     }
 }

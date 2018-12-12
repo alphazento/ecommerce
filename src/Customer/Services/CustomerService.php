@@ -37,6 +37,7 @@ class CustomerService
   }
 
   public function addAddress(\Illuminate\Foundation\Auth\User $user, array $address_attributes) {
+      $address_attributes['customer_id'] = $user->id;
       return CustomerAddress::create($address_attributes);
   }
 
@@ -44,6 +45,7 @@ class CustomerService
     if ($address = CustomerAddress::find($address_id)) {
       if($address->customer_id == $user->id) {
         $user->default_billing_address_id = $address_id;
+        $user->update();
         return true;
       }
     }
@@ -54,6 +56,7 @@ class CustomerService
     if ($address = CustomerAddress::find($address_id)) {
       if($address->customer_id == $user->id) {
         $user->default_shipping_address_id = $address_id;
+        $user->update();
         return true;
       }
     }
@@ -65,5 +68,18 @@ class CustomerService
       unset($address_attributes['id']);
       unset($address_attributes['customer_id']);
     }
+  }
+
+  public function getCustomerAddresses($customer_id, $only_active = true) {
+    return CustomerAddress::where('customer_id', $customer_id)
+      ->whereIn('is_active', $only_active ? [1] : [0, 1])
+      ->get();
+  }
+
+  public function getCustomerAddress($customer_id, $address_id, $only_active = true) {
+    return CustomerAddress::where('customer_id', $customer_id)
+      ->where('id', $address_id)
+      ->whereIn('is_active', $only_active ? [1] : [0, 1])
+      ->first();
   }
 }
