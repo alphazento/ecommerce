@@ -20,10 +20,10 @@ class ShipmentController extends \App\Http\Controllers\Controller
             if ($params = Request::get('shipping_address')) {
                 $address = new ShoppingCartAddress($params);
                 zento_assert($address);
-                return \Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null);
+                return ['status' => 200, 'data' => \Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null)];
             } else {
                 if ($address = $cart->shipping_address) {
-                    return \Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null);
+                    return['status' => 200, 'data' =>\Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null)];
                 } else {
                     return ['status'=> 420, 'error' => 'Address is empty.'];
                 }

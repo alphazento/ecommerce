@@ -246,10 +246,11 @@ class ShoppingCartService
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
                 if ($item->quantity != $quantity) {
-                    $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
-                    if ($ret) {
-                        return false;
-                    }
+                    // pre check event.
+                    // $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
+                    // if ($ret) {
+                    //     return false;
+                    // }
                     $item->quantity = $quantity;
                     $item->total_price = $item->unit_price * $item->quantity;
                     $item->update();

@@ -142,7 +142,6 @@ class CustomerController extends \App\Http\Controllers\Controller
 
     public function setDefaultShippingAddress() {
       return $this->tapAcl(function() {
-        dd($this->_retrieveCustomer());
         if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
             return ['status'=>200, 'data'=> null];
         } else {

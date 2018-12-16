@@ -45,7 +45,7 @@ class ShipmentService
         }
       }
     }
-    return $results;
+    return array_values($results);
   }
 
   public function getShippingMethod($code) {
