@@ -39,7 +39,6 @@ class CatalogController extends Controller
         \zento_assert($category);
         // $page_size = Request::get('page_size', 9);
         // $page = Request::get('page', 1);
-        
         return ['status'=>200, 'data'=>$category->products()->paginate(Request::get('per_page', 9))];
     }
 
