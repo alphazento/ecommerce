@@ -121,6 +121,25 @@ class CatalogService
         }
     }
 
+
+    /**
+     * {
+        "criteria" : {
+            "category": [4],
+            "price": [
+                {
+                    ">=":12,
+                    "<=":13.5
+                },
+                {
+                    ">=":14,
+                    "<=":15
+                }
+            ]
+        },
+        "sort_by":"price,asc"
+        }
+     */
     public function search($filters, $order_by='position,desc') {
         $builder = (new Product)->newQuery();
         foreach($filters as $name => $filter) {
@@ -134,12 +153,12 @@ class CatalogService
             } 
             // else filter by eav
         }
+        $this->aggregate($builder);
 
         if (!empty($order_by)) {
             $this->applyOrderBy($builder, $order_by);
         }
 
-        $this->aggregate($builder);
         
         dd($builder->get());
         return $builder->get();
@@ -150,6 +169,8 @@ class CatalogService
      */
     protected function aggregate($builder) {
         $query = clone $builder;
+        $query->select(['category_products.category_id', DB::raw('count(*) as amount')]);
+        $query->groupBy('category_products.category_id')->get();
     }
 
     protected function applyOrderBy($builder, $order_by) {
