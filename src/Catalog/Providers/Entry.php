@@ -2,7 +2,9 @@
 
 namespace Zento\Catalog\Providers;
 
+use Zento\Catalog\Services\CatalogService;
 use Zento\Catalog\Services\CategoryService;
+use Zento\Catalog\Services\ProductService;
 use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,6 +16,10 @@ class Entry extends ServiceProvider
 {
     public function register()
     {
+        $this->app->singleton('catalog_service', function ($app) {
+            return new CatalogService();
+        });
+
         $this->app->singleton('category_service', function ($app) {
             return new CategoryService();
         });
@@ -22,6 +28,7 @@ class Entry extends ServiceProvider
             return new ProductService();
         });
         
+        PackageManager::class_alias('\Zento\Catalog\Providers\Facades\CatalogService', 'CatalogService');
         PackageManager::class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
         PackageManager::class_alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
 
@@ -46,6 +53,6 @@ class Entry extends ServiceProvider
      */
     public function provides()
     {
-        return ['CategoryService', 'ProductService'];
+        return ['CatalogService', 'CategoryService', 'ProductService'];
     }
 }

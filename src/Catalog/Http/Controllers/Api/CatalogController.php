@@ -2,7 +2,9 @@
 
 namespace Zento\Catalog\Http\Controllers\Api;
 
+use CatalogService;
 use CategoryService;
+use ProductService;
 use Product;
 use Route;
 use Request;
@@ -37,8 +39,6 @@ class CatalogController extends Controller
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);
-        // $page_size = Request::get('page_size', 9);
-        // $page = Request::get('page', 1);
         return ['status'=>200, 'data'=>$category->products()->paginate(Request::get('per_page', 9))];
     }
 
@@ -47,8 +47,7 @@ class CatalogController extends Controller
     }
 
     public function product() {
-        $category = CategoryService::getCategoryById(30);
-        $product = $category->products[0];
+        $product = ProductService::getProductById(Route::input('id'));
         return ['status'=>200, 'data'=> $product];
     }
 
@@ -87,5 +86,10 @@ class CatalogController extends Controller
                 ]
             ]
         ];
+    }
+
+    public function search() {
+        $params = Request::all();
+        return CatalogService::search($params['criteria'], $params['sort_by']);
     }
 }

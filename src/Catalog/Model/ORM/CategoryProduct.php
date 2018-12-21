@@ -13,6 +13,7 @@ class CategoryProduct extends \Illuminate\Database\Eloquent\Model
     protected $fillable = [
         'category_id',
         'product_id',
+        'direct_relation', // if true means product belongs to category directly, otherwise it belongs to it's sub category
         'position'
     ];
 }

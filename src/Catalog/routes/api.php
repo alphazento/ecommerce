@@ -8,6 +8,11 @@ Route::group(
         'middleware' => ['cors']
     ], function () {
         Route::get(
+            '/catalog/search', 
+            ['as' => 'home', 'uses' => 'CatalogController@search']
+        );
+
+        Route::get(
             '/categories', 
             ['as' => 'home', 'uses' => 'CatalogController@categories']
         );
@@ -28,7 +33,7 @@ Route::group(
         );
 
         Route::get(
-            '/product/{id}', 
+            '/products/{id}', 
             ['as' => 'product', 'uses' => 'CatalogController@product']
         );
 

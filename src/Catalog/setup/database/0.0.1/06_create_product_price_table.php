@@ -18,6 +18,7 @@ class CreateProductPriceTable extends Migration
             $table->decimal('cost', 8, 2)->nullable()->default(0);
             $table->decimal('rrp', 8, 2)->nullable()->default(0);
             $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('discount', 8, 2)->default(0);
             $table->timestamps();
         });
     }

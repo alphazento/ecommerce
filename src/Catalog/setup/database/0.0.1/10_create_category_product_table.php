@@ -16,6 +16,7 @@ class CreateCategoryProductTable extends Migration
             $table->increments('id');
             $table->integer('category_id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->boolean('direct_relation')->default(0);
             $table->integer('position');
             $table->timestamps();
         });
