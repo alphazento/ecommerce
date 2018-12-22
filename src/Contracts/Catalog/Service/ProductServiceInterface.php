@@ -35,7 +35,7 @@ interface ProductServiceInterface
      * @param  array  $identifiers
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
-    public function getProductsBySkus($sku);
+    public function getProductsBySkus(array $sku);
 
     /**
      * get latest products(new product)

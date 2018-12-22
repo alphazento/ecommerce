@@ -59,7 +59,7 @@ class CatalogService
         if (!isset($this->joined_tables[$table])) {
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-            $this->joined_tables[$table] = 1;
+            $this->joined_tables[$table] = true;
         }
         $builder->orderBy($table . '.position', $direction);
     }
@@ -70,7 +70,7 @@ class CatalogService
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id')
                 ->orderBy($table . '.price', $direction);
-            $this->joined_tables[$table] = 1;
+            $this->joined_tables[$table] = true;
         }
         $builder->orderBy($table . '.price', $direction);
     }
@@ -89,7 +89,7 @@ class CatalogService
     protected function filterCategory($builder, array $category_ids) {
         if (count($category_ids) > 0) {
             $table = (new CategoryProduct)->getTable();
-            $this->joined_tables[$table] = 1;
+            $this->joined_tables[$table] = true;
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id')
                 ->whereIn($table . '.category_id', $category_ids);
@@ -106,7 +106,7 @@ class CatalogService
     protected function filterPrice($builder, array $conditionGroups) {
         if (count($conditionGroups) > 0) {
             $table = (new ProductPrice)->getTable();
-            $this->joined_tables[$table] = 1;
+            $this->joined_tables[$table] = true;
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
             $builder->where(function($query) use($conditionGroups, $table){
@@ -141,13 +141,14 @@ class CatalogService
         }
      */
     public function search($filters, $order_by='position,desc') {
-        $builder = $this->prepareSearch($filter);
+        $builder = $this->prepareSearch($filters);
+        $aggregate = $this->aggregate($builder);
+
         if (!empty($order_by)) {
             $this->applyOrderBy($builder, $order_by);
         }
         
-        dd($builder->get());
-        return $builder->get();
+        return ['aggregate' =>  $aggregate, 'result'=> $builder->get()];
     }
 
     protected function prepareSearch($filters) {
@@ -166,16 +167,42 @@ class CatalogService
         return $builder;
     }
 
+    protected function aggregate($builder) {
+        $aggregate = ['category' => $this->aggregateCategory($builder)];
+        return $aggregate;
+    }
+
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregate() {
-        $builder = $this->prepareSearch($filter);
-
+    protected function aggregateCategory($builder) {
+        //category aggregate
         $query = clone $builder;
-        $query->select(['category_products.category_id', DB::raw('count(*) as amount')]);
-        $query->groupBy('category_products.category_id')->get();
+        $table = (new CategoryProduct)->getTable();
+        if (!isset($this->joined_tables[$table])) {
+            $product_table = $builder->getModel()->getTable();
+            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
+        }
+        $query->select([$table . '.category_id', DB::raw('count(*) as amount')]);
+        $agg = $query->groupBy($table . '.category_id')->get();
+
+        return $agg->map(function ($item) {
+            return ['category_id' => $item['category_id'], 'amount' => $item['amount']];
+          });
     }
+
+    /**
+     * brand, price, category, country, new selection ... 
+     */
+    protected function aggregateDynColumn($builder) {
+        //category aggregate
+        $query = clone $builder;
+      
+        return $agg->map(function ($item) {
+            return ['category_id' => $item['category_id'], 'amount' => $item['amount']];
+        });
+    }
+
 
     protected function applyOrderBy($builder, $order_by) {
         list($order_by_field, $dir) = explode(',', $order_by);
