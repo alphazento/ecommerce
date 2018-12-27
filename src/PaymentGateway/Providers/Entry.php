@@ -6,7 +6,7 @@ use Zento\Kernel\Facades\PackageManager;
 use Zento\PaymentGateway\Services\PaymentGateway;
 use Illuminate\Support\ServiceProvider;
 
-class Main extends ServiceProvider
+class Entry extends ServiceProvider
 {
     public function register()
     {
