@@ -9,6 +9,7 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 use Zento\Catalog\Model\ORM\ProductPrice;
+use Zento\Catalog\Model\ORM\ProductDescription;
 
 class CatalogService
 {
@@ -68,15 +69,21 @@ class CatalogService
         $table = (new ProductPrice)->getTable();
         if (!isset($this->joined_tables[$table])) {
             $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id')
-                ->orderBy($table . '.price', $direction);
+            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
             $this->joined_tables[$table] = true;
         }
         $builder->orderBy($table . '.price', $direction);
     }
 
     protected function orderByName($builder, $field, $direction = 'asc') {
-        $builder->orderBy($product_table . '.name', $direction);
+        // return;
+        $table = (new ProductDescription)->getTable();
+        if (!isset($this->joined_tables[$table])) {
+            $product_table = $builder->getModel()->getTable();
+            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
+            $this->joined_tables[$table] = true;
+        }
+        $builder->orderBy($table . '.name', $direction);
     }
 
     /**
@@ -140,20 +147,40 @@ class CatalogService
         "sort_by":"price,asc"
         }
      */
-    public function search($filters, $order_by='position,desc') {
-        $builder = $this->prepareSearch($filters);
-        $aggregate = $this->aggregate($builder);
+    public function search($criteria, $per_page, $withAggregate = true) {
+        list($builder, $aggregateQuery) = $this->prepareSearch($criteria, $withAggregate);
 
-        if (!empty($order_by)) {
-            $this->applyOrderBy($builder, $order_by);
+        if (!empty($criteria['sort_by'])) {
+            $this->applyOrderBy($builder, $criteria['sort_by']);
         }
         
-        return ['aggregate' =>  $aggregate, 'result'=> $builder->get()];
+        $items = $builder->paginate($per_page);
+        $items = $items->toArray();
+        if ($withAggregate) {
+            // if ($items['total'] > $items['per_page']) {
+                $aggregate = $this->aggregate($aggregateQuery);
+            // } else {
+            //     $aggregate = [];
+            // }
+        } else {
+            $aggregate = [];
+        }
+
+        return ['aggregate' =>  $aggregate, 'items'=> $items];
     }
 
-    protected function prepareSearch($filters) {
-        $builder = (new Product)->newQuery();
-        foreach($filters as $name => $filter) {
+    protected function prepareSearch($criteria, $withAggregate = true) {
+        $model = new Product;
+        $builder = $model->newQuery()->select([$model->getTable() . '.*']);
+        
+        $priceFilter = null;  // price's aggregate is special
+
+        foreach($criteria as $name => $filter) {
+            if ($name == 'sort_by') { continue; }
+            if ($name == 'price') { 
+                $priceFilter = $filter;
+                continue; 
+            }
             if (isset($this->filters[$name])) {
                 $callback = $this->filters[$name];
                 if (is_callable($callback)) {
@@ -162,13 +189,22 @@ class CatalogService
                     $this->{$callback}($builder, $filter);
                 }
             } 
-            // else filter by eav
         }
-        return $builder;
+
+        $aggregateQuery = $withAggregate ? (clone $builder) : null;
+
+        if ($priceFilter) {
+            $this->filterPrice($builder, $priceFilter);
+        }
+        return [$builder, $aggregateQuery];
     }
 
     protected function aggregate($builder) {
-        $aggregate = ['category' => $this->aggregateCategory($builder)];
+        $aggregate = ['price' =>  $this->aggregatePrice($builder), 'category' => $this->aggregateCategory($builder)];
+        if ($manufacture = $this->aggregateDynColumn($builder, 'manufacturer')) {
+            $aggregate['manufacturer'] = $manufacture;
+        }
+        
         return $aggregate;
     }
 
@@ -194,15 +230,49 @@ class CatalogService
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregateDynColumn($builder) {
-        //category aggregate
+    protected function aggregateDynColumn($builder, $dyn_field) {
         $query = clone $builder;
-      
-        return $agg->map(function ($item) {
-            return ['category_id' => $item['category_id'], 'amount' => $item['amount']];
-        });
+
+        if ($table = DanamicAttributeFactory::getTable($builder->getModel(), $dyn_field)) {
+            if (!isset($this->joined_tables[$table])) {
+                $product_table = $query->getModel()->getTable();
+                $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
+            }
+            $query->select([DB::raw($table . '.value as ' . $dyn_field), DB::raw('count(*) as amount')]);
+            $agg = $query->groupBy($dyn_field)->get();
+            return $agg->map(function ($item) use ($dyn_field) {
+                return [$dyn_field => $item[$dyn_field], 'amount' => $item['amount']];
+              });
+        }
+        return false;
     }
 
+    /**
+     * brand, price, category, country, new selection ... 
+     */
+    protected function aggregatePrice($builder) {
+        //category aggregate
+        $query = clone $builder;
+
+        $table = (new ProductPrice)->getTable();
+        $product_table = $query->getModel()->getTable();
+        $query->join($table, $product_table . '.id', '=', $table . '.product_id');
+
+        $minQuery = clone $query;
+        $min = $minQuery->orderBy('price')->first();
+        $minValue = floor($min->price);
+
+        $maxQuery = clone $query;
+        $max = $maxQuery->orderBy('price','desc')->first();
+        $maxValue = ceil($max->price);
+
+        // $range = $max - $min;
+        // $split = 4;
+        // $avgQuery = clone $query;
+        // $avg = $avgQuery->avg('price');
+
+        return [$minValue, $maxValue];
+    }
 
     protected function applyOrderBy($builder, $order_by) {
         list($order_by_field, $dir) = explode(',', $order_by);
