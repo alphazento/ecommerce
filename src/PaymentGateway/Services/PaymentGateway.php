@@ -5,7 +5,6 @@ namespace Zento\PaymentGateway\Services;
 use Config;
 use Registry;
 use Closure;
-use Zento\Foundation\Contract\Service\PaymentMethod;
 
 class PaymentGateway {
     protected $app;
@@ -35,7 +34,7 @@ class PaymentGateway {
         if (isset($this->method_services[$serviceName])) {
             $service = $this->method_services[$serviceName] ?? null;
             if (is_callable($service)) {
-                $this->method_services[$serviceName] = call_user_func_array($service);
+                $this->method_services[$serviceName] = call_user_func_array($service, []);
             }
             return $this->method_services[$serviceName];
         }
@@ -48,15 +47,16 @@ class PaymentGateway {
      * @param mixed $quote
      * @param mixed $user
      * @param mixed $shippingAddress
+     * @param string $clientType
      * @return array \Zento\PaymentGateway\Interfaces\Method
      */
-    public function availables($quote, $user, $shippingAddress) {
+    public function estimate($quote, $user, $shippingAddress, $clientType = 'web') {
         $availables = [];
-        foreach($this->method_services as $serviceName) {
+        foreach($this->method_services as $serviceName => $instance) {
             $service = $this->getMethod($serviceName);
-            if ($service->isAvailable($quote, $user, $shippingAddress)) {
-                $availables[] = $service;
-            }
+            // if ($service->isAvailable($quote, $user, $shippingAddress)) {
+                $availables[] = $service->prepareForClient($clientType);
+            // }
         }
         return $availables;
     }

@@ -11,5 +11,20 @@ Route::group(
             '/payment/estimate', 
             ['as' => 'home', 'uses' => 'ApiController@estimate']
         );
+
+        Route::post(
+            '/payment/presubmit/{method}', 
+            ['as' => 'home', 'uses' => 'ApiController@presubmit']
+        );
+
+        Route::post(
+            '/payment/submit/{method}', 
+            ['as' => 'home', 'uses' => 'ApiController@submit']
+        );
+
+        Route::post(
+            '/payment/postsubmit/{method}', 
+            ['as' => 'home', 'uses' => 'ApiController@postsubmit']
+        );
     }
 );

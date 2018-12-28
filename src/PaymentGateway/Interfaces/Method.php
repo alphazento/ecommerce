@@ -48,5 +48,7 @@ interface Method {
 
     public function denyPayment($payment);
 
+    public function prepareForClient($clientType = 'web');
+    
     public function renderMethodView();
 }
