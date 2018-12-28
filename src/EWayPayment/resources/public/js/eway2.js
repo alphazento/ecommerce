@@ -45,9 +45,11 @@
                                 EWAY_CARDCVN: cardData['cvc'],
                             };
                             console.log('eWayCardData', eWayCardData);
-                            this.client.post(resp.data.action_url, eWayCardData).then(resp => {
-                                console.log('eWayCardData', resp);
-                            });
+                            this.reactPaymentComponent.openChild(resp.data.action_url, eWayCardData);
+
+                            // this.client.post(resp.data.action_url, eWayCardData).then(resp => {
+                            //     console.log('eWayCardData', resp);
+                            // });
                         }
                     }
                 });
