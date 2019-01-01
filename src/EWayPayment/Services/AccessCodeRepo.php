@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\PaymentGateway\Services;
+namespace Zento\EWayPayment\Services;
 
 use Session;
 use Closure;
@@ -64,7 +64,8 @@ class AccessCodeRepo {
             'Email'=> 'tony@tonercity.com.au',
             'Phone' => '0222222222',
             'Mobile' => '0222222222',
-            'RedirectUrl' => 'http://alphazento.local.test/rest/v1/payment/postsubmit/ewaypayment'
+            // 'RedirectUrl' => 'http://alphazento.local.test/rest/v1/payment/postsubmit/ewaypayment'
+            'RedirectUrl' => "http://localhost:3000/paymentcallback/ewaypayment"
         ];
         $transaction = [
             // 'Customer' => $customer,

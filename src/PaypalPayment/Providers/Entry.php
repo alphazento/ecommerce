@@ -1,17 +1,17 @@
 <?php
 
-namespace Zento\EWayPayment\Providers;
+namespace Zento\PaypalPayment\Providers;
 
 use Zento\Kernel\Facades\PackageManager;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
 use Illuminate\Support\ServiceProvider;
-use Zento\EWayPayment\Services\PaymentMethod;
+use Zento\PaypalPayment\Services\PaymentMethod;
 
 class Entry extends ServiceProvider
 {
     public function register()
     {
-        PaymentGateway::registerMethod("ewaypayment", function() {
+        PaymentGateway::registerMethod("paypalexpress", function() {
             return new PaymentMethod();
         });
     }

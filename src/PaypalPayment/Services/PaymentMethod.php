@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\EWayPayment\Services;
+namespace Zento\PaypalPayment\Services;
 
 use Config;
 use Registry;
@@ -8,15 +8,15 @@ use Closure;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
-        return 'ewaypayment';
+        return 'paypalexpress';
     }
 
     public function getTitle(){
-        return config('ewaypayment.title', 'Secure Credit Card(eWay)');
+        return config('paypalexpress.title', 'Paypal Express Checkout');
     }
 
     public function canOrder() {
-        return config('ewaypayment.title');
+        return config('paypalexpress.title');
     }
 
     public function canAuthorize(){
@@ -44,23 +44,23 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function canUseAtFront() {
-        return config('ewaypayment.can.useatfront');
+        return config('paypalexpress.can.useatfront');
     }
 
     public function canUseAtAdmin() {
-        return config('ewaypayment.can.useatadmin');
+        return false;
     }
 
     public function canUseCheckout() {
-        return config('ewaypayment.can.usecheckout');
+        return config('paypalexpress.can.usecheckout');
     }
 
     public function canEdit() {
-        return config('ewaypayment.can.edit');
+        return config('paypalexpress.can.edit');
     }
 
     public function canFetchTransactionInfo() {
-        return config('ewaypayment.can.fetchtransactioninfo');
+        return config('paypalexpress.can.fetchtransactioninfo');
     }
 
     public function canUseForCountry($country) {
@@ -95,21 +95,10 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return true;
     }
 
-    protected $accesscodeRepo;
-    protected function getAccesscodeRepo() {
-        if (!$this->accesscodeRepo) {
-            $this->accesscodeRepo = new AccessCodeRepo;
-        }
-        return $this->accesscodeRepo;
-    }
-
     public function preSubmit($params) {
-        return $this->getAccesscodeRepo()->requestNewCode();
     }
 
     public function submit($params) {
-        // $this->authorize()
-        // $this->capture()
     }
 
     public function postSubmit($params) {
@@ -135,14 +124,14 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return [
             "name" => $this->getCode(),
             "title" => $this->getTitle(),
-            "withCards" =>true,
-            // "html" => 
+            "withCards" =>false,
+            "html" => '<img src="https://yes.edu.my/wp-content/uploads/2018/10/paypal.png" width=200 />',
             "js" => [
                 "depends"=> [
-                        [
-                            "namespaces" => ["eWAYUtils", "eWAY"],
-                            "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
-                        ]
+                        // [
+                        //     "namespaces" => ["eWAYUtils", "eWAY"],
+                        //     "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
+                        // ]
                     ],
                     "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
             ],
