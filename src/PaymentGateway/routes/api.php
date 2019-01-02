@@ -14,17 +14,17 @@ Route::group(
 
         Route::post(
             '/payment/presubmit/{method}', 
-            ['as' => 'home', 'uses' => 'ApiController@presubmit']
+            ['as' => 'payment.presubmit', 'uses' => 'ApiController@presubmit']
         );
 
         Route::post(
             '/payment/submit/{method}', 
-            ['as' => 'home', 'uses' => 'ApiController@submit']
+            ['as' => 'payment.submit', 'uses' => 'ApiController@submit']
         );
 
         Route::post(
             '/payment/postsubmit/{method}', 
-            ['as' => 'home', 'uses' => 'ApiController@postsubmit']
+            ['as' => 'payment.postsubmit', 'uses' => 'ApiController@postsubmit']
         );
     }
 );

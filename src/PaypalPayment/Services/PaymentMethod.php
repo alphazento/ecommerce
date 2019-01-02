@@ -2,9 +2,9 @@
 
 namespace Zento\PaypalPayment\Services;
 
-use Config;
-use Registry;
-use Closure;
+use Zento\PaypalPayment\Model\PaymentCapturer;
+use Zento\PaypalPayment\Model\PaymentPrimer;
+use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
@@ -96,9 +96,11 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function preSubmit($params) {
+        return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
     }
 
     public function submit($params) {
+        return (new PaymentCapturer)->execute($params);
     }
 
     public function postSubmit($params) {
@@ -121,6 +123,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     protected function prepareForReactjs() {
+        $url = (string)(route('payment.submit', ['method' => $this->getCode() ]));
         return [
             "name" => $this->getCode(),
             "title" => $this->getTitle(),
@@ -128,15 +131,24 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             "html" => '<img src="https://yes.edu.my/wp-content/uploads/2018/10/paypal.png" width=200 />',
             "js" => [
                 "depends"=> [
-                        // [
-                        //     "namespaces" => ["eWAYUtils", "eWAY"],
-                        //     "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
-                        // ]
+                    [
+                        "namespaces" => ["paypal_config"],
+                        "src" => "http://alphazento.local.test/rest/v1/paypal_config"
                     ],
-                    "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
+                    [
+                        "namespaces" => ["paypal"],
+                        "src" => "https://www.paypalobjects.com/api/checkout.js"
+                    ]
+                    // [
+                    //     "namespaces" => ["eWAYUtils", "eWAY"],
+                    //     "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
+                    // ]
+                ],
+                "entry" => "http://alphazento.local.test/js/paypalexpress.js?v="  . time()
             ],
             'params' => [
-                'prepare_endpoint' => "/payment/presubmit/" . $this->getCode() 
+                // 'submit_endpoint' => route('payment.submit', ['method' => $this->getCode() ])
+                'submit_endpoint' => str_replace('https:', 'http:', $url)
             ]
         ];
     }
