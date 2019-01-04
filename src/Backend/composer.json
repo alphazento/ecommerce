@@ -41,9 +41,11 @@
                     "listeners":  {
                     },
                     "middlewaregroup": {
-                        "apipassport": {
-                            "post": [
-                                "\\Zento\\Backend\\Http\\Middleware\\Backend"
+                        "adminapi": {
+                            "main": [
+                                "\\Zento\\Backend\\Http\\Middleware\\Backend",
+                                "\\Zento\\Passport\\Http\\Middleware\\CORS",
+                                "\\Zento\\Backend\\Http\\Middleware\\UseAdministratorModel"
                             ]
                         }
                     }

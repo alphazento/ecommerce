@@ -21,6 +21,7 @@ class Backend
      */
     public function handle($request, Closure $next)
     {
+        Config::set('auth.providers.users.model', \Zento\Backend\Model\ORM\Administrator::class);
         //change default setting as admin setting
         if (Request::segment(1) == config('backend_url_prefix')) {
             if (config(self::BACKEND_IP_RESTRICT)
