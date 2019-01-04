@@ -1,10 +1,6 @@
 <?php
 
-namespace Zento\Customer\Services;
-
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zento\Customer\Model\ORM\Customer;
-use Zento\Customer\Model\ORM\CustomerAddress;
+namespace Zento\Backend\Services;
 
 class AdminService
 {

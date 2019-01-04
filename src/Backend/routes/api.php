@@ -3,7 +3,7 @@ Route::group(
     [
         'namespace' => '\Zento\Backend\Http\Controllers',
         'middleware' => ['adminapi'],
-        'prefix' => '/rest/v1/backend',
+        'prefix' => '/backend/rest/v1/',
     ], function() {
     }
 );
