@@ -3,21 +3,17 @@
     "description": "Zento ecommerce sales package",
     "keywords": ["laravel", "zento", "ecommerce", "sales"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
     },
     "autoload": {
-        "psr-4": {
-        },
-        "files": [
-        ]
+        "psr-4": {},
+        "files": []
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -26,20 +22,20 @@
             "dev-master": "1.0-dev"
         },
         "laravel": {
-            "providers": [
-            ],
-            "aliases": {
-            },
+            "providers": [],
+            "aliases": {},
             "zento": {
-                "Zento_Sales":{
-                    "version" : "0.0.1",
-                    "commands" : [
-                    ],
-                    "providers" : [
+                "Zento_Sales": {
+                    "version": "0.0.1",
+                    "commands": [],
+                    "providers": [
                         "\\Zento\\Sales\\Providers\\Entry"
                     ],
-                    "listeners":  {
-                        "Zento\\ShoppingCart\\Event\\ShoppingCartModified":["\\Zento\\Sales\\Event\\Listener\\ShoppingCartModified"]
+                    "listeners": {
+                        "Zento\\ShoppingCart\\Event\\ShoppingCartModified": ["\\Zento\\Sales\\Event\\Listener\\ShoppingCartModified"],
+                        "Zento\\Checkout\\Event\\CreatingOrder": {
+                            "20": "\\Zento\\Sales\\Event\\Listener\\CreatingOrder"
+                        }
                     }
                 }
             }

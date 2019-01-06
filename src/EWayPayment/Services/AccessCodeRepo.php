@@ -120,7 +120,7 @@ class AccessCodeRepo {
             && $response->TransactionID
             && in_array($response->ResponseMessage, $this->success_response_messages))
         {
-            return ['status' => 201, 'data' => self::ACCESSCODE_COMPLETED];
+            return ['status' => 201, 'data' => self::ACCESSCODE_COMPLETED, 'transaction_id' => $response->TransactionID];
         }
         return [
             'status' => 420, 

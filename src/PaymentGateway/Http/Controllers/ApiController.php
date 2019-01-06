@@ -37,7 +37,13 @@ class ApiController extends Controller {
 
     public function postsubmit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            return $method->postSubmit(Request::all());
+            $returns = $method->postSubmit(Request::all());
+            if ($returns['status'] == 201 && $returns['next'] == 'create_order') { //payment success
+                $data = (new \Zento\Checkout\Event\CreatingOrder(Request::get('shopping_cart'), Route::input('method'), $returns['transaction_id']))->fireUntil();
+                return ['status' => 201, 'data' => $data];
+            } else {
+                return $returns;
+            }
         } else {
             return ['status' => 404, 'data' => 'payment method not found'];
         }

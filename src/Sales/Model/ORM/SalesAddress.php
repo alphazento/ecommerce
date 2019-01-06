@@ -16,5 +16,17 @@ class SalesAddress extends \Illuminate\Database\Eloquent\Model
         ];
     }
 
-    // protected $fillable = self::PROPERTIES;
+    protected $fillable = [
+        'firstname',
+        'middlename',
+        'lastname',
+        'company',
+        'address1',
+        'address2',
+        'city',
+        'country',
+        'postal_code',
+        'state',
+        'phone',
+    ];
 }
