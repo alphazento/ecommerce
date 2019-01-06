@@ -13,27 +13,18 @@
     }
 }(function () {
     var ewayTransparent = {
-        init: function (reactPaymentComponent, client, extraParams) {
-            this.reactPaymentComponent = reactPaymentComponent;
+        init: function (reactScope, client, extraParams) {
+            this.reactScope = reactScope;
             this.client = client;
             this.extraParams = extraParams
         },
 
-        preCapture: function () {
-            return this.client.post('/eway/accesscode');
-        },
-
-        capture: function () {
-            this.preCapture().then(resp => {
-                console.log('capture', resp);
-            });
-        },
-
-        placeOrder: function () {
-            if (this.reactPaymentComponent) {
-                this.client.post(this.extraParams["prepare_endpoint"]).then(resp => {
+        placeOrder: function (params) {
+            if (this.reactScope) {
+                this.reactScope.popupWindow("ewaypayment");
+                this.client.post(this.extraParams["prepare_endpoint"], params).then(resp => {
                     if (resp.status === 200) {
-                        let cardData = this.reactPaymentComponent.getCardData();
+                        let cardData = this.reactScope.getCardData();
                         if (cardData) {
                             let expiry = cardData["expiry"].split("/");
                             let eWayCardData = {
@@ -45,7 +36,7 @@
                                 EWAY_CARDCVN: cardData['cvc'],
                             };
                             console.log('eWayCardData', eWayCardData);
-                            this.reactPaymentComponent.openChild(resp.data.action_url, eWayCardData);
+                            this.reactScope.postToNewWindow(resp.data.action_url, eWayCardData);
 
                             // this.client.post(resp.data.action_url, eWayCardData).then(resp => {
                             //     console.log('eWayCardData', resp);
@@ -53,6 +44,18 @@
                         }
                     }
                 });
+            }
+        },
+
+        postPayment: function (result) {
+            if (this.reactScope) {
+                this.client.post('/payment/postsubmit/ewaypayment' + result.query).then(resp => {
+                    if (resp.status === 200) {
+                        this.reactScope.orderPlaced(result);
+                    } else {
+
+                    }
+                })
             }
         }
     };

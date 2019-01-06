@@ -5,12 +5,24 @@ namespace Zento\Backend\Services;
 class AdminService
 {
   protected $menus = [];
+  protected $config_groups = [];
+
+  public function getMeus() {
+    return $this->menus;
+  }
+
+  public function getDetailGroup($key) {
+    return isset($this->config_groups[$key]) ? $this->config_groups[$key]: [];
+  }
+
   public function registerRootLevelMenuNode($name, $title) 
   {
-    $this->menus[$name] = [
-      'title' => $title,
-      'items' => []
-    ];
+    if (!isset($this->menus[$name])) {
+      $this->menus[$name] = [
+        'title' => $title,
+        'items' => []
+      ];
+    }
   }
 
   public function registerL1MenuNode($parentName, $l1Name, $title) {
@@ -19,34 +31,35 @@ class AdminService
       throw new \Exception(sprintf('Parent Menu %s not exists.', $parentName));
     }
 
-    if ($menu = $this->hasL1MenuNode($parentName, $l1Name))
+    if (!$this->hasL1MenuNode($parentName, $l1Name))
     {
-      throw new \Exception(sprintf('%s has a same name Menu Node %s exists.', $parentName, $l1Name));
+      $this->menus[$parentName]['items'][$l1Name] = [
+        'title' => $title,
+      ];
     }
-
-    $menu[$l1Name] = [
-      'title' => $title,
-      'groups' => []
-    ];
   }
 
-  public function registerGroupToL1($parentName, $l1Name, $groupName, array $group) {
-    if (!$this->hasGroup($parentName, $l1Name, $groupName)) {
-      $this->menus[$parentName][$l1Name]['groups'] = $group;
+  public function registerGroup($l0name_l1Name, $groupName, array $group) {
+    if (!isset($this->config_groups[$l0name_l1Name])) {
+      $this->config_groups[$l0name_l1Name] = [$groupName => $group];
     } else {
-      throw new \Exception(sprintf('%s %s contains same group(%s).', $parentName, $l1Name, $groupName));
-    }
-  }
-
-  public function registerItemToGroup($parentName, $l1Name, $groupName, array $item) {
-    if ($this->hasGroup($parentName, $l1Name, $groupName)) {
-      if (isset($this->menus[$parentName][$l1Name]['groups'][$groupName]['items'])) {
-        $this->menus[$parentName][$l1Name]['groups'][$groupName]['items'] =[$group];
+      if (!isset($this->config_groups[$l0name_l1Name][$groupName])) {
+        $this->config_groups[$l0name_l1Name][$groupName] = $group;
       } else {
-        $this->menus[$parentName][$l1Name]['groups'][$groupName]['items'][] = $group;
+        throw new \Exception(sprintf('%s %s contains same group(%s).', $parentName, $l1Name, $groupName));
       }
+    }
+  }
+
+  public function registerItemToGroup($l0name_l1Name, $groupName, array $item) {
+    if (!isset($this->config_groups[$l0name_l1Name])) {
+        $this->config_groups[$l0name_l1Name] = [$groupName => [$item]];
     } else {
-      throw new \Exception(sprintf('%s %s does not contain group(%s).', $parentName, $l1Name, $groupName));
+      if (isset($this->config_groups[$l0name_l1Name][$groupName])) {
+        $this->config_groups[$l0name_l1Name][$groupName][] = $item;
+      } else {
+        $this->config_groups[$l0name_l1Name][$groupName]= [$item];
+      }
     }
   }
 

@@ -2,7 +2,6 @@
 
 namespace Zento\Backend\Providers;
 
-use Auth;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
@@ -10,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class Entry extends ServiceProvider
 {
     public function register() {
-        $this->app->singleton('admin', function ($app) {
+        $this->app->singleton('adminsevice', function ($app) {
             return new \Zento\Backend\Services\AdminService();
         });
     }

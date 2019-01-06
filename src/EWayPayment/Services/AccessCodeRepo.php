@@ -39,39 +39,40 @@ class AccessCodeRepo {
 
     public function getApiClient() {
         if (!$this->ewayApi) {
-            $this->ewayApi = Rapid::createClient(               
-                'F9802CbZzvjeQbx6lSFPZO3N/KuFQdqEzZk/yKOGJDuFDQCgiUgGS9kxhFeSbz4F2uteP/', //api key
-                'jM2RMxqq', //secret
-                Client::MODE_SANDBOX,
+            $mode = config('paymentgateway.eway.mode', 'sandbox');
+            $this->ewayApi = Rapid::createClient(
+                config(sprintf('paymentgateway.eway.%s.client_id', $mode)),
+                config(sprintf('paymentgateway.eway.%s.secret', $mode)),
+                $mode,
                 app('log')
             );
         }
         return $this->ewayApi;
     }
 
-    protected function prepareParams($reference) {
+    protected function prepareParams($shoppingCart, $reference) {
+        $shippingAddress = $shoppingCart['shipping_address'];
         $customer = [
-            'FirstName' => 'Tony',
-            'LastName' => 'Chen',
+            'FirstName' => $shippingAddress['firstname'],
+            'LastName' => $shippingAddress['lastname'],
             'Title' => 'Prof',
-            'Street1'=> '1 bc',
-            'Street2'=> '',
-            'City' => 'Sydney',
-            'State' => 'NSW',
-            'PostalCode' => '2000',
+            'Street1'=> $shippingAddress['address1'],
+            'Street2'=> $shippingAddress['address2'],
+            'City' => $shippingAddress['city'],
+            'State' => $shippingAddress['state'],
+            'PostalCode' =>$shippingAddress['postal_code'],
             'Country' => 'AU',
-            'IsActive'=> '1',
-            'Email'=> 'tony@tonercity.com.au',
-            'Phone' => '0222222222',
-            'Mobile' => '0222222222',
+            'IsActive'=> $shippingAddress['is_active'],
+            'Email'=> $shoppingCart['email'],
+            'Phone' => $shippingAddress['phone'],
+            'Mobile' => $shippingAddress['phone'],
             // 'RedirectUrl' => 'http://alphazento.local.test/rest/v1/payment/postsubmit/ewaypayment'
             'RedirectUrl' => "http://localhost:3000/paymentcallback/ewaypayment"
         ];
         $transaction = [
-            // 'Customer' => $customer,
             'TransactionType' => TransactionType::MOTO,
             'Payment' => [
-                'TotalAmount' => 50,
+                'TotalAmount' => $shoppingCart['total'] * 100,
                 'InvoiceReference' => $reference,
             ]
         ];
@@ -80,9 +81,9 @@ class AccessCodeRepo {
         return ClassValidator::getInstance('Eway\Rapid\Model\Transaction', $transaction);
     }
 
-    public function requestNewCode() {
-        $ref = sprintf('T%s', time());
-        $transaction = $this->prepareParams($ref);
+    public function requestNewCode($shoppingCart) {
+        $ref = $shoppingCart['guid'];
+        $transaction = $this->prepareParams($shoppingCart, $ref);
         $response = $this->getApiClient()->createTransaction(
             ApiMethod::TRANSPARENT_REDIRECT,
             $transaction
@@ -99,5 +100,32 @@ class AccessCodeRepo {
         } else {
             return [false, $response->Errors];
         }
+    }
+
+    /**
+    *  asset access code should be ...
+    */
+    public function checkAccessCode($accesscode) {
+        $response = $this->getApiClient()->queryAccessCode($accesscode);
+
+        if ($response->AccessCode != $accesscode) {
+            return ['status' => 420, 'data' => self::ACCESSCODE_INVALID];
+        }
+
+        if ($response->ResponseMessage == 'S5099' && !$response->AuthorisationCode) {
+            return ['status' => 200, 'data' => self::ACCESSCODE_READY];
+        }
+
+        if ($response->TransactionStatus
+            && $response->TransactionID
+            && in_array($response->ResponseMessage, $this->success_response_messages))
+        {
+            return ['status' => 201, 'data' => self::ACCESSCODE_COMPLETED];
+        }
+        return [
+            'status' => 420, 
+            'data' => self::ACCESSCODE_FAIL, 
+            'ResponseMessage' => $response->ResponseMessage
+        ];
     }
 }

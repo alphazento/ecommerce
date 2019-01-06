@@ -44,11 +44,11 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function canUseAtFront() {
-        return config('ewaypayment.can.useatfront');
+        return config('paymentgateway.eway.frontend.enabled');
     }
 
     public function canUseAtAdmin() {
-        return config('ewaypayment.can.useatadmin');
+        return config('paymentgateway.eway.admin.enabled');
     }
 
     public function canUseCheckout() {
@@ -103,8 +103,8 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return $this->accesscodeRepo;
     }
 
-    public function preSubmit($params) {
-        return $this->getAccesscodeRepo()->requestNewCode();
+    public function preSubmit($shoppingCart) {
+        return $this->getAccesscodeRepo()->requestNewCode($shoppingCart);
     }
 
     public function submit($params) {
@@ -113,7 +113,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function postSubmit($params) {
-
+        return $this->getAccesscodeRepo()->checkAccessCode($params['AccessCode']);
     }
 
     public function capture($payment, $amount) {

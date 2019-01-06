@@ -37,7 +37,7 @@ class ApiController extends Controller {
 
     public function postsubmit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            return ['status' => 200, 'data' => $method->postSubmit(Request::all())];
+            return $method->postSubmit(Request::all());
         } else {
             return ['status' => 404, 'data' => 'payment method not found'];
         }
