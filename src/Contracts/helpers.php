@@ -50,3 +50,37 @@ if (!function_exists('guidv4')) {
         }
     }
 }
+
+if (!function_exists('generateReadOnlyModelFromArray')) {
+    function generateReadOnlyModelFromArray($className, array $attr = []) {
+        $instance = null;
+        eval('$instance = new class extends ' . $className . ' {
+            public function _fill_(array $attrs = []) {
+                foreach($attrs as $key => $value) {
+                    if (is_string($key) && is_array($value)) {
+                        if ($relation = $this->{$key}()) {
+                            $model = $relation->getQuery()->getModel();
+                            if ($relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne) {
+                                $obj = generateReadOnlyModelFromArray(get_class($model), $value);
+                                $this->setRelation($key, $obj);
+                            } else {
+                                $items = [];
+                                foreach($value as $item) {
+                                    $items[] = generateReadOnlyModelFromArray(get_class($model), $item);
+                                }
+                                $this->setRelation($key, $items);
+                            }
+                        } else {
+                            $this->setAttribute($key, $value);
+                        }
+                    } else {
+                        $this->setAttribute($key, $value);
+                    }
+                }
+            } 
+            use \Zento\Kernel\Booster\Database\Eloquent\ReadOnly\TraitReadOnly;
+        };');
+        $instance->_fill_($attr);
+        return $instance;
+    }
+}

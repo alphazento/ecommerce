@@ -20,10 +20,12 @@ class ApiController extends Controller {
 
     public function presubmit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            list($ret, $data) = $method->preSubmit(Request::all());
+            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all());
+            \zento_assert($shoppingCart);
+            list($ret, $data) = $method->preSubmit($shoppingCart);
             return ['status' => $ret ? 200 : 500, 'data' => $data];
         } else {
-            return ['status' => 404, 'data' => 'payment method not found'];
+            return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
         }
     }
 
@@ -31,21 +33,27 @@ class ApiController extends Controller {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             return ['status' => 200, 'data' => $method->submit(Request::all())];
         } else {
-            return ['status' => 404, 'data' => 'payment method not found'];
+            return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
         }
     }
 
     public function postsubmit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             $returns = $method->postSubmit(Request::all());
-            if ($returns['status'] == 201 && $returns['next'] == 'create_order') { //payment success
-                $data = (new \Zento\Checkout\Event\CreatingOrder(Request::get('shopping_cart'), Route::input('method'), $returns['transaction_id']))->fireUntil();
-                return ['status' => 201, 'data' => $data];
+            if ($returns['success'] && $returns['next'] == 'create_order') { //payment success
+                $orderData = (new \Zento\Checkout\Event\CreatingOrder(Request::get('shopping_cart'), Route::input('method'), $returns['transaction_id']))->fireUntil();
+                $orderData['payment_data'] = $returns['data'];
+                if ($orderData['success'] ?? false) {
+                    return ['status' => 201, 'data' => $orderData];
+                } else {
+                    return ['status' => 420, 'data' => $orderData];
+                }
             } else {
+                $returns['status'] = $returns['success'] ? 201 : 420;
                 return $returns;
             }
         } else {
-            return ['status' => 404, 'data' => 'payment method not found'];
+            return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
         }
     }
 }

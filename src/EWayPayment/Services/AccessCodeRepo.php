@@ -15,16 +15,6 @@ use Request;
 use Carbon\Carbon;
 
 class AccessCodeRepo {
-    const EWAY_NETWORK_ERR = 'eway_network_error';
-    const ACCESSCODE_INVALID = 'accesscode_invalid';
-    const ACCESSCODE_READY = 'accesscode_ready';
-    const ACCESSCODE_COMPLETED = 'accesscode_complete';
-    const ACCESSCODE_FAIL = 'accesscode_fail';
-    const ACCESSCODE_VALIDATE_FAIL = 'accesscode_validate_fail';
-
-    const SANDBOX_ACCESSCODE_API_ENTRY =  'payment/eway/sandbox/api_accesscode_url';
-    const PRODUCTION_ACCESSCODE_API_ENTRY =  'payment/eway/production/api_accesscode_url';
-
     protected $lastRemoteResponse;
     protected $lastRemoteStatus;
     private $success_response_messages = [
@@ -37,7 +27,7 @@ class AccessCodeRepo {
 
     protected $ewayApi = null;
 
-    public function getApiClient() {
+    protected function getApiClient() {
         if (!$this->ewayApi) {
             $mode = config('paymentgateway.eway.mode', 'sandbox');
             $this->ewayApi = Rapid::createClient(
@@ -81,6 +71,12 @@ class AccessCodeRepo {
         return ClassValidator::getInstance('Eway\Rapid\Model\Transaction', $transaction);
     }
 
+    /**
+     * request a new access code from eway server
+     *
+     * @param array $shoppingCart
+     * @return void
+     */
     public function requestNewCode($shoppingCart) {
         $ref = $shoppingCart['guid'];
         $transaction = $this->prepareParams($shoppingCart, $ref);
@@ -88,44 +84,69 @@ class AccessCodeRepo {
             ApiMethod::TRANSPARENT_REDIRECT,
             $transaction
         );
-        if (!empty($response->AccessCode)) {
-            return [
-                true,
-                [
-                    'access_code' => $response->AccessCode,
-                    'ref'=>$ref,
-                    'action_url' => $response->FormActionURL
-                ]
-            ];
-        } else {
-            return [false, $response->Errors];
+        try {
+            if (!empty($response->AccessCode)) {
+                return [
+                    true,
+                    [
+                        'access_code' => $response->AccessCode,
+                        'ref'=>$ref,
+                        'action_url' => $response->FormActionURL
+                    ]
+                ];
+            } else {
+                return [false, ['response' => $response, 'messages' => $this->parseErrors($response->Errors)]];
+            }
+        } catch (\Exception $e) {
+            return [false, ['response' => $response, 'messages' => ['Z9999' => $e->getMessage()]]];
         }
     }
 
-    /**
-    *  asset access code should be ...
+   /**
+    * check an access code's status
+    *
+    * @param string $accesscode
+    * @return array with indicator if success and messages
     */
     public function checkAccessCode($accesscode) {
         $response = $this->getApiClient()->queryAccessCode($accesscode);
 
-        if ($response->AccessCode != $accesscode) {
-            return ['status' => 420, 'data' => self::ACCESSCODE_INVALID];
+        $messages = array_merge($this->parseErrors($response->ResponseMessage), $this->parseErrors($response->Errors));
+        if (isset($response->AccessCode) && $response->AccessCode != $accesscode) {
+            return ['success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
         }
 
         if ($response->ResponseMessage == 'S5099' && !$response->AuthorisationCode) {
-            return ['status' => 200, 'data' => self::ACCESSCODE_READY];
+            return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
         }
 
         if ($response->TransactionStatus
             && $response->TransactionID
             && in_array($response->ResponseMessage, $this->success_response_messages))
         {
-            return ['status' => 201, 'data' => self::ACCESSCODE_COMPLETED, 'transaction_id' => $response->TransactionID];
+            $messages['transaction_id'] = $response->TransactionID;
+            return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
         }
-        return [
-            'status' => 420, 
-            'data' => self::ACCESSCODE_FAIL, 
-            'ResponseMessage' => $response->ResponseMessage
-        ];
+        return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
+    }
+
+    /**
+     * parse eway error code to message.
+     *
+     * @param array|string $errors
+     * @return array messages
+     */
+    protected function parseErrors($errors) {
+        if (empty($errors)) {
+            return [];
+        }
+        if (!is_array($errors)) {
+            $errors = [$errors];
+        }
+        $messages = [];
+        foreach($errors as $error) {
+            $messages[$error] = Rapid::getMessage($error);
+        }
+        return $messages;
     }
 }

@@ -43,8 +43,8 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $order->order_currency_code = 'AUD';
         $order->save();
 
-        // $this->createShipmentRecord($event->shoppingCart, $order->id);
-        return ['order_id' =>  $order->id];
+        $this->createShipmentRecord($event->shoppingCart, $order->id);
+        return ['success' => true, 'order_id' =>  $order->id];
     }
 
     protected function createSalesAddressRecord($shippingAddress) {
@@ -72,5 +72,17 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         // $table->boolean('can_ship_partially')->default(0);
         // $table->smallInteger('can_ship_partially_item')->unsigned()->nullable();
         $shipment->save();
+    }
+
+    protected function createPaymentRecord($shoppingCart, $orderId, $paymentMethod) {
+        $payment = new SalesOrderPayment();
+        $payment->order_id = $orderId;
+        $payment->payment_method = $paymentMethod;
+        $payment->comment = '';
+        $payment->total_due = 0;
+        $payment->amount_authorized = 0;
+        $payment->amount_paid = 0;
+        $payment->amount_refunded = 0;
+        $payment->amount_canceled = 0;
     }
 }
