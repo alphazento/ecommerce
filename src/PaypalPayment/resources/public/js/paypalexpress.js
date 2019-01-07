@@ -32,48 +32,31 @@
                     commit: true,
                     // payment() is called when the button is clicked
                     payment: function (data, actions) {
-                        if (reactPaymentComponent) {
-                            console.log('tony', 'req');
-                            let rq = new Promise(function (resolve, reject) {
-                                console.log('tony', 'rq', extraParams);
-                                client.post(extraParams["prepare_endpoint"], data).then(resp => {
-                                    console.log('tony', 'resp', extraParams);
-                                    if (resp.status === 200) {
-                                        var ret = actions.payment.create({
-                                            payment: resp.data
-                                        });
-                                        ret.catch(function (e) {
-                                            var messages = paypalexpress.filterPaypal400(e);
-                                            console.log('paypal error', message, e);
-                                            // logservice.collect({
-                                            //     source: "paypal",
-                                            //     level: 400,
-                                            //     cookies: logservice.cookies,
-                                            //     messages: messages ? messages : e.message
-                                            // });
-                                        });
-                                        console.log('tony', 'resolve');
-                                        resolve(ret);
-                                    }
-                                });
-                            });
-                            var pro = Promise.all([rq]).then(resp => {
-                                console.log('tony', resp);
-                            });
-                            console.log('tony return');
-                            return pro;
-                        }
+                        var ret = actions.payment.create({
+                            payment: reactPaymentComponent.prepare()
+                        });
+                        ret.catch(function (e) {
+                            var messages = paypalexpress.filterPaypal400(e);
+                            console.log('paypal error', message, e);
+                            // logservice.collect({
+                            //     source: "paypal",
+                            //     level: 400,
+                            //     cookies: logservice.cookies,
+                            //     messages: messages ? messages : e.message
+                            // });
+                        });
+                        return ret;
                     },
 
                     // onAuthorize() is called when the buyer approves the payment
                     onAuthorize: function (data, actions) {
-                        return window.paypal.request.post('/payment/postpay', data)
+                        return window.paypal.request.post(extraParams['submit_endpoint'], data)
                             .then(resp => {
                                 if (resp.success) {
                                     //redirect to success.
                                     console.log('paypal success, redirecting');
                                 } else {
-                                    paypalexpress.cancelPay();
+                                    // paypalexpress.cancelPay();
                                     if (resp.errors) {
                                         console.log('paypal error');
                                     }
@@ -81,11 +64,11 @@
                             });
                     },
                     onCancel: function (data) {
-                        paypalexpress.cancelPay();
+                        // paypalexpress.cancelPay();
                     },
                     onError: function (data) {
                         var errorMessage = '';
-                        var messages = ppegateway.filterPaypal400(data);
+                        var messages = paypalexpress.filterPaypal400(data);
                         if (messages) {
                             errorMessage = 'Error:' + messages.name + '<br>';
                         }
@@ -98,22 +81,59 @@
                 paypalSelector);
         },
 
-        preCapture: function (cart_data) {
-            return this.client.post('/payment/presubmit', cart_data);
-        },
-
-        capture: function () {
-
+        preCapture: function (cart) {
+            var items = [];
+            cart.items.forEach(item => {
+                items.push({
+                    name: item.name,
+                    description: item.description,
+                    quantity: item.quantity,
+                    price: item.unit_price,
+                    sku: item.id,
+                    currency: "AUD"
+                })
+            })
+            var payment = {
+                intent: "sale",
+                payer: {
+                    payer_info: {
+                        email: cart.email
+                    }
+                },
+                transactions: [{
+                    amount: {
+                        total: cart.total,
+                        currency: "AUD",
+                        details: {
+                            subtotal: cart.subtotal,
+                            shipping: cart.shipping_fee
+                        }
+                    },
+                    description: "The payment transaction description.",
+                    custom: cart.customer_id,
+                    invoice_number: "c" + cart.customer_id + cart.guid,
+                    payment_options: {
+                        allowed_payment_method: "UNRESTRICTED"
+                    },
+                    item_list: {
+                        items: items,
+                        shipping_address: {
+                            recipient_name: cart.shipping_address.firstname + ' ' + cart.shipping_address.lastname,
+                            line1: cart.shipping_address.address1,
+                            line2: cart.shipping_address.address2,
+                            city: cart.shipping_address.city,
+                            country_code: "AU",
+                            postal_code: 2000,
+                            state: "NSW"
+                        }
+                    }
+                }]
+            }
+            return payment;
         },
 
         placeOrder: function () {
-            if (this.reactPaymentComponent) {
-                this.client.post(this.extraParams["prepare_endpoint"]).then(resp => {
-                    if (resp.status === 200) {
-
-                    }
-                });
-            }
+            throw new "Paypal should not call function placeOrder";
         }
     };
     return paypalexpress;
