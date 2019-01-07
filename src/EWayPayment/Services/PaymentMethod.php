@@ -103,7 +103,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return $this->accesscodeRepo;
     }
 
-    public function preSubmit($shoppingCart) {
+    public function preSubmit(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
         return $this->getAccesscodeRepo()->requestNewCode($shoppingCart);
     }
 
