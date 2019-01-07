@@ -13,9 +13,12 @@
     }
 }(function () {
     var paypalexpress = {
-        init: function (reactPaymentComponent, client, extraParams, paypalSelector) {
+        init: function (reactPayment, client, extraParams, paypalSelector) {
             console.log('paypal init', extraParams, paypalSelector);
-            this.reactPaymentComponent = reactPaymentComponent;
+            this.reactPayment = reactPayment;
+            this.client = client;
+            this.extraParams = extraParams;
+            this.paypalSelector = paypalSelector;
             window.paypal.Button.render({
                     style: {
                         label: 'checkout',
@@ -32,9 +35,11 @@
                     commit: true,
                     // payment() is called when the button is clicked
                     payment: function (data, actions) {
+                        console.log('tony prepaerPayment', window.paypal_config, reactPayment, actions)
                         var ret = actions.payment.create({
-                            payment: reactPaymentComponent.prepare()
+                            payment: reactPayment.prepaerPayment()
                         });
+
                         ret.catch(function (e) {
                             var messages = paypalexpress.filterPaypal400(e);
                             console.log('paypal error', message, e);
@@ -81,7 +86,12 @@
                 paypalSelector);
         },
 
-        preCapture: function (cart) {
+        reInit: function () {
+            return this.init(this.reactPayment, this.client, this.extraParams, this.paypalSelector)
+        },
+
+        prepaerPayment: function (cart) {
+            console.log('tony prepaerPayment', cart)
             var items = [];
             cart.items.forEach(item => {
                 items.push({
