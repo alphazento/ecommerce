@@ -36,6 +36,6 @@ class ConfigurationController extends Controller
         $key = Route::input('key');
         $value = Request::get('value');
         Config::save($key, $value);
-        return ['status' => 200];
+        return ['status' => 200, 'data' => [$key => $value]];
     }
 }

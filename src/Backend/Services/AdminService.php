@@ -51,16 +51,38 @@ class AdminService
     }
   }
 
-  public function registerItemToGroup($l0name_l1Name, $groupName, array $item) {
+  public function registerItemToGroup($l0name_l1Name, $groupName, array $item, $sort = 0) {
     if (!isset($this->config_groups[$l0name_l1Name])) {
-        $this->config_groups[$l0name_l1Name] = [$groupName => [$item]];
+        $this->config_groups[$l0name_l1Name] = [$groupName => ['items' => [$item]]];
     } else {
       if (isset($this->config_groups[$l0name_l1Name][$groupName])) {
-        $this->config_groups[$l0name_l1Name][$groupName][] = $item;
+        if (!isset($this->config_groups[$l0name_l1Name][$groupName]['items'])) {
+          $this->config_groups[$l0name_l1Name][$groupName]['items'] = [];
+        }
+        if ($sort && !isset($this->config_groups[$l0name_l1Name][$groupName][$sort])) {
+          $this->config_groups[$l0name_l1Name][$groupName]['items'][$sort] = $item;
+        } else {
+          $this->config_groups[$l0name_l1Name][$groupName]['items'][] = $item;
+        }
       } else {
-        $this->config_groups[$l0name_l1Name][$groupName]= [$item];
+        $this->config_groups[$l0name_l1Name][$groupName]['items']= [$item];
       }
     }
+  }
+
+  public function registerSubgroupToGroup($l0name_l1Name, $groupName, $subGroupName, array $item) {
+    if (!isset($this->config_groups[$l0name_l1Name])) {
+      $this->config_groups[$l0name_l1Name] = [$groupName => ['subgroups' => [$subGroupName => [$item]]]];
+  } else {
+    if (isset($this->config_groups[$l0name_l1Name][$groupName])) {
+      if (!isset($this->config_groups[$l0name_l1Name][$groupName]['subgroups'])) {
+        $this->config_groups[$l0name_l1Name][$groupName]['subgroups'] = [];
+      }
+      $this->config_groups[$l0name_l1Name][$groupName]['subgroups'][$subGroupName] = $item;
+    } else {
+      $this->config_groups[$l0name_l1Name][$groupName]['subgroups'] = [$subGroupName => $item];
+    }
+  }
   }
 
   protected function hasL1MenuNode($parentName, $l1Name) 

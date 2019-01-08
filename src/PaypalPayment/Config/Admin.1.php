@@ -35,12 +35,7 @@ class Admin {
                                 ['value' => 'production', 'label' => 'Production']
                             ],
                             'cpath' => 'paymentgateway.paypalexpress.mode'
-                        ]
-                    ]
-                ]);
-                AdminService::registerSubgroupToGroup($key, 'paypalexpress', 'sandbox', [
-                    'title' => 'Sandbox API Settings',
-                    'items' => [
+                        ],
                         [
                             'title' => 'Sandbox ClientID',
                             'type' => 'LongText',
@@ -55,12 +50,7 @@ class Admin {
                             'title' => 'Sandbox OAuth2 Token Entry',
                             'type' => 'LongText',
                             'cpath' => 'paymentgateway.paypalexpress.sandbox.oauth2_token_url'
-                        ]
-                    ]
-                ]);
-                AdminService::registerSubgroupToGroup($key, 'paypalexpress', 'production', [
-                    'title' => 'Production API Settings',
-                    'items' => [
+                        ],
                         [
                             'title' => 'Production ClientID',
                             'type' => 'LongText',
