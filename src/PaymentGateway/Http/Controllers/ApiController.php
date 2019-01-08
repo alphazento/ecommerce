@@ -31,7 +31,8 @@ class ApiController extends Controller {
 
     public function submit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            return ['status' => 200, 'data' => $method->submit(Request::all())];
+            list($success, $data) = $method->submit(Request::all());
+            return ['status' => $success ? 200 : 420, 'data' => $data];
         } else {
             return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
         }
@@ -40,8 +41,11 @@ class ApiController extends Controller {
     public function postsubmit() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             $returns = $method->postSubmit(Request::all());
-            if ($returns['success'] && $returns['next'] == 'create_order') { //payment success
-                $orderData = (new \Zento\Checkout\Event\CreatingOrder(Request::get('shopping_cart'), Route::input('method'), $returns['transaction_id']))->fireUntil();
+            if ($returns['success'] && isset($returns['next']) && $returns['next'] == 'create_order') { //payment success
+                $orderData = (new \Zento\Checkout\Event\CreatingOrder(
+                    Request::get('shopping_cart'), 
+                    Route::input('method'), 
+                    $returns['transaction_id']))->fireUntil();
                 $orderData['payment_data'] = $returns['data'];
                 if ($orderData['success'] ?? false) {
                     return ['status' => 201, 'data' => $orderData];

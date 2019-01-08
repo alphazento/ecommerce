@@ -108,14 +108,12 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function submit($params) {
-        // $this->authorize()
-        // $this->capture()
     }
 
     public function postSubmit($params) {
-        $return = $this->getAccesscodeRepo()->checkAccessCode($params['AccessCode']);
-        $return['next'] = 'create_order';
-        return $return;
+        $returns = $this->getAccesscodeRepo()->checkAccessCode($params['AccessCode']);
+        $returns['next'] = 'create_order';
+        return $returns;
     }
 
     public function capture($payment, $amount) {

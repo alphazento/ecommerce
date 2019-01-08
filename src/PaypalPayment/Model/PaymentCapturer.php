@@ -13,33 +13,58 @@ class PaymentCapturer {
         'PAYEE_FILTER_RESTRICTIONS' => 'Payee filter restrictions'
     ];
 
-    const PRODUCTION_CLIENT_TOKEN_INFO = 'payment/paypalexpress/production/client_token_info';     //do not put in admin.php
-    const SANDBOX_CLIENT_TOKEN_INFO = 'payment/paypalexpress/sandbox/client_token_info';     //do not put in admin.php
+    const SANDBOX_OAUTH2_TOKEN_VALUE = 'paymentgateway.paypalexpress.sandbox.oauth2_token.value';     //do not put in admin.php
+    const PRODUCTION_OAUTH2_TOKEN_VALUE = 'paymentgateway.paypalexpress.production.oauth2_token.value';     //do not put in admin.php
 
     protected $is_retrying = false;
 
-    protected $errors = [
-        'Payment has been declined.',
-        'Please verify your details and try again.',
-        'Or you can use another payment method.'
-    ];
+    protected $errors = [];
+
+    protected $mode;
+    public function __construct() {
+        $this->mode = config('paymentgateway.paypalexpress.mode');
+    }
+
+    protected function getConfigValue($key) {
+        return config(sprintf('paymentgateway.paypalexpress.%s.%s', $this->mode, $key));
+    }
 
     public function execute($reqData) {
         if (isset($reqData['paymentID'])) {
             $payId = $reqData['paymentID'];
             $url = $this->getPaymentCheckUrl($payId, 'execute');
             list($status, $results) = $this->httprequest($url , ['payer_id' => $reqData['payerID']]);
-            if ($status == 200) {
-                if (strtolower($results['state']) == 'failed') {
-                    if (isset($results['failure_reason'])) {
-                        $this->errors[] = 'Reason:' .  self::MESSAGES[strtoupper($results['failure_reason'])];
+            switch($status) {
+                case 200:
+                    if (strtolower($results['state']) == 'failed') {
+                        if (isset($results['failure_reason'])) {
+                            $this->errors[] = 'Reason:' .  self::MESSAGES[strtoupper($results['failure_reason'])];
+                        }
+                    } else {
+                        return ['success'=>true, 'data' => $results, 'transaction_id' => $results['id']];
                     }
-                } else {
-                    return ['status' => 200, 'data' => $results];
-                }
+                    break;
+                case 400:
+                    if ($results && isset($results['message'])) {
+                        $this->errors[] = $results['message'];
+                    }
+                    break;
+                case 404:
+                    $this->errors[] = 'Paypal Execute url is not found.';
+                    break;
+                case 500:
+                case 502:
+                case 503:
+                case 504:
+                    $this->errors[] = 'Paypal Server is temporary unavailable';
+                    break;
+                default:
+                    $this->errors[] = 'Paypal Server caused unknow error.';
+                    break;
             }
+            $reqData['raw_status'] = $status;
         }
-        return ['status' => 420, 'data' => $this->errors];
+        return ['success'=>false, 'data' => [$reqData], 'messages' => $this->errors];
     }
 
     protected function httprequest($url, $data, $method = 'POST') {
@@ -65,10 +90,8 @@ class PaymentCapturer {
     }
 
     protected function retrieveClientToken($force = false) {
-        $isProduction = false;
-        $tokenInfoKey = $isProduction ? self::PRODUCTION_CLIENT_TOKEN_INFO : self::SANDBOX_CLIENT_TOKEN_INFO;
         if (!$force) {
-            $parts = explode(':::', config($tokenInfoKey, ''));
+            $parts = explode(':::', $this->getConfigValue('oauth2_token.value'));
             if (count($parts) == 2) {
                 if (time() - $parts[1] < 300) {
                     //not expired
@@ -77,25 +100,25 @@ class PaymentCapturer {
             }
         }
        
-        $clientId = 'AZj9xbFq-EMIObVF1J9slM3d_mS_6dUa3jEHJaAtMcuDsgHintWAh4zXj8rj1IgvF-c6S5auWXFeQN6R';
-        $secret = 'ECji2Mboxhly_7yRXc3RAWmL2f8gslGp-Iv3jnqJcffodOtXa21GFQ3XZl3Z1lTswRbDW6yXlK-x-1BU';
-        list($code, $ret) = $this->requestToken($clientId, $secret);
+        list($code, $ret) = $this->requestToken();
         if($code == 200) {
             $token = sprintf('%s %s', $ret['token_type'], $ret['access_token']);
-            Config::set($tokenInfoKey, sprintf('%s:::%s', $token, time() + $ret['expires_in']));
+            Config::set(
+                sprintf('paymentgateway.paypalexpress.%s.%s', $this->mode,'oauth2_token.value'), 
+                sprintf('%s:::%s', $token, time() + $ret['expires_in'])
+            );
             return $token;
         }
     }
 
-    protected function requestToken($clientId, $secret) {
+    protected function requestToken() {
         $headers[] = 'Accept: application/json';
-        // $url = ('production' == Store::getConfig(Constants::ENV_MODE)) ? Store::getConfig(Constants::PRODUCTION_TOKEN_URL) : Store::getConfig(Constants::SANDBOX_TOKEN_URL);
-        $url = 'https://api.sandbox.paypal.com/v1/oauth2/token';
-        $ch = curl_init($url);
+        $oauth2_token_url = $this->getConfigValue('oauth2_token_url');
+        $ch = curl_init($oauth2_token_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $headers[] = 'Accept: application/json';
         $headers[] = 'Accept-Language: en_US';
-        curl_setopt($ch, CURLOPT_USERPWD, sprintf('%s:%s', $clientId, $secret));
+        curl_setopt($ch, CURLOPT_USERPWD, sprintf('%s:%s', $this->getConfigValue('client_id'), $this->getConfigValue('secret')));
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'grant_type=client_credentials');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

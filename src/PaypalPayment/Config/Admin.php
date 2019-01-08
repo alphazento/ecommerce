@@ -47,6 +47,11 @@ class Admin {
                             'cpath' => 'paymentgateway.paypalexpress.sandbox.secret'
                         ],
                         [
+                            'title' => 'Sandbox OAuth2 Token Entry',
+                            'type' => 'LongText',
+                            'cpath' => 'paymentgateway.paypalexpress.sandbox.oauth2_token_url'
+                        ],
+                        [
                             'title' => 'Production ClientID',
                             'type' => 'LongText',
                             'cpath' => 'paymentgateway.paypalexpress.production.client_id'
@@ -55,7 +60,12 @@ class Admin {
                             'title' => 'Production Secret',
                             'type' => 'LongText',
                             'cpath' => 'paymentgateway.paypalexpress.production.secret'
-                        ]
+                        ],
+                        [
+                            'title' => 'Production OAuth2 Token Entry',
+                            'type' => 'LongText',
+                            'cpath' => 'paymentgateway.paypalexpress.production.oauth2_token_url'
+                        ],
                     ]
                 ]);
             },

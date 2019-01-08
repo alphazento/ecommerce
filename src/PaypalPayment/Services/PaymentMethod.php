@@ -99,12 +99,20 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
     }
 
+    /**
+     * this submit is for payment gateway which using server side submit.
+     * if you are using frontend submit, do not extend this function
+     *
+     * @param [type] $params
+     * @return void
+     */
     public function submit($params) {
-        return (new PaymentCapturer)->execute($params);
     }
 
     public function postSubmit($params) {
-
+        $returns = (new PaymentCapturer)->execute($params['payment_data']);
+        $returns['next'] = 'create_order';
+        return $returns;
     }
 
     public function capture($payment, $amount) {
@@ -123,7 +131,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     protected function prepareForReactjs() {
-        $url = (string)(route('payment.submit', ['method' => $this->getCode() ]));
+        $url = (string)(route('payment.postsubmit', ['method' => $this->getCode() ]));
         return [
             "name" => $this->getCode(),
             "title" => $this->getTitle(),
@@ -147,8 +155,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                 "entry" => "http://alphazento.local.test/js/paypalexpress.js?v="  . time()
             ],
             'params' => [
-                // 'submit_endpoint' => route('payment.submit', ['method' => $this->getCode() ])
-                'submit_endpoint' => str_replace('https:', 'http:', $url)
+                'postsubmit' => str_replace('https:', 'http:', $url)
             ]
         ];
     }
