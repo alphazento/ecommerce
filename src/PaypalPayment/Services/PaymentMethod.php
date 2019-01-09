@@ -95,7 +95,10 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
      */
     public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
         $returns = (new PaymentCapturer)->execute($payment_data['payment']);
-        return (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult($payment_data['payment'], ture))
+        return (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
+            $this->getCode(), 
+            $payment_data['payment'], 
+            true))
             ->success($returns['success']);
     }
 

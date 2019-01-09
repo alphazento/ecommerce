@@ -5,21 +5,19 @@ namespace Zento\Checkout\Event;
 class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     
     public $shoppingCart;
-    public $paymentMethod;
-    public $paymentRef;
+    public $paymentDetail;
 
     /**
      * Create a new event instance.
      *
-     * @param  array $shopping_cart
-     * @param  string  $payment_method
-     * @param  string  $payment_ref
+     * @param  array $shoppingCart
+     * @param  string  $paymentDetail
      * @return void
      */
-    public function __construct($shoppingCart, $paymentMethod, $paymentRef)
+    public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart, 
+        \Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail)
     {
         $this->shoppingCart = $shoppingCart;
-        $this->paymentMethod = $paymentMethod;
-        $this->paymentRef = $paymentRef;
+        $this->paymentDetail = $paymentDetail;
     }
 }

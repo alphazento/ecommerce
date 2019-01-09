@@ -43,7 +43,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $order->order_currency_code = 'AUD';
         $order->save();
 
-        $this->createShipmentRecord($event->shoppingCart, $order->id);
+        // $this->createShipmentRecord($event->shoppingCart, $order->id);
         return ['success' => true, 'order_id' =>  $order->id];
     }
 
@@ -51,7 +51,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $id = $shippingAddress['id'];
         unset($shippingAddress['id']);
         unset($shippingAddress['hash']);
-        $address = new SalesAddress($shippingAddress);
+        $address = new SalesAddress($shippingAddress->toArray());
         $address->save();
         $shippingAddress['id'] = $id;
         return $address->id;

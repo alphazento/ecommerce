@@ -37,13 +37,13 @@ class CapturePaymentResult
     return $this->data['payment_raw_data'];
   }
 
-  public function setTransactionId($data) {
-    $this->data['transaction_id'] = $data;
+  public function setPaymentDetail(array $data) {
+    $this->data['payment_detail'] = \array2ReadOnlyObject('\Zento\PaymentGateway\Interfaces\PaymentDetail', $data);
     return $this;
   }
 
-  public function getTransactionId() {
-    return $this->data['transaction_id'];
+  public function getPaymentDetail() {
+    return $this->data['payment_detail'];
   }
 
   public function getPaymentName() {
@@ -52,6 +52,10 @@ class CapturePaymentResult
 
   public function isSuccess() {
     return $this->data['success'];
+  }
+
+  public function getData() {
+    return $this->data;
   }
 
   public function canCreateOrderAfterCapture() {

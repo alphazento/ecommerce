@@ -31,21 +31,18 @@ class ApiController extends Controller {
 
     public function capture() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            $returns = $method->capture(Request::all());
-            if ($returns['success'] && isset($returns['next']) && $returns['next'] == 'create_order') { //payment success
+            $result = $method->capture(Request::all());
+            if ($result->canCreateOrderAfterCapture()) { //payment success
+                $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
+                \zento_assert($shoppingCart);
                 $orderData = (new \Zento\Checkout\Event\CreatingOrder(
-                    Request::get('shopping_cart'), 
-                    Route::input('method'), 
-                    $returns['transaction_id']))->fireUntil();
-                $orderData['payment_data'] = $returns['data'];
-                if ($orderData['success'] ?? false) {
-                    return ['status' => 201, 'data' => $orderData];
-                } else {
-                    return ['status' => 420, 'data' => $orderData];
-                }
+                    $shoppingCart, 
+                    $result->getPaymentDetail())
+                )->fireUntil();
+                $orderData['payment_data'] = $result->getData();
+                return ['status' => $orderData['success'] ? 201 : 420, 'data' => $orderData];
             } else {
-                $returns['status'] = $returns['success'] ? 201 : 420;
-                return $returns;
+                return ['status' => $result->isSuccess() ? 201 : 420, 'data' => $result->getData()];
             }
         } else {
             return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];

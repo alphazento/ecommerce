@@ -1,7 +1,7 @@
 <?php
 namespace Zento\PaymentGateway\Interfaces;
 
-interface Method {
+interface AdminFeatures {
     public function canCapturePartial();
     public function canCaptureOnce();
     public function canRefund();

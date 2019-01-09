@@ -86,25 +86,27 @@ if (!function_exists('generateReadOnlyModelFromArray')) {
 }
 
 if (!function_exists('array2ReadOnlyObject')) {
-    function array2ReadOnlyObject(array $attrs) {
-        return new class($attrs) implements \Zento\Contracts\AssertAbleInterface {
-            protected $data;
+    function array2ReadOnlyObject($interface, array $attrs) {
+        $instance = null;
+        eval('$instance = new class($attrs) implements ' . $interface . ' {
+            protected $attrs;
 
-            public function __construct($attrs) {
-                $this->data = $attrs;
+            public function __construct(array $attrs) {
+                $this->attrs = $attrs;
             }
 
             public function getData() {
-                return $this->data;
+                return $this->attrs;
             }
 
             public function __get($key) {
-                return isset($this->data[$key]) ? $this->data[$key] : null;
+                return isset($this->attrs[$key]) ? $this->attrs[$key] : null;
             }
 
             public function __set($key, $value) {
-                throw new \Exception('This model is read only');
+                throw new \Exception("This model is read only");
             }
-        };
+        };');
+        return $instance;
     }
 }
