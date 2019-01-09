@@ -13,18 +13,13 @@ Route::group(
         );
 
         Route::post(
-            '/payment/presubmit/{method}', 
-            ['as' => 'payment.presubmit', 'uses' => 'ApiController@presubmit']
+            '/payment/prepare/{method}', 
+            ['as' => 'payment.prepare', 'uses' => 'ApiController@prepare']
         );
 
         Route::post(
-            '/payment/submit/{method}', 
-            ['as' => 'payment.submit', 'uses' => 'ApiController@submit']
-        );
-
-        Route::post(
-            '/payment/postsubmit/{method}', 
-            ['as' => 'payment.postsubmit', 'uses' => 'ApiController@postsubmit']
+            '/payment/capture/{method}', 
+            ['as' => 'payment.capture', 'uses' => 'ApiController@capture']
         );
     }
 );

@@ -13,6 +13,16 @@
     }
 }(function () {
     var paypalexpress = {
+        findPaypal400Error: function (ex) {
+            if (ex && ex.message) {
+                var f = ex.message.indexOf('{');
+                var t = ex.message.lastIndexOf('}');
+                var message = ex.message.substring(f, t + 1);
+                return JSON.parse(message);
+            }
+            return false;
+        },
+
         init: function (reactPayment, client, extraParams, paypalSelector) {
             console.log('paypal init', extraParams, paypalSelector);
             this.reactPayment = reactPayment;
@@ -41,21 +51,18 @@
                         });
 
                         ret.catch(function (e) {
-                            var messages = paypalexpress.filterPaypal400(e);
+                            var messages = paypalexpress.findPaypal400Error(e);
                             console.log('paypal error', message, e);
-                            // logservice.collect({
-                            //     source: "paypal",
-                            //     level: 400,
-                            //     cookies: logservice.cookies,
-                            //     messages: messages ? messages : e.message
-                            // });
                         });
                         return ret;
                     },
 
                     // onAuthorize() is called when the buyer approves the payment
                     onAuthorize: function (data, actions) {
-                        return window.paypal.request.post(extraParams['submit_endpoint'], data)
+                        return client.post(extraParams['capture_url'], {
+                                payment: data,
+                                shopping_cart: reactPayment.getShoppingCartData()
+                            })
                             .then(resp => {
                                 if (resp.success) {
                                     //redirect to success.
@@ -70,16 +77,15 @@
                     },
                     onCancel: function (data) {
                         // paypalexpress.cancelPay();
+                        console.log('paypalexpress.cancelPay')
                     },
                     onError: function (data) {
                         var errorMessage = '';
-                        var messages = paypalexpress.filterPaypal400(data);
+                        var messages = paypalexpress.findPaypal400Error(data);
                         if (messages) {
                             errorMessage = 'Error:' + messages.name + '<br>';
                         }
-
-                        errorMessage = errorMessage + 'Payment could not be executed. Please try again or choose other payment method.';
-
+                        errorMessage = errorMessage + 'Paypal Payment could not be executed. Please try again or choose other payment method.';
                         console.log('paypal error', errorMessage)
                     }
                 },
@@ -121,7 +127,7 @@
                     },
                     description: "The payment transaction description.",
                     custom: cart.customer_id,
-                    invoice_number: "c" + cart.customer_id + cart.guid,
+                    invoice_number: "c" + cart.customer_id + cart.guid + Math.floor(Date.now() / 1000),
                     payment_options: {
                         allowed_payment_method: "UNRESTRICTED"
                     },

@@ -55,7 +55,7 @@ class PaymentGateway {
         foreach($this->method_services as $serviceName => $instance) {
             $service = $this->getMethod($serviceName);
             // if ($service->isAvailable($quote, $user, $shippingAddress)) {
-                $availables[] = $service->prepareForClient($clientType);
+                $availables[] = $service->prepareForClientSide($clientType);
             // }
         }
         return $availables;
@@ -95,16 +95,5 @@ class PaymentGateway {
         $service = $this->getMethod($methodName);
         $service->disable();
         return $this;
-    }
-
-    /**
-     * render method view part to page
-     *
-     * @param string $methodName
-     * @return string
-     */
-    public function renderMethodView($methodName) {
-        $service = $this->getMethod($methodName);
-        return $service->renderMethodView();
     }
 }

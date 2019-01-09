@@ -2,7 +2,7 @@
 
 namespace Zento\PaymentGateway\Events;
 
-class PostSubmitPayment extends \Zento\Kernel\Booster\Events\BaseEvent {
+class CapturePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
     public $method;
     public $data;
     /**

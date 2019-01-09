@@ -18,29 +18,20 @@ class ApiController extends Controller {
         ];
     }
 
-    public function presubmit() {
+    public function prepare() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all());
             \zento_assert($shoppingCart);
-            list($ret, $data) = $method->preSubmit($shoppingCart);
+            list($ret, $data) = $method->prepare($shoppingCart);
             return ['status' => $ret ? 200 : 500, 'data' => $data];
         } else {
             return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
         }
     }
 
-    public function submit() {
+    public function capture() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            list($success, $data) = $method->submit(Request::all());
-            return ['status' => $success ? 200 : 420, 'data' => $data];
-        } else {
-            return ['status' => 404, 'data' => ['messages'=>['Payment method not support by server.']]];
-        }
-    }
-
-    public function postsubmit() {
-        if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            $returns = $method->postSubmit(Request::all());
+            $returns = $method->capture(Request::all());
             if ($returns['success'] && isset($returns['next']) && $returns['next'] == 'create_order') { //payment success
                 $orderData = (new \Zento\Checkout\Event\CreatingOrder(
                     Request::get('shopping_cart'), 

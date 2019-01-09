@@ -52,7 +52,7 @@ if (!function_exists('guidv4')) {
 }
 
 if (!function_exists('generateReadOnlyModelFromArray')) {
-    function generateReadOnlyModelFromArray($className, array $attr = []) {
+    function generateReadOnlyModelFromArray($className, array $attrs = []) {
         $instance = null;
         eval('$instance = new class extends ' . $className . ' {
             public function _fill_(array $attrs = []) {
@@ -80,7 +80,31 @@ if (!function_exists('generateReadOnlyModelFromArray')) {
             } 
             use \Zento\Kernel\Booster\Database\Eloquent\ReadOnly\TraitReadOnly;
         };');
-        $instance->_fill_($attr);
+        $instance->_fill_($attrs);
         return $instance;
+    }
+}
+
+if (!function_exists('array2ReadOnlyObject')) {
+    function array2ReadOnlyObject(array $attrs) {
+        return new class($attrs) implements \Zento\Contracts\AssertAbleInterface {
+            protected $data;
+
+            public function __construct($attrs) {
+                $this->data = $attrs;
+            }
+
+            public function getData() {
+                return $this->data;
+            }
+
+            public function __get($key) {
+                return isset($this->data[$key]) ? $this->data[$key] : null;
+            }
+
+            public function __set($key, $value) {
+                throw new \Exception('This model is read only');
+            }
+        };
     }
 }

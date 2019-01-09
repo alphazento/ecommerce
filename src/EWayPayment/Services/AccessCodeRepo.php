@@ -56,7 +56,6 @@ class AccessCodeRepo {
             'Email'=> $shoppingCart['email'],
             'Phone' => $shippingAddress['phone'],
             'Mobile' => $shippingAddress['phone'],
-            // 'RedirectUrl' => 'http://alphazento.local.test/rest/v1/payment/postsubmit/ewaypayment'
             'RedirectUrl' => "http://localhost:3000/paymentcallback/ewaypayment"
         ];
         $transaction = [
@@ -125,7 +124,7 @@ class AccessCodeRepo {
             && in_array($response->ResponseMessage, $this->success_response_messages))
         {
             $messages['transaction_id'] = $response->TransactionID;
-            return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
+            return [ 'success' => true, 'data' => ['response' => $response, 'messages' => $messages] ];
         }
         return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
     }

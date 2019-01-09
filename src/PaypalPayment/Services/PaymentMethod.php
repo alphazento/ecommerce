@@ -79,47 +79,27 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return true;
     }
 
-    public function authorize($payment, $amount) {
+    public function authorize($payment_data) {
         return true;
     }
 
-    public function refund($payment, $amount) {
-        return true;
-    }
-
-    public function acceptPayment($payment) {
-        return true;
-    }
-
-    public function denyPayment($payment) {
-        return true;
-    }
-
-    public function preSubmit($params) {
+    public function prepare($params) {
         return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
     }
 
     /**
-     * this submit is for payment gateway which using server side submit.
-     * if you are using frontend submit, do not extend this function
+     * Base on different payment method, 
      *
-     * @param [type] $params
-     * @return void
+     * @param array $data
+     * @return \Zento\PaymentGateway\Interfaces\CapturePaymentResult
      */
-    public function submit($params) {
+    public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
+        $returns = (new PaymentCapturer)->execute($payment_data['payment']);
+        return (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult($payment_data['payment'], ture))
+            ->success($returns['success']);
     }
 
-    public function postSubmit($params) {
-        $returns = (new PaymentCapturer)->execute($params['payment_data']);
-        $returns['next'] = 'create_order';
-        return $returns;
-    }
-
-    public function capture($payment, $amount) {
-        return true;
-    }
-
-    public function prepareForClient($clientType = 'web') {
+    public function prepareForClientSide($clientType = 'web') {
         switch($clientType) {
             case 'web':
                 return $this;
@@ -131,7 +111,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     protected function prepareForReactjs() {
-        $url = (string)(route('payment.postsubmit', ['method' => $this->getCode() ]));
+        $url = (string)(route('payment.capture', ['method' => $this->getCode() ]));
         return [
             "name" => $this->getCode(),
             "title" => $this->getTitle(),
@@ -155,12 +135,8 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                 "entry" => "http://alphazento.local.test/js/paypalexpress.js?v="  . time()
             ],
             'params' => [
-                'postsubmit' => str_replace('https:', 'http:', $url)
+                'capture_url' => str_replace('https:', 'http:', $url)
             ]
         ];
-    }
-
-    public function renderMethodView() {
-        return '';
     }
 }

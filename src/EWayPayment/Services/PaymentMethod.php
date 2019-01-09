@@ -79,19 +79,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return true;
     }
 
-    public function authorize($payment, $amount) {
-        return true;
-    }
-
-    public function refund($payment, $amount) {
-        return true;
-    }
-
-    public function acceptPayment($payment) {
-        return true;
-    }
-
-    public function denyPayment($payment) {
+    public function authorize($payment_data) {
         return true;
     }
 
@@ -103,24 +91,22 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return $this->accesscodeRepo;
     }
 
-    public function preSubmit(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
+    public function prepare(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
         return $this->getAccesscodeRepo()->requestNewCode($shoppingCart);
     }
 
-    public function submit($params) {
+    /**
+     * capture
+     *
+     * @param array $payment_data
+     * @return \Zento\PaymentGateway\Interfaces\CapturePaymentResult
+     */
+    public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
+        $returns = $this->getAccesscodeRepo()->checkAccessCode($payment_data['AccessCode']);
+        return (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult($payment_data['AccessCode'], ture))->success($returns['success']);
     }
 
-    public function postSubmit($params) {
-        $returns = $this->getAccesscodeRepo()->checkAccessCode($params['AccessCode']);
-        $returns['next'] = 'create_order';
-        return $returns;
-    }
-
-    public function capture($payment, $amount) {
-        return true;
-    }
-
-    public function prepareForClient($clientType = 'web') {
+    public function prepareForClientSide($clientType = 'web') {
         switch($clientType) {
             case 'web':
                 return $this;
@@ -147,12 +133,8 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                     "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
             ],
             'params' => [
-                'prepare_endpoint' => "/payment/presubmit/" . $this->getCode() 
+                'prepare_url' => "/payment/prepare/" . $this->getCode() 
             ]
         ];
-    }
-
-    public function renderMethodView() {
-        return '';
     }
 }

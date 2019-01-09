@@ -3,52 +3,31 @@ namespace Zento\PaymentGateway\Interfaces;
 
 interface Method {
     public function getCode();
-
     public function getTitle();
 
     public function canOrder();
-
     public function canAuthorize();
-
     public function canCapture();
 
     public function canCapturePartial();
-
     public function canCaptureOnce();
     
     public function canRefund();
-
-    public function canUseInternal();
-
     public function canUseAtFront();
-
-    public function canUseAtAdmin();
-
     public function canUseCheckout();
 
-    public function canEdit();
-
-    public function canFetchTransactionInfo();
-
     public function canUseForCountry($country);
-
     public function canUseForCurrency($currencyCode);
-
-    public function canReviewPayment();
-
     public function validate();
 
-    public function authorize($payment, $amount);
+    public function authorize($payment_data);
+    public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 
-    public function capture($payment, $amount);
-
-    public function refund($payment, $amount);
-
-    public function acceptPayment($payment);
-
-    public function denyPayment($payment);
-
-    public function prepareForClient($clientType = 'web');
-    
-    public function renderMethodView();
+    /**
+     * prepare for client side
+     *
+     * @param string $clientType
+     * @return array
+     */
+    public function prepareForClientSide($clientType = 'web');
 }

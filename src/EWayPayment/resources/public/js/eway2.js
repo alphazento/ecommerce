@@ -21,7 +21,7 @@
 
         preCapture: function (shoppingCart) {
             this.reactPayment.openRedirectWindow("ewaypayment");
-            return this.client.post(this.extraParams["prepare_endpoint"], shoppingCart);
+            return this.client.post(this.extraParams["prepare_url"], shoppingCart);
         },
 
         // capture: function () {
@@ -31,7 +31,7 @@
         // },
 
         capturePayment: function (shoppingCart, cardData) {
-            this.preCapture(shoppingCart).then(resp => {
+            return this.preCapture(shoppingCart).then(resp => {
                 if (resp.status === 200) {
                     if (cardData) {
                         let expiry = cardData["expiry"].split("/");
@@ -47,22 +47,15 @@
                         this.reactPayment.postUrlInRedirectWindow(resp.data.action_url, eWayCardData);
                     }
                 }
+                return resp;
             });
         },
 
         postPayment: function (transferQuery, transferPostData, shoppingCart) {
-            if (this.reactPayment) {
-                this.client.post('/payment/postsubmit/ewaypayment' + transferQuery, {
-                    from_gateway: transferPostData,
-                    shopping_cart: shoppingCart,
-                }).then(resp => {
-                    if (resp.status === 201) {
-                        this.reactPayment.onPaymentCaptured(result);
-                    } else {
-
-                    }
-                })
-            }
+            return this.client.post('/payment/postsubmit/ewaypayment' + transferQuery, {
+                from_gateway: transferPostData,
+                shopping_cart: shoppingCart,
+            });
         }
     };
     return ewayTransparent;
