@@ -13,22 +13,16 @@
     }
 }(function () {
     var ewayTransparent = {
-        init: function (reactPayment, client, extraParams) {
+        init: function (reactPayment, httpclient, extraParams) {
             this.reactPayment = reactPayment;
-            this.client = client;
+            this.httpclient = httpclient;
             this.extraParams = extraParams
         },
 
         preCapture: function (shoppingCart) {
             this.reactPayment.openRedirectWindow("ewaypayment");
-            return this.client.post(this.extraParams["prepare_url"], shoppingCart);
+            return this.httpclient.post(this.extraParams["prepare_url"], shoppingCart);
         },
-
-        // capture: function () {
-        //     this.preCapture().then(resp => {
-        //         console.log('capture', resp);
-        //     });
-        // },
 
         capturePayment: function (shoppingCart, cardData) {
             return this.preCapture(shoppingCart).then(resp => {
@@ -52,7 +46,7 @@
         },
 
         postPayment: function (transferQuery, transferPostData, shoppingCart) {
-            return this.client.post(this.extraParams["capture_url"] + transferQuery, {
+            return this.httpclient.post(this.extraParams["capture_url"] + transferQuery, {
                 payment: transferPostData,
                 shopping_cart: shoppingCart
             });
