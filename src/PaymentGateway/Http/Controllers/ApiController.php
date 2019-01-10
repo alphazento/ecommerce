@@ -19,6 +19,11 @@ class ApiController extends Controller {
         ];
     }
 
+    /**
+     * prepare data for payment gateway
+     *
+     * @return void
+     */
     public function prepare() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all());
@@ -30,6 +35,12 @@ class ApiController extends Controller {
         }
     }
 
+    /**
+     * capture or validate caputred payment
+     * if the want to create order directlly in this method, it wll call create order
+     *
+     * @return void
+     */
     public function capture() {
         if ($method = PaymentGateway::getMethod(Route::input('method'))) {
             $paymentResult = $method->capture(Request::all());
@@ -46,6 +57,11 @@ class ApiController extends Controller {
         }
     }
 
+    /**
+     * create order as an api entry
+     *
+     * @return void
+     */
     public function createOrder() {
         $paymentDetail = \array2ReadOnlyObject(Request::get('payment_detail'), '\Zento\PaymentGateway\Interfaces\PaymentDetail');
         $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
@@ -53,6 +69,13 @@ class ApiController extends Controller {
         return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];
     }
 
+    /**
+     * create order method
+     *
+     * @param \Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail
+     * @param \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart
+     * @return void
+     */
     public function _createOrder(PaymentDetail $paymentDetail, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
         \zento_assert($paymentDetail);
         \zento_assert($shoppingCart);
