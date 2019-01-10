@@ -12,7 +12,7 @@ use Zento\Sales\Model\ORM\SalesShipment;
 use Zento\Sales\Model\ORM\SalesOrderPayment;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
 
-class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
+class CreateOrder extends \Zento\Kernel\Booster\Events\BaseListener
 {
     /**
      * @param \Zento\Contracts\Catalog\Model\ShoppingCart $event

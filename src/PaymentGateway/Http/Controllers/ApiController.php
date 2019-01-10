@@ -4,9 +4,9 @@ namespace Zento\PaymentGateway\Http\Controllers;
 
 use Route;
 use Request;
+use CheckoutService;
 use App\Http\Controllers\Controller;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
-use Zento\PaymentGateway\Interfaces\PaymentDetail;
 
 class ApiController extends Controller {
     public function estimate() {
@@ -46,7 +46,7 @@ class ApiController extends Controller {
             $paymentResult = $method->capture(Request::all());
             if ($paymentResult->canCreateOrderAfterCapture()) { //payment success
                 $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
-                $order = $this->_createOrder($paymentResult->getPaymentDetail(), $shoppingCart);
+                $order = CheckoutService::createOrder($paymentResult->getPaymentDetail(), $shoppingCart);
                 $order->addData('payment_data', $paymentResult->toArray());
                 return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];
             } else {
@@ -57,31 +57,5 @@ class ApiController extends Controller {
         }
     }
 
-    /**
-     * create order as an api entry
-     *
-     * @return void
-     */
-    public function createOrder() {
-        $paymentDetail = \array2ReadOnlyObject(Request::get('payment_detail'), '\Zento\PaymentGateway\Interfaces\PaymentDetail');
-        $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
-        $order = $this->_createOrder($paymentDetail, $shoppingCart);
-        return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];
-    }
-
-    /**
-     * create order method
-     *
-     * @param \Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail
-     * @param \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart
-     * @return void
-     */
-    public function _createOrder(PaymentDetail $paymentDetail, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
-        \zento_assert($paymentDetail);
-        \zento_assert($shoppingCart);
-        return (new \Zento\Checkout\Event\CreatingOrder(
-                $shoppingCart, 
-                $paymentDetail)
-            )->fireUntil();
-    }
+    
 }

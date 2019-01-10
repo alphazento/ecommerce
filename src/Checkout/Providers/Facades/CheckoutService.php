@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\ShoppingCart\Providers\Facades;
+namespace Zento\Checkout\Providers\Facades;
 
 class CheckoutService extends \Illuminate\Support\Facades\Facade
 {

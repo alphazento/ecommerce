@@ -2,10 +2,11 @@
 
 namespace Zento\Checkout\Event;
 
-class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
+class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     
     public $shoppingCart;
     public $paymentDetail;
+    public $customer;
 
     /**
      * Create a new event instance.
@@ -19,5 +20,6 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     {
         $this->shoppingCart = $shoppingCart;
         $this->paymentDetail = $paymentDetail;
+        // $this->customer = $customer;
     }
 }
