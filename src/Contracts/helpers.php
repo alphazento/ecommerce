@@ -1,15 +1,38 @@
 <?php
 
 if (!function_exists('zento_assert')) {
-    function zento_assert(\Zento\Contracts\AssertAbleInterface $obj) {
+    function zento_assert($obj, $interface = false) {
         if (app()->environment(['local', 'staging'])) {
+            if (!$obj) {
+                $errorMessage = sprintf('Assert object is null');
+                trigger_error($errorMessage, E_USER_ERROR);
+            }
+
+            $PROPERTIES = false;
+            if ($obj instanceof \Zento\Contracts\AssertAbleInterface) {
+                $PROPERTIES = $obj::PROPERTIES;
+            } elseif (!empty($interface)) {
+                $PROPERTIES = $interface::PROPERTIES;
+            }
+
+            if (!$PROPERTIES) {
+
+                $errorMessage = sprintf('Assert object is not an instance of \Zento\Contracts\AssertAbleInterface, then you need to define the assert interface');
+                trigger_error($errorMessage, E_USER_ERROR);
+            }
+        
             $diffs = [];
-            if ($obj instanceof \Illuminate\Database\Eloquent\Model) {
+            if ($obj instanceof \Illuminate\Database\Eloquent\Model 
+                || $obj instanceof \Zento\Contracts\ReadOnlyObject) 
+            {
                 $attributes = $obj->getAttributes();
                 if (!empty($attributes)) {
-                    $attributes = array_merge(array_keys($attributes), array_keys($obj->getRelations()));
-                    $diffs = array_diff($obj::PROPERTIES, $attributes);
+                    $diffs = array_diff($PROPERTIES, array_keys($attributes));
                 }
+                if (count($diffs) > 0 && method_exists($obj, 'getRelations')) {
+                    $diffs = array_diff($diffs, array_keys($obj->getRelations()));
+                }
+                
                 if (count($diffs) > 0 && method_exists($obj, 'getPreloadRelations')) {
                     $extraProperties = array_values(array_filter($obj->getPreloadRelations(), function($v, $k) {
                         return is_array($v);
@@ -22,7 +45,7 @@ if (!function_exists('zento_assert')) {
                     }
                 }
             } else {
-                $diffs = $obj::PROPERTIES;
+                $diffs = $PROPERTIES;
             }
             $not_exists = [];
             foreach($diffs as $property) {
@@ -86,27 +109,12 @@ if (!function_exists('generateReadOnlyModelFromArray')) {
 }
 
 if (!function_exists('array2ReadOnlyObject')) {
-    function array2ReadOnlyObject($interface, array $attrs) {
+    function array2ReadOnlyObject(array $attrs, $interface = '') {
         $instance = null;
-        eval('$instance = new class($attrs) implements ' . $interface . ' {
-            protected $attrs;
-
-            public function __construct(array $attrs) {
-                $this->attrs = $attrs;
-            }
-
-            public function getData() {
-                return $this->attrs;
-            }
-
-            public function __get($key) {
-                return isset($this->attrs[$key]) ? $this->attrs[$key] : null;
-            }
-
-            public function __set($key, $value) {
-                throw new \Exception("This model is read only");
-            }
-        };');
+        if (!empty($interface)) {
+            $interface = ' implements ' . $interface;
+        }
+        eval('$instance = new class($attrs) extends \Zento\Contracts\ReadOnlyObject' . $interface . '{};');
         return $instance;
     }
 }

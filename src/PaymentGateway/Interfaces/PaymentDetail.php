@@ -6,6 +6,7 @@ interface PaymentDetail extends \Zento\Contracts\AssertAbleInterface
 {
   const PROPERTIES = [
     'payment_method', 
+    'payment_transaction_id',
     'comment', 
     'total_due',
     'amount_authorized',

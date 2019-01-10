@@ -5,6 +5,7 @@ namespace Zento\EWayPayment\Services;
 use Config;
 use Registry;
 use Closure;
+use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
@@ -102,20 +103,21 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
      * @return \Zento\PaymentGateway\Interfaces\CapturePaymentResult
      */
     public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
-        $returns = $this->getAccesscodeRepo()->checkAccessCode($payment_data['AccessCode']);
-        $result = (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
-            $this->getCode(), 
-            $payment_data['AccessCode'], 
-            true))->success($returns['success']);
+        list($success, $eWayResponse, $messages) = $this->getAccesscodeRepo()->checkAccessCode($payment_data['AccessCode']);
+        $result = (new CapturePaymentResult($this->getCode(), $payment_data['AccessCode'], true))
+            ->setMessages($messages)
+            ->success($success);
         if ($result->isSuccess()) {
+            $totalAmount = $eWayResponse['TotalAmount']/100;
             $result->setPaymentDetail([
-                'payment_method' => $this->getCode(), 
+                'payment_method' => $this->getCode(),
+                'payment_transaction_id' => $eWayResponse['TransactionID'],
                 'comment' => '', 
                 'total_due' => 0,
-                'amount_authorized' => 100,
-                'amount_paid' => 100, 
-                'amount_refunded' => 100,
-                'amount_canceled => 100' 
+                'amount_authorized' => $totalAmount,
+                'amount_paid' => $totalAmount, 
+                'amount_refunded' => 0,
+                'amount_canceled' => 0
             ]);
         }
         return $result;
@@ -138,6 +140,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             "title" => $this->getTitle(),
             "withCards" =>true,
             // "html" => 
+            // "img" => 
             "js" => [
                 "depends"=> [
                         [
@@ -148,7 +151,8 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                     "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
             ],
             'params' => [
-                'prepare_url' => "/payment/prepare/" . $this->getCode() 
+                'prepare_url' => "/payment/prepare/" . $this->getCode(),
+                'capture_url' => "/payment/capture/" . $this->getCode()
             ]
         ];
     }

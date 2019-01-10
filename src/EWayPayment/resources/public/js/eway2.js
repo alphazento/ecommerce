@@ -52,9 +52,9 @@
         },
 
         postPayment: function (transferQuery, transferPostData, shoppingCart) {
-            return this.client.post('/payment/postsubmit/ewaypayment' + transferQuery, {
-                from_gateway: transferPostData,
-                shopping_cart: shoppingCart,
+            return this.client.post(this.extraParams["capture_url"] + transferQuery, {
+                payment: transferPostData,
+                shopping_cart: shoppingCart
             });
         }
     };

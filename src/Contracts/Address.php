@@ -2,7 +2,7 @@
 
 namespace Zento\Contracts;
 
-interface Address  extends \Zento\Contracts\AssertAbleInterface 
+interface Address extends \Zento\Contracts\AssertAbleInterface 
 {
     const PROPERTIES = [
         'firstname', 

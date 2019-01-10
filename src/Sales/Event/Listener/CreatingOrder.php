@@ -21,13 +21,12 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
     protected function run($event) {
         // \zento_assert($event->shoppingCart);
         // dd($event->shoppingCart);
-
         $order = new SalesOrder();
         $order->store_id = 1;
         $order->invoice_no = 0;
         $order->status_id = 0;
-        $order->coupon_code = $event->shoppingCart['coupon_codes'];
-        $order->customer_id = $event->shoppingCart['customer_id'];
+        $order->coupon_code = $event->shoppingCart->coupon_codes;
+        $order->customer_id = $event->shoppingCart->customer_id;
         $order->customer_is_guest = !$order->customer_id;
         $order->ext_customer_id = 0;
         $order->ext_order_id = 0;
@@ -35,16 +34,17 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $order->applied_rule_ids = '';
         $order->remote_ip = Request::ip();
         $order->applied_rule_ids = '';
-        $order->total_item_count = $event->shoppingCart['items_quantity'];
-        $order->cart_address_id = $event->shoppingCart['shipping_address_id'];
-        $order->cart_id = $event->shoppingCart['id'];
+        $order->total_item_count = $event->shoppingCart->items_quantity;
+        $order->cart_address_id = $event->shoppingCart->shipping_address_id;
+        $order->cart_id = $event->shoppingCart->id;
         // $order->total_amount_include_tax = 0;
         $order->base_currency_code = 'AUD';
         $order->order_currency_code = 'AUD';
         $order->save();
 
-        // $this->createShipmentRecord($event->shoppingCart, $order->id);
-        return ['success' => true, 'order_id' =>  $order->id];
+        // $this->createShipmentRecord($order->id, $event->shoppingCart);
+        $this->createPaymentRecord($order->id, $event->paymentDetail);
+        return $event->createFiredResult(true, ['order' =>  $order]);
     }
 
     protected function createSalesAddressRecord($shippingAddress) {
@@ -57,7 +57,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         return $address->id;
     }
 
-    protected function createShipmentRecord($shoppingCart, $ordeId) {
+    protected function createShipmentRecord($ordeId, $shoppingCart) {
         $shipment = new SalesShipment();
         $shipment->order_id = $ordeId;
         $shipment->customer_id = $shoppingCart['customer_id'];
@@ -74,15 +74,9 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $shipment->save();
     }
 
-    protected function createPaymentRecord($shoppingCart, $orderId, $paymentMethod) {
-        $payment = new SalesOrderPayment();
+    protected function createPaymentRecord($orderId, $paymentDetail) {
+        $payment = new SalesOrderPayment($paymentDetail->toArray());
         $payment->order_id = $orderId;
-        $payment->payment_method = $paymentMethod;
-        $payment->comment = '';
-        $payment->total_due = 0;
-        $payment->amount_authorized = 0;
-        $payment->amount_paid = 0;
-        $payment->amount_refunded = 0;
-        $payment->amount_canceled = 0;
+        $payment->save();
     }
 }

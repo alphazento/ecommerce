@@ -94,10 +94,10 @@ class AccessCodeRepo {
                     ]
                 ];
             } else {
-                return [false, ['response' => $response, 'messages' => $this->parseErrors($response->Errors)]];
+                return [false, ['response' => $response->toArray(), 'messages' => $this->parseErrors($response->Errors)]];
             }
         } catch (\Exception $e) {
-            return [false, ['response' => $response, 'messages' => ['Z9999' => $e->getMessage()]]];
+            return [false, ['response' => $response->toArray(), 'messages' => ['Z9999' => $e->getMessage()]]];
         }
     }
 
@@ -112,21 +112,20 @@ class AccessCodeRepo {
 
         $messages = array_merge($this->parseErrors($response->ResponseMessage), $this->parseErrors($response->Errors));
         if (isset($response->AccessCode) && $response->AccessCode != $accesscode) {
-            return ['success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
+            return [false, $response->toArray(), $messages];
         }
 
         if ($response->ResponseMessage == 'S5099' && !$response->AuthorisationCode) {
-            return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
+            return [false, $response->toArray(), $messages];
         }
 
         if ($response->TransactionStatus
             && $response->TransactionID
             && in_array($response->ResponseMessage, $this->success_response_messages))
         {
-            $messages['transaction_id'] = $response->TransactionID;
-            return [ 'success' => true, 'data' => ['response' => $response, 'messages' => $messages] ];
+            return [true, $response->toArray(), $messages];
         }
-        return [ 'success' => false, 'data' => ['response' => $response, 'messages' => $messages] ];
+        return [false, $response->toArray(), $messages];
     }
 
     /**
