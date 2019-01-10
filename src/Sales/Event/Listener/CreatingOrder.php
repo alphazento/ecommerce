@@ -44,7 +44,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
 
         // $this->createShipmentRecord($order->id, $event->shoppingCart);
         $this->createPaymentRecord($order->id, $event->paymentDetail);
-        return $event->createFiredResult(true, ['order' =>  $order]);
+        return $event->createResult(true, ['order' =>  $order]);
     }
 
     protected function createSalesAddressRecord($shippingAddress) {
