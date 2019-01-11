@@ -4,6 +4,7 @@ namespace Zento\Checkout\Providers;
 
 use Zento\Checkout\Services\CheckoutService;
 use Illuminate\Support\ServiceProvider;
+use PackageManager;
 
 class Entry extends ServiceProvider
 {

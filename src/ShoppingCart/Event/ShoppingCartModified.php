@@ -6,10 +6,9 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Foundation\Events\Dispatchable;
 
 class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseEvent {
-    /**
-     * @var \Zento\Contracts\Catalog\Model\ShoppingCart
-     */
-    public $shoppingCart;
+    const HAS_ATTRS = [
+        'shoppingCart'
+    ];
     
     /**
      * Create a new event instance.
@@ -19,7 +18,9 @@ class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseEvent {
      */
     public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart)
     {
-        $this->shoppingCart = $shoppingCart;
+        $this->data = [
+            'shoppingCart' => $shoppingCart
+        ];
     }
 
     /**

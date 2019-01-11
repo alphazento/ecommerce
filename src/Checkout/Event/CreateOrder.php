@@ -3,10 +3,11 @@
 namespace Zento\Checkout\Event;
 
 class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
-    
-    public $shoppingCart;
-    public $paymentDetail;
-    public $customer;
+    const HAS_ATTRS = [
+        'shoppingCart',
+        'paymentDetail',
+        'customer'
+    ];
 
     /**
      * Create a new event instance.
@@ -18,8 +19,10 @@ class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart, 
         \Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail)
     {
-        $this->shoppingCart = $shoppingCart;
-        $this->paymentDetail = $paymentDetail;
-        // $this->customer = $customer;
+        $this->data = [
+            'shoppingCart' => $shoppingCart,
+            'paymentDetail' => $paymentDetail,
+            // 'customer' => $customer,
+        ];
     }
 }

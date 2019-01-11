@@ -5,6 +5,7 @@ namespace Zento\PaymentGateway\Services;
 use Config;
 use Registry;
 use Closure;
+use CheckoutService;
 
 class PaymentGateway {
     protected $app;
@@ -95,5 +96,45 @@ class PaymentGateway {
         $service = $this->getMethod($methodName);
         $service->disable();
         return $this;
+    }
+
+    public function preparePaymentData(string $methodName, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
+        if ($method = $this->getMethod($methodName)) {
+            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all());
+            \zento_assert($shoppingCart);
+            $eventResult = (new \Zento\PaymentGateway\Event\BeforePreparePayment($methodName, $shoppingCart))
+                ->fireUntil();
+            if ($eventResult->isSuccess())
+            {
+                return $method->prepare($shoppingCart);
+            } else {
+                return [false, $eventResult->getData()];
+            }
+        }
+        return [false, 'data' => ['messages'=>['Payment method not support by server.']]];
+    }
+
+    public function capturePayment(string $methodName, $params) {
+        if ($method = PaymentGateway::getMethod(Route::input('method'))) {
+            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
+            \zento_assert($shoppingCart);
+            $event = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
+                ->fireUntil();
+            if ($eventResult->isSuccess())
+            {
+                $paymentResult = $method->capture($params);
+                if ($paymentResult->canCreateOrderAfterCapture()) { //payment success
+                    $order = CheckoutService::createOrder($paymentResult->getPaymentDetail(), $shoppingCart);
+                    $order->addData('payment_data', $paymentResult->toArray());
+                    return [$order->isSuccess(), $order->getData()];
+                } else {
+                    return [$paymentResult->isSuccess(), $paymentResult->toArray()];
+                }
+            } else {
+                return [false, $eventResult->getData()];
+            }
+        } else {
+            return [false, ['messages'=>['Payment method not support by server.']]];
+        }
     }
 }
