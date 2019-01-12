@@ -3,21 +3,17 @@
     "description": "Zento ecommerce shopping cart package",
     "keywords": ["laravel", "zento", "ecommerce", "shopping cart"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
     },
     "autoload": {
-        "psr-4": {
-        },
-        "files": [
-        ]
+        "psr-4": {},
+        "files": []
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -26,18 +22,20 @@
             "dev-master": "1.0-dev"
         },
         "laravel": {
-            "providers": [
-            ],
-            "aliases": {
-            },
+            "providers": [],
+            "aliases": {},
             "zento": {
-                "Zento_ShoppingCart":{
-                    "version" : "0.0.1",
-                    "commands" : [
-                    ],
-                    "providers" : [
+                "Zento_ShoppingCart": {
+                    "version": "0.0.1",
+                    "commands": [],
+                    "providers": [
                         "\\Zento\\ShoppingCart\\Providers\\Entry"
                     ],
+                    "listeners": {
+                        "Zento\\Checkout\\Event\\OrderCreated": {
+                            "20": "\\Zento\\ShoppingCart\\Event\\Listener\\OrderCreated"
+                        }
+                    },
                     "depends": [
                         "Zento_Catalog",
                         "Zento_Customer"

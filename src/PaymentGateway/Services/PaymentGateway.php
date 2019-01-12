@@ -2,8 +2,6 @@
 
 namespace Zento\PaymentGateway\Services;
 
-use Config;
-use Registry;
 use Closure;
 use CheckoutService;
 
@@ -100,7 +98,6 @@ class PaymentGateway {
 
     public function preparePaymentData(string $methodName, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
         if ($method = $this->getMethod($methodName)) {
-            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all());
             \zento_assert($shoppingCart);
             $eventResult = (new \Zento\PaymentGateway\Event\BeforePreparePayment($methodName, $shoppingCart))
                 ->fireUntil();
@@ -115,10 +112,10 @@ class PaymentGateway {
     }
 
     public function capturePayment(string $methodName, $params) {
-        if ($method = PaymentGateway::getMethod(Route::input('method'))) {
-            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
+        if ($method = PaymentGateway::getMethod($methodName)) {
+            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', $params['shopping_cart']);
             \zento_assert($shoppingCart);
-            $event = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
+            $eventResult = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
                 ->fireUntil();
             if ($eventResult->isSuccess())
             {

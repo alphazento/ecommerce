@@ -5,8 +5,8 @@ namespace Zento\Checkout\Event;
 class OrderCreated extends \Zento\Kernel\Booster\Events\BaseEvent {
     
     const HAS_ATTRS = [
-        'order_id',
-        'shopping_cart_id'
+        'order',
+        'shoppingCart'
     ];
 
     /**
@@ -14,11 +14,11 @@ class OrderCreated extends \Zento\Kernel\Booster\Events\BaseEvent {
      *
      * @return void
      */
-    public function __construct(string $order_id, string $shopping_cart_id)
+    public function __construct($order, $shoppingCart)
     {
         $this->data = [
-            'order_id' => $order_id,
-            'shopping_cart_id' => $shopping_cart_id,
+            'order' => $order,
+            'shoppingCart' => $shoppingCart,
         ];
     }
 }

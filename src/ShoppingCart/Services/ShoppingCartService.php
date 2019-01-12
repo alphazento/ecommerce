@@ -5,6 +5,7 @@ namespace Zento\ShoppingCart\Services;
 use DB;
 use Store;
 use Auth;
+
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 
 use Zento\ShoppingCart\Event\ShoppingCartModified;
@@ -14,16 +15,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ShoppingCartService
 {
-    protected $myCart;
     protected $cartCache = [];
-    public function myCart() {
-        if (!$this->myCart) {
-            $cart_guid = session()->get('shopping_cart', 0);
-            if ($cart_guid) {
-                $this->myCart = $this->cart($cart_guid);
-            }
-        }
-        return $this->myCart;
+    
+    public function getMyCart() {
+        return ShoppingCart::where('customer_id', '=', Auth::user()->id)
+            ->where('status', '=', 0)
+            ->orderBy('updated_at', 'desc')
+            ->first();
     }
 
     public function createCart() {
@@ -36,7 +34,6 @@ class ShoppingCartService
         ]);
         $cart->save();  
         $this->cartCache[$cart->guid] = $cart;
-        $this->myCart = $cart;
         session()->put('shopping_cart', $cart->guid);
         return $cart;
     }
@@ -51,6 +48,10 @@ class ShoppingCartService
             }
         }
         return $this->cartCache[$guid];
+    }
+
+    public function cartBuilder() {
+        return ShoppingCart::getQuery();
     }
 
     public function deleteCart($guid) {
@@ -146,13 +147,13 @@ class ShoppingCartService
 
     public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, array $options =[]) {
         zento_assert($cart);
-        $product = \Zento\Catalog\Model\ORM\Product::find($product_id);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
-            $this->shoppingCartModified($cart);
-            return $item;
+            if ($this->shoppingCartModified($cart)->isSuccess()) {
+                return $item;
+            }
         } elseif ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
             return $this->addProductAsNewItem($cart, $product, $quantity, $options);
         }
@@ -164,25 +165,28 @@ class ShoppingCartService
         if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
             $newQuantity = $item->quantity + $quantity;
             $ret = (new PreAddProduct($product, $options, $newQuantity))->fireUntil();
-            if ($ret) {
-                return $ret;
+            if (!$ret->isSuccess()) {
+                return false;
             }
             $item->quantity = $newQuantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
-            $this->shoppingCartModified($cart);
-            return $item;
+            if ($this->shoppingCartModified($cart)->isSuccess()) {
+                return $item;
+            }
         } else {
-            return $this->addProductAsNewItem($product, $quantity, $options);
+            return $this->addProductAsNewItem($cart, $product, $quantity, $options);
         }
     }
 
-    protected function addProductAsNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
+    protected function addProductAsNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
+        \Zento\Contracts\Catalog\Model\Product $product, 
+        $quantity, array $options =[]) {
         zento_assert($cart);
         zento_assert($product);
         $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
-        if ($ret) {
-            return $ret;
+        if (!$ret->isSuccess()) {
+            return false;
         }
 
         $item = new \Zento\ShoppingCart\Model\ORM\ShoppingCartItem([
@@ -205,8 +209,9 @@ class ShoppingCartService
             'total_price' => $product->price * $quantity
         ]);
         $item->save();
-        $this->shoppingCartModified($cart);
-        return $item;
+        if ($this->shoppingCartModified($cart)->isSuccess()) {
+            return $item;
+        }
     }
 
     public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
@@ -223,12 +228,12 @@ class ShoppingCartService
             $item->quantity = $newQuantity;
             $item->total_price = $item->unit_price * $item->quantity;
             $item->save();
-            $trigger_event && $this->shoppingCartModified($cart);
+            $trigger_event && ($this->shoppingCartModified($cart)->isSuccess());
             return $item;
         } else {
             $cartItem->cart_id = $cart->id;
             $cartItem->save();
-            $trigger_event && $this->shoppingCartModified($cart);
+            $trigger_event && ($this->shoppingCartModified($cart)->isSuccess());
             return $cartItem;
         }
     }
@@ -277,7 +282,6 @@ class ShoppingCartService
     public function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
         zento_assert($cart);
         $cart->load('items');
-        (new ShoppingCartModified($cart))->fireUntil();
-        $cart->save();
+        return (new ShoppingCartModified($cart))->fireUntil();
     }
 }

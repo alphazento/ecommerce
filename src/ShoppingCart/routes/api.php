@@ -34,6 +34,7 @@ Route::group(
         }
 });
 
+
 Route::group(
     [
         'prefix' => '/rest/v1/cart',
@@ -46,17 +47,4 @@ Route::group(
                 ['as' => $name, 'uses' => $route['uses']]
             );
         }
-});
-
-
-Route::group(
-    [
-        'prefix' => '/rest/v1/test',
-        'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['cors']
-    ], function () use ($apiRoutes) {
-        Route::post(
-            '/urlrewrite',
-            ['uses' => 'TestController@getUrlRewrite']
-        );
 });

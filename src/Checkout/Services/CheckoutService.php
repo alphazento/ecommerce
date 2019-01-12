@@ -26,8 +26,8 @@ class CheckoutService
             )->fireUntil();
         if ($eventResult->isSuccess()) {
             (new \Zento\Checkout\Event\OrderCreated(
-                $shoppingCart, 
-                $paymentDetail)
+                $eventResult->getData('order'), 
+                $shoppingCart)
             )->fire();
         }
         return $eventResult;

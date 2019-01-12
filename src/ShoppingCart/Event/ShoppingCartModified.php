@@ -23,15 +23,12 @@ class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseEvent {
         ];
     }
 
-    /**
-     * fire event
-     *
-     * @param array $payload
-     * @return void
-     */
-    public function fire($payload = [], $halt = false) {
-        $result = parent::fire($payload, $halt);
-        $this->shoppingCart->update();
+    protected function afterFireUntil(\Zento\Kernel\Booster\Events\EventFiredResult $result) : \Zento\Kernel\Booster\Events\EventFiredResult {
+        if ($result->isSuccess()) {
+            if ($shoppingCart = $this->shoppingCart) {
+                $shoppingCart->update();
+            }
+        } 
         return $result;
     }
 }

@@ -5,8 +5,7 @@ namespace Zento\Checkout\Event;
 class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'shoppingCart',
-        'paymentDetail',
-        'customer'
+        'paymentDetail'
     ];
 
     /**
@@ -21,8 +20,7 @@ class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     {
         $this->data = [
             'shoppingCart' => $shoppingCart,
-            'paymentDetail' => $paymentDetail,
-            // 'customer' => $customer,
+            'paymentDetail' => $paymentDetail
         ];
     }
 }
