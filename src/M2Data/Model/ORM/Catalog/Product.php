@@ -9,6 +9,8 @@ use Zento\M2Data\Model\ORM\Eavs\Product\ProductTextAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Product\ProductVarcharAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Product\ProductDatetimeAttribute;
 use Zento\M2Data\Model\ORM\Eavs\Product\ProductDecimalAttribute;
+use Zento\M2Data\Model\ORM\Eavs\Product\ProductMediaGalleryAttribute;
+use Zento\M2Data\Model\ORM\Eavs\Product\MediaGallery\ValueToEntity;
 
 class Product extends \Zento\M2Data\Model\ORM\Magento2Model
 {
@@ -33,5 +35,9 @@ class Product extends \Zento\M2Data\Model\ORM\Magento2Model
 
     public function decimalattrs() {
         return $this->hasMany(ProductDecimalAttribute::class, 'entity_id');
+    }
+
+    public function galleryattrs() {
+        return $this->hasManyThrough(ProductMediaGalleryAttribute::class, ValueToEntity::class, 'entity_id', 'value_id', 'entity_id', 'value_id');
     }
 }

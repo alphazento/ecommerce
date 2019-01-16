@@ -37,7 +37,10 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                 'varcharattrs.codedesc', 
                 'textattrs.codedesc',
                 'datetimeattrs.codedesc',
-                'decimalattrs.codedesc'
+                'decimalattrs.codedesc',
+                'galleryattrs.codedesc',
+                'galleryattrs.galleryvalue',
+                'galleryattrs.video',
             ])
             ->get();
         foreach($collection as $item) {
@@ -54,22 +57,29 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             $product->active = true;
             $product->save();
 
-            foreach(['integer','text', 'varchar', 'datetime', 'decimal'] as $ftype) {
+            foreach(['integer', 'text', 'varchar', 'datetime', 'decimal', 'gallery'] as $ftype) {
                 $relation = $ftype .'attrs';
                 foreach($item->{$relation} ?? [] as $eavItem) {
                     if (!$eavItem->codedesc) {
                         continue;
                     }
-               
+
+                    // if ($eavItem->codedesc->attribute_code == 'color') {
+                    //     dd($eavItem->codedesc);
+                    // }
+
                     $attrKeysInMainTable = array_keys($this->attrsInMainTable);
                     if (in_array($eavItem->codedesc->attribute_code, $attrKeysInMainTable)) {
                         $zentoKey = $this->attrsInMainTable[$eavItem->codedesc->attribute_code];
                         $product->{$zentoKey} = $eavItem->value;
                         continue;
                     }
+
+                    $isSingleDyn = $this->isSingleEav($eavItem->codedesc->frontend_input);
                     $attrId = DanamicAttributeFactory::createRelationShipORM($product,
-                        $eavItem->codedesc->attribute_code, [$ftype], 
-                        $this->isSingleEav($eavItem->codedesc->frontend_input));
+                        $eavItem->codedesc->attribute_code, 
+                        [$ftype === 'gallery' ? 'varchar' : $ftype], 
+                        $isSingleDyn);
                     
                     $attrInSet = AttributeInSet::where('attribute_set_id', $product->attribute_set_id)
                         ->where('attribute_id', $attrId)
@@ -82,7 +92,19 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     $attrInSet->save();
                     
                     if ($eavItem->value) {
-                        DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
+                        if ($isSingleDyn) {
+                            try {
+                                DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
+                            } catch(\Exception $e) {
+                            }
+                        } else {
+                            if ($options = DanamicAttributeFactory::option($product, $eavItem->codedesc->attribute_code)) {
+                                $values = explode(',', $eavItem->value);
+                                foreach($values as $value) {
+                                    $options->newValue($value);
+                                }
+                            }
+                        }
                     }
                 }
             }

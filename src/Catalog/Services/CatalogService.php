@@ -201,9 +201,9 @@ class CatalogService
 
     protected function aggregate($builder) {
         $aggregate = ['price' =>  $this->aggregatePrice($builder), 'category' => $this->aggregateCategory($builder)];
-        if ($manufacture = $this->aggregateDynColumn($builder, 'manufacturer')) {
-            $aggregate['manufacturer'] = $manufacture;
-        }
+        // if ($manufacture = $this->aggregateDynColumn($builder, 'manufacturer')) {
+        //     $aggregate['manufacturer'] = $manufacture;
+        // }
         
         return $aggregate;
     }

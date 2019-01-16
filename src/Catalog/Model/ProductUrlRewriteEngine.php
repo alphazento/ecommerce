@@ -10,7 +10,8 @@ use Zento\Catalog\Model\ORM\Product;
 class ProductUrlRewriteEngine extends \Zento\RouteAndRewriter\Engine\UrlRewriteEngineAbstract
 {
     public function findRewriteRule(string $url) {
-        if ($product = Product::where('url_path', '=', $url)
+        $url = Str::endsWith($url, '.html') ? substr($url, 0, -5) : $url;
+        if ($product = Product::where('url_key', '=', $url)
             ->first(['id'])) {
             $rule = new RuleModel();
             $rule->req_uri = $url;

@@ -9,9 +9,12 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 class AttributeSetSeeder extends \Illuminate\Database\Seeder {
 
     protected $models_map = ['1' => 'customers', '2' => 'customer_addresses', 
-        '4'=>'orders', '9'=>'categories', '10'=>'products',
-        '18'=>'invoices', '19' =>'default', '21' => 'default',
-        '24'=>'shipments', '28'=>'creditmemos',
+        '3' => 'categories', '4'=>'products', 
+        '5' => 'null', '6'=> 'null',
+        '7' => 'null', '8'=> 'null'
+        // '9'=>'categories', '10'=>'products',
+        // '18'=>'invoices', '19' =>'default', '21' => 'default',
+        // '24'=>'shipments', '28'=>'creditmemos',
     ];
     
     public function run()
