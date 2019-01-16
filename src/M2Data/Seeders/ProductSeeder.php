@@ -93,13 +93,14 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     
                     if ($eavItem->value) {
                         if ($isSingleDyn) {
-                            try {
-                                DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
-                            } catch(\Exception $e) {
-                            }
+                            DanamicAttributeFactory::single($product, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);
                         } else {
                             if ($options = DanamicAttributeFactory::option($product, $eavItem->codedesc->attribute_code)) {
-                                $values = explode(',', $eavItem->value);
+                                if ($eavItem->codedesc->frontend_input == 'multiselect') {
+                                    $values = explode(',', $eavItem->value);
+                                } else {
+                                    $values = [$eavItem->value];
+                                }
                                 foreach($values as $value) {
                                     $options->newValue($value);
                                 }
