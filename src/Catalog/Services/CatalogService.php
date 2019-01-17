@@ -15,21 +15,36 @@ class CatalogService
 {
     protected $joined_tables = [];
 
-    protected $filters = [
+    /**
+     * the filters which will apply to search even not include in search criteria
+     *
+     * @var array
+     */
+    protected $layer_filters = [];
+
+    /**
+     * the filters which match with criteria params
+     *
+     * @var array
+     */
+    protected $criteria_filters = [
         'category' => 'filterCategory',
         'price' => 'filterPrice',
         'text' =>''
     ];
-
+ 
     protected $sort_bys = [
         'position' => 'orderByPosition', 
         'price' => 'orderByPrice',
         'name' => 'orderByName',
     ];
 
+    public function registerCriteriaFilter($name, $callback) {
+        $this->criteria_filters[$name] = $callback;
+    }
 
-    public function registerFilter($name, $callback) {
-        $this->filters[$name] = $callback;
+    public function registerFilterLayer($callback) {
+        $this->layer_filters[] = $callback;
     }
 
     public function registerSortBy($name, $callback) {
@@ -128,7 +143,6 @@ class CatalogService
         }
     }
 
-
     /**
      * {
         "criteria" : {
@@ -148,7 +162,7 @@ class CatalogService
         }
      */
     public function search($criteria, $per_page, $withAggregate = true) {
-        list($builder, $aggregateQuery) = $this->prepareSearch($criteria, $withAggregate);
+        list($builder, $aggregateQuery) = $this->applyFilter($criteria, $withAggregate);
 
         if (!empty($criteria['sort_by'])) {
             $this->applyOrderBy($builder, $criteria['sort_by']);
@@ -169,11 +183,17 @@ class CatalogService
         return ['aggregate' =>  $aggregate, 'items'=> $items];
     }
 
-    protected function prepareSearch($criteria, $withAggregate = true) {
+    protected function applyFilter($criteria, $withAggregate = true) {
         $model = new Product;
         $builder = $model->newQuery()->select([$model->getTable() . '.*']);
-        
+
         $priceFilter = null;  // price's aggregate is special
+
+        foreach($this->layer_filters as $callback) {
+            if (is_callable($callback)) {
+                call_user_func_array($callback, [$builder]);
+            }
+        }
 
         foreach($criteria as $name => $filter) {
             if ($name == 'sort_by') { continue; }
@@ -181,14 +201,14 @@ class CatalogService
                 $priceFilter = $filter;
                 continue; 
             }
-            if (isset($this->filters[$name])) {
-                $callback = $this->filters[$name];
+            if (isset($this->criteria_filters[$name])) {
+                $callback = $this->criteria_filters[$name];
                 if (is_callable($callback)) {
                     call_user_func_array($callback, [$builder, $filter]);
                 } else {
                     $this->{$callback}($builder, $filter);
                 }
-            } 
+            }
         }
 
         $aggregateQuery = $withAggregate ? (clone $builder) : null;

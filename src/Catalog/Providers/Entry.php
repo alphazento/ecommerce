@@ -35,6 +35,9 @@ class Entry extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
         }
+        $this->app['catalog_service']->registerFilterLayer(function($builder) {
+            $builder->where('visibility', '!=', 1);
+        });
     }
 
     public function boot() {
