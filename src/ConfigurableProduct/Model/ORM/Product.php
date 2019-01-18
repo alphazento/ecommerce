@@ -21,4 +21,8 @@ class Product extends \Zento\Catalog\Model\ORM\Product
             ]);
         return $relations;
     }
+
+    protected function lazyLoadRelation() {
+        $this->load('configurables');
+    }
 }

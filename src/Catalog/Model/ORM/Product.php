@@ -60,6 +60,8 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
 
         $model->fireModelEvent('retrieved', false);
 
+        $model->lazyLoadRelation();
+        
         return $model;
     }
 
@@ -81,5 +83,14 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
         } else {
             return $this->newInstance([], true);
         }
-    } 
+    }
+
+    /**
+     * base on type id, some inheritence class may not load some relationshop
+     *
+     * @return void
+     */
+    protected function lazyLoadRelation() {
+
+    }
 }
