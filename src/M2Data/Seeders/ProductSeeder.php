@@ -64,10 +64,6 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                         continue;
                     }
 
-                    // if ($eavItem->codedesc->attribute_code == 'color') {
-                    //     dd($eavItem->codedesc);
-                    // }
-
                     $attrKeysInMainTable = array_keys($this->attrsInMainTable);
                     if (in_array($eavItem->codedesc->attribute_code, $attrKeysInMainTable)) {
                         $zentoKey = $this->attrsInMainTable[$eavItem->codedesc->attribute_code];
