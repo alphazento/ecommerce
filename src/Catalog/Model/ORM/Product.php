@@ -10,7 +10,10 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
 
     private static $typeMap = [
-        'simple' => '\Zento\Catalog\Model\ORM\Product'
+        'simple' => '\Zento\Catalog\Model\ORM\Product',
+        'grouped' => '\Zento\Catalog\Model\ORM\Product',
+        'bundle' => '\Zento\Catalog\Model\ORM\Product',
+        'downloadable' => '\Zento\Catalog\Model\ORM\Product',
     ];
 
     public static function registerType($type_id, $class) {
@@ -71,7 +74,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
             if (isset($attributes['type_id'])) {
                 $type_id = $attributes['type_id'];
             }
-        } elseif (is_object($attributes)) {
+        } elseif (is_object($attributes) && property_exists($attributes, 'type_id')) {
             $type_id = $attributes->type_id;
         }
         
