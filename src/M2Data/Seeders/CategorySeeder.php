@@ -84,6 +84,9 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                     $attrInSet->attribute_set_id = $category->attribute_set_id;
                     $attrInSet->attribute_id = $attrId;
                     $attrInSet->save();
+
+                    //migrate option value
+                    $this->migrateOptionValue($eavItem->codedesc, 'categories', $attrId);
                     
                     if ($eavItem->value) {
                         DanamicAttributeFactory::single($category, $eavItem->codedesc->attribute_code)->newValue($eavItem->value);

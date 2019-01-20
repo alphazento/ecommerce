@@ -45,7 +45,9 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             ->get();
         foreach($collection as $item) {
             $product = Product::find($item->entity_id);
-            if (!$product) {
+            if ($product) {
+                $product->exists = true;
+            } else {
                 $product = new Product();
             }
             $product->id = $item->entity_id;
@@ -86,6 +88,9 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     $attrInSet->attribute_set_id = $product->attribute_set_id;
                     $attrInSet->attribute_id = $attrId;
                     $attrInSet->save();
+
+                    //migrate option value
+                    $this->migrateOptionValue($eavItem->codedesc, 'products', $attrId);
                     
                     if ($eavItem->value) {
                         if ($isSingleDyn) {
