@@ -50,6 +50,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             } else {
                 $product = new Product();
             }
+
             $product->id = $item->entity_id;
             $product->attribute_set_id = $item->attribute_set_id;
             $product->type_id = $item->type_id;
@@ -77,7 +78,9 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     $attrId = DanamicAttributeFactory::createRelationShipORM($product,
                         $eavItem->codedesc->attribute_code, 
                         [$ftype === 'gallery' ? 'varchar' : $ftype], 
-                        $isSingleDyn);
+                        $isSingleDyn,
+                        !empty($eavItem->codedesc->options)
+                    );
                     
                     $attrInSet = AttributeInSet::where('attribute_set_id', $product->attribute_set_id)
                         ->where('attribute_id', $attrId)
@@ -110,6 +113,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     }
                 }
             }
+            $product->unsetRelation('configurables');
             $product->push();
         }
     }

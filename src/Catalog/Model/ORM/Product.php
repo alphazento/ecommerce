@@ -94,6 +94,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
      * @return void
      */
     protected function lazyLoadRelation() {
-
+        //do nothing for simple product
     }
 }
