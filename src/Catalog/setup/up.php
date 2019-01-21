@@ -6,7 +6,7 @@ require(__DIR__ . '/Seeder.php');
 // $feed->run();
 
 
-$seeder = new \Zento\M2Data\Seeders\AttributeSetSeeder();
+$seeder = new \Zento\M2Data\Seeders\DynamicAttributeSetSeeder();
 $seeder->run();
 
 $seeder = new \Zento\M2Data\Seeders\CategorySeeder();

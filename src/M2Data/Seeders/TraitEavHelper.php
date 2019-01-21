@@ -1,8 +1,8 @@
 <?php
 namespace Zento\M2Data\Seeders;
 
-use Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\ORM\AttributeValueMap;
-use Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\ORM\ModelDynamicAttribute;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeValueMap;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 trait TraitEavHelper {
     protected function isSingleEav($frontend_input) {
@@ -29,17 +29,17 @@ trait TraitEavHelper {
         if (!$codedesc->options) return;
 
         if (!$attrId) {
-            if ($dynAttribute = ModelDynamicAttribute::where('model', $model)->where('attribute', $codedesc->attribute_code)->first()) {
+            if ($dynAttribute = DynamicAttribute::where('model', $model)->where('attribute', $codedesc->attribute_code)->first()) {
                 $attrId = $dynAttribute->id;
             }
         }
         if ($attrId) {
             foreach($codedesc->options as $option) {
-                $attrValue = AttributeValueMap::where('attribute_id', $attrId)
+                $attrValue = DynamicAttributeValueMap::where('attribute_id', $attrId)
                     ->where('value_id', $option->option_id)
                     ->first();
                 if (!$attrValue && $option->value) {
-                    $attrValue = AttributeValueMap::create([
+                    $attrValue = DynamicAttributeValueMap::create([
                         'attribute_id' => $attrId, 
                         'value_id'=>$option->option_id,
                         'value' => $option->value->value

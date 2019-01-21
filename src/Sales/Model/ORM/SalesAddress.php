@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 
 class SalesAddress extends \Illuminate\Database\Eloquent\Model
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     public static function getPreloadRelations() {
         return [

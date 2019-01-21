@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 
 class Customer extends \Zento\Passport\Model\User
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     protected $fillable = [
         'group_id',

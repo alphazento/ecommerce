@@ -4,7 +4,7 @@ namespace Zento\M2Data\Seeders;
 use Illuminate\Support\Facades\DB;
 use Zento\Catalog\Model\ORM\Category;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
-use Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\ORM\AttributeInSet;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeInSet;
 
 class CategorySeeder extends \Illuminate\Database\Seeder {
     use TraitEavHelper;
@@ -77,11 +77,11 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                         !empty($eavItem->codedesc->options)
                     );
                     
-                    $attrInSet = AttributeInSet::where('attribute_set_id', $category->attribute_set_id)
+                    $attrInSet = DynamicAttributeInSet::where('attribute_set_id', $category->attribute_set_id)
                         ->where('attribute_id', $attrId)
                         ->first();
                     if (!$attrInSet) {
-                        $attrInSet = new AttributeInSet();
+                        $attrInSet = new DynamicAttributeInSet();
                     }
                     $attrInSet->attribute_set_id = $category->attribute_set_id;
                     $attrInSet->attribute_id = $attrId;

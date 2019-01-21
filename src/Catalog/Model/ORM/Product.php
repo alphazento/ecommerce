@@ -6,8 +6,8 @@ use Illuminate\Support\Collection;
 
 class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\Product
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\TraitRealationMutatorHelper;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     private static $typeMap = [
         'simple' => '\Zento\Catalog\Model\ORM\Product',

@@ -2,11 +2,11 @@
 namespace Zento\M2Data\Seeders;
 
 use Illuminate\Support\Facades\DB;
-use Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\ORM\AttributeSet;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 
-class AttributeSetSeeder extends \Illuminate\Database\Seeder {
+class DynamicAttributeSetSeeder extends \Illuminate\Database\Seeder {
 
     protected $models_map = ['1' => 'customers', '2' => 'customer_addresses', 
         '3' => 'categories', '4'=>'products', 
@@ -19,11 +19,11 @@ class AttributeSetSeeder extends \Illuminate\Database\Seeder {
     
     public function run()
     {
-        $collection = \Zento\M2Data\Model\ORM\EavAttributeSet::get();
+        $collection = \Zento\M2Data\Model\ORM\EavDynamicAttributeSet::get();
         foreach($collection as $item) {
-            $attrSet = AttributeSet::find($item->attribute_set_id);
+            $attrSet = DynamicAttributeSet::find($item->attribute_set_id);
             if (!$attrSet) {
-                $attrSet = new AttributeSet();
+                $attrSet = new DynamicAttributeSet();
             }
             $attrSet->id = $item->attribute_set_id;
             $attrSet->model = $this->models_map[$item->entity_type_id];

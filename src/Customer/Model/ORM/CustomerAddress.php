@@ -8,7 +8,7 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Address
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DynamicAttribute\DynamicAttributeAbility;
+    use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
     public static function getPreloadRelations() {
         return [
         ];
