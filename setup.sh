@@ -12,6 +12,7 @@ php artisan package:enable Zento_ThemeManager
 php artisan package:enable Zento_Passport
 php artisan package:enable Zento_Backend
 php artisan package:enable Zento_Catalog
+php artisan package:enable Zento_ConfigurableProduct
 php artisan package:enable Zento_Customer
 php artisan package:enable Zento_PaymentGateway
 php artisan package:enable Zento_ShoppingCart
