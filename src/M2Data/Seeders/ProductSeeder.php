@@ -63,6 +63,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
             foreach(['integer', 'text', 'varchar', 'datetime', 'decimal', 'gallery'] as $ftype) {
                 $relation = $ftype .'attrs';
                 foreach($item->{$relation} ?? [] as $eavItem) {
+                    echo '.';
                     if (!$eavItem->codedesc) {
                         continue;
                     }

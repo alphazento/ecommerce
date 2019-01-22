@@ -1,6 +1,6 @@
 <?php
 
-$seeder = new \Zento\M2Data\Seeders\DynamicAttributeSetSeeder();
+$seeder = new \Zento\M2Data\Seeders\AttributeSetSeeder();
 $seeder->run();
 
 $seeder = new \Zento\M2Data\Seeders\CategorySeeder();

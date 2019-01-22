@@ -6,7 +6,7 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 
-class DynamicAttributeSetSeeder extends \Illuminate\Database\Seeder {
+class AttributeSetSeeder extends \Illuminate\Database\Seeder {
 
     protected $models_map = ['1' => 'customers', '2' => 'customer_addresses', 
         '3' => 'categories', '4'=>'products', 
@@ -19,7 +19,7 @@ class DynamicAttributeSetSeeder extends \Illuminate\Database\Seeder {
     
     public function run()
     {
-        $collection = \Zento\M2Data\Model\ORM\EavDynamicAttributeSet::get();
+        $collection = \Zento\M2Data\Model\ORM\EavAttributeSet::get();
         foreach($collection as $item) {
             $attrSet = DynamicAttributeSet::find($item->attribute_set_id);
             if (!$attrSet) {
