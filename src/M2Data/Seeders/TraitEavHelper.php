@@ -29,7 +29,10 @@ trait TraitEavHelper {
         if (!$codedesc->options) return;
 
         if (!$attrId) {
-            if ($dynAttribute = DynamicAttribute::where('model', $model)->where('attribute', $codedesc->attribute_code)->first()) {
+            if ($dynAttribute = DynamicAttribute::where('parent_table', $model)
+                    ->where('attribute_name', $codedesc->attribute_code)
+                    ->first()) 
+            {
                 $attrId = $dynAttribute->id;
             }
         }

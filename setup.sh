@@ -1,4 +1,5 @@
 composer require laravel/passport
+
 php artisan migrate
 php artisan passport:install
 
@@ -20,3 +21,4 @@ php artisan package:enable Zento_Sales
 php artisan package:enable Zento_PaypalPayment
 php artisan package:enable Zento_EWayPayment
 php artisan package:enable Zento_FreeShipping
+php artisan package:enable Zento_M2Data
