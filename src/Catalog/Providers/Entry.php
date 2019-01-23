@@ -43,8 +43,19 @@ class Entry extends ServiceProvider
     public function boot() {
         if (!$this->app->runningInConsole()) {
             $this->app->booted(function ($app) {
-                $app['routeandrewriter_svc']->appendRewriteEngine(new \Zento\Catalog\Model\CategoryUrlRewriteEngine());
-                $app['routeandrewriter_svc']->appendRewriteEngine(new \Zento\Catalog\Model\ProductUrlRewriteEngine());
+                $rewriteSvc = $app['routeandrewriter_svc'];
+                $rewriteSvc->appendRewriteEngine(new \Zento\Catalog\Model\CategoryUrlRewriteEngine());
+                $rewriteSvc->appendRewriteEngine(new \Zento\Catalog\Model\ProductUrlRewriteEngine());
+
+                //uri builder for web
+                $rewriteSvc->setUriBuilder('category', function($id) {
+                    // return route('category', ['ids' => $id]);
+                    return sprintf('/category/%s', $id);
+                });
+                $rewriteSvc->setUriBuilder('product', function($id) {
+                    // return route('product', ['id' => $id]);
+                    return sprintf('/product/%s', $id);
+                });
             });
         }
     }

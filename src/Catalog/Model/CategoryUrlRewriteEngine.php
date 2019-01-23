@@ -12,10 +12,12 @@ class CategoryUrlRewriteEngine extends \Zento\RouteAndRewriter\Engine\UrlRewrite
     public function findRewriteRule(string $url) {
         $url = Str::endsWith($url, '.html') ? substr($url, 0, -5) : $url;
         if ($category = Category::where('url_path', '=', $url)
-                ->first(['id'])) {
+                ->first(['id'])) 
+        {
             $rule = new RuleModel();
             $rule->req_uri = $url;
-            $rule->to_uri = '/category/' . $category->id;
+            // $rule->to_uri =  '/category/' . $category->id;
+            $rule->to_uri = RouteAndRewriterService::buildToUri('category', $category->id);
             $rule->status_code = 200;
             return $rule;
         }

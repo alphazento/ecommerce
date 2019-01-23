@@ -12,10 +12,12 @@ class ProductUrlRewriteEngine extends \Zento\RouteAndRewriter\Engine\UrlRewriteE
     public function findRewriteRule(string $url) {
         $url = Str::endsWith($url, '.html') ? substr($url, 0, -5) : $url;
         if ($product = Product::where('url_key', '=', $url)
-            ->first(['id'])) {
+            ->first(['id'])) 
+        {
             $rule = new RuleModel();
             $rule->req_uri = $url;
-            $rule->to_uri = '/product/' . $product->id;
+            // $rule->to_uri = '/product/' . $product->id;
+            $rule->to_uri = RouteAndRewriterService::buildToUri('product', $product->id);
             $rule->status_code = 200;
             return $rule;
         }
