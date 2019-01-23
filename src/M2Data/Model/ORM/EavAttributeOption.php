@@ -11,6 +11,12 @@ class EavAttributeOption extends Magento2Model
     protected $primaryKey = 'option_id';
 
     public function value() {
-        return $this->hasOne(EavAttributeOptionValue::class, 'option_id', 'option_id');
+        return $this->hasOne(EavAttributeOptionValue::class, 'option_id', 'option_id')
+            ->where('store_id', '=', 0);
+    }
+
+    public function swatch() {
+        return $this->hasOne(EavAttributeOptionSwatch::class, 'option_id', 'option_id')
+            ->where('store_id', '=', 0);
     }
 }

@@ -25,9 +25,10 @@ trait TraitEavHelper {
         return true;
     }
 
-    protected function migrateOptionValue($codedesc, $modelName, $attrId = 0) {
+    protected function migrateOptionValue(\Zento\M2Data\Model\ORM\EavAttribute $codedesc, $modelName, $attrId = 0) {
         if (!$codedesc->options) return;
 
+        $dynAttribute = null;
         if (!$attrId) {
             if ($dynAttribute = DynamicAttribute::where('parent_table', $model)
                     ->where('attribute_name', $codedesc->attribute_code)
@@ -35,6 +36,8 @@ trait TraitEavHelper {
             {
                 $attrId = $dynAttribute->id;
             }
+        } else {
+            $dynAttribute = DynamicAttribute::find($attrId);
         }
         if ($attrId) {
             foreach($codedesc->options as $option) {
@@ -42,10 +45,15 @@ trait TraitEavHelper {
                     ->where('value_id', $option->option_id)
                     ->first();
                 if (!$attrValue && $option->value) {
+                    if ($option->swatch) {
+                        $dynAttribute->swatch_type = 1 + $option->swatch->type;
+                        $dynAttribute->update();
+                    }
                     $attrValue = DynamicAttributeValueMap::create([
                         'attribute_id' => $attrId, 
                         'value_id'=>$option->option_id,
-                        'value' => $option->value->value
+                        'value' => $option->value->value,
+                        'swatch_value' => ($option->swatch ? $option->swatch->value : null)
                         ]);
                 }
             }
