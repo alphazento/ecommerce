@@ -5,6 +5,7 @@ namespace Zento\ReactJsBridge\Http\Controllers;
 use Route;
 use Request;
 use Zento\RouteAndRewriter\Facades\RouteAndRewriterService;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class ApiController extends \App\Http\Controllers\Controller
 {
@@ -12,12 +13,37 @@ class ApiController extends \App\Http\Controllers\Controller
 
     public function configs() {
         $data = [
-            'swatches' => [],
+            'swatches' => $this->getProductSwatches(),
+            'reorder' => [],
+            'constants' => []
         ];
 
         return ['status' => 200, 'data' => $data];
     }
 
+    protected function getProductSwatches() {
+        $attributes = DynamicAttribute::with(['options'])
+            ->where('swatch_type', '>', '0')
+            ->where('enabled', 1)
+            ->get();
+        
+        $results = [];
+        foreach($attributes as $attr) {
+            $options = [];
+            foreach($attr->options as $option) {
+                $options[$option->value] = $option->swatch_value;
+            }
+            $results[$attr->attribute_name] = $options;
+        }
+        return $results;
+    }
+
+    /**
+     * provide reactjs url rewrite support
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
     public function getUrlRewriteTo(\Illuminate\Http\Request $request) {
         RouteAndRewriterService::setUriBuilder('category', function($id) {
             return sprintf('/category/%s', $id);

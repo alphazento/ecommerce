@@ -5,12 +5,12 @@ Route::group(
         'namespace' => '\Zento\ReactJsBridge\Http\Controllers',
         'middleware' => ['cors']
     ], function () {
-        Route::post(
+        Route::get(
             '/reactjs/configs', 
             ['as' => 'reactjs.configs', 'uses' => 'ApiController@configs']
         );
         Route::get(
-            '/urlrewrite', 
+            '/urlrewrite',
             ['uses'=>'ApiController@getUrlRewriteTo']
         );
 });
