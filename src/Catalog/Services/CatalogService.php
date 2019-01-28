@@ -243,7 +243,7 @@ class CatalogService
         $agg = $query->groupBy($table . '.category_id')->get();
 
         return $agg->map(function ($item) {
-            return ['category_id' => $item['category_id'], 'amount' => $item['amount']];
+            return ['id' => $item['category_id'], 'amount' => $item['amount']];
           });
     }
 
@@ -251,7 +251,8 @@ class CatalogService
      * brand, price, category, country, new selection ... 
      */
     protected function aggregateDynamicAttributes($builder, &$aggregation) {
-        $collection = DynamicAttribute::where('parent_table', 'products')
+        $collection = DynamicAttribute::with(['options'])
+            ->where('parent_table', 'products')
             ->where('enabled', 1)
             ->where('is_search_layer', 1)
             ->orderBy('search_layer_sort')
@@ -267,9 +268,20 @@ class CatalogService
             }
             $query->select([DB::raw($table . '.value as ' . $dynAttr), DB::raw('count(*) as amount')]);
             $agg = $query->groupBy($dynAttr)->get();
-            $aggregation[$dynAttr] = $agg->map(function ($row) use ($dynAttr) {
-                return [$dynAttr => $row[$dynAttr], 'amount' => $row['amount']];
-              });
+            $items = [];
+            if (count($agg) >0) {
+                if ($item->with_value_map) {
+                    $attrDesc = DanamicAttributeFactory::getAttributeDesc($table);
+                    $items = $agg->map(function ($row) use ($dynAttr, $attrDesc) {
+                        return [$dynAttr => $row[$dynAttr], 'value' => $attrDesc['options'][$row[$dynAttr]], 'amount' => $row['amount']];
+                      });
+                } else {
+                    $items = $agg->map(function ($row) use ($dynAttr) {
+                        return [$dynAttr => $row[$dynAttr], 'amount' => $row['amount']];
+                      });
+                }
+            }
+            $aggregation[$dynAttr] = $items;
         }
     }
 
