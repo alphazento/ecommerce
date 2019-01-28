@@ -10,6 +10,7 @@ use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Model\ORM\ProductDescription;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class CatalogService
 {
@@ -216,16 +217,15 @@ class CatalogService
         if ($priceFilter) {
             $this->filterPrice($builder, $priceFilter);
         }
+        // echo $builder->toSql();die;
+
         return [$builder, $aggregateQuery];
     }
 
     protected function aggregate($builder) {
-        $aggregate = ['price' =>  $this->aggregatePrice($builder), 'category' => $this->aggregateCategory($builder)];
-        // if ($manufacture = $this->aggregateDynColumn($builder, 'manufacturer')) {
-        //     $aggregate['manufacturer'] = $manufacture;
-        // }
-        
-        return $aggregate;
+        $aggregation = ['price' =>  $this->aggregatePrice($builder), 'category' => $this->aggregateCategory($builder)];
+        $this->aggregateDynamicAttributes($builder, $aggregation);
+        return $aggregation;
     }
 
     /**
@@ -250,21 +250,27 @@ class CatalogService
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregateDynColumn($builder, $dyn_field) {
-        $query = clone $builder;
+    protected function aggregateDynamicAttributes($builder, &$aggregation) {
+        $collection = DynamicAttribute::where('parent_table', 'products')
+            ->where('enabled', 1)
+            ->where('is_search_layer', 1)
+            ->orderBy('search_layer_sort')
+            ->get();
 
-        if ($table = DanamicAttributeFactory::getTable($builder->getModel(), $dyn_field)) {
+        $product_table = $builder->getModel()->getTable();
+        foreach($collection as $item) {
+            $query = clone $builder;
+            $table = $item->attribute_table;
+            $dynAttr = $item->attribute_name;
             if (!isset($this->joined_tables[$table])) {
-                $product_table = $query->getModel()->getTable();
                 $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
             }
-            $query->select([DB::raw($table . '.value as ' . $dyn_field), DB::raw('count(*) as amount')]);
-            $agg = $query->groupBy($dyn_field)->get();
-            return $agg->map(function ($item) use ($dyn_field) {
-                return [$dyn_field => $item[$dyn_field], 'amount' => $item['amount']];
+            $query->select([DB::raw($table . '.value as ' . $dynAttr), DB::raw('count(*) as amount')]);
+            $agg = $query->groupBy($dynAttr)->get();
+            $aggregation[$dynAttr] = $agg->map(function ($row) use ($dynAttr) {
+                return [$dynAttr => $row[$dynAttr], 'amount' => $row['amount']];
               });
         }
-        return false;
     }
 
     /**

@@ -24,5 +24,15 @@ Route::group(
             '/configs/{key}', 
             ['as' => 'admin.configs.set.value', 'uses' => 'ConfigurationController@setConfigValue']
         );
+
+        Route::get(
+            '/dynamicattributes/{model}', 
+            ['as' => 'admin.da.get', 'uses' => 'DAController@getAttributes']
+        );
+
+        Route::post(
+            '/dynamicattributes/{id}', 
+            ['as' => 'admin.put.da', 'uses' => 'DAController@updateAttribute']
+        );
     }
 );
