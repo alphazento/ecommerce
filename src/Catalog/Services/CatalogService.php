@@ -223,7 +223,18 @@ class CatalogService
     }
 
     protected function aggregate($builder) {
-        $aggregation = ['price' =>  $this->aggregatePrice($builder), 'category' => $this->aggregateCategory($builder)];
+        $aggregation = [
+            'price' => [
+                'is_dynattr' => false,
+                'label' => 'Price',
+                'items' => $this->aggregatePrice($builder), 
+            ],
+            'category' => [
+                'is_dynattr' => false,
+                'label' => 'Category',
+                'items' => $this->aggregateCategory($builder)
+            ]
+        ];
         $this->aggregateDynamicAttributes($builder, $aggregation);
         return $aggregation;
     }
@@ -259,29 +270,40 @@ class CatalogService
             ->get();
 
         $product_table = $builder->getModel()->getTable();
-        foreach($collection as $item) {
+        foreach($collection as $da) {
             $query = clone $builder;
-            $table = $item->attribute_table;
-            $dynAttr = $item->attribute_name;
+            $table = $da->attribute_table;
+            $attr_name = $da->attribute_name;
             if (!isset($this->joined_tables[$table])) {
                 $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
             }
-            $query->select([DB::raw($table . '.value as ' . $dynAttr), DB::raw('count(*) as amount')]);
-            $agg = $query->groupBy($dynAttr)->get();
+            $query->select([DB::raw($table . '.value as ' . $attr_name), DB::raw('count(*) as amount')]);
+            $agg = $query->groupBy($attr_name)->get();
             $items = [];
             if (count($agg) >0) {
-                if ($item->with_value_map) {
+                if ($da->with_value_map) {
                     $attrDesc = DanamicAttributeFactory::getAttributeDesc($table);
-                    $items = $agg->map(function ($row) use ($dynAttr, $attrDesc) {
-                        return [$dynAttr => $row[$dynAttr], 'value' => $attrDesc['options'][$row[$dynAttr]], 'amount' => $row['amount']];
+                    $items = $agg->map(function ($row) use ($attr_name, $attrDesc) {
+                        return [
+                            'id' => $row[$attr_name], 
+                            'value' => $attrDesc['options'][$row[$attr_name]], 
+                            'amount' => $row['amount']
+                        ];
                       });
                 } else {
-                    $items = $agg->map(function ($row) use ($dynAttr) {
-                        return [$dynAttr => $row[$dynAttr], 'amount' => $row['amount']];
+                    $items = $agg->map(function ($row) use ($attr_name) {
+                        return [
+                            'value' => $row[$attr_name], 
+                            'amount' => $row['amount']
+                        ];
                       });
                 }
             }
-            $aggregation[$dynAttr] = $items;
+            $aggregation[$attr_name] =[
+                'is_dynattr' => true,
+                'label' => $da->label,
+                'items' => $items
+            ];
         }
     }
 
