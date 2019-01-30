@@ -4,6 +4,8 @@ namespace Zento\Catalog\Services;
 
 use DB;
 use Store;
+use Cache;
+use ShareBucket;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
@@ -21,7 +23,7 @@ class CatalogService
      *
      * @var array
      */
-    protected $layer_filters = [];
+    protected $extra_filters = [];
 
     /**
      * the filters which match with criteria params
@@ -45,7 +47,7 @@ class CatalogService
     }
 
     public function registerFilterLayer($callback) {
-        $this->layer_filters[] = $callback;
+        $this->extra_filters[] = $callback;
     }
 
     public function registerSortBy($name, $callback) {
@@ -61,7 +63,6 @@ class CatalogService
     // public function getProductDynColOrderBys($field) {
         
     // }
-
  
     protected function applyOrderByEavField($builder, $dyn_field, $direction) {
         $product_table = $builder->getModel()->getTable();
@@ -190,12 +191,18 @@ class CatalogService
 
         $priceFilter = null;  // price's aggregate is special
 
-        foreach($this->layer_filters as $callback) {
+        //apply extra filter layer
+        foreach($this->extra_filters as $callback) {
             if (is_callable($callback)) {
                 call_user_func_array($callback, [$builder]);
             }
         }
 
+        $searchLayerDynamicAttrs = $this->getSearchLayerDynAttributes();
+        $dynAttrs = [];
+        foreach($searchLayerDynamicAttrs as $da) {
+            $dynAttrs[] = $da['attribute_name'];
+        }
         foreach($criteria as $name => $filter) {
             if ($name == 'sort_by') { continue; }
             if ($name == 'price') { 
@@ -208,6 +215,10 @@ class CatalogService
                     call_user_func_array($callback, [$builder, $filter]);
                 } else {
                     $this->{$callback}($builder, $filter);
+                }
+            } else {
+                if (in_array($name, $dynAttrs)) {
+                    $builder->whereIn($name, $filter);
                 }
             }
         }
@@ -258,22 +269,44 @@ class CatalogService
           });
     }
 
+    protected function getSearchLayerDynAttributes() {
+        $key = 'searchlayer-attribute';
+        if (!ShareBucket::has($key)) {
+            if (!Cache::has($key)) {
+                $collection = DynamicAttribute::with(['options'])
+                    ->where('parent_table', 'products')
+                    ->where('enabled', 1)
+                    ->where('is_search_layer', 1)
+                    ->orderBy('search_layer_sort')
+                    ->get();
+                $ds = $collection->toArray();
+                ShareBucket::put($key, $ds);
+                Cache::forever($key, $ds);
+                return $ds;
+            }
+            ShareBucket::put($key, Cache::get($key));
+        }
+        return ShareBucket::get($key);
+    }
+
     /**
      * brand, price, category, country, new selection ... 
      */
     protected function aggregateDynamicAttributes($builder, &$aggregation) {
-        $collection = DynamicAttribute::with(['options'])
-            ->where('parent_table', 'products')
-            ->where('enabled', 1)
-            ->where('is_search_layer', 1)
-            ->orderBy('search_layer_sort')
-            ->get();
+        // $collection = DynamicAttribute::with(['options'])
+        //     ->where('parent_table', 'products')
+        //     ->where('enabled', 1)
+        //     ->where('is_search_layer', 1)
+        //     ->orderBy('search_layer_sort')
+        //     ->get();
+        $aggraegatableDAs = $this->getSearchLayerDynAttributes();
 
         $product_table = $builder->getModel()->getTable();
-        foreach($collection as $da) {
+        foreach($aggraegatableDAs as $da) {
             $query = clone $builder;
-            $table = $da->attribute_table;
-            $attr_name = $da->attribute_name;
+            $table = $da['attribute_table'];
+            $attr_name = $da['attribute_name'];
+            $query->depressDynAttrCondition($attr_name);
             if (!isset($this->joined_tables[$table])) {
                 $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
             }
@@ -281,7 +314,7 @@ class CatalogService
             $agg = $query->groupBy($attr_name)->get();
             $items = [];
             if (count($agg) >0) {
-                if ($da->with_value_map) {
+                if ($da['with_value_map']) {
                     $attrDesc = DanamicAttributeFactory::getAttributeDesc($table);
                     $items = $agg->map(function ($row) use ($attr_name, $attrDesc) {
                         return [
@@ -301,7 +334,7 @@ class CatalogService
             }
             $aggregation[$attr_name] =[
                 'is_dynattr' => true,
-                'label' => $da->label,
+                'label' => $da['label'],
                 'items' => $items
             ];
         }
