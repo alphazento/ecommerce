@@ -42,4 +42,5 @@ class Customer extends \Zento\Passport\Model\User
             return sprinft('%s %s', $this->firstname, $this->lastname);
         }
     }
+
 }

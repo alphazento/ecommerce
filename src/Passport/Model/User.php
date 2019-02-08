@@ -44,6 +44,10 @@ class User extends Authenticatable
         $this->attribute['email'] = $value;
     }
 
+    public function findForPassport($username) {
+        return $this->where('email', $username)->first();
+    }
+
     public function acl($routeName, $isMe = false) {
         if ($isMe) {
             return true;
