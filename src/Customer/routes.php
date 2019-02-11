@@ -18,7 +18,7 @@ class Routes implements \Zento\Contracts\RouteRule
             [
                 'prefix' => '/rest/v1/customers',
                 'namespace' => '\Zento\Customer\Http\Controllers\Api',
-                'middleware' => ['apipassport', 'auth:api']
+                'middleware' => ['setuppassport', 'auth:api']
             ], function () use ($apiRoutes) {
                 foreach ($apiRoutes as $name => $route) {
                     if ($route['allow_guest'] ?? false) {

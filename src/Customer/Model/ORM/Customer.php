@@ -17,7 +17,9 @@ class Customer extends \Zento\Passport\Model\User
         'middlename',
         'lastname',
         'email',
-        'password'
+        'real_email',
+        'password',
+        'is_guest'
     ];
 
     public static function getPreloadRelations() {
@@ -43,4 +45,19 @@ class Customer extends \Zento\Passport\Model\User
         }
     }
 
+    public function createDummyCustomer() {
+        $uuid = uniqid('', true);
+        $password = substr($uuid, 0, 8);
+        $dummy = static::create([
+            'group_id' => 0,
+            'store_id' => 0,
+            'firstname' => 'Guest',
+            'lastname' => '',
+            'email' => 'dummy' . $uuid,
+            'real_email' => '',
+            'password' => bcrypt($password),
+            'is_guest' => 1
+        ]);
+        return [$dummy, $password];
+    }
 }

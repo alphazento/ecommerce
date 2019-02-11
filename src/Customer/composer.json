@@ -41,7 +41,7 @@
                     "listeners":  {
                     },
                     "middlewaregroup": {
-                        "apipassport": {
+                        "setuppassport": {
                             "post": [
                                 "\\Zento\\Customer\\Http\\Middleware\\UseCustomerModel"
                             ]

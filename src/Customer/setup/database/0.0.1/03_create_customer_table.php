@@ -20,9 +20,11 @@ class CreateCustomerTable extends Migration
             $table->string('middlename', 64)->nullable();
             $table->string('lastname', 64);
             $table->string('email', 255);//->unique();
+            $table->string('real_email', 255);//->unique();
             $table->string('password', 255);
             $table->string('remember_token', 255)->nullable();
             $table->boolean('is_active')->default(1);
+            $table->boolean('is_guest')->default(0);
             $table->integer('created_from_portal')->default(0);
             $table->string('prefix', 40)->nullable();
             $table->string('suffix', 40)->nullable();

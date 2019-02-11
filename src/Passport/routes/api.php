@@ -7,9 +7,9 @@ Route::options('/{all}',
 
 Route::group(
     [
-        'prefix' => '/rest/v1/oauth',
+        'prefix' => '/rest/v1/oauth2',
         'namespace' => '\Zento\Passport\Http\Controllers\Api',
-        'middleware' => ['apipassport']
+        'middleware' => ['setuppassport']
     ], function () {
     Route::post(
         '/zento_token', 
