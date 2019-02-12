@@ -8,14 +8,18 @@ use App\Http\Controllers\Controller;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
 
 class ApiController extends Controller {
+    use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
+
     public function estimate() {
-        $quote = 0;
-        $user = 0;
-        $shippingAddress = 0;
-        return [
-            "status" => 200,
-            "data" => PaymentGateway::estimate($quote, $user, $shippingAddress, 'reactjs')
-        ];
+        // return $this->tapCart(function($cart) {
+            $quote = 0;
+            $user = 0;
+            $shippingAddress = 0;
+            return [
+                "status" => 200,
+                "data" => PaymentGateway::estimate($quote, $user, $shippingAddress, 'reactjs')
+            ];
+        // }
     }
 
     /**
