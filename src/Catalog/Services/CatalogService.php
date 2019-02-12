@@ -353,11 +353,11 @@ class CatalogService
 
         $minQuery = clone $query;
         $min = $minQuery->orderBy('price')->first();
-        $minValue = floor($min->price);
+        $minValue = $min ? floor($min->price) : 0;
 
         $maxQuery = clone $query;
         $max = $maxQuery->orderBy('price','desc')->first();
-        $maxValue = ceil($max->price);
+        $maxValue = $max ? ceil($max->price) : 999999;
 
         // $range = $max - $min;
         // $split = 4;
