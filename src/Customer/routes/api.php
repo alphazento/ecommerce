@@ -54,7 +54,7 @@ Route::group(
 
     Route::post(
         '/{customer_id}/addresses/', 
-        ['as' => 'customer.add.address', 'uses' => 'CustomerController@addCustomerAddress']
+        ['as' => 'customer.add.address', 'uses' => 'CustomerController@addAddress']
     );
 
     // Route::delete(

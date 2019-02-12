@@ -14,9 +14,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ShipmentController extends \App\Http\Controllers\Controller
 {
+    use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
+
     public function estimateShippingMethods() {
-        $cart_guid = Route::input('cart_guid');
-        if ($cart_guid && $cart = ShoppingCartService::cart($cart_guid)) {
+        return $this->tapCart(function($cart) {
             if ($params = Request::get('shipping_address')) {
                 $address = new ShoppingCartAddress($params);
                 zento_assert($address);
@@ -28,8 +29,6 @@ class ShipmentController extends \App\Http\Controllers\Controller
                     return ['status'=> 420, 'error' => 'Address is empty.'];
                 }
             }
-        } else {
-            return ['status'=> 404, 'error' => 'cart not found.'];
-        }
+        });
     }
 }
