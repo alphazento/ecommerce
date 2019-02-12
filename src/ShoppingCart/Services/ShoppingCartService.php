@@ -17,18 +17,23 @@ class ShoppingCartService
 {
     protected $cartCache = [];
     
-    public function getMyCart() {
-        return ShoppingCart::where('customer_id', '=', Auth::user()->id)
+    public function getMyCart($forceCreateForMine = false) {
+        if ($myCart = ShoppingCart::where('customer_id', '=', Auth::user()->id)
             ->where('status', '=', 0)
             ->orderBy('updated_at', 'desc')
-            ->first();
+            ->first()) {
+                return $myCart;
+        } elseif ($forceCreateForMine) {
+            return $this->createCart();
+        }
     }
 
     public function createCart() {
+        $user = Auth::user();
         $cart = new ShoppingCart([
             'guid' => guidv4(),
-            'email' => Auth::guest() ? '' : Auth::user()->getEmail(),
-            'customer_id' => Auth::guest() ? 0 : Auth::user()->getId(),
+            'email' => $user->is_guest ? $user->guest_email : $user->getEmail(),
+            'customer_id' => $user->getId(),
             "currency" => 'AUD',
             'client_ip' => '',
         ]);
@@ -161,7 +166,7 @@ class ShoppingCartService
 
     public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
         zento_assert($cart);
-        zento_assert($product);
+        // zento_assert($product);
         if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
             $newQuantity = $item->quantity + $quantity;
             $ret = (new PreAddProduct($product, $options, $newQuantity))->fireUntil();
@@ -183,7 +188,7 @@ class ShoppingCartService
         \Zento\Contracts\Catalog\Model\Product $product, 
         $quantity, array $options =[]) {
         zento_assert($cart);
-        zento_assert($product);
+        // zento_assert($product);
         $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
         if (!$ret->isSuccess()) {
             return false;

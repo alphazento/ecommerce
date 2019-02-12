@@ -16,7 +16,6 @@ if (!function_exists('zento_assert')) {
             }
 
             if (!$PROPERTIES) {
-
                 $errorMessage = sprintf('Assert object is not an instance of \Zento\Contracts\AssertAbleInterface, then you need to define the assert interface');
                 trigger_error($errorMessage, E_USER_ERROR);
             }

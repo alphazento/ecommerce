@@ -1,4 +1,15 @@
 <?php
+Route::group([
+    'prefix' => '/rest/v1/customers',
+    'namespace' => '\Zento\Customer\Http\Controllers\Api',
+    'middleware' => ['setuppassport']
+], function () {
+        Route::put(
+            '/guest', 
+            ['as' => 'customer.put.guest', 'uses' => 'PassportController@getOrCreateGuest']
+        );
+    });
+
 Route::group(
     [
         'prefix' => '/rest/v1/customers',

@@ -30,12 +30,12 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function addItem() {
         return $this->tapCart(function($cart) {
-            if ($item = ShoppingCartService::addProductById($cart, Request::get('product_id'), Request::get('quantity'), [])) {
+            if ($item = ShoppingCartService::addProductById($cart, Request::get('product_id'), Request::get('quantity', 1), [])) {
                 return ['status'=> 201, 'data' => ['cart_id' => $cart->guid]];
             } else {
                 return ['status'=> 420, 'error' => 'fail to add item to cart'];
             }
-        });
+        }, true);
     }
 
     public function updateItemQuantity() {
@@ -45,7 +45,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
             } else {
                 return ['status'=> 420, 'data' => ['Can not update quantity for item ' . Route::input('item_id')]];
             }
-        });
+        }, true);
     }
 
     public function deleteItem() {
@@ -123,12 +123,12 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         });
     }
 
-    protected function tapCart(\Closure $callbak) {
+    protected function tapCart(\Closure $callbak, $forceCreateForMine = false) {
         $cart_guid = Route::input('cart_guid');
         if ($cart_guid === 'mine') {
             if (!Auth::check()) {
                 return response('', 401);
-            } elseif($cart = ShoppingCartService::getMyCart()) {
+            } elseif($cart = ShoppingCartService::getMyCart($forceCreateForMine)) {
                 return \call_user_func($callbak, $cart);
             }
         }

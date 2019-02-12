@@ -2,7 +2,7 @@
 
 namespace Zento\Customer\Model\ORM;
 
-use DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 
 class Customer extends \Zento\Passport\Model\User
@@ -17,7 +17,7 @@ class Customer extends \Zento\Passport\Model\User
         'middlename',
         'lastname',
         'email',
-        'real_email',
+        'guest_email',
         'password',
         'is_guest'
     ];
@@ -45,19 +45,25 @@ class Customer extends \Zento\Passport\Model\User
         }
     }
 
-    public function createDummyCustomer() {
-        $uuid = uniqid('', true);
-        $password = substr($uuid, 0, 8);
-        $dummy = static::create([
-            'group_id' => 0,
-            'store_id' => 0,
-            'firstname' => 'Guest',
-            'lastname' => '',
-            'email' => 'dummy' . $uuid,
-            'real_email' => '',
-            'password' => bcrypt($password),
-            'is_guest' => 1
-        ]);
+    public static function requestDummyCustomer($uuid) {
+        $password = Str::random(8);
+
+        $email = 'dm'. $uuid;
+        if ($dummy = static::where('email', $email)->first()) {
+            $dummy->password = bcrypt($password);
+            $dummy->save();
+        } else {
+            $dummy = static::create([
+                'group_id' => 0,
+                'store_id' => 0,
+                'firstname' => 'Guest',
+                'lastname' => '',
+                'email' => $email,
+                'guest_email' => '',
+                'password' => bcrypt($password),
+                'is_guest' => 1
+            ]);
+        }
         return [$dummy, $password];
     }
 }

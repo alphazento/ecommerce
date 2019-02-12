@@ -9,6 +9,7 @@ interface ShoppingCart  extends \Zento\Contracts\AssertAbleInterface
         'ship_to_billingaddesss', 'billing_address', 'shipping_address',
         'order_id', 'currency', 'total_weight', 
         'tax_amount', 'grand_total', 'shipping_fee', 'handle_fee', 'subtotal', 
-        'subtotal_with_discount', 'total',  'items', 'items_count', 'client_ip'
+        'subtotal_with_discount', 'total',  'items',  'client_ip',
+        // 'items_count',
     ];
 }
