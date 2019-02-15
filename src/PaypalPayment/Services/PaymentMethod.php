@@ -95,11 +95,26 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
      */
     public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
         $returns = (new PaymentCapturer)->execute($payment_data['payment']);
-        return (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
+
+        $result = (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
             $this->getCode(), 
             $payment_data['payment'], 
             true))
             ->success($returns['success']);
+        if ($result->isSuccess()) {
+            $totalAmount = 100; // $returns['transactions']['amount']['total'];
+            $result->setPaymentDetail([
+                'payment_method' => $this->getCode(),
+                'payment_transaction_id' => 100, // $returns['id'],
+                'comment' => '', 
+                'total_due' => 0,
+                'amount_authorized' => $totalAmount,
+                'amount_paid' => $totalAmount, 
+                'amount_refunded' => 0,
+                'amount_canceled' => 0
+            ]);
+        }
+        return $result;
     }
 
     public function prepareForClientSide($clientType = 'web') {

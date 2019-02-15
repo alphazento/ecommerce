@@ -64,6 +64,8 @@
                                 shopping_cart: reactPayment.getShoppingCartData()
                             })
                             .then(resp => {
+                                console.log('onAuthorize', resp)
+                                reactPayment.onOrderPlaced(resp);
                                 if (resp.success) {
                                     //redirect to success.
                                     console.log('paypal success, redirecting');
