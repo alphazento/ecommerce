@@ -3,7 +3,7 @@ $apiRoutes = [
     'cart.create' => [ 'method' => 'post', 'path' => '/create', 'uses' => 'ShoppingCartController@createCart', 'allow_guest' => true],
     'cart.getone' => [ 'method' => 'get', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@getCart', 'allow_guest' => true],
     'cart.delete' => [ 'method' => 'delete', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@deleteCart', 'allow_guest' => true],
-    'cart.add.item' => [ 'method' => 'post', 'path' =>'/{cart_guid}/items/add', 'uses' => 'ShoppingCartController@addItem', 'allow_guest' => true],
+    'cart.add.item' => [ 'method' => 'post', 'path' =>'/{cart_guid}/items', 'uses' => 'ShoppingCartController@addItem', 'allow_guest' => true],
     'cart.delete.item' => [ 'method' => 'delete', 'path' =>'/{cart_guid}/items/{item_id}', 'uses' => 'ShoppingCartController@deleteItem', 'allow_guest' => true],
     'cart.patch.item.quantity' => [ 'method' => 'patch', 'path' => '/{cart_guid}/items/{item_id}/quantity/{quantity}', 'uses' => 'ShoppingCartController@updateItemQuantity', 'allow_guest' => true],
     'cart.get.coupons' => [ 'method' => 'get', 'path' => '/{cart_guid}/coupons', 'uses' => 'ShoppingCartController@getCoupons', 'allow_guest' => true],
