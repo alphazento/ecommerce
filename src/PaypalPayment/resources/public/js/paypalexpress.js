@@ -111,6 +111,7 @@
                     currency: "AUD"
                 })
             })
+            console.log('prepare payment', cart)
             var payment = {
                 intent: "sale",
                 payer: {

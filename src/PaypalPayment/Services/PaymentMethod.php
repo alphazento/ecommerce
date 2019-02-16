@@ -102,10 +102,10 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             true))
             ->success($returns['success']);
         if ($result->isSuccess()) {
-            $totalAmount = 100; // $returns['transactions']['amount']['total'];
+            $totalAmount = $returns['data']['transactions'][0]['amount']['total'];
             $result->setPaymentDetail([
                 'payment_method' => $this->getCode(),
-                'payment_transaction_id' => 100, // $returns['id'],
+                'payment_transaction_id' => $returns['transaction_id'],
                 'comment' => '', 
                 'total_due' => 0,
                 'amount_authorized' => $totalAmount,

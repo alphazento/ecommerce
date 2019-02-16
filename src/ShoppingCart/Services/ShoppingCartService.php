@@ -151,7 +151,7 @@ class ShoppingCartService
     }
 
     public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, array $options =[]) {
-        zento_assert($cart);
+        // zento_assert($cart);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
             $item->total_price = $item->unit_price * $item->quantity;

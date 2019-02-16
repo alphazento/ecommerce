@@ -14,7 +14,7 @@ class ApiController extends Controller
     public function renderPaypalConfigJs() {
         $mode = config('paymentgateway.paypalexpress.mode');
         $clientId = config(sprintf('paymentgateway.paypalexpress.%s.client_id', $mode));
-        $clientId = 'AQy7c9Sm4XjVt2T9oWfMT5r6u8NXWIdeJovtG0r-Od5XTIn-AKLJujEEZefISsWe8U2AqrDEj8DfoF5K';
+        // $clientId = 'AQy7c9Sm4XjVt2T9oWfMT5r6u8NXWIdeJovtG0r-Od5XTIn-AKLJujEEZefISsWe8U2AqrDEj8DfoF5K';
         $jsCode = 'var paypal_config = {
                     env: "sandbox",
                     // PayPal Client IDs - replace with your own
