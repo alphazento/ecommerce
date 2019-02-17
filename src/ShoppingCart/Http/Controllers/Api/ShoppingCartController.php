@@ -31,7 +31,11 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function addItem() {
         return $this->tapCart(function($cart) {
-            if ($item = ShoppingCartService::addProductById($cart, Request::get('product_id'), Request::get('quantity', 1), [])) {
+            if ($item = ShoppingCartService::addProductById($cart, 
+                Request::get('product_id'), 
+                Request::get('quantity', 1),
+                Request::get('url'),
+                Request::get('options', []))) {
                 return ['status'=> 201, 'data' => ['cart_id' => $cart->guid]];
             } else {
                 return ['status'=> 420, 'error' => 'fail to add item to cart'];

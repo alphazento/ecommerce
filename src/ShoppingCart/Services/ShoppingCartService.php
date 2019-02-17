@@ -138,19 +138,29 @@ class ShoppingCartService
     protected function findExistItemByProductOption(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, array $options = []) {
         foreach($cart->items ?? [] as $item) {
             if ($item->product_id == $product_id) {
-                if ($item->options == $options) {
                     return $item;
-                } else {
-                    if ((empty($item->options) || $item->options->isEmpty()) && empty($options)) {
-                        return $item;
-                    }
-                }
+                // if ((empty($item->options) || $item->options->isEmpty()) && empty($options)){
+                //     return $item;
+                // } 
+                
+                // if (count($item->options) == count($options)) {
+                //     foreach($item->options as $option) {
+                //         $code = $option->code;
+                //         if (!isset($options[$code])) {
+                //             return null;
+                //         }
+                //         if ($options[$code] != $option->value) {
+                //             return null;
+                //         }
+                //     }
+                //     return $item;
+                // }
             }
         }
         return null;
     }
 
-    public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, array $options =[]) {
+    public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, $url, array $options =[]) {
         // zento_assert($cart);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
@@ -160,11 +170,11 @@ class ShoppingCartService
                 return $item;
             }
         } elseif ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
-            return $this->addProductAsNewItem($cart, $product, $quantity, $options);
+            return $this->addProductAsNewItem($cart, $product, $quantity, $url, $options);
         }
     }
 
-    public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, array $options =[]) {
+    public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, $url, array $options =[]) {
         zento_assert($cart);
         // zento_assert($product);
         if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
@@ -180,13 +190,13 @@ class ShoppingCartService
                 return $item;
             }
         } else {
-            return $this->addProductAsNewItem($cart, $product, $quantity, $options);
+            return $this->addProductAsNewItem($cart, $product, $quantity, $url, $options);
         }
     }
 
     protected function addProductAsNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
         \Zento\Contracts\Catalog\Model\Product $product, 
-        $quantity, array $options =[]) {
+        $quantity, $url, array $options =[]) {
         zento_assert($cart);
         // zento_assert($product);
         $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
@@ -202,7 +212,8 @@ class ShoppingCartService
             'price' => (string)$product->price,
             'custom_price' => (string)$product->price,
             'description' => (string)$product->description,
-            'url' => (string)$product->url_path,
+            // 'url' => (string)$product->url_path,
+            'url' => $url,
             'image' => (string)$product->image,
             'quantity' => $quantity,
             'min_quantity' => 1,
@@ -211,7 +222,8 @@ class ShoppingCartService
             'taxable' => true,
             'duplicatable' => true,
             'unit_price' => $product->price,
-            'total_price' => $product->price * $quantity
+            'total_price' => $product->price * $quantity,
+            // 'options' => json_encode($options)
         ]);
         $item->save();
         if ($this->shoppingCartModified($cart)->isSuccess()) {
