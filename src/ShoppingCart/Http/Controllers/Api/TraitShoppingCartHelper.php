@@ -13,7 +13,7 @@ trait TraitShoppingCartHelper {
     if ($cart_guid === 'mine') {
         if (!Auth::check()) {
             return response('', 401);
-        } elseif($cart = ShoppingCartService::getMyCart($forceCreateForMine)) {
+        } elseif ($cart = ShoppingCartService::getMyCart($forceCreateForMine)) {
             return \call_user_func($callbak, $cart);
         }
     }

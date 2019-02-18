@@ -1,6 +1,6 @@
 <?php
 $apiRoutes = [
-    'cart.create' => [ 'method' => 'post', 'path' => '/create', 'uses' => 'ShoppingCartController@createCart', 'allow_guest' => true],
+    'cart.create' => [ 'method' => 'post', 'path' => '/', 'uses' => 'ShoppingCartController@createCart', 'allow_guest' => true],
     'cart.getone' => [ 'method' => 'get', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@getCart', 'allow_guest' => true],
     'cart.delete' => [ 'method' => 'delete', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@deleteCart', 'allow_guest' => true],
     'cart.add.item' => [ 'method' => 'post', 'path' =>'/{cart_guid}/items', 'uses' => 'ShoppingCartController@addItem', 'allow_guest' => true],
@@ -18,21 +18,21 @@ $apiRoutes = [
     'cart.put.customer' => [ 'method' => 'put', 'path' => '/{cart_guid}/customer/{customer_id}', 'uses' => 'ShoppingCartController@setCustomer', 'allow_guest' => false],
 ];
 
-Route::group(
-    [
-        'prefix' => '/rest/v1/guest-cart',
-        'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['cors']
-    ], function () use ($apiRoutes) {
-        foreach($apiRoutes as $name => $route) {
-            if ($route['allow_guest'] ?? false) {
-                Route::{$route['method']}(
-                    $route['path'],
-                    ['as' => $name, 'uses' => $route['uses']]
-                );
-            }
-        }
-});
+// Route::group(
+//     [
+//         'prefix' => '/rest/v1/guest-cart',
+//         'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
+//         'middleware' => ['cors']
+//     ], function () use ($apiRoutes) {
+//         foreach($apiRoutes as $name => $route) {
+//             if ($route['allow_guest'] ?? false) {
+//                 Route::{$route['method']}(
+//                     $route['path'],
+//                     ['as' => $name, 'uses' => $route['uses']]
+//                 );
+//             }
+//         }
+// });
 
 
 Route::group(
