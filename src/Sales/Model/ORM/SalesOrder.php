@@ -34,7 +34,7 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     public static function getPreloadRelations() {
         return [
             'payment',
-            'shipment',
+            // 'shipment',
             'status',
             'status_history',
             // 'withcount' => ['items']
@@ -52,7 +52,7 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     }
 
     public function status() {
-        return $this->hasOne(SalesOrderStatus::class, 'status_id');
+        return $this->hasOne(SalesOrderStatus::class, 'id');
     }
 
     public function status_history() {
