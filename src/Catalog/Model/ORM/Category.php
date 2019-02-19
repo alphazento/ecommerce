@@ -14,7 +14,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
             'category_description' =>[
                 'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
             ],
-            'children_categories',
+            'children',
             'withcount' => ['products']
         ];
     }
@@ -23,7 +23,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Con
         return $this->hasOne(CategoryDescription::class, 'category_id');
     }
 
-    public function children_categories() {
+    public function children() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
     }
 

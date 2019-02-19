@@ -48,10 +48,11 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
     public function getCategoriesByLevel($level, $activeOnly = true, $parent_id = -1) {
         $cacheKey = sprintf('%s.all.%s', $level, $parent_id);
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = Category::where('level', $level)
-                ->active($activeOnly)
-                ->orderBy('sort_by')
-                ->get();
+            $builder = Category::where('level', $level);
+            if ($activeOnly) {
+                $builder->active($activeOnly);
+            }
+            $this->cache[$cacheKey] = $builder->orderBy('sort_by')->get();
         }
         return $this->cache[$cacheKey];
     }
@@ -68,10 +69,10 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
     /**
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
-    public function tree() {
+    public function tree($activeOnly = true) {
 		static $tree = 0;
 		if (!$tree) {
-			$tree = $this->getCategoriesByLevel($this->treeLevelFrom);
+			$tree = $this->getCategoriesByLevel($this->treeLevelFrom, $activeOnly);
 		}
 		return $tree;
     }

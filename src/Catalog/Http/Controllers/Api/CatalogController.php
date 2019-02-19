@@ -21,11 +21,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CatalogController extends Controller
 {
     public function categoriesTree() {
-        return ['status'=>200, 'data'=> CategoryService::tree()];
+        $all = Request::get('all', false);
+        return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
     }
     
     public function categories() {
-        return ['status'=>200, 'data'=> CategoryService::tree()];
+        $all = Request::get('all', true);
+        return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
     }
 
     public function category() {

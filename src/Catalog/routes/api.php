@@ -47,3 +47,40 @@ Route::group(
             ['as' => 'section.shoppingcollection', 'uses' => 'CatalogController@shoppingCollectionSection']
         );
 });
+
+Route::group(
+    [
+        'prefix' => '/admin/rest/v1',
+        'namespace' => '\Zento\Catalog\Http\Controllers\Api',
+        'middleware' => ['cors']
+    ], function () {
+        Route::post(
+            '/catalog/search',
+            ['as' => 'home', 'uses' => 'CatalogController@search']
+        );
+
+        Route::get(
+            '/categories', 
+            ['as' => 'home', 'uses' => 'CatalogController@categories']
+        );
+        
+        Route::get(
+            '/categories/tree', 
+            ['as' => 'home', 'uses' => 'CatalogController@categoriesTree']
+        );
+
+        Route::get(
+            '/categories/{ids}/',
+            ['as' => 'category', 'uses' => 'CatalogController@category']
+        )->where('ids', '([\d\/]+)?');
+
+        Route::get(
+            '/categories/{id}/products',
+            ['as' => 'category.products', 'uses' => 'CatalogController@productsOfCategory']
+        );
+
+        Route::get(
+            '/products/{id}', 
+            ['as' => 'product', 'uses' => 'CatalogController@product']
+        );
+});
