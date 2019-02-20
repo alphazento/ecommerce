@@ -14,7 +14,6 @@ class Admin {
             'Catalog/Category' => function($key) {
                 AdminService::registerGroup($key, 'category',  [
                     'title' => 'Category Settings',
-                    'groupSave' => true,
                     'items' => [
                         [
                             'title' => 'Enable Category',

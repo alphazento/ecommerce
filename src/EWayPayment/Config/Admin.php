@@ -16,7 +16,6 @@ class Admin {
             'Sales/PaymentGateway' => function($key) {
                 AdminService::registerGroup($key, 'eWay',  [
                     'title' => 'eWay Transparent',
-                    'groupSave' => true,
                     'items' => [
                         [
                             'title' => 'Enabled In Frontend',
