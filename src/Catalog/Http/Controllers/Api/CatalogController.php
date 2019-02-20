@@ -38,6 +38,22 @@ class CatalogController extends Controller
         return ['status'=>200, 'data'=> $category];
     }
 
+    /**
+     * used for admin
+     * co-work with react config components
+     *
+     * @return void
+     */
+    public function categoryValues() {
+        $id = Route::input('id');
+        $category = CategoryService::getCategoryById($id);
+        \zento_assert($category);
+
+        
+
+        return ['status'=>200, 'data'=> $category];
+    }
+
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);

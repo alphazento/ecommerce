@@ -16,10 +16,11 @@ class ConfigurationController extends Controller
         return ['status'=>200, 'data' => AdminService::getMeus()];
     }
 
-    public function getMenuDetailGroups() {
+    public function getConfigGroups() {
         $key = (new \Zento\Backend\Config\Admin())->registerGroupIfMatchs(Route::input('l0'), Route::input('l1'));
         $key = (new \Zento\PaypalPayment\Config\Admin())->registerGroupIfMatchs(Route::input('l0'), Route::input('l1'));
         $key = (new \Zento\EwayPayment\Config\Admin())->registerGroupIfMatchs(Route::input('l0'), Route::input('l1'));
+        $key = (new \Zento\Catalog\Config\Admin())->registerGroupIfMatchs(Route::input('l0'), Route::input('l1'));
         return ['status'=>200, 'data' => AdminService::getDetailGroup($key)];
     }
 

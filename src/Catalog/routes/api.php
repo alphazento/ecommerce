@@ -48,6 +48,7 @@ Route::group(
         );
 });
 
+//admin
 Route::group(
     [
         'prefix' => '/admin/rest/v1',
@@ -82,5 +83,10 @@ Route::group(
         Route::get(
             '/products/{id}', 
             ['as' => 'product', 'uses' => 'CatalogController@product']
+        );
+
+        Route::post(
+            '/catalog/categories/{id}/values', 
+            ['as' => 'category.values', 'uses' => 'CatalogController@categoryValues']
         );
 });

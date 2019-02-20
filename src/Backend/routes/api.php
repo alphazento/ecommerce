@@ -12,7 +12,7 @@ Route::group(
 
         Route::get(
             '/configs/groups/{l0}/{l1}', 
-            ['as' => 'admin.configs.groups', 'uses' => 'ConfigurationController@getMenuDetailGroups']
+            ['as' => 'admin.configs.groups', 'uses' => 'ConfigurationController@getConfigGroups']
         );
 
         Route::post(

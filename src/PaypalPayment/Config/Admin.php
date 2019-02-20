@@ -40,6 +40,7 @@ class Admin {
                 ]);
                 AdminService::registerSubgroupToGroup($key, 'paypalexpress', 'sandbox', [
                     'title' => 'Sandbox API Settings',
+                    'groupSave' => true,
                     'items' => [
                         [
                             'title' => 'Sandbox ClientID',
@@ -60,6 +61,7 @@ class Admin {
                 ]);
                 AdminService::registerSubgroupToGroup($key, 'paypalexpress', 'production', [
                     'title' => 'Production API Settings',
+                    'groupSave' => true,
                     'items' => [
                         [
                             'title' => 'Production ClientID',
