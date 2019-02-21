@@ -85,8 +85,13 @@ Route::group(
             ['as' => 'product', 'uses' => 'CatalogController@product']
         );
 
-        Route::post(
+        Route::get(
             '/catalog/categories/{id}/values', 
             ['as' => 'category.values', 'uses' => 'CatalogController@categoryValues']
+        );
+
+        Route::put(
+            '/catalog/categories/{id}/{field}', 
+            ['as' => 'category.put.filed', 'uses' => 'CatalogController@setCategoryField']
         );
 });

@@ -15,12 +15,12 @@ Route::group(
             ['as' => 'admin.configs.groups', 'uses' => 'ConfigurationController@getConfigGroups']
         );
 
-        Route::post(
-            '/configs/values', 
-            ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getConfigValues']
+        Route::get(
+            '/configs/values/{l0}/{l1}', 
+            ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getGroupValues']
         );
 
-        Route::post(
+        Route::put(
             '/configs/{key}', 
             ['as' => 'admin.configs.set.value', 'uses' => 'ConfigurationController@setConfigValue']
         );

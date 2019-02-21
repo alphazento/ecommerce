@@ -6,6 +6,7 @@ class AdminService
 {
   protected $menus = [];
   protected $config_groups = [];
+  protected $pendingBeforeGroupCreated = [];
 
   public function getMeus() {
     return $this->menus;
@@ -46,16 +47,28 @@ class AdminService
       if (!isset($this->config_groups[$l0name_l1Name][$groupName])) {
         $this->config_groups[$l0name_l1Name][$groupName] = $group;
       } else {
-        throw new \Exception(sprintf('%s %s contains same group(%s).', $parentName, $l1Name, $groupName));
+        throw new \Exception(sprintf('%s contains same group(%s).', $l0name_l1Name, $groupName));
       }
     }
+    
+    $key = strtolower(sprintf('%s:%s', $l0name_l1Name, $groupName));
+    foreach($this->pendingBeforeGroupCreated[$key] ?? [] as $callback) {
+      $callback($this, $l0name_l1Name, $groupName);
+    }    
   }
 
   public function registerItemToGroup($l0name_l1Name, $groupName, array $item, $sort = 0) {
-    if (!isset($this->config_groups[$l0name_l1Name])) {
-        $this->config_groups[$l0name_l1Name] = [$groupName => ['items' => [$item]]];
+    if (!isset($this->config_groups[$l0name_l1Name]) || !isset($this->config_groups[$l0name_l1Name][$groupName])) {
+        //call after group is created.
+        $key = strtolower(sprintf('%s:%s', $l0name_l1Name, $groupName));
+        if (!isset($this->pendingBeforeGroupCreated[$key])) {
+          $this->pendingBeforeGroupCreated[$key] = [];
+        }
+        $this->pendingBeforeGroupCreated[$key][] = function($adminService, $l0name_l1Name, $groupName) use ($item, $sort) {
+          $adminService->registerItemToGroup($l0name_l1Name, $groupName, $item, $sort);
+        };
     } else {
-      if (isset($this->config_groups[$l0name_l1Name][$groupName])) {
+      // if (isset($this->config_groups[$l0name_l1Name][$groupName])) {
         if (!isset($this->config_groups[$l0name_l1Name][$groupName]['items'])) {
           $this->config_groups[$l0name_l1Name][$groupName]['items'] = [];
         }
@@ -64,9 +77,9 @@ class AdminService
         } else {
           $this->config_groups[$l0name_l1Name][$groupName]['items'][] = $item;
         }
-      } else {
-        $this->config_groups[$l0name_l1Name][$groupName]['items']= [$item];
-      }
+      // } else {
+      //   $this->config_groups[$l0name_l1Name][$groupName]['items']= [$item];
+      // }
     }
   }
 

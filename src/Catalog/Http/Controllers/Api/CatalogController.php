@@ -26,7 +26,7 @@ class CatalogController extends Controller
     }
     
     public function categories() {
-        $all = Request::get('all', true);
+        $all = Request::get('all', false);
         return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
     }
 
@@ -49,9 +49,20 @@ class CatalogController extends Controller
         $category = CategoryService::getCategoryById($id);
         \zento_assert($category);
 
-        
-
         return ['status'=>200, 'data'=> $category];
+    }
+
+    public function setCategoryField() {
+        if ($id = Route::input('id')) {
+            if ($category = CategoryService::getCategoryById($id)) {
+                $field = Route::input('field');
+                $value = Request::get('value');
+                $category->{$field} = $value;
+                $category->save();
+                return ['status' => 200, 'data' => [$field => $value]];
+            }
+        }
+        return ['status' => 420, 'data' => [$field => $value]];
     }
 
     public function productsOfCategory() {
