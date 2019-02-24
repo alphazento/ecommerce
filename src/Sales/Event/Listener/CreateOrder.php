@@ -15,7 +15,6 @@ use Zento\Sales\Model\ORM\SalesOrderStatus;
 class CreateOrder extends \Zento\Kernel\Booster\Events\BaseListener
 {
     /**
-     * @param \Zento\Contracts\Catalog\Model\ShoppingCart $event
      * @return void
      */
     protected function run($event) {

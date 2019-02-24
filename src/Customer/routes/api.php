@@ -8,7 +8,24 @@ Route::group([
             '/guest', 
             ['as' => 'customer.put.guest', 'uses' => 'PassportController@getOrCreateGuest']
         );
-    });
+    }
+);
+
+Route::group(
+    [
+        'prefix' => '/rest/v1/oauth2',
+        'namespace' => '\Zento\Customer\Http\Controllers\Api',
+        'middleware' => ['setuppassport']
+    ], function () {
+    Route::post(
+        '/zento_token', 
+        ['uses' => 'PassportController@issueToken']
+    );
+    Route::post(
+        '/register', 
+        ['uses' => 'PassportController@register']
+    );
+});
 
 Route::group(
     [

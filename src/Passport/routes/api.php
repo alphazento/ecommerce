@@ -1,5 +1,4 @@
 <?php
-
 Route::options('/{all}', 
     ['as' => 'oauth.zento_token', 'uses' => '\Zento\Passport\Http\Controllers\Api\ZentoPassportController@apiOptions'])
         ->where('all', '.*')

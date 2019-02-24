@@ -18,14 +18,18 @@ class ShoppingCartService
     protected $cartCache = [];
     
     public function getMyCart($forceCreateForMine = false) {
-        if ($myCart = ShoppingCart::where('customer_id', '=', Auth::user()->id)
-            ->where('status', '=', 0)
-            ->orderBy('updated_at', 'desc')
-            ->first()) {
-                return $myCart;
+        if ($myCart = $this->getCartByUserId(Auth::user()->id)) {
+            return $myCart;
         } elseif ($forceCreateForMine) {
             return $this->createCart();
         }
+    }
+
+    public function getCartByUserId($userId) {
+        return ShoppingCart::where('customer_id', '=', $userId)
+            ->where('status', '=', 0)
+            ->orderBy('updated_at', 'desc')
+            ->first();
     }
 
     public function createCart() {

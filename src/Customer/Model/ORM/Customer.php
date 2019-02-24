@@ -45,6 +45,11 @@ class Customer extends \Zento\Passport\Model\User
         }
     }
 
+    public static function findDummyCustomer($uuid) {
+        $email = 'dm'. $uuid;
+        return static::where('email', $email)->first();
+    }
+    
     public static function requestDummyCustomer($uuid) {
         $password = Str::random(8);
 
@@ -52,7 +57,7 @@ class Customer extends \Zento\Passport\Model\User
         if ($dummy = static::where('email', $email)->first()) {
             $dummy->password = bcrypt($password);
             $dummy->save();
-        } else {
+        } elseif ($createIfNotExist) {
             $dummy = static::create([
                 'group_id' => 0,
                 'store_id' => 0,

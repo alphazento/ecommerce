@@ -7,6 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
+    protected $isRegistering = false;
+
     public function apiOptions(ServerRequestInterface $request) {
         return '';
     }
@@ -25,6 +27,7 @@ class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessT
     }
 
     public function register(ServerRequestInterface $request) {
+        $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
 
         // Request::validate([
