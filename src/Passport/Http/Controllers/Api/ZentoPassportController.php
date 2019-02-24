@@ -2,6 +2,7 @@
 
 namespace Zento\Passport\Http\Controllers\Api;
 
+use Auth;
 use Request;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -47,5 +48,11 @@ class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessT
             return $this->issueToken($request);
         }
         return ['status'=>420, 'data' => 'fail to create customer'];
+    }
+
+    public function logout()
+    {
+        Auth::user()->token()->revoke();
+        return ['status'=>200, 'data' => 'Successfully logged out'];
     }
 }

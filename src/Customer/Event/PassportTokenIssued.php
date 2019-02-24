@@ -5,7 +5,7 @@ namespace Zento\Customer\Event;
 class PassportTokenIssued extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'dummyCustomer',
-        'currentCustomer',
+        'customer',
         'requestParams',
         'isRegistering',
     ];
@@ -16,14 +16,14 @@ class PassportTokenIssued extends \Zento\Kernel\Booster\Events\BaseEvent {
      * @return void
      */
     public function __construct(
+        \Zento\Customer\Model\ORM\Customer $dummy,
         \Zento\Customer\Model\ORM\Customer $customer,
-        // \Zento\Customer\Model\ORM\Customer $current,
         array $requestParams, 
         $isRegistering)
     {
         $this->data = [
-            'dummyCustomer' => $customer,
-            // 'currentCustomer' => $current,
+            'dummyCustomer' => $dummy,
+            'customer' => $customer,
             'requestParams' => $requestParams,
             'isRegistering' => $isRegistering,
         ];

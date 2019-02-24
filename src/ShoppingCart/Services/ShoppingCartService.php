@@ -78,8 +78,8 @@ class ShoppingCartService
     public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
         \Zento\Contracts\Address $address, 
         $ship_to_billingaddesss = false) {
-        zento_assert($cart);
-        zento_assert($address);
+        // zento_assert($cart);
+        // zento_assert($address);
 
         if ($cart->billing_address_id) {
             // $cart->billing_address->
@@ -96,8 +96,8 @@ class ShoppingCartService
     }
 
     public function setShippingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Address $address) {
-        zento_assert($cart);
-        zento_assert($address);
+        // zento_assert($cart);
+        // zento_assert($address);
         $address->save();
         
         $cart->shipping_address_id = $address->id;
@@ -112,7 +112,7 @@ class ShoppingCartService
         \Zento\Contracts\Address $shipping_address,
         string $shipping_carrier_code,
         string $shipping_method_code) {
-        zento_assert($cart);
+        // zento_assert($cart);
         zento_assert($billing_address);
 
         if (!$this->setBillingAddress($cart, $billing_address, $ship_to_billingaddesss)) {
@@ -179,7 +179,7 @@ class ShoppingCartService
     }
 
     public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, $url, array $options =[]) {
-        zento_assert($cart);
+        // zento_assert($cart);
         // zento_assert($product);
         if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
             $newQuantity = $item->quantity + $quantity;
@@ -198,10 +198,11 @@ class ShoppingCartService
         }
     }
 
-    protected function addProductAsNewItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
+    protected function addProductAsNewItem(
+        \Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
         \Zento\Contracts\Catalog\Model\Product $product, 
         $quantity, $url, array $options =[]) {
-        zento_assert($cart);
+        // zento_assert($cart);
         // zento_assert($product);
         $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
         if (!$ret->isSuccess()) {
@@ -238,8 +239,8 @@ class ShoppingCartService
     public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
         \Zento\Contracts\Catalog\Model\ShoppingCartItem $cartItem, 
         $trigger_event = true) {
-        zento_assert($cart);
-        zento_assert($item);
+        // zento_assert($cart);
+        // zento_assert($item);
         if ($item = $this->findExistItemByProductOption($cart, $cartItem->product_id, $options)) {
             $newQuantity = $item->quantity + $cartItem->quantity;
             $ret = (new PreAddProduct($product, $options, $newQuantity))->fireUntil();
@@ -268,7 +269,7 @@ class ShoppingCartService
             return $this->deleteItem($cart, $item_id);
         }
 
-        zento_assert($cart);
+        // zento_assert($cart);
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
                 if ($item->quantity != $quantity) {
@@ -289,7 +290,7 @@ class ShoppingCartService
     }
 
     public function deleteItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $item_id) {
-        zento_assert($cart);
+        // zento_assert($cart);
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
                 $item->delete();
@@ -301,7 +302,7 @@ class ShoppingCartService
     }
 
     public function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
-        zento_assert($cart);
+        // zento_assert($cart);
         $cart->load('items');
         return (new ShoppingCartModified($cart))->fireUntil();
     }

@@ -13,8 +13,20 @@ class PassportTokenIssued extends \Zento\Kernel\Booster\Events\BaseListener {
      */
     protected function run($event) {
         // dd($event->shoppingCart);
-        dump($event);
-        if ($event->dummyCustomer) {
+        if ($event->dummyCustomer 
+            && $event->customer
+            && $event->dummyCustomer->id !== $event->customer->id)
+        {
+            if ($dummyCart = ShoppingCartService::getCartByUserId($event->dummyCustomer->id)) {
+                //if do not merge shopping cart
+                //delete mycart
+                if ($dummyCart->items_quantity > 0) {
+                    $dummyCart->customer_id = $event->customer->id;
+                    $dummyCart->email = $event->customer->email;
+                    $dummyCart->save();
+                }
+            }
+            
             if ($event->isRegistering) {
                 // ShoppingCartService::getCartByUserId()
             }

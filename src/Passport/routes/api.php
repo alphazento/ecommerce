@@ -18,4 +18,8 @@ Route::group(
         '/register', 
         ['as' => 'oauth.register', 'uses' => 'ZentoPassportController@register']
     );
+    Route::delete(
+        '/logout', 
+        ['as' => 'oauth.logout', 'uses' => 'ZentoPassportController@logout']
+    )->middleware('auth:api');
 });

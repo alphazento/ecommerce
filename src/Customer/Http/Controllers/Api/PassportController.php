@@ -33,15 +33,17 @@ class PassportController extends \Zento\Passport\Http\Controllers\Api\ZentoPassp
     public function issueToken(ServerRequestInterface $request) {
       $response = parent::issueToken($request);
       if ($response['status'] === 200) {
-        $uuid = Request::header('Guest-Uuid');
-        if (strlen($uuid) > 36) {
-          if ($dummyCustomer = \Zento\Customer\Model\ORM\Customer::findDummyCustomer($uuid)) {
-            (new \Zento\Customer\Event\PassportTokenIssued(
-              $dummyCustomer,
-              // Auth::user(),
-              Request::all(),
-              $this->isRegistering)
-            )->fire();
+        if ($username = Request::get('username')) {
+          $uuid = Request::header('Guest-Uuid');
+          if (strlen($uuid) > 36) {
+            if ($dummyCustomer = \Zento\Customer\Model\ORM\Customer::findDummyCustomer($uuid)) {
+              (new \Zento\Customer\Event\PassportTokenIssued(
+                $dummyCustomer,
+                \Zento\Customer\Model\ORM\Customer::where('email', $username)->first(),
+                Request::all(),
+                $this->isRegistering)
+              )->fire();
+            }
           }
         }
       }
