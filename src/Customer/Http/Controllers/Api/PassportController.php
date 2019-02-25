@@ -37,12 +37,16 @@ class PassportController extends \Zento\Passport\Http\Controllers\Api\ZentoPassp
           $uuid = Request::header('Guest-Uuid');
           if (strlen($uuid) > 36) {
             if ($dummyCustomer = \Zento\Customer\Model\ORM\Customer::findDummyCustomer($uuid)) {
-              (new \Zento\Customer\Event\PassportTokenIssued(
-                $dummyCustomer,
-                \Zento\Customer\Model\ORM\Customer::where('email', $username)->first(),
-                Request::all(),
-                $this->isRegistering)
-              )->fire();
+              if ($customer = \Zento\Customer\Model\ORM\Customer::where('email', $username)->first()) {
+                if ($dummyCustomer->id !== $customer->id) {
+                  (new \Zento\Customer\Event\PassportTokenIssued(
+                    $dummyCustomer,
+                    $customer,
+                    Request::all(),
+                    $this->isRegistering)
+                  )->fire();
+                }
+              }
             }
           }
         }

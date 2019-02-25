@@ -38,7 +38,10 @@
                     "providers" : [
                         "\\Zento\\Customer\\Providers\\Entry"
                     ],
-                    "listeners":  {
+                    "listeners": {
+                        "Zento\\Customer\\Event\\PassportTokenIssued": {
+                            "10": "\\Zento\\Customer\\Event\\Listener\\PassportTokenIssued"
+                        }
                     },
                     "middlewaregroup": {
                         "setuppassport": {

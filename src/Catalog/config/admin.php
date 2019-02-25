@@ -10,7 +10,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
     protected function _registerGroups($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'general',  [
+            AdminService::registerGroup($groupTag, 'category',  [
                 'title' => 'Category Settings',
                 'items' => [
                     [
