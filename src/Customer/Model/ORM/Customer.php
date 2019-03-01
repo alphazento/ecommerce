@@ -57,7 +57,7 @@ class Customer extends \Zento\Passport\Model\User
         if ($dummy = static::where('email', $email)->first()) {
             $dummy->password = bcrypt($password);
             $dummy->save();
-        } elseif ($createIfNotExist) {
+        } else {
             $dummy = static::create([
                 'group_id' => 0,
                 'store_id' => 0,
