@@ -11,13 +11,23 @@ use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
 use Zento\Sales\Model\ORM\SalesOrderPayment;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
+use Zento\Sales\Providers\Facades\SalesService;
 
-class CreateOrder extends \Zento\Kernel\Booster\Events\BaseListener
+class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
 {
+    protected function run($event) {
+        $order = SalesService::placeOrder($event->shoppingCart, 
+            $event->paymentDetail,
+            'freeshipping', 
+            'free',
+            '0',
+            '');
+        return $event->createResult(true, ['order' =>  $order]);
+    }
     /**
      * @return void
      */
-    protected function run($event) {
+    protected function run1($event) {
         // \zento_assert($event->shoppingCart);
         // dd($event->shoppingCart);
         $order = new SalesOrder();

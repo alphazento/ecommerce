@@ -20,7 +20,7 @@ class CheckoutService
     public function createOrder(\Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
         \zento_assert($paymentDetail);
         \zento_assert($shoppingCart);
-        $eventResult = (new \Zento\Checkout\Event\CreateOrder(
+        $eventResult = (new \Zento\Checkout\Event\CreatingOrder(
                 $shoppingCart, 
                 $paymentDetail)
             )->fireUntil();

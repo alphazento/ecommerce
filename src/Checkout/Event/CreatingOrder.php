@@ -2,7 +2,7 @@
 
 namespace Zento\Checkout\Event;
 
-class CreateOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
+class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'shoppingCart',
         'paymentDetail'
