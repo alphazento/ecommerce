@@ -217,7 +217,8 @@ class CatalogService
                     $this->{$callback}($builder, $filter);
                 }
             } else {
-                if (in_array($name, $dynAttrs)) {
+                if (count($filter) > 0 && in_array($name, $dynAttrs)) {
+                    //filter column or dynamic column
                     $builder->whereIn($name, $filter);
                 }
             }
