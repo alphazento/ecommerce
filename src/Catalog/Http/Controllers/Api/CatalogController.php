@@ -119,6 +119,18 @@ class CatalogController extends Controller
 
     public function search() {
         $params = Request::all();
-        return ['status' => 200, 'data' => CatalogService::search($params['criteria'], $params['per_page'])];
+        $per_page = 15;
+        $page = 1;
+
+        if (isset($params['per_page'])) {
+            $per_page = $params['per_page'];
+            unset($params['per_page']);
+        }
+
+        if (isset($params['page'])) {
+            $page = $params['page'];
+            unset($params['page']);
+        }
+        return CatalogService::search($params, $per_page, $page);
     }
 }

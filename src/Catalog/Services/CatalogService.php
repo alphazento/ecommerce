@@ -6,6 +6,7 @@ use DB;
 use Store;
 use Cache;
 use ShareBucket;
+use Illuminate\Pagination\Paginator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
@@ -163,15 +164,21 @@ class CatalogService
         "sort_by":"price,asc"
         }
      */
-    public function search($criteria, $per_page, $withAggregate = true) {
+    public function search($criteria, $per_page, $page, $withAggregate = true) {
         list($builder, $aggregateQuery) = $this->applyFilter($criteria, $withAggregate);
 
         if (!empty($criteria['sort_by'])) {
             $this->applyOrderBy($builder, $criteria['sort_by']);
         }
         
+        $statusCode = 200;
         $items = $builder->paginate($per_page);
-        $items = $items->toArray();
+
+        if ($items->lastPage() < $page && $items->total() > 0) {
+            $statusCode = 301;
+            $items = $builder->paginate($per_page, ['*'], 'page', $items->lastPage());
+        }
+        // $items = $items->toArray();
         if ($withAggregate) {
             // if ($items['total'] > $items['per_page']) {
                 $aggregate = $this->aggregate($aggregateQuery);
@@ -182,7 +189,10 @@ class CatalogService
             $aggregate = [];
         }
 
-        return ['aggregate' =>  $aggregate, 'items'=> $items];
+        if ($items->total() == 0) {
+            $statusCode = 404;
+        }
+        return ['status' => $statusCode, 'data' => ['aggregate' =>  $aggregate, 'items'=> $items]];
     }
 
     protected function applyFilter($criteria, $withAggregate = true) {

@@ -11,6 +11,10 @@ Route::group(
             '/catalog/search', 
             ['as' => 'home', 'uses' => 'CatalogController@search']
         );
+        Route::get(
+            '/catalog/search', 
+            ['as' => 'home', 'uses' => 'CatalogController@search']
+        );
 
         Route::get(
             '/categories', 
