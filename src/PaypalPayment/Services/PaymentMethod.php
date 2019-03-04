@@ -139,7 +139,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                 "depends"=> [
                     [
                         "namespaces" => ["paypal_config"],
-                        "src" => "http://alphazento.local.test/rest/v1/paypal_config"
+                        "src" => route('paypay.config')
                     ],
                     [
                         "namespaces" => ["paypal"],
@@ -150,7 +150,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                     //     "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
                     // ]
                 ],
-                "entry" => "http://alphazento.local.test/js/paypalexpress.js?v="  . time()
+                "entry" => asset("js/paypalexpress.js?v="  . time())
             ],
             'params' => [
                 'capture_url' => str_replace('https:', 'http:', $url)

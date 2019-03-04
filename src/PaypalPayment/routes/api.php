@@ -7,6 +7,9 @@ Route::group(
     ], function () {
         Route::get(
             '/paypal_config', 
-            [ 'uses' => 'ApiController@renderPaypalConfigJs']
+            [
+                'as' => 'paypay.config',
+                 'uses' => 'ApiController@renderPaypalConfigJs'
+            ]
         );
 });
