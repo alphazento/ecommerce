@@ -16,6 +16,11 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'type' => 'Text',
                 'cpath' => 'name'
             ];
+            $items[] = [
+                'title' => 'Enable Category',
+                'type' => 'Switch',
+                'cpath' => 'is_active'
+            ];
 
             $itemsGroups = [];
 
