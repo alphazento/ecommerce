@@ -34,5 +34,10 @@ Route::group(
             '/dynamicattributes/{id}', 
             ['as' => 'admin.put.da', 'uses' => 'DAController@updateAttribute']
         );
+
+        Route::put('/model/{model}/{id}', 
+            ['as' => 'admin.put.model', 'uses' => 'ModelController@updateModel']
+        );
+
     }
 );

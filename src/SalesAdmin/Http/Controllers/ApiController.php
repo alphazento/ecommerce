@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ApiController extends \App\Http\Controllers\Controller
 {
     function getOrders() {
-      $orders = SalesOrder::orderBy('id', 'desc')->paginate(30);
+      $orders = SalesOrder::orderBy('id', 'desc')->paginate(3);
       return ['status' => 200, 'data'=> $orders];
     }
 }
