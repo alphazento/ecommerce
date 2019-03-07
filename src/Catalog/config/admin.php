@@ -72,5 +72,58 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //     ]
             // ]);
         };
+
+        $groups['catalog/product'] = function($groupTag) {
+            $items[] = [
+                'title' => 'Product Name',
+                'type' => 'Text',
+                'cpath' => 'name'
+            ];
+            $items[] = [
+                'title' => 'Enable Product',
+                'type' => 'Switch',
+                'cpath' => 'is_active'
+            ];
+
+            $itemsGroups = [];
+
+            $dynAttrs = DynamicAttribute::where('parent_table', 'products')
+                ->where('enabled', 1)
+                ->get();
+
+            foreach($dynAttrs as $item) {
+                if (empty($item->admin_group)) {
+                    $items[] = [
+                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
+                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'cpath' => $item->attribute_name
+                    ];
+                } else {
+                    $group = $item->admin_group;
+                    if (!isset($itemsGroups[$group])) {
+                        $itemsGroups[$group] = [];
+                    }
+                    $itemsGroups[$group][] = [
+                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
+                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'cpath' => $item->attribute_name
+                    ];
+                }
+            }
+            
+            AdminService::registerGroup($groupTag, 'product',  [
+                'title' => 'Product Settings',
+                'items' => $items
+            ]);
+            foreach($itemsGroups as $group => $items) {
+                AdminService::registerSubgroupToGroup($groupTag, 
+                    'product', 
+                    md5($group), 
+                    [
+                        'title' => $group,
+                        'items' => $items
+                    ]);
+            }
+        };
     }
 }
