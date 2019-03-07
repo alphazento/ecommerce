@@ -24,7 +24,7 @@ class CatalogService
      *
      * @var array
      */
-    protected $extra_filters = [];
+    protected $default_filters = [];
 
     /**
      * the filters which match with criteria params
@@ -34,7 +34,7 @@ class CatalogService
     protected $criteria_filters = [
         'category' => 'filterCategory',
         'price' => 'filterPrice',
-        'text' =>''
+        'text' =>'',
     ];
  
     protected $sort_bys = [
@@ -47,8 +47,8 @@ class CatalogService
         $this->criteria_filters[$name] = $callback;
     }
 
-    public function registerFilterLayer($callback) {
-        $this->extra_filters[] = $callback;
+    public function registerDefaultFilterLayer($callback) {
+        $this->default_filters[] = $callback;
     }
 
     public function registerSortBy($name, $callback) {
@@ -202,7 +202,7 @@ class CatalogService
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
-        foreach($this->extra_filters as $callback) {
+        foreach($this->default_filters as $callback) {
             if (is_callable($callback)) {
                 call_user_func_array($callback, [$builder]);
             }

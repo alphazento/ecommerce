@@ -35,9 +35,20 @@ class Entry extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
         }
-        $this->app['catalog_service']->registerFilterLayer(function($builder) {
-            $builder->where('visibility', '>', 1);
-        });
+        $this->app['catalog_service']->registerCriteriaFilter('visibility',
+            function ($builder, $value) {
+                if (empty($value) || $value === 'storefront') {
+                    $builder->where('visibility', '>', 1);
+                } else {
+                    if ($value !== 'admin') {
+                        if (!is_array($value)) {
+                            $value = [$value];
+                        }
+                        $builder->whereIn('visibility', $value);
+                    }
+                }
+            }
+        );
     }
 
     public function boot() {

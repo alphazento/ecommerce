@@ -118,6 +118,14 @@ class CatalogController extends Controller
     }
 
     public function search() {
+        return $this->_search();
+    }
+
+    public function adminSearch() {
+        return $this->_search('admin', false);
+    }
+
+    protected function _search($visibility = 'storefront', $withAggreate = true) {
         $params = Request::all();
         $per_page = 15;
         $page = 1;
@@ -131,6 +139,10 @@ class CatalogController extends Controller
             $page = $params['page'];
             unset($params['page']);
         }
-        return CatalogService::search($params, $per_page, $page);
+
+        if (!isset($params['visibility'])) {
+            $params['visibility'] = $visibility;
+        }
+        return CatalogService::search($params, $per_page, $page, $withAggreate);
     }
 }

@@ -9,21 +9,21 @@ Route::group(
     ], function () {
         Route::post(
             '/catalog/search', 
-            ['as' => 'home', 'uses' => 'CatalogController@search']
+            ['as' => 'catalog.search', 'uses' => 'CatalogController@search']
         );
         Route::get(
             '/catalog/search', 
-            ['as' => 'home', 'uses' => 'CatalogController@search']
+            ['as' => 'catalog.search', 'uses' => 'CatalogController@search']
         );
 
         Route::get(
             '/categories', 
-            ['as' => 'home', 'uses' => 'CatalogController@categories']
+            ['as' => 'get.categories', 'uses' => 'CatalogController@categories']
         );
         
         Route::get(
             '/categories/tree', 
-            ['as' => 'home', 'uses' => 'CatalogController@categoriesTree']
+            ['as' => 'get.categories.tree', 'uses' => 'CatalogController@categoriesTree']
         );
 
         Route::get(
@@ -59,34 +59,38 @@ Route::group(
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         'middleware' => ['cors']
     ], function () {
-        Route::post(
-            '/catalog/search',
-            ['as' => 'home', 'uses' => 'CatalogController@search']
-        );
-
         Route::get(
             '/categories', 
-            ['as' => 'home', 'uses' => 'CatalogController@categories']
+            ['as' => 'admin.get.categories', 'uses' => 'CatalogController@categories']
         );
         
         Route::get(
             '/categories/tree', 
-            ['as' => 'home', 'uses' => 'CatalogController@categoriesTree']
+            ['as' => 'admin.get.categories.tree', 'uses' => 'CatalogController@categoriesTree']
         );
 
         Route::get(
             '/categories/{ids}/',
-            ['as' => 'category', 'uses' => 'CatalogController@category']
+            ['as' => 'admin.get.category', 'uses' => 'CatalogController@category']
         )->where('ids', '([\d\/]+)?');
 
         Route::get(
             '/categories/{id}/products',
-            ['as' => 'category.products', 'uses' => 'CatalogController@productsOfCategory']
+            ['as' => 'admin.category.products', 'uses' => 'CatalogController@productsOfCategory']
         );
 
         Route::get(
             '/products/{id}', 
-            ['as' => 'product', 'uses' => 'CatalogController@product']
+            ['as' => 'admin.get.product', 'uses' => 'CatalogController@product']
+        );
+
+        Route::get(
+            '/catalog/search', 
+            ['as' => 'admin.get.products', 'uses' => 'CatalogController@adminSearch']
+        );
+        Route::post(
+            '/catalog/search', 
+            ['as' => 'admin.get.products', 'uses' => 'CatalogController@adminSearch']
         );
 
         Route::get(
