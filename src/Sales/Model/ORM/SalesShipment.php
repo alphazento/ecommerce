@@ -10,6 +10,7 @@ class SalesShipment extends \Illuminate\Database\Eloquent\Model
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
+    protected $fillable = ['order_id'];
     public static function getPreloadRelations() {
         return [
             'billing_address',

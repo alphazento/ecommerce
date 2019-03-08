@@ -39,7 +39,8 @@ class SalesService
       'base_to_order_currency_rate' => "1.3"
     ]);
 
-    $billing_address = new SalesAddress($cart->billing_address->getAttributes());
+    $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
+    $billing_address = new SalesAddress($cartBillingAddress->getAttributes());
     $billing_address->id = null;
     $billing_address->save();
 
@@ -51,22 +52,22 @@ class SalesService
       $shipping_address->save();
     }
 
-    $shipment = SalesShipment::create([
-      'order_id' => $order->id,
-      'customer_id' => $cart->customer_id,
-      'shipment_status' => 0,
-      'shipping_address_id' => $shipping_address->id,
-      'billing_address_id' => $billing_address->id,
-      'shipping_method' => 0,
-      'shipping_carrier' => 0,
-      'shipment_instruction' => 0,
-      'total_weight' => 0,
-      'total_qty' => $cart->items_quantity,
-    ]);
+    // $shipment = SalesShipment::create([
+    //   'order_id' => $order->id,
+    //   'customer_id' => $cart->customer_id,
+    //   'shipment_status' => 0,
+    //   'shipping_address_id' => $shipping_address->id,
+    //   'billing_address_id' => $billing_address->id,
+    //   'shipping_method' => 0,
+    //   'shipping_carrier' => 0,
+    //   'shipment_instruction' => 0,
+    //   'total_weight' => 0,
+    //   'total_qty' => $cart->items_quantity,
+    // ]);
 
-    $shipment->save();
+    // $shipment->save();
 
-    $payment = SalesOrderPayment::create([
+    $payment = new SalesOrderPayment([
       'order_id' => $order->id,
       'comment' => '',
       'total_due' => 0,
@@ -75,8 +76,9 @@ class SalesService
       'amount_refunded' => 0,
       'amount_canceled' => 0,
     ]);
+    $payment->order_id = $order->id;
     $payment->save();
-    $payment->storePaymentItems($cart);
+    // $payment->storePaymentItems($cart);
 
     return $order;
   }
