@@ -42,13 +42,13 @@ class ConfigurationController extends Controller
 
         foreach($groups['data']??[] as $name => $group) {
             foreach($group['items'] ?? [] as $item) {
-                $cpath = $item['cpath'];
-                $values[$cpath] = config($cpath);
+                $accessor = $item['accessor'];
+                $values[$accessor] = config($accessor);
             }
             foreach($group['subgroups'] ?? [] as $subgroups) {
                 foreach($subgroups['items'] ?? [] as $item) {
-                    $cpath = $item['cpath'];
-                    $values[$cpath] = config($cpath);
+                    $accessor = $item['accessor'];
+                    $values[$accessor] = config($accessor);
                 }
             }
         }

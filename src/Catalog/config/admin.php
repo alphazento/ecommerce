@@ -14,12 +14,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'title' => 'Category Name',
                 'type' => 'Text',
-                'cpath' => 'name'
+                'accessor' => 'name'
             ];
             $items[] = [
                 'title' => 'Enable Category',
                 'type' => 'Switch',
-                'cpath' => 'is_active'
+                'accessor' => 'is_active'
             ];
 
             $itemsGroups = [];
@@ -33,7 +33,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'cpath' => $item->attribute_name
+                        'accessor' => $item->attribute_name
                     ];
                 } else {
                     $group = $item->admin_group;
@@ -43,7 +43,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'cpath' => $item->attribute_name
+                        'accessor' => $item->attribute_name
                     ];
                 }
             }
@@ -67,7 +67,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //         [
             //             'title' => 'Url Key',
             //             'type' => 'LongText',
-            //             'cpath' => 'url_key'
+            //             'accessor' => 'url_key'
             //         ]
             //     ]
             // ]);
@@ -77,12 +77,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'title' => 'Product Name',
                 'type' => 'Text',
-                'cpath' => 'name'
+                'accessor' => 'name'
             ];
             $items[] = [
                 'title' => 'Enable Product',
                 'type' => 'Switch',
-                'cpath' => 'is_active'
+                'accessor' => 'is_active'
             ];
 
             $itemsGroups = [];
@@ -96,7 +96,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'cpath' => $item->attribute_name
+                        'accessor' => $item->attribute_name
                     ];
                 } else {
                     $group = $item->admin_group;
@@ -106,7 +106,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'cpath' => $item->attribute_name
+                        'accessor' => $item->attribute_name
                     ];
                 }
             }

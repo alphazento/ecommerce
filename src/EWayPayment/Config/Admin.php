@@ -18,12 +18,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'title' => 'Enabled In Frontend',
                         'type' => 'Switch',
-                        'cpath' => 'paymentgateway.eway.frontend.enabled'
+                        'accessor' => 'paymentgateway.eway.frontend.enabled'
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
                         'type' => 'Switch',
-                        'cpath' => 'paymentgateway.eway.admin.enabled'
+                        'accessor' => 'paymentgateway.eway.admin.enabled'
                     ],
                     [
                         'title' => 'Mode',
@@ -32,27 +32,27 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
                         ],
-                        'cpath' => 'paymentgateway.eway.mode'
+                        'accessor' => 'paymentgateway.eway.mode'
                     ],
                     [
                         'title' => 'Sandbox ClientID',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.eway.sandbox.client_id'
+                        'accessor' => 'paymentgateway.eway.sandbox.client_id'
                     ],
                     [
                         'title' => 'Sandbox Secret',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.eway.sandbox.secret'
+                        'accessor' => 'paymentgateway.eway.sandbox.secret'
                     ],
                     [
                         'title' => 'Production ClientID',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.eway.production.client_id'
+                        'accessor' => 'paymentgateway.eway.production.client_id'
                     ],
                     [
                         'title' => 'Production Secret',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.eway.production.secret'
+                        'accessor' => 'paymentgateway.eway.production.secret'
                     ]
                 ]
             ]);

@@ -18,12 +18,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'title' => 'Enabled In Frontend',
                         'type' => 'Switch',
-                        'cpath' => 'paymentgateway.paypalexpress.frontend.enabled'
+                        'accessor' => 'paymentgateway.paypalexpress.frontend.enabled'
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
                         'type' => 'Switch',
-                        'cpath' => 'paymentgateway.paypalexpress.admin.enabled'
+                        'accessor' => 'paymentgateway.paypalexpress.admin.enabled'
                     ],
                     [
                         'title' => 'Mode',
@@ -32,7 +32,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
                         ],
-                        'cpath' => 'paymentgateway.paypalexpress.mode'
+                        'accessor' => 'paymentgateway.paypalexpress.mode'
                     ]
                 ]
             ]);
@@ -42,17 +42,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'title' => 'Sandbox ClientID',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.sandbox.client_id'
+                        'accessor' => 'paymentgateway.paypalexpress.sandbox.client_id'
                     ],
                     [
                         'title' => 'Sandbox Secret',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.sandbox.secret'
+                        'accessor' => 'paymentgateway.paypalexpress.sandbox.secret'
                     ],
                     [
                         'title' => 'Sandbox OAuth2 Token Entry',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.sandbox.oauth2_token_url'
+                        'accessor' => 'paymentgateway.paypalexpress.sandbox.oauth2_token_url'
                     ]
                 ]
             ]);
@@ -62,17 +62,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'title' => 'Production ClientID',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.production.client_id'
+                        'accessor' => 'paymentgateway.paypalexpress.production.client_id'
                     ],
                     [
                         'title' => 'Production Secret',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.production.secret'
+                        'accessor' => 'paymentgateway.paypalexpress.production.secret'
                     ],
                     [
                         'title' => 'Production OAuth2 Token Entry',
                         'type' => 'LongText',
-                        'cpath' => 'paymentgateway.paypalexpress.production.oauth2_token_url'
+                        'accessor' => 'paymentgateway.paypalexpress.production.oauth2_token_url'
                     ],
                 ]
             ]);

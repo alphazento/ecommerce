@@ -3,6 +3,7 @@
 namespace Zento\Backend\Config;
 
 use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends AbstractAdminConfig {
     public function registerMenus() {
@@ -24,12 +25,12 @@ class Admin extends AbstractAdminConfig {
                     [
                         'title' => 'Enabled',
                         'type' => 'Switch',
-                        'cpath' => 'admin.ip_restrict.eanbled'
+                        'accessor' => 'admin.ip_restrict.eanbled'
                     ],
                     [
                         'title' => 'Admin URL',
                         'type' => 'Text',
-                        'cpath' => 'admin.admin_url'
+                        'accessor' => 'admin.admin_url'
                     ],
                 ]
             ]);
@@ -42,12 +43,12 @@ class Admin extends AbstractAdminConfig {
                     [
                         'title' => 'Base URL',
                         'type' => 'Text',
-                        'cpath' => 'website.web.base_url'
+                        'accessor' => 'website.web.base_url'
                     ],
                     [
                         'title' => 'Test Item',
                         'type' => 'Switch',
-                        'cpath' => 'website.web.test.eanbled'
+                        'accessor' => 'website.web.test.eanbled'
                     ],
                 ]
             ]);
@@ -58,8 +59,121 @@ class Admin extends AbstractAdminConfig {
                     [
                         'title' => 'Enabled',
                         'type' => 'Switch',
-                        'cpath' => 'website.web.url_rewrite.eanbled'
+                        'accessor' => 'website.web.url_rewrite.eanbled'
                     ]
+                ]
+            ]);
+        };
+
+        $groups['tables/dynamicattributes'] = function($groupTag) {
+            AdminService::registerGroup($groupTag, 'table',  [
+                'title' => 'Table Definition',
+                'items' => [
+                    [
+                        'title' => 'Name',
+                        'type' => 'Text',
+                        'accessor' => 'attribute_name'
+                    ],
+                    [
+                        'title' => 'Type',
+                        'type' => 'SelectBox',
+                        'accessor' => 'attribute_type',
+                        'editable' => true,
+                        'options' => [
+                            [
+                                'value' => 'integer',
+                                'label' => 'Int'
+                            ],
+                            [
+                                'value' => 'varchar',
+                                'label' => 'varchar'
+                            ],
+                        ]
+                    ],
+                    [
+                        'title' => 'Front Label',
+                        'type' => 'Text',
+                        'accessor' => 'label',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Admin Label',
+                        'type' => 'Text',
+                        'accessor' => 'admin_label',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Admin Group',
+                        'type' => 'Text',
+                        'accessor' => 'admin_group',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Admin Component',
+                        'type' => 'SelectBox',
+                        'accessor' => 'admin_component',
+                        'editable' => true,
+                        'options' => [
+                            [
+                                'value' => 'Text',
+                                'label' => 'Text'
+                            ],
+                            [
+                                'value' => 'LongText',
+                                'label' => 'LongText'
+                            ],
+                            [
+                                'value' => 'SelectBox',
+                                'label' => 'SelectBox'
+                            ],
+                            [
+                                'value' => 'Switch',
+                                'label' => 'Switch'
+                            ],
+                        ]
+                    ],
+                    [
+                        'title' => 'Default Value',
+                        'type' => 'Text',
+                        'accessor' => 'default_value',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Enabled',
+                        'type' => 'Switch',
+                        'accessor' => 'enabled',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Single',
+                        'accessor' => 'single',
+                        'type' => 'Switch',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Swatch',
+                        'accessor' => 'swatch_type',
+                        'type' => 'Switch',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Value Map',
+                        'accessor' => 'with_value_map',
+                        'type' => 'Switch',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Is Search Layer',
+                        'accessor' => 'is_search_layer',
+                        'type' => 'Switch',
+                        'editable' => true
+                    ],
+                    [
+                        'title' => 'Search Layer Sort',
+                        'accessor' => 'search_layer_sort',
+                        'type' => 'Text',
+                        'editable' => true
+                    ],
                 ]
             ]);
         };
