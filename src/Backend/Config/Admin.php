@@ -130,6 +130,10 @@ class Admin extends AbstractAdminConfig {
                                 'value' => 'Switch',
                                 'label' => 'Switch'
                             ],
+                            [
+                                'value' => 'Image',
+                                'label' => 'Image'
+                            ],
                         ]
                     ],
                     [
