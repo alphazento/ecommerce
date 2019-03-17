@@ -127,6 +127,10 @@ class Admin extends AbstractAdminConfig {
                                 'label' => 'SelectBox'
                             ],
                             [
+                                'value' => 'MultiSelectBox',
+                                'label' => 'MultiSelectBox'
+                            ],
+                            [
                                 'value' => 'Switch',
                                 'label' => 'Switch'
                             ],

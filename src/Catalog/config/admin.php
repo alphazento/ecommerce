@@ -24,7 +24,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             $itemsGroups = [];
 
-            $dynAttrs = DynamicAttribute::where('parent_table', 'categories')
+            $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'categories')
                 ->where('enabled', 1)
                 ->get();
 
@@ -33,7 +33,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'accessor' => $item->attribute_name
+                        'accessor' => $item->attribute_name,
+                        'options'  => $this->mapOptions($item->options)
                     ];
                 } else {
                     $group = $item->admin_group;
@@ -43,7 +44,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'accessor' => $item->attribute_name
+                        'accessor' => $item->attribute_name,
+                        'options'  => $this->mapOptions($item->options)
                     ];
                 }
             }
@@ -87,7 +89,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             $itemsGroups = [];
 
-            $dynAttrs = DynamicAttribute::where('parent_table', 'products')
+            $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
                 ->where('enabled', 1)
                 ->get();
 
@@ -96,7 +98,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'accessor' => $item->attribute_name
+                        'accessor' => $item->attribute_name,
+                        'options'  => $this->mapOptions($item->options)
                     ];
                 } else {
                     $group = $item->admin_group;
@@ -106,7 +109,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                        'accessor' => $item->attribute_name
+                        'accessor' => $item->attribute_name,
+                        'options'  => $this->mapOptions($item->options)
                     ];
                 }
             }
@@ -125,5 +129,13 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     ]);
             }
         };
+    }
+
+    protected function mapOptions($optionCollection) {
+        $options = [];
+        foreach($optionCollection ?? [] as $item) {
+            $options[] = ['label' => $item['value'], 'value' => ('' . $item['id'])];
+        }
+        return $options;
     }
 }

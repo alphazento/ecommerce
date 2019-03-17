@@ -13,6 +13,7 @@ use View;
 use App\Http\Controllers\Controller;
 use Zento\Catalog\Model\DB\CartridgeSeries;
 use Zento\Catalog\Model\Search\LegacySearch as Adapter;
+use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
 use Zento\Catalog\Model\DB\CartridgeSeries\Description;
@@ -122,6 +123,7 @@ class CatalogController extends Controller
     }
 
     public function adminSearch() {
+        DanamicAttributeFactory::withoutMappedValue(false);
         return $this->_search('admin', false);
     }
 

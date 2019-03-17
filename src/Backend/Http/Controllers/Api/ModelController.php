@@ -27,7 +27,8 @@ class ModelController extends Controller
             foreach($attrs as $key => $name) {
                 $model->{$key} = $name;
             }
-            $model->save();
+            $model->exists = true;
+            $model->push();
             return ['status'=>200, 'data' => $attrs];
         }
         return ['status'=>404, 'data' => 'Not found'];
