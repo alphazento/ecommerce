@@ -77,7 +77,7 @@ class CatalogService
         $table = (new CategoryProduct)->getTable();
         if (!isset($this->joined_tables[$table])) {
             $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
+            $builder->leftJoin($table, $product_table . '.id', '=', $table . '.product_id');
             $this->joined_tables[$table] = true;
         }
         $builder->orderBy($table . '.position', $direction);
@@ -173,11 +173,11 @@ class CatalogService
         
         $statusCode = 200;
         $items = $builder->paginate($per_page);
-
         if ($items->lastPage() < $page && $items->total() > 0) {
             $statusCode = 301;
             $items = $builder->paginate($per_page, ['*'], 'page', $items->lastPage());
         }
+
         // $items = $items->toArray();
         if ($withAggregate) {
             // if ($items['total'] > $items['per_page']) {
@@ -188,7 +188,6 @@ class CatalogService
         } else {
             $aggregate = [];
         }
-
         if ($items->total() == 0) {
             $statusCode = 404;
         }
@@ -227,9 +226,22 @@ class CatalogService
                     $this->{$callback}($builder, $filter);
                 }
             } else {
-                if (count($filter) > 0 && in_array($name, $dynAttrs)) {
+                $values = $filter;
+                if (!is_array($filter)) {
+                    $values = [$filter];
+                }
+                // if (count($values) > 0 && in_array($name, $dynAttrs)) {
+                if (count($values) > 0 ) {
                     //filter column or dynamic column
-                    $builder->whereIn($name, $filter);
+                    if (in_array($name, $dynAttrs)) {
+                        $builder->whereIn($name, $values);
+                    } else {
+                        if (is_array($filter)) {
+                            $builder->whereIn($name, $values);
+                        } else {
+                            $builder->where($name, 'like', $filter);
+                        }
+                    }
                 }
             }
         }
@@ -388,7 +400,14 @@ class CatalogService
                 $this->{$callback}($builder, $order_by_field, $dir);
             }
         } else {
-            $this->applyOrderByEavField($builder, $order_by_field, $dir);
+            $dynAttrs = DanamicAttributeFactory::getAttributeDesc('products');
+            foreach($dynAttrs as $attr) {
+                if ($attr->attribute_name === $order_by_field) {
+                    $this->applyOrderByEavField($builder, $order_by_field, $dir);
+                    return;
+                }
+            }
+            $builder->orderBy($order_by_field, $dir);
         }
     }
 }
