@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Catalog\Http\Controllers;
+namespace Zento\BaseTheme\Http\Controllers;
 
 use CategoryService;
 use Product;

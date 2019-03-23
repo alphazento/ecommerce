@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\ShoppingCart\Http\Controllers;
+namespace Zento\BaseTheme\Http\Controllers;
 
 
 use Route;
