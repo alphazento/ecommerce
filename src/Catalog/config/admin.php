@@ -89,6 +89,16 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             $itemsGroups = [];
 
+            $relationFields = \Zento\Catalog\Model\ORM\Product::getPreloadRelations();
+            foreach($relationFields ?? [] as $fields) {
+                $items[] = [
+                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
+                    'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                    'accessor' => $item->attribute_name,
+                    'options'  => $this->mapOptions($item->options)
+                ];
+            }
+
             $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
                 ->where('enabled', 1)
                 ->get();

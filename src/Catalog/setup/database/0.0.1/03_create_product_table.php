@@ -20,7 +20,6 @@ class CreateProductTable extends Migration
             $table->boolean('required_options');
             $table->boolean('active');
             $table->string('sku', 255);
-            // $table->string('name', 255);
             $table->timestamps();
         });
     }
