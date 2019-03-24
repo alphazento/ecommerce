@@ -35,7 +35,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     public static function getPreloadRelations() {
         return [
             'product_description' => [
-                'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
+                'name', 'description', 'meta_title', 'meta_description', 'meta_keyword'
             ],
             'product_price' => [
                 'rrp', 'cost', 'price',

@@ -77,7 +77,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
         $groups['catalog/product'] = function($groupTag) {
             $items[] = [
-                'title' => 'Product Name',
+                'title' => 'Name',
                 'type' => 'Text',
                 'accessor' => 'name'
             ];
@@ -87,17 +87,66 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'is_active'
             ];
 
-            $itemsGroups = [];
+            $items[] = [
+                'title' => 'Description',
+                'type' => 'Text',
+                'accessor' => 'description',
+            ];
+            $items[] = [
+                'title' => 'Meta Description',
+                'type' => 'Text',
+                'accessor' => 'meta_description',
+            ];
 
-            $relationFields = \Zento\Catalog\Model\ORM\Product::getPreloadRelations();
-            foreach($relationFields ?? [] as $fields) {
-                $items[] = [
-                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                    'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
-                    'accessor' => $item->attribute_name,
-                    'options'  => $this->mapOptions($item->options)
-                ];
-            }
+            $items[] = [
+                'title' => 'Meta Title',
+                'type' => 'Text',
+                'accessor' => 'meta_description',
+            ];
+
+            $items[] = [
+                'title' => 'Meta Keyword',
+                'type' => 'Text',
+                'accessor' => 'meta_keyword',
+            ];
+
+            $items[] = [
+                'title' => 'Price',
+                'type' => 'Text',
+                'accessor' => 'price',
+            ];
+
+            $items[] = [
+                'title' => 'RRP',
+                'type' => 'Text',
+                'accessor' => 'rrp',
+            ];
+
+            $items[] = [
+                'title' => 'Cost',
+                'type' => 'Text',
+                'accessor' => 'cost',
+            ];
+
+            $items[] = [
+                'title' => 'Special Price',
+                'type' => 'Text',
+                'accessor' => 'special_price',
+            ];
+
+            $items[] = [
+                'title' => 'Special From',
+                'type' => 'Text',
+                'accessor' => 'special_from',
+            ];
+
+            $items[] = [
+                'title' => 'Special To',
+                'type' => 'Text',
+                'accessor' => 'special_to',
+            ];
+
+            $itemsGroups = [];
 
             $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
                 ->where('enabled', 1)
