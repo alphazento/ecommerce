@@ -88,8 +88,20 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ];
 
             $items[] = [
+                'title' => 'Visibility',
+                'type' => 'SelectBox',
+                'accessor' => 'visibility',
+                'options' => [
+                    ['label' => 'Not Visible Individually', 'value' => 1],
+                    ['label' => 'Catalog', 'value' => 2],
+                    ['label' => 'Search', 'value' => 3],
+                    ['label' => 'Catalog, Search', 'value' => 4],
+                ]
+            ];
+
+            $items[] = [
                 'title' => 'Description',
-                'type' => 'Text',
+                'type' => 'LongText',
                 'accessor' => 'description',
             ];
             $items[] = [
@@ -153,6 +165,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 ->get();
 
             foreach($dynAttrs as $item) {
+                if ('visibility' == $item->attribute_name) {
+                    continue;
+                }
                 if (empty($item->admin_group)) {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
@@ -178,6 +193,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'title' => 'Product Settings',
                 'items' => $items
             ]);
+
             foreach($itemsGroups as $group => $items) {
                 AdminService::registerSubgroupToGroup($groupTag, 
                     'product', 
