@@ -104,23 +104,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'type' => 'LongText',
                 'accessor' => 'description',
             ];
-            $items[] = [
-                'title' => 'Meta Description',
-                'type' => 'Text',
-                'accessor' => 'meta_description',
-            ];
-
-            $items[] = [
-                'title' => 'Meta Title',
-                'type' => 'Text',
-                'accessor' => 'meta_description',
-            ];
-
-            $items[] = [
-                'title' => 'Meta Keyword',
-                'type' => 'Text',
-                'accessor' => 'meta_keyword',
-            ];
+            
 
             $items[] = [
                 'title' => 'Price',
@@ -159,6 +143,25 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ];
 
             $itemsGroups = [];
+
+            $itemsGroups['Search Engine Optimization'] = [];
+            $itemsGroups['Search Engine Optimization'][] = [
+                'title' => 'Meta Description',
+                'type' => 'Text',
+                'accessor' => 'meta_description',
+            ];
+
+            $itemsGroups['Search Engine Optimization'][] = [
+                'title' => 'Meta Title',
+                'type' => 'Text',
+                'accessor' => 'meta_description',
+            ];
+
+            $itemsGroups['Search Engine Optimization'][] = [
+                'title' => 'Meta Keyword',
+                'type' => 'Text',
+                'accessor' => 'meta_keyword',
+            ];
 
             $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
                 ->where('enabled', 1)
