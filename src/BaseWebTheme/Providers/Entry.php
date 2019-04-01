@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\BaseTheme\Providers;
+namespace Zento\BaseWebTheme\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

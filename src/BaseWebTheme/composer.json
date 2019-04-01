@@ -1,5 +1,5 @@
 {
-    "name": "alphazento/basetheme",
+    "name": "alphazento/basewebtheme",
     "description": "Zento ecommerce web base theme package",
     "keywords": ["laravel", "zento", "passport"],
     "license": "MIT",
@@ -26,11 +26,11 @@
             "providers": [],
             "aliases": {},
             "zento": {
-                "Zento_BaseTheme": {
+                "Zento_BaseWebTheme": {
                     "version": "0.0.1",
                     "commands": [],
                     "providers": [
-                        "\\Zento\\BaseTheme\\Providers\\Entry"
+                        "\\Zento\\BaseWebTheme\\Providers\\Entry"
                     ],
                     "middlewares": {},
                     "middlewaregroup": {

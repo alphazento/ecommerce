@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\ReactJsBridge\Http\Controllers;
+namespace Zento\ReactAppAdapter\Http\Controllers;
 
 use Route;
 use Request;

@@ -1,6 +1,6 @@
 {
-    "name": "alphazento/reactjsbridge",
-    "description": "Zento ecommerce a reactjs client bridge package",
+    "name": "alphazento/reactappadapter",
+    "description": "Zento ecommerce a reactjs app adapter package",
     "keywords": [
         "laravel",
         "zento",
@@ -32,16 +32,17 @@
             "providers": [],
             "aliases": {},
             "zento": {
-                "Zento_ReactJsBridge": {
+                "Zento_ReactAppAdapter": {
                     "version": "0.0.1",
                     "commands": [],
                     "providers": [
-                        "\\Zento\\ReactJsBridge\\Providers\\Entry"
+                        "\\Zento\\ReactAppAdapter\\Providers\\Entry"
                     ],
                     "depends":[
                         "Zento_RouteAndRewriter",
                         "Zento_Catalog"
-                    ]
+                    ],
+                    "theme": true
                 }
             }
         }

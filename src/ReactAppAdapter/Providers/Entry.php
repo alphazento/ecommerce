@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\ReactJsBridge\Providers;
+namespace Zento\ReactAppAdapter\Providers;
 
 use Zento\RouteAndRewriter\Facades\RouteAndRewriterService;
 

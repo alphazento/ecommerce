@@ -2,12 +2,12 @@
 Route::group(
     [
         'prefix' => '/rest/v1',
-        'namespace' => '\Zento\ReactJsBridge\Http\Controllers',
+        'namespace' => '\Zento\ReactAppAdapter\Http\Controllers',
         'middleware' => ['cors']
     ], function () {
         Route::get(
-            '/reactjs/configs', 
-            ['as' => 'reactjs.configs', 'uses' => 'ApiController@configs']
+            '/configs/reactapp', 
+            ['as' => 'configs.reactapp', 'uses' => 'ApiController@configs']
         );
         Route::get(
             '/urlrewrite',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\BaseTheme\Http\Controllers;
+namespace Zento\BaseWebTheme\Http\Controllers;
 
 
 use Route;
@@ -13,8 +13,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckoutController extends \App\Http\Controllers\Controller
 {
-
-    public function index() {
-        return (new \Zento\CMS\Services\LayoutService)->render('checkout', 'page.checkout',  ['cart'=> ShoppingCartService::myCart()]);
-    }
 }
