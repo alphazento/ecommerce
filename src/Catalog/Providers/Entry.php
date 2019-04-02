@@ -32,9 +32,6 @@ class Entry extends ServiceProvider
         PackageManager::class_alias('\Zento\Catalog\Providers\Facades\CategoryService', 'CategoryService');
         PackageManager::class_alias('\Zento\Catalog\Providers\Facades\ProductService', 'ProductService');
 
-        if (!$this->app->runningInConsole()) {
-            // ThemeManager::prependUserThemeLocation(PackageManager::packageViewsPath('Zento_MainTheme'));
-        }
         $this->app['catalog_service']->registerCriteriaFilter('visibility',
             function ($builder, $value) {
                 if (empty($value) || $value === 'storefront') {

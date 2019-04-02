@@ -1,5 +1,5 @@
 {
-    "name": "alphazento/reactappadapter",
+    "name": "alphazento/ReactApp",
     "description": "Zento ecommerce a reactjs app adapter package",
     "keywords": [
         "laravel",
@@ -32,11 +32,13 @@
             "providers": [],
             "aliases": {},
             "zento": {
-                "Zento_ReactAppAdapter": {
+                "Zento_ReactApp": {
                     "version": "0.0.1",
-                    "commands": [],
+                    "commands": [
+                        "\\Zento\\ReactApp\\Console\\Commands\\BuildApp"
+                    ],
                     "providers": [
-                        "\\Zento\\ReactAppAdapter\\Providers\\Entry"
+                        "\\Zento\\ReactApp\\Providers\\Entry"
                     ],
                     "depends":[
                         "Zento_RouteAndRewriter",

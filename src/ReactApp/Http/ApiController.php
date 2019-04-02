@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\ReactAppAdapter\Http\Controllers;
+namespace Zento\ReactApp\Http\Controllers;
 
 use Route;
 use Request;
@@ -51,13 +51,15 @@ class ApiController extends \App\Http\Controllers\Controller
         RouteAndRewriterService::setUriBuilder('product', function($id) {
             return sprintf('/product/%s', $id);
         });
-        
-        if ($rule = $this->recursiveFindRewriteRule($request->get('url'))) {
-            return [
-                'status'=>200, 
-                'data'=>$rule
-            ];
+        if ($url = $request->get('url')) {
+            if ($rule = $this->recursiveFindRewriteRule($url)) {
+                return [
+                    'status'=>200, 
+                    'data'=>$rule
+                ];
+            }
         }
+        
         return ['status'=>404, 'data'=>null];
     }
 
