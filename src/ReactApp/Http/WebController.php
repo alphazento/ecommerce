@@ -47,8 +47,19 @@ class WebController extends \App\Http\Controllers\Controller
         } else {
             $data['urlrw'] = '';
         }
+
+        // $pageconfigs = [];
+        // $request = Request::create('/rest/v1/pageconfigs', 'GET');
+        // app()->instance('request', $request);
+        // $resp = Route::dispatch($request);
+        // if ($resp instanceof JsonResponse) {
+        //     $pageconfigs = $resp->getOriginalContent();
+        // }
+        
+        $data = ['appconfigs' => $appConfigs['data'], 'categories' => $categories['data']];
+
         app()->instance('request', $originRequest);
-        return view('index', $data);
+        return view('index', ['configs' => $data]);
     }
 
     public function appServe1() {
