@@ -1,8 +1,8 @@
 <?php
 
-namespace Zento\Catalog\Providers\Facades;
+namespace Zento\CatalogSearch\Providers\Facades;
 
-class CatalogService extends \Illuminate\Support\Facades\Facade
+class CatalogSearchService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class CatalogService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'catalog_service';
+        return 'catalogsearch_service';
     }
 }

@@ -3,19 +3,8 @@ Route::group(
     [
         'prefix' => '/rest/v1',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
-        // 'middleware' => ['web']
-        // 'middleware' => ['cors', 'auth:api']
         'middleware' => ['cors']
     ], function () {
-        Route::post(
-            '/catalog/search', 
-            ['as' => 'catalog.search', 'uses' => 'CatalogController@search']
-        );
-        Route::get(
-            '/catalog/search', 
-            ['as' => 'catalog.search', 'uses' => 'CatalogController@search']
-        );
-
         Route::get(
             '/categories', 
             ['as' => 'get.categories', 'uses' => 'CatalogController@categories']
@@ -82,15 +71,6 @@ Route::group(
         Route::get(
             '/products/{id}', 
             ['as' => 'admin.get.product', 'uses' => 'CatalogController@product']
-        );
-
-        Route::get(
-            '/catalog/search', 
-            ['as' => 'admin.get.products', 'uses' => 'CatalogController@adminSearch']
-        );
-        Route::post(
-            '/catalog/search', 
-            ['as' => 'admin.get.products', 'uses' => 'CatalogController@adminSearch']
         );
 
         Route::get(

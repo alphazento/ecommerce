@@ -2,7 +2,6 @@
 
 namespace Zento\Catalog\Http\Controllers\Api;
 
-use CatalogService;
 use CategoryService;
 use ProductService;
 use Product;
@@ -93,58 +92,5 @@ class CatalogController extends Controller
             $collection[] = ['name' => $category->name, 'products' => $category->products()->limit(6)->get()];
         }
         return ['status'=>200, 'data'=> $collection];
-    }
-
-    public function shoppingCollectionSection() {
-        return ['status'=>200, 'data'=> 
-            [
-                [
-                    'name' => 'Spring 2018',
-                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-                ],
-                [
-                    'name' => 'Productivity',
-                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-                ],
-                [
-                    'name' => 'Live boost',
-                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-                ],
-                [
-                    'name' => 'Mobile',
-                    'image' => 'https://alphazento.local.test/images/catalog/product/o/t/ottoman.jpg'
-                ]
-            ]
-        ];
-    }
-
-    public function search() {
-        return $this->_search();
-    }
-
-    public function adminSearch() {
-        DanamicAttributeFactory::withoutMappedValue(false);
-        return $this->_search('admin', false);
-    }
-
-    protected function _search($visibility = 'storefront', $withAggreate = true) {
-        $params = Request::all();
-        $per_page = 15;
-        $page = 1;
-
-        if (isset($params['per_page'])) {
-            $per_page = $params['per_page'];
-            unset($params['per_page']);
-        }
-
-        if (isset($params['page'])) {
-            $page = $params['page'];
-            unset($params['page']);
-        }
-
-        if (!isset($params['visibility'])) {
-            $params['visibility'] = $visibility;
-        }
-        return CatalogService::search($params, $per_page, $page, $withAggreate);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Zento\Catalog\Model\ORM;
+namespace Zento\CatalogSearch\Model\ORM;
 
 use DB;
 
-class SearchableFulltext extends \Illuminate\Database\Eloquent\Model {
+class FulltextData extends \Illuminate\Database\Eloquent\Model {
     protected $primaryKey = 'product_id';
     public $timestamps = false;
 

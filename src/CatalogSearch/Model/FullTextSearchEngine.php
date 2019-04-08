@@ -1,8 +1,6 @@
 <?php
 
-namespace Zento\Catalog\Services;
-
-use Cache;
+namespace Zento\CatalogSearch\Model;
 
 use Zento\Catalog\Model\ORM\SearchableFulltext;
 
@@ -15,9 +13,6 @@ class FullTextSearchEngine {
             if(preg_match_all('/[a-zA-Z]+(\d+)\w+/', $match, $matches1) ) {
                 if (count($matches1[0]) > 1) {
                     $replaces[$match] = str_replace('-', ' ', $match);
-                } else {
-                    //KeywordHandler::getInstance()->addSuggestion();
-                    //$replaces[$match] = str_replace('-', ' ', $match);
                 }
             }
         }

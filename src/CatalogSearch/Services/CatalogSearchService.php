@@ -1,13 +1,12 @@
 <?php
 
-namespace Zento\Catalog\Services;
+namespace Zento\CatalogSearch\Services;
 
 use DB;
 use Store;
 use Cache;
 use ShareBucket;
 use Illuminate\Pagination\Paginator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\CategoryProduct;
@@ -15,7 +14,7 @@ use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Model\ORM\ProductDescription;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
-class CatalogService
+class CatalogSearchService
 {
     protected $joined_tables = [];
 
@@ -60,16 +59,6 @@ class CatalogService
         $this->sort_bys[$name] = $callback;
     }
 
-    // /**
-    //  * get product dyn columns which support order by
-    //  *
-    //  * @param [type] $field
-    //  * @return void
-    //  */
-    // public function getProductDynColOrderBys($field) {
-        
-    // }
- 
     protected function applyOrderByEavField($builder, $dyn_field, $direction) {
         $product_table = $builder->getModel()->getTable();
         if ($table = DanamicAttributeFactory::getTable($builder->getModel(), $dyn_field)) {
