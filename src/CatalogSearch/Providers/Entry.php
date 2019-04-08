@@ -18,7 +18,7 @@ class Entry extends ServiceProvider
         $this->app['catalogsearch_service']->registerCriteriaFilter('visibility',
             function ($builder, $value) {
                 if (empty($value) || $value === 'storefront') {
-                    $builder->where('visibility', '>', 1);
+                    $builder->where('visibility', '>', \Zento\Catalog\Model\ProductVisibility::NOT_VISIBLE_INDI);
                 } else {
                     if ($value !== 'admin') {
                         if (!is_array($value)) {

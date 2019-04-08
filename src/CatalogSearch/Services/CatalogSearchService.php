@@ -101,6 +101,11 @@ class CatalogSearchService
      */
     protected function filterCategory($builder, array $category_ids) {
         if (count($category_ids) > 0) {
+            $product_table = $builder->getModel()->getTable();
+            if (!isset($this->joined_tables[$this->categoryProductTable])) {
+                $this->joined_tables[$this->categoryProductTable] = true;
+                $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
+            }
             $builder->whereIn($this->categoryProductTable . '.category_id', $category_ids);
         }
     }
@@ -111,16 +116,6 @@ class CatalogSearchService
             $ids = $engine->search($text);
             $product_table = $builder->getModel()->getTable();
             $builder->whereIn($product_table . '.id', $ids);
-        }
-    }
-
-    protected function filterVisibility($builder, $visible) {
-        $table = (new \Zento\Catalog\Model\ProductVisibility)->getTable();
-        if (!isset($this->joined_tables[$table])) {
-            $this->joined_tables[$table] = true;
-            $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-            $builder->where($table . '.visibility', '>', $visible);
         }
     }
 
@@ -177,10 +172,10 @@ class CatalogSearchService
         $statusCode = 200;
         $items = $builder->paginate($per_page);
         if ($items->lastPage() < $page && $items->total() > 0) {
-            $statusCode = 301;
+            $statusCode = 302;
             $items = $builder->paginate($per_page, ['*'], 'page', $items->lastPage());
         }
-
+        
         // $items = $items->toArray();
         if ($withAggregate) {
             $aggregate = $this->aggregate($aggregateQuery);
@@ -197,7 +192,6 @@ class CatalogSearchService
         $model = new Product;
         $product_table = $model->getTable();
         $builder = $model->newQuery()->select([$product_table . '.*']);
-        $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
@@ -278,6 +272,10 @@ class CatalogSearchService
     protected function aggregateCategory($builder) {
         //category aggregate
         $query = clone $builder;
+        $product_table = $builder->getModel()->getTable();
+        if (!isset($this->joined_tables[$this->categoryProductTable])) {
+            $query->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
+        }
         $query->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
@@ -360,7 +358,7 @@ class CatalogSearchService
 
         $table = (new ProductPrice)->getTable();
         $product_table = $query->getModel()->getTable();
-        $query->join($table, $product_table . '.id', '=', $table . '.product_id');
+        $query->leftJoin($table, $product_table . '.id', '=', $table . '.product_id');
 
         $minQuery = clone $query;
         $min = $minQuery->orderBy('price')->first();
