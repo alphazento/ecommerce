@@ -34,7 +34,6 @@ class CatalogSearchService
         'category' => 'filterCategory',
         'price' => 'filterPrice',
         'text' =>'filterText',
-        'visibility' =>'filterVisibility',
     ];
  
     protected $sort_bys = [
@@ -225,9 +224,6 @@ class CatalogSearchService
                     call_user_func_array($callback, [$builder, $filter]);
                 } else {
                     $this->{$callback}($builder, $filter);
-                }
-                if ($name == "visibility") {
-                    echo $builder->toSql();die;
                 }
             } else {
                 $values = $filter;

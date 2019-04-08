@@ -105,46 +105,43 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'description',
             ];
             
-
-            $items[] = [
+            $itemsGroups = ['Price' => [], 'Search Engine Optimization'=>[]];
+            $itemsGroups['Price'][] = [
                 'title' => 'Price',
                 'type' => 'Text',
                 'accessor' => 'price',
             ];
 
-            $items[] = [
+            $itemsGroups['Price'][] = [
                 'title' => 'RRP',
                 'type' => 'Text',
                 'accessor' => 'rrp',
             ];
 
-            $items[] = [
+            $itemsGroups['Price'][] = [
                 'title' => 'Cost',
                 'type' => 'Text',
                 'accessor' => 'cost',
             ];
 
-            $items[] = [
+            $itemsGroups['Price'][] = [
                 'title' => 'Special Price',
                 'type' => 'Text',
                 'accessor' => 'special_price',
             ];
 
-            $items[] = [
+            $itemsGroups['Price'][] = [
                 'title' => 'Special From',
                 'type' => 'Text',
                 'accessor' => 'special_from',
             ];
 
-            $items[] = [
+            $itemsGroups['Price'][] = [
                 'title' => 'Special To',
                 'type' => 'Text',
                 'accessor' => 'special_to',
             ];
 
-            $itemsGroups = [];
-
-            $itemsGroups['Search Engine Optimization'] = [];
             $itemsGroups['Search Engine Optimization'][] = [
                 'title' => 'Meta Description',
                 'type' => 'Text',
