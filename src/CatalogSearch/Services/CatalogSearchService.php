@@ -34,6 +34,7 @@ class CatalogSearchService
         'category' => 'filterCategory',
         'price' => 'filterPrice',
         'text' =>'filterText',
+        'visibility' =>'filterVisibility',
     ];
  
     protected $sort_bys = [
@@ -106,8 +107,21 @@ class CatalogSearchService
     }
 
     protected function filterText($builder, $text) {
-        if (empty($text)) {
+        if (!empty($text)) {
+            $engine = new \Zento\CatalogSearch\Model\FullTextSearchEngine();
+            $ids = $engine->search($text);
+            $product_table = $builder->getModel()->getTable();
+            $builder->whereIn($product_table . '.id', $ids);
+        }
+    }
 
+    protected function filterVisibility($builder, $visible) {
+        $table = (new \Zento\Catalog\Model\ProductVisibility)->getTable();
+        if (!isset($this->joined_tables[$table])) {
+            $this->joined_tables[$table] = true;
+            $product_table = $builder->getModel()->getTable();
+            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
+            $builder->where($table . '.visibility', '>', $visible);
         }
     }
 
@@ -212,6 +226,9 @@ class CatalogSearchService
                 } else {
                     $this->{$callback}($builder, $filter);
                 }
+                if ($name == "visibility") {
+                    echo $builder->toSql();die;
+                }
             } else {
                 $values = $filter;
                 if (!is_array($filter)) {
@@ -238,7 +255,6 @@ class CatalogSearchService
         if ($priceFilter) {
             $this->filterPrice($builder, $priceFilter);
         }
-        // echo $builder->toSql();die;
 
         return [$builder, $aggregateQuery];
     }
@@ -298,12 +314,6 @@ class CatalogSearchService
      * brand, price, category, country, new selection ... 
      */
     protected function aggregateDynamicAttributes($builder, &$aggregation) {
-        // $collection = DynamicAttribute::with(['options'])
-        //     ->where('parent_table', 'products')
-        //     ->where('enabled', 1)
-        //     ->where('is_search_layer', 1)
-        //     ->orderBy('search_layer_sort')
-        //     ->get();
         $aggraegatableDAs = $this->getSearchLayerDynAttributes();
 
         $product_table = $builder->getModel()->getTable();

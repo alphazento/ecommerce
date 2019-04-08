@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFulltextDataTable extends Migration
+class CreateFulltextIndexTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateFulltextDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('fulltext_data', function (Blueprint $table) {
+        Schema::create('fulltext_indices', function (Blueprint $table) {
             $table->integer('product_id')->index();
             $table->string('field_name', '64');
             $table->longtext('data_index');
@@ -27,6 +27,6 @@ class CreateFulltextDataTable extends Migration
      */
     public function down()
     {
-        Schema::drop('fulltext_data');
+        Schema::drop('fulltext_indices');
     }
 }

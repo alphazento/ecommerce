@@ -2,7 +2,7 @@
 
 namespace Zento\CatalogSearch\Model;
 
-use Zento\Catalog\Model\ORM\SearchableFulltext;
+use Zento\CatalogSearch\Model\ORM\FulltextIndex;
 
 class FullTextSearchEngine {
   private function handleHyphenWord($queryValue) {
@@ -26,7 +26,7 @@ class FullTextSearchEngine {
 
   public function search($query_text) {
       $ft_min_word_len = 2;
-      $keywords = str_replace('-', '', $this->handleHyphenWord($query_text));
-      return (new SearchableFulltext())->search($keyword);
+      $query_text = str_replace('-', '', $this->handleHyphenWord($query_text));
+      return (new FulltextIndex())->search($query_text);
   }
 }
