@@ -34,7 +34,7 @@ class CatalogService
     protected $criteria_filters = [
         'category' => 'filterCategory',
         'price' => 'filterPrice',
-        'text' =>'',
+        'text' =>'filterText',
     ];
  
     protected $sort_bys = [
@@ -42,6 +42,11 @@ class CatalogService
         'price' => 'orderByPrice',
         'name' => 'orderByName',
     ];
+
+    protected $categoryProductTable;
+    public function __construct() {
+        $this->categoryProductTable = (new CategoryProduct)->getTable();
+    }
 
     public function registerCriteriaFilter($name, $callback) {
         $this->criteria_filters[$name] = $callback;
@@ -74,13 +79,7 @@ class CatalogService
     }
 
     protected function orderByPosition($builder, $field, $direction = 'asc') {
-        $table = (new CategoryProduct)->getTable();
-        if (!isset($this->joined_tables[$table])) {
-            $product_table = $builder->getModel()->getTable();
-            $builder->leftJoin($table, $product_table . '.id', '=', $table . '.product_id');
-            $this->joined_tables[$table] = true;
-        }
-        $builder->orderBy($table . '.position', $direction);
+        $builder->orderBy($this->categoryProductTable . '.position', $direction);
     }
 
     protected function orderByPrice($builder, $field, $direction = 'asc') {
@@ -113,11 +112,13 @@ class CatalogService
      */
     protected function filterCategory($builder, array $category_ids) {
         if (count($category_ids) > 0) {
-            $table = (new CategoryProduct)->getTable();
-            $this->joined_tables[$table] = true;
-            $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id')
-                ->whereIn($table . '.category_id', $category_ids);
+            $builder->whereIn($this->categoryProductTable . '.category_id', $category_ids);
+        }
+    }
+
+    protected function filterText($builder, $text) {
+        if (empty($text)) {
+
         }
     }
 
@@ -180,11 +181,7 @@ class CatalogService
 
         // $items = $items->toArray();
         if ($withAggregate) {
-            // if ($items['total'] > $items['per_page']) {
-                $aggregate = $this->aggregate($aggregateQuery);
-            // } else {
-            //     $aggregate = [];
-            // }
+            $aggregate = $this->aggregate($aggregateQuery);
         } else {
             $aggregate = [];
         }
@@ -196,8 +193,9 @@ class CatalogService
 
     protected function applyFilter($criteria, $withAggregate = true) {
         $model = new Product;
-        $builder = $model->newQuery()->select([$model->getTable() . '.*']);
-
+        $product_table = $model->getTable();
+        $builder = $model->newQuery()->select([$product_table . '.*']);
+        $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
@@ -279,13 +277,8 @@ class CatalogService
     protected function aggregateCategory($builder) {
         //category aggregate
         $query = clone $builder;
-        $table = (new CategoryProduct)->getTable();
-        if (!isset($this->joined_tables[$table])) {
-            $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-        }
-        $query->select([$table . '.category_id', DB::raw('count(*) as amount')]);
-        $agg = $query->groupBy($table . '.category_id')->get();
+        $query->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
+        $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
         return $agg->map(function ($item) {
             return ['id' => $item['category_id'], 'amount' => $item['amount']];
