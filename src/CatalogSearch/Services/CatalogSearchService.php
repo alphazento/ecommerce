@@ -12,6 +12,8 @@ use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Model\ORM\ProductDescription;
+use Zento\Catalog\Providers\Facades\CategoryService;
+
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class CatalogSearchService
@@ -106,7 +108,8 @@ class CatalogSearchService
                 $this->joined_tables[$this->categoryProductTable] = true;
                 $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
             }
-            $builder->whereIn($this->categoryProductTable . '.category_id', $category_ids);
+            $ids = CategoryService::getCategoryIdsWithChildrenByIds($category_ids);
+            $builder->whereIn($this->categoryProductTable . '.category_id', $ids);
         }
     }
 

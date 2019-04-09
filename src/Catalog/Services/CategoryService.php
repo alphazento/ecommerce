@@ -32,9 +32,29 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
             ->first();
     }
 
-    public function getCategoryByIds($identifiers)
+    public function getCategoryByIds(array $identifiers)
     {
         return Category::whereIn('id', $identifiers)->get();
+    }
+
+    public function getCategoryIdsWithChildrenByIds(array $identifiers, $activeOnly = true) {
+        $builder = Category::whereIn('id', $identifiers);
+        if ($activeOnly) {
+            $builder->active($activeOnly);
+        }
+        $categories = $builder->get();
+        $ids = [];
+        foreach($categories ?? [] as $category) {
+            $this->getCategoryIdsInCategory($category, $ids);
+        }
+        return $ids;
+    }
+
+    protected function getCategoryIdsInCategory(Category $category, array &$ids) {
+        $ids[] = $category->id;
+        foreach($category->children ?? [] as $item) {
+            $this->getCategoryIdsInCategory($item, $ids);
+        } 
     }
 
     /**
