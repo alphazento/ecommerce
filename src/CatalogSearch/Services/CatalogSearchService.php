@@ -181,7 +181,7 @@ class CatalogSearchService
         
         // $items = $items->toArray();
         if ($withAggregate) {
-            $aggregate = $this->aggregate($aggregateQuery);
+            $aggregate = $this->aggregate($aggregateQuery, $criteria);
         } else {
             $aggregate = [];
         }
@@ -252,17 +252,17 @@ class CatalogSearchService
         return [$builder, $aggregateQuery];
     }
 
-    protected function aggregate($builder) {
+    protected function aggregate($builder, &$criteria) {
         $aggregation = [
             'price' => [
                 'is_dynattr' => false,
                 'label' => 'Price',
-                'items' => $this->aggregatePrice($builder), 
+                'items' => $this->aggregatePrice($builder, $criteria), 
             ],
             'category' => [
                 'is_dynattr' => false,
                 'label' => 'Category',
-                'items' => $this->aggregateCategory($builder)
+                'items' => $this->aggregateCategory($builder, $criteria)
             ]
         ];
         $this->aggregateDynamicAttributes($builder, $aggregation);
@@ -272,7 +272,7 @@ class CatalogSearchService
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregateCategory($builder) {
+    protected function aggregateCategory($builder, &$criteria) {
         //category aggregate
         $query = clone $builder;
         $product_table = $builder->getModel()->getTable();
@@ -282,9 +282,17 @@ class CatalogSearchService
         $query->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
-        return $agg->map(function ($item) {
+        $ret = $agg->map(function ($item) {
             return ['id' => $item['category_id'], 'amount' => $item['amount']];
-          });
+          }
+        );
+        // $criteriaCategory = isset($criteria['category']) ? $criteria['category']:[];
+        // if (count($criteriaCategory) >0) {
+        //     $ret = $ret->filter(function($item) use(&$criteriaCategory){
+        //         return !in_array($item['id'], $criteriaCategory);
+        //     });
+        // }
+        return $ret;
     }
 
     protected function getSearchLayerDynAttributes() {
@@ -355,7 +363,7 @@ class CatalogSearchService
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregatePrice($builder) {
+    protected function aggregatePrice($builder, &$criteria) {
         //category aggregate
         $query = clone $builder;
 

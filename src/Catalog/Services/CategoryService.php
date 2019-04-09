@@ -37,6 +37,26 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
         return Category::whereIn('id', $identifiers)->get();
     }
 
+    /**
+     * give category ids, build their category tree relationship
+     */
+    public function buildCategoryTreeByIds(array $identifiers, $activeOnly = true) {
+        $builder = Category::whereIn('id', $identifiers);
+        if ($activeOnly) {
+            $builder->active($activeOnly);
+        }
+        $categories = $builder->get()->keyBy('id');
+        foreach($categories ?? [] as $key => $category) {
+        }
+    }
+
+    /**
+     * give category ids, return all category ids including their children
+     *
+     * @param array $identifiers
+     * @param boolean $activeOnly
+     * @return array
+     */
     public function getCategoryIdsWithChildrenByIds(array $identifiers, $activeOnly = true) {
         $builder = Category::whereIn('id', $identifiers);
         if ($activeOnly) {
