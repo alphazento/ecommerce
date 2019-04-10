@@ -41,7 +41,7 @@ class WebController extends \App\Http\Controllers\Controller
             app()->instance('request', $request);
             $resp = Route::dispatch($request);
             $respData = $resp->getOriginalContent();
-            $respData['data'] = $respData['data']->toArray();
+            $respData['data'] = $respData['data'] ? $respData['data']->toArray() : null;
 
             $data['urlrw'] = [$url => $respData];
         } else {
@@ -55,7 +55,7 @@ class WebController extends \App\Http\Controllers\Controller
         // if ($resp instanceof JsonResponse) {
         //     $pageconfigs = $resp->getOriginalContent();
         // }
-        
+
         $data = ['appconfigs' => $appConfigs['data'], 'categories' => $categories['data']];
 
         app()->instance('request', $originRequest);

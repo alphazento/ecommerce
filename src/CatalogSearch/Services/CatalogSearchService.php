@@ -70,6 +70,11 @@ class CatalogSearchService
     }
 
     protected function orderByPosition($builder, $field, $direction = 'asc') {
+        if (!isset($this->joined_tables[$this->categoryProductTable])) {
+            $product_table = $builder->getModel()->getTable();
+            // $this->joined_tables[$this->categoryProductTable] = true;
+            $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
+        }
         $builder->orderBy($this->categoryProductTable . '.position', $direction);
     }
 
