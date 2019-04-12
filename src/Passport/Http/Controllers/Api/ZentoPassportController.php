@@ -27,6 +27,20 @@ class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessT
             'data'=>json_decode($response->getContent(), true)];
     }
 
+    public function refreshToken(ServerRequestInterface $request)
+    {
+        $parsedBody = $request->getParsedBody();
+        if (!isset($parsedBody['client_id'])) {
+            if ($configs = config('passport.defaultclient')) {
+                $configs['grant_type'] = 'refresh_token';
+                $request = $request->withParsedBody(array_merge($configs, $parsedBody));
+            }
+        }
+        $response = parent::issueToken($request);
+        return ['status'=>$response->getStatusCode(),
+            'data'=>json_decode($response->getContent(), true)];
+    }
+
     public function register(ServerRequestInterface $request) {
         $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
