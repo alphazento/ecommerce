@@ -16,24 +16,18 @@ class CreateShoppingCartItemTable extends Migration
             $table->increments('id');
             $table->integer('cart_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            $table->string('name', 255);
             $table->string('sku', 255);
+            $table->string('product_hash', 32);
+            $table->string('name', 255);
             $table->decimal('price', 8, 2);
             $table->decimal('custom_price', 8, 2);
-            $table->text('description');
-            $table->string('url', 255);
-            $table->string('image', 255);
             $table->smallInteger('quantity');
-            $table->smallInteger('min_quantity');
-            $table->smallInteger('max_quantity');
-            $table->boolean('duplicatable');
+            // $table->boolean('duplicatable');
             $table->boolean('shippable');
             $table->boolean('taxable');
-            $table->decimal('unit_price', 8, 2);
-            $table->decimal('total_price', 8, 2);
+            $table->decimal('row_price', 8, 2);
+            $table->text('options');
             $table->timestamps();
-            // 'taxes',//  []
-            // 'options'
         });
     }
 

@@ -19,6 +19,18 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     public static function registerType($type_id, $class) {
         self::$typeMap[$type_id] = $class;
     }
+
+    public function getRealProductForShoppingCart($options = null) {
+        return $this;    
+    }
+
+    public function getPrice() {
+        return $this->price;
+    }
+    
+    public function shippable() {
+        return true;
+    }
    
     public function product_description() {
         return $this->hasOne(ProductDescription::class, 'product_id');
@@ -96,4 +108,5 @@ class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Cont
     protected function lazyLoadRelation() {
         //do nothing for simple product
     }
+
 }

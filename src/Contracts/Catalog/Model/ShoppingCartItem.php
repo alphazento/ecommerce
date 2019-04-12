@@ -10,20 +10,14 @@ interface ShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface
         'name', 
         'product_id', 
         'sku', 
+        'product_hash',
         'price',
         'custom_price',
-        'description',
-        'url', 
-        'image',  
         'quantity', 
-        'min_quantity', 
-        'max_quantity', 
-        // 'stackable', 
         'shippable',
         'taxable',
-        'duplicatable', 
         'unit_price', 
-        'total_price',
-        // 'options'
+        'row_price',
+        'options'
     ];
 }

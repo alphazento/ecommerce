@@ -9,6 +9,7 @@ use Request;
 use Response;
 use Registry;
 use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
+use Zento\Catalog\Providers\Facades\ProductService;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;

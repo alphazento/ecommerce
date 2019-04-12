@@ -26,7 +26,8 @@ class ShoppingCartService
     }
 
     public function getCartByUserId($userId) {
-        return ShoppingCart::where('customer_id', '=', $userId)
+        return ShoppingCart::with(['billing_address', 'shipping_address', 'items', 'items.product'])
+            ->where('customer_id', '=', $userId)
             ->where('status', '=', 0)
             ->orderBy('updated_at', 'desc')
             ->first();
@@ -168,7 +169,7 @@ class ShoppingCartService
         // zento_assert($cart);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
-            $item->total_price = $item->unit_price * $item->quantity;
+            $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
             if ($this->shoppingCartModified($cart)->isSuccess()) {
                 return $item;
@@ -188,7 +189,7 @@ class ShoppingCartService
                 return false;
             }
             $item->quantity = $newQuantity;
-            $item->total_price = $item->unit_price * $item->quantity;
+            $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
             if ($this->shoppingCartModified($cart)->isSuccess()) {
                 return $item;
@@ -209,26 +210,22 @@ class ShoppingCartService
             return false;
         }
 
+        $realProduct = $product->getRealProductForShoppingCart($options);
+        $price = $realProduct->getPrice();
         $item = new \Zento\ShoppingCart\Model\ORM\ShoppingCartItem([
             'cart_id' => $cart->id,
-            'name' => $product->name,
+            'name' => $realProduct->name,
             'product_id' => $product->id,
             'sku' => $product->sku,
-            'price' => (string)$product->price,
-            'custom_price' => (string)$product->price,
-            'description' => (string)$product->description,
-            // 'url' => (string)$product->url_path,
-            'url' => $url,
-            'image' => (string)$product->image,
+            'product_hash' => md5(json_encode($product->toArray())),
+            'price' => (string)$price,
+            'custom_price' => (string)$price,
             'quantity' => $quantity,
-            'min_quantity' => 1,
-            'max_quantity' => $quantity * 2,
-            'shippable' => true,
+            'shippable' => $product->shippable(),
             'taxable' => true,
-            'duplicatable' => true,
-            'unit_price' => $product->price,
-            'total_price' => $product->price * $quantity,
-            // 'options' => json_encode($options)
+            'unit_price' => $price,
+            'row_price' => $price * $quantity,
+            'options' => json_encode($options)
         ]);
         $item->save();
         if ($this->shoppingCartModified($cart)->isSuccess()) {
@@ -248,7 +245,7 @@ class ShoppingCartService
                 return $ret;
             }
             $item->quantity = $newQuantity;
-            $item->total_price = $item->unit_price * $item->quantity;
+            $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
             $trigger_event && ($this->shoppingCartModified($cart)->isSuccess());
             return $item;
@@ -279,7 +276,7 @@ class ShoppingCartService
                     //     return false;
                     // }
                     $item->quantity = $quantity;
-                    $item->total_price = $item->unit_price * $item->quantity;
+                    $item->row_price = $item->unit_price * $item->quantity;
                     $item->update();
                     $this->shoppingCartModified($cart);
                 }
