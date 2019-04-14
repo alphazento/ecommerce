@@ -141,25 +141,15 @@ class ShoppingCartService
      * @return void
      */
     protected function findExistItemByProductOption(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, array $options = []) {
+        $optionStr = json_encode($options);
         foreach($cart->items ?? [] as $item) {
             if ($item->product_id == $product_id) {
+                if ((empty($item->options)) || $item->options == '{}' && count($options) ==0 ){
                     return $item;
-                // if ((empty($item->options) || $item->options->isEmpty()) && empty($options)){
-                //     return $item;
-                // } 
-                
-                // if (count($item->options) == count($options)) {
-                //     foreach($item->options as $option) {
-                //         $code = $option->code;
-                //         if (!isset($options[$code])) {
-                //             return null;
-                //         }
-                //         if ($options[$code] != $option->value) {
-                //             return null;
-                //         }
-                //     }
-                //     return $item;
-                // }
+                }
+                if ($item->options == $optionStr) {
+                    return $item;
+                }
             }
         }
         return null;
