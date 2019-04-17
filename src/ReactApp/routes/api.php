@@ -6,8 +6,12 @@ Route::group(
         'middleware' => ['cors']
     ], function () {
         Route::get(
-            '/configs/reactapp', 
-            ['as' => 'configs.reactapp', 'uses' => 'ApiController@configs']
+            '/reactapp/configs', 
+            ['as' => 'reactapp.configs', 'uses' => 'ApiController@configs']
+        );
+        Route::get(
+            '/reactapp/cms/home', 
+            ['as' => 'reactapp.cms.home', 'uses' => 'ApiController@cmsHome']
         );
         Route::get(
             '/urlrewrite',

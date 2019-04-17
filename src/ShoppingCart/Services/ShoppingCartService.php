@@ -8,7 +8,7 @@ use Auth;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 
-use Zento\ShoppingCart\Event\ShoppingCartModified;
+use Zento\ShoppingCart\Event\ShoppingCartUpdated;
 use Zento\ShoppingCart\Event\PreAddProduct;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -161,7 +161,7 @@ class ShoppingCartService
             $item->quantity += $quantity;
             $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
-            if ($this->shoppingCartModified($cart)->isSuccess()) {
+            if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
                 return $item;
             }
         } elseif ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
@@ -181,7 +181,7 @@ class ShoppingCartService
             $item->quantity = $newQuantity;
             $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
-            if ($this->shoppingCartModified($cart)->isSuccess()) {
+            if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
                 return $item;
             }
         } else {
@@ -218,7 +218,7 @@ class ShoppingCartService
             'options' => json_encode($options)
         ]);
         $item->save();
-        if ($this->shoppingCartModified($cart)->isSuccess()) {
+        if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
             return $item;
         }
     }
@@ -237,12 +237,12 @@ class ShoppingCartService
             $item->quantity = $newQuantity;
             $item->row_price = $item->unit_price * $item->quantity;
             $item->save();
-            $trigger_event && ($this->shoppingCartModified($cart)->isSuccess());
+            $trigger_event && ($this->ShoppingCartUpdated($cart)->isSuccess());
             return $item;
         } else {
             $cartItem->cart_id = $cart->id;
             $cartItem->save();
-            $trigger_event && ($this->shoppingCartModified($cart)->isSuccess());
+            $trigger_event && ($this->ShoppingCartUpdated($cart)->isSuccess());
             return $cartItem;
         }
     }
@@ -268,7 +268,7 @@ class ShoppingCartService
                     $item->quantity = $quantity;
                     $item->row_price = $item->unit_price * $item->quantity;
                     $item->update();
-                    $this->shoppingCartModified($cart);
+                    $this->ShoppingCartUpdated($cart);
                 }
                 return true;
             }
@@ -281,16 +281,16 @@ class ShoppingCartService
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
                 $item->delete();
-                $this->shoppingCartModified($cart);
+                $this->ShoppingCartUpdated($cart);
                 return true;
             }
         }
         return false;
     }
 
-    public function shoppingCartModified(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+    public function ShoppingCartUpdated(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
         // zento_assert($cart);
         $cart->load('items');
-        return (new ShoppingCartModified($cart))->fireUntil();
+        return (new ShoppingCartUpdated($cart))->fireUntil();
     }
 }

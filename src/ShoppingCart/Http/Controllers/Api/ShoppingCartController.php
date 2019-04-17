@@ -106,7 +106,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
                 foreach($cart->items as $item) {
                     ShoppingCartService::addItem($to_cart, $item, false);
                 }
-                ShoppingCartService::shoppingCartModified($to_cart);
+                ShoppingCartService::ShoppingCartUpdated($to_cart);
                 // $cart->abandoned()->update();
             }
         });

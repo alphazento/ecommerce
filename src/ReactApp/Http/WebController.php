@@ -17,8 +17,7 @@ class WebController extends \App\Http\Controllers\Controller
         $data = [];
         $appConfigs = [];
         
-
-        $request = Request::create('/rest/v1/configs/reactapp', 'GET');
+        $request = Request::create('/rest/v1/reactapp/configs', 'GET');
         app()->instance('request', $request);
         $appConfigsResp = Route::dispatch($request);
         if ($appConfigsResp instanceof JsonResponse) {
@@ -60,14 +59,5 @@ class WebController extends \App\Http\Controllers\Controller
 
         app()->instance('request', $originRequest);
         return view('index', ['configs' => $data]);
-    }
-
-    public function appServe1() {
-        app()->instance('middleware.disable', true);
-        $request = Request::create('/rest/v1/configs/reactapp', 'GET');
-        $response = Route::dispatch($request);
-        if ($response instanceof JsonResponse) {
-            return $response->getOriginalContent();
-        }
     }
 }

@@ -40,7 +40,7 @@ class ProductService implements \Zento\Contracts\Catalog\Service\ProductServiceI
     }
 
     public function getBestSellerProducts($limit) {
-
+        return Product::offset(0)->take($limit)->get();
     }
 
     public function __call($method, $args) {

@@ -8,6 +8,7 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCart
 {
+    protected $fillable = self::PROPERTIES;
     public function billing_address() {
         return $this->hasOne(ShoppingCartAddress::class, 'id', 'billing_address_id');
     }

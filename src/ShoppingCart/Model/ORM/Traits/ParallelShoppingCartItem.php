@@ -73,7 +73,7 @@ trait ParallelShoppingCartItem
     }
     
     public function getTotalPrice() {
-        return $this->total_price;
+        return $this->row_price;
     }
 
     // public function getRecurring();

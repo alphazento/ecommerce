@@ -19,7 +19,7 @@ class BuildApp extends \Zento\Kernel\PackageManager\Console\Commands\Base
      *
      * @var string
      */
-    protected $signature = 'build:storefront';
+    protected $signature = 'build:storefront {--force}';
 
     protected $description = "Build zento store front app.";
 
@@ -34,8 +34,10 @@ class BuildApp extends \Zento\Kernel\PackageManager\Console\Commands\Base
     }
 
     public function build() {
-        $zentoStoreFolder = PackageManager::packagePath('Zento_ReactApp',['zentostore']);
-        exec(sprintf('cd %s && yarn build', $zentoStoreFolder));
+        if ($forceBuild = $this->option('force')) {
+            $zentoStoreFolder = PackageManager::packagePath('Zento_ReactApp',['zentostore']);
+            exec(sprintf('cd %s && yarn build', $zentoStoreFolder));
+        }
 
         $buildFolder = PackageManager::packagePath('Zento_ReactApp', ['zentostore', 'build']);
         $viewsPath = PackageManager::packageViewsPath('Zento_ReactApp');

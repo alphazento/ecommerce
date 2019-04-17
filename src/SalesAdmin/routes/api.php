@@ -1,7 +1,7 @@
 <?php
 Route::group(
     [
-        'prefix' => '/admin/rest/v1/sales',
+        'prefix' => '/rest/v1/admin/sales',
         'namespace' => '\Zento\SalesAdmin\Http\Controllers',
         'middleware' => ['cors']
         // 'middleware' => ['web']

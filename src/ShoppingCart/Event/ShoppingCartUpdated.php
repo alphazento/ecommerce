@@ -5,7 +5,7 @@ namespace Zento\ShoppingCart\Event;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseEvent {
+class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'shoppingCart'
     ];

@@ -32,7 +32,7 @@
                         "\\Zento\\Sales\\Providers\\Entry"
                     ],
                     "listeners": {
-                        "Zento\\ShoppingCart\\Event\\ShoppingCartModified": ["\\Zento\\Sales\\Event\\Listener\\ShoppingCartModified"],
+                        "Zento\\ShoppingCart\\Event\\ShoppingCartUpdated": ["\\Zento\\Sales\\Event\\Listener\\ShoppingCartUpdated"],
                         "Zento\\Checkout\\Event\\CreatingOrder": {
                             "20": "\\Zento\\Sales\\Event\\Listener\\CreatingOrder"
                         }

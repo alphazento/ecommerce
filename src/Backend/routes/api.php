@@ -3,7 +3,7 @@ Route::group(
     [
         'namespace' => '\Zento\Backend\Http\Controllers\Api',
         'middleware' => ['adminapi'],
-        'prefix' => '/admin/rest/v1',
+        'prefix' => '/rest/v1/admin',
     ], function() {
         Route::get(
             '/configs/menus', 

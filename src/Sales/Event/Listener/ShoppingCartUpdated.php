@@ -5,20 +5,20 @@ namespace Zento\Sales\Event\Listener;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class ShoppingCartModified extends \Zento\Kernel\Booster\Events\BaseListener
+class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseListener
 {
     /**
      * @param \Zento\Contracts\Catalog\Model\ShoppingCart $event
      * @return void
      */
     protected function run($event) {
-        // \zento_assert($event->shoppingCart);
+        \zento_assert($event->shoppingCart);
         if ($event->shoppingCart) {
             $total = 0;
             $items_quantity = 0;
             foreach($event->shoppingCart->items ?? [] as $item) {
                 \zento_assert($item);
-                $total += $item->total_price;
+                $total += $item->row_price;
                 $items_quantity += $item->quantity;
             }
             $event->shoppingCart->items_quantity = $items_quantity;
