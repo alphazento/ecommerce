@@ -128,8 +128,14 @@ class ShoppingCartService
         return true;
     }
 
-    public function addCoupon($coupon) {
+    public function addCoupon($cart, $coupon) {
+        if ($cart->coupon_code == $coupon) {
+            return true;
+        }
 
+        $cart->coupon_code = $coupon;
+        $this->ShoppingCartUpdated($cart);
+        return $cart->coupon_code == $coupon;
     }
 
     /**

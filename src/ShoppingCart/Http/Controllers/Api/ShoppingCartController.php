@@ -69,15 +69,21 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     }
 
     public function putCoupon() {
+        return $this->tapCart(function($cart) {
+            if (ShoppingCartService::addCoupon($cart, Route::input('coupon'))) {
+                return ['status'=> 200, 'data' => $cart];
+            } else {
+                return ['status'=> 420, 'data' => "Coupon is not valid."];
+            }
+        });
+    }
+
+    public function getCoupon() {
         ShoppingCartService::addCoupon();
     }
 
-    public function getCoupons() {
-        ShoppingCartService::addCoupon();
-    }
-
-    public function deleteCoupons() {
-        ShoppingCartService::deleteCoupons();
+    public function deleteCoupon() {
+        ShoppingCartService::deleteCoupon();
     }
 
     public function setBillingAddress() {
@@ -126,6 +132,14 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
             } else {
                 return ['status' => 420, 'error' => 'the cart is not guest mode'];
             }
+        });
+    }
+
+    public function updateEmail() {
+        return $this->tapCart(function($cart) {
+            $cart->email = Request::get('email');
+            $cart->save();
+            return ['status' => 200];
         });
     }
 }
