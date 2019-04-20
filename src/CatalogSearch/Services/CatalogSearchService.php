@@ -34,6 +34,7 @@ class CatalogSearchService
      */
     protected $criteria_filters = [
         'category' => 'filterCategory',
+        'sub_categories' => 'filterCategory',
         'price' => 'filterPrice',
         'text' =>'filterText',
     ];
@@ -98,6 +99,25 @@ class CatalogSearchService
         }
         $builder->orderBy($table . '.name', $direction);
     }
+
+    // /**
+    //  * filter category
+    //  *
+    //  * @param [type] $builder
+    //  * @param array $category_ids  [id1, id2]
+    //  * @return void
+    //  */
+    // protected function filterMainCategory($builder, array $category_ids) {
+    //     if (count($category_ids) > 0) {
+    //         $product_table = $builder->getModel()->getTable();
+    //         if (!isset($this->joined_tables[$this->categoryProductTable])) {
+    //             $this->joined_tables[$this->categoryProductTable] = true;
+    //             $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
+    //         }
+    //         $ids = CategoryService::getCategoryIdsWithChildrenByIds($category_ids);
+    //         $builder->whereIn($this->categoryProductTable . '.category_id', $ids);
+    //     }
+    // }
 
     /**
      * filter category
