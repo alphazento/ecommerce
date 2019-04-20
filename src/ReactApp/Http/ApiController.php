@@ -49,7 +49,7 @@ class ApiController extends \App\Http\Controllers\Controller
             "title": "New Luma Yoga Collection",
             "description": "Get fit and look fab in new seasonal styles",
             "button": "Shop New Yoga",
-            "href": "to"
+            "href": "new-yoga"
           },
         "Gallery": [
             {
