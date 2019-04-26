@@ -30,7 +30,7 @@ class ShipmentService
       \Zento\Contracts\Address $shipping_address, 
        $customer,
        $arrivalDate) {
-    zento_assert($cart);
+    // zento_assert($cart);
     zento_assert($shipping_address);
     
     $results = [];

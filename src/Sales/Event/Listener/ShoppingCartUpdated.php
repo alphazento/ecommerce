@@ -12,7 +12,7 @@ class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseListener
      * @return void
      */
     protected function run($event) {
-        \zento_assert($event->shoppingCart);
+        // \zento_assert($event->shoppingCart);
         if ($event->shoppingCart) {
             $total = 0;
             $items_quantity = 0;
