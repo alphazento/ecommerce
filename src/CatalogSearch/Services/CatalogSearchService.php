@@ -9,6 +9,7 @@ use ShareBucket;
 use Illuminate\Pagination\Paginator;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
+use Zento\Catalog\Model\ORM\Category;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Model\ORM\ProductDescription;
@@ -71,13 +72,14 @@ class CatalogSearchService
     }
 
     protected function orderByPosition($builder, $field, $direction = 'asc') {
-        if (!isset($this->joined_tables[$this->categoryProductTable])) {
-            $product_table = $builder->getModel()->getTable();
-            //comment this line cos it will affect category aggrate
-            // $this->joined_tables[$this->categoryProductTable] = true;  
-            $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
-        }
-        $builder->orderBy($this->categoryProductTable . '.position', $direction);
+        $product_table = $builder->getModel()->getTable();
+        $productPositions = DB::table($this->categoryProductTable)
+            ->select('product_id', 'position')
+            ->distinct();
+        $builder->joinSub($productPositions, 'productPositions', function ($join) use ($product_table) {
+                $join->on($product_table.'.id', '=', 'productPositions.product_id');
+            });
+        $builder->orderBy('productPositions.position', $direction);
     }
 
     protected function orderByPrice($builder, $field, $direction = 'asc') {
@@ -199,6 +201,7 @@ class CatalogSearchService
         
         $statusCode = 200;
         $items = $builder->paginate($per_page);
+
         if ($items->lastPage() < $page && $items->total() > 0) {
             $statusCode = 302;
             $items = $builder->paginate($per_page, ['*'], 'page', $items->lastPage());
