@@ -1,0 +1,39 @@
+{
+    "name": "zento/elasticsuit",
+    "description": "Eloquent ORM encapsulation of Elasticsearch for Laravel",
+    "keywords": ["laravel", "elasticsearch", "eloquent", "ORM"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Yongcheng Chen",
+        "email": "yongcheng.chen@live.com"
+    }],
+    "require": {
+        "php": ">=7.1",
+        "illuminate/support": ">=5.6.0",
+        "elasticsearch/elasticsearch": "~6.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zento\\ElasticSuit\\": "./"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [],
+            "aliases": {},
+            "zento": {
+                "Zento_ElasticSuit": {
+                    "version": "0.0.1",
+                    "commands": [],
+                    "providers": [
+                        "\\Zento\\ElasticSuit\\Providers\\Entry"
+                    ],
+                    "depends": []
+                }
+            }
+        }
+    }
+}
