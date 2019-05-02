@@ -56,7 +56,7 @@ class AccessCodeRepo {
             'Email'=> $shoppingCart['email'],
             'Phone' => $shippingAddress['phone'],
             'Mobile' => $shippingAddress['phone'],
-            'RedirectUrl' => "http://localhost:3000/paymentcallback/ewaypayment"
+            'RedirectUrl' => "/paymentcallback/ewaypayment"
         ];
         $transaction = [
             'TransactionType' => TransactionType::MOTO,

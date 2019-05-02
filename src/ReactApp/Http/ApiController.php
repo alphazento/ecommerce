@@ -14,6 +14,12 @@ class ApiController extends \App\Http\Controllers\Controller
 
     public function configs() {
         $data = [
+            "ga" => [
+              "id" => "UA-50234091-1",
+              "enabled" => true,
+              "plugins" => ["ec"]
+            ],
+            "use_query_search" => true,
             'swatches' => $this->getProductSwatches(),
             'reorder' => [],
             'constants' => []

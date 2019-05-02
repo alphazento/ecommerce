@@ -31,7 +31,12 @@ class WebController extends \App\Http\Controllers\Controller
         if ($categoriesResp instanceof JsonResponse) {
             $categories = $categoriesResp->getOriginalContent();
         }
-        $data = ['appconfigs' => $appConfigs['data'], 'categories' => $categories['data']];
+        $data = [
+            "server" => config('app.url'), //url('/),
+            "image_server" => config('app.url') . '/images/catalog', //url('/images/catalog'),
+            'configs' => $appConfigs['data'], 
+            'categories' => $categories['data']
+        ];
 
         $url = Request::path();
         $urlRewrite = [];
@@ -55,9 +60,9 @@ class WebController extends \App\Http\Controllers\Controller
         //     $pageconfigs = $resp->getOriginalContent();
         // }
 
-        $data = ['appconfigs' => $appConfigs['data'], 'categories' => $categories['data']];
+        // $data = ['configs' => $appConfigs['data'], 'categories' => $categories['data']];
 
         app()->instance('request', $originRequest);
-        return view('index', ['configs' => $data]);
+        return view('index', ['data' => $data]);
     }
 }
