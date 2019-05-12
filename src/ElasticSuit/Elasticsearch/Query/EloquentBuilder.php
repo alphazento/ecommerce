@@ -37,9 +37,16 @@ class EloquentBuilder extends \Illuminate\Database\Eloquent\Builder
     public function setModel(Model $model)
     {
         $this->model = $model;
-
         $this->query->from($model->getTable(), $model->getKeyName());
- 
         return $this;
     }
+
+    // public function applyScopes() {
+    //     // $oldQuery = $this->getQuery();
+    //     $builder = parent::applyScopes();
+    //     // $newQuery = $builder->getQuery();
+    //     // $newQuery->keyname = $oldQuery->keyname;
+    //     // $newQuery->keyValue = $oldQuery->keyValue;
+    //     return $builder;
+    // }
 }

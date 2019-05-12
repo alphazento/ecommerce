@@ -16,6 +16,7 @@ class Entry extends ServiceProvider
     public function register()
     {
         $this->app['db']->extend('elasticsearch', function($config, $name) {
+            $config['name'] = $name;
             return new Connection($config['database'], $config['prefix'], $config);
         });
     }

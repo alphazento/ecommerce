@@ -20,6 +20,7 @@ use Illuminate\Database\Query\Processors\Processor;
 class Builder extends \Illuminate\Database\Query\Builder
 {
     public $keyname;
+    public $keyValue;
 
     /**
      * Set the table which the query is targeting.
@@ -35,9 +36,24 @@ class Builder extends \Illuminate\Database\Query\Builder
         return $this;
     }
 
+
     private function notSupport($keyword) {
         throw new RuntimeException(sprintf('keyword "%s" is not supported by Elasticsearch', $keyword));
     }
+
+    // /**
+    //  * Add a basic where clause to the query.
+    //  *
+    //  * @param  string|array|\Closure  $column
+    //  * @param  mixed   $operator
+    //  * @param  mixed   $value
+    //  * @param  string  $boolean
+    //  * @return $this
+    //  */
+    // public function where($column, $operator = null, $value = null, $boolean = 'and')
+    // {
+    //     return parent::where($column, $operator, $value, $boolean);
+    // }
 
     public function join($table, $one, $operator = null, $two = null, $type = 'inner', $where = false)
     {

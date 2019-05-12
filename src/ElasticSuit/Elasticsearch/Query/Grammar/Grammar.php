@@ -36,13 +36,12 @@ class Grammar extends BaseGrammar
     {
         list($result, $keyValue) = $this->processKeyValue($query, $values);
         $params = [
-            'index'=> $query->getConnection()->getDatabaseName(),
-            'type'=> $query->from,
-            'body'=> $values
-            // 'id' => $docId
+            'index'=> $query->from,
+            'type'=> '_doc',
+            'body'=> $values,
         ];
         if ($result) {
-            $params['id'] = $keyValue;
+            $params['_id'] = $keyValue;
         }
         return $params;
     }
@@ -65,8 +64,8 @@ class Grammar extends BaseGrammar
         $query->columns = $original;
 
         $searchs = [
-            'index' => $query->getConnection()->getDatabaseName(),
-            'type' => $query->from,
+            'index' => $query->from,
+            'type' => '_doc',
             'body' => $sqls
         ];
         return $searchs;
@@ -452,14 +451,15 @@ class Grammar extends BaseGrammar
      */
     public function compileUpdate(Builder $query, $values)
     {
-        $sql = [
-            'index'=> $query->getConnection()->getDatabaseName(),
-            'type'=> $query->from,
-            'body'=> ['doc'=>$values]
-            // 'id' => $docId
+        // $values[$query->keyname] = $query->keyValue;
+        $params = [
+            'index'=> $query->from,
+            'type'=> '_doc',
+            'body'=> ['doc' => $values],
         ];
+        $params['id'] = $query->keyValue;
 
-        return json_encode($params);
+        return $params;
     }
 
      /**
