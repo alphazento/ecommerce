@@ -1,57 +1,12 @@
 <?php
 
-namespace Zento\Catalog\Services;
+namespace Zento\ElsCatalog\Services;
 
 // use Zento\Catalog\Model\ORM\Category;
 
-class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServiceInterface 
+class CategoryService extends \Zento\Catalog\Services\CategoryService 
 {
-    protected $rootId;
-    protected $treeLevelFrom;
-    protected $treeMaxLevel;
-
-    protected $cache = [];
-
-    protected $model = \Zento\Catalog\Model\ORM\Category::class;
-
-    public function __construct() {
-        $this->rootId = config('category.tree.root.id', 1);
-        $this->treeLevelFrom = config('category.tree.level.from', 2);
-        $this->treeMaxLevel = config('category.tree.level.max', 3);
-    }
-
-    /**
-     * Retrieve a user by their unique identifier.
-     *
-     * @param  mixed  $identifier
-     * @return \Zento\Contracts\Catalog\Model\Category|null
-     */
-    public function getCategoryById($identifier)
-    {
-        $model = $this->model;
-        return $model::where('id', $identifier)
-            ->first();
-    }
-
-    public function getCategoryByIds(array $identifiers)
-    {
-        $model = $this->model;
-        return $model::whereIn('id', $identifiers)->get();
-    }
-
-    /**
-     * give category ids, build their category tree relationship
-     */
-    public function buildCategoryTreeByIds(array $identifiers, $activeOnly = true) {
-        $model = $this->model;
-        $builder = $model::whereIn('id', $identifiers);
-        if ($activeOnly) {
-            $builder->active($activeOnly);
-        }
-        $categories = $builder->get()->keyBy('id');
-        foreach($categories ?? [] as $key => $category) {
-        }
-    }
+    protected $model = \Zento\ElsCatalog\Model\ElsIndex\Category::class;
 
     /**
      * give category ids, return all category ids including their children
@@ -100,15 +55,6 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
             $this->cache[$cacheKey] = $builder->orderBy('sort_by')->get();
         }
         return $this->cache[$cacheKey];
-    }
-
-    /**
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @return \Zento\Contracts\Catalog\Model\Category|null
-     */
-    public function root() {
-        return $this->getCategoryById(1);
     }
 
     /**
