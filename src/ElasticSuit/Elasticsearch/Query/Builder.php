@@ -111,6 +111,14 @@ class Builder extends \Illuminate\Database\Query\Builder
     }
 
 
+    public function aggs($columns = false) {
+        if ($columns) {
+            $columns = is_array($columns) ? $columns : [$columns];
+            return $this->aggregate(__FUNCTION__, $columns); 
+        }
+        return $this;
+    }
+
     /**
      * Add a "where mulit match" clause to the query.
      *
@@ -154,7 +162,11 @@ class Builder extends \Illuminate\Database\Query\Builder
 
         $this->bindings['select'] = [];
 
-        $results = $this->limit(1)->getAggregate($columns);
+        if ($function === 'aggs') {
+            $results = $this->getAggregate($columns);
+        } else {
+            $results = $this->limit(1)->getAggregate($columns);
+        }
 
         $this->aggregate = null;
 
@@ -162,10 +174,14 @@ class Builder extends \Illuminate\Database\Query\Builder
 
         $this->bindings['select'] = $previousSelectBindings;
 
-        if ($function !== 'stats') {
-            return $results['aggregate']['value'];
+        if ($function === 'aggs') {
+            return $results;
         } else {
-            return $results['aggregate'];
+            if ($function !== 'stats') {
+                return $results['aggregate']['value'];
+            } else {
+                return $results['aggregate'];
+            }
         }
     }
 

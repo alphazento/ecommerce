@@ -5,6 +5,9 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCategoryTable extends Migration
 {
+    protected function getBuilder() {
+        return Schema::getInstance();
+    }
     /**
      * Run the migrations.
      *
@@ -12,7 +15,7 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        $this->getBuilder()->create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('attribute_set_id')->unsigned();
             $table->integer('parent_id')->unsigned();
@@ -35,6 +38,6 @@ class CreateCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::drop('categories');
+        $this->getBuilder()->drop('categories');
     }
 }

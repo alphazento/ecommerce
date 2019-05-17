@@ -1,0 +1,9 @@
+<?php
+
+namespace Zento\ElasticSuit\Elasticsearch\Schema;
+
+class BluePrint extends \Illuminate\Database\Schema\Blueprint {
+    // public function create() {
+      
+    // }
+}

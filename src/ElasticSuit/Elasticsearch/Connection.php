@@ -73,26 +73,6 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Get the Doctrine DBAL driver.
-     *
-     * @return \Doctrine\DBAL\Driver\PDOSqlite\Driver
-     */
-    protected function getDoctrineDriver()
-    {
-        return new DoctrineDriver;
-    }
-
-    // /**
-    //  * Get the Doctrine DBAL schema manager for the connection.
-    //  *
-    //  * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-    //  */
-    // public function getDoctrineSchemaManager()
-    // {
-    //     return new Schema\Builder($this);
-    // }
-
-    /**
      * Get a schema builder instance for the connection.
      *
      * @return \Illuminate\Database\Schema\Builder

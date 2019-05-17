@@ -7,23 +7,21 @@ use Zento\ElsCatalog\Model\ElsIndex\Product;
 
 class ProductSync {
     public function sync() {
-        $collection = OrmProduct::all();
-        foreach($collection as $item) {
-            $this->sync_item($item);
-        }
+        $collection = OrmProduct::with(['categories'])->chunk(100, function($collection) {
+            foreach($collection as $item) {
+                $this->sync_item($item);
+            }
+        });
     }
 
     protected function sync_item($ormProduct) {
-        $product = null;
-        try {
-            $product = Product::where('id', '=', $ormProduct->id)->first();
-        } catch (\Exception $e) {
-
-        }
+        $product = Product::where('id', '=', $ormProduct->id)->first();
         if (!$product) {
             $product = new Product();
         }
-        $product->forceFill($ormProduct->toArray());
+        $data = $ormProduct->toArray();
+        $data['categories'] = $ormProduct->categories->pluck('id');
+        $product->forceFill($data);
         $product->save();
     }
 }

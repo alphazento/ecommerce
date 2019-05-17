@@ -5,6 +5,9 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateProductTable extends Migration
 {
+    protected function getBuilder() {
+        return Schema::getInstance();
+    }
     /**
      * Run the migrations.
      *
@@ -12,7 +15,7 @@ class CreateProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        $this->getBuilder()->create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('attribute_set_id')->unsigned();
             $table->string('type_id', 64);
@@ -31,6 +34,6 @@ class CreateProductTable extends Migration
      */
     public function down()
     {
-        Schema::drop('products');
+        $this->getBuilder()->drop('products');
     }
 }

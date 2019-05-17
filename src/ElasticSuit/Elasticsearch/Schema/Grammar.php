@@ -15,7 +15,8 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
     public function compileTableExists()
     {
         echo 'compileTableExists';
-        return 'compileTableExists';
+        // return 'compileTableExists';
+        return false;
     }
 
     /**

@@ -417,8 +417,10 @@ class Grammar extends BaseGrammar
         'min'=>'min',
         'avg'=>'avg',
         'sum'=>'sum',
-        'stats'=>'stats'
+        'stats'=>'stats',
+        'aggs' => 'aggs'
     ];
+
     /**
      * Compile an aggregated select clause.
      *
@@ -428,18 +430,21 @@ class Grammar extends BaseGrammar
      */
     protected function compileAggregate(Builder $query, $aggregate)
     {
-        // return [
-        //     "eloquent_aggregate" => [
-        //         $this->aggregateMapping[$aggregate['function']] => [ "field" => $aggregate['columns']] 
-        //     ]
-        // ];
-        $column = implode(',', $aggregate['columns']);
-        $column = ($column=='*') ? $query->keyname : $column;
-        return [
-            'aggregate' => [
-                $this->aggregateMapping[$aggregate['function']] => [ 'field' => $column] 
-            ]
-        ];
+        if ($aggregate['function'] === 'aggs') {
+            $items = [];
+            foreach($aggregate['columns'] as $column) {
+                $items[$column] = ["terms" => ["field" => $column]];
+            }
+            return $items;
+        } else {
+            $column = implode(',', $aggregate['columns']);
+            $column = ($column=='*') ? $query->keyname : $column;
+            return [
+                'aggregate' => [
+                    $this->aggregateMapping[$aggregate['function']] => [ 'field' => $column] 
+                ]
+            ];
+        }
     }
 
     /**
