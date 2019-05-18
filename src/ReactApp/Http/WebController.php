@@ -4,13 +4,20 @@ namespace Zento\ReactApp\Http\Controllers;
 
 use Route;
 use Request;
+use ProductService;
+
+use Illuminate\Http\JsonResponse;
 use Zento\RouteAndRewriter\Facades\RouteAndRewriterService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
-use Illuminate\Http\JsonResponse;
 
 class WebController extends \App\Http\Controllers\Controller
 {
     public function appServe() {
+        // echo get_class(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Zoltan Gym Tee')->aggs('name.keyword'));
+        // dd(\Zento\Catalog\Model\ORM\Product::where('id', '>', '0')->count());
+        // dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')->count('name.keyword'));
+        dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')->aggs('categories')->paginate()->toArray());
+
         $originRequest = Request::instance();
 
         app()->instance('middleware.disable', true);

@@ -235,5 +235,43 @@ class Builder extends \Illuminate\Database\Query\Builder
 
         return $this;
     }
+
+    /**
+     * Paginate the given query into a simple paginator.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    // public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    // {
+    //     $page = $page ?: Paginator::resolveCurrentPage($pageName);
+    //     $results = $this->forPage($page, $perPage)->get($columns);
+    //     $results = $total ? $this->forPage($page, $perPage)->get($columns) : collect();
+
+    //     return $this->paginator($results, $total, $perPage, $page, [
+    //         'path' => Paginator::resolveCurrentPath(),
+    //         'pageName' => $pageName,
+    //     ]);
+    // }
+
+    /**
+     * Execute the query as a "select" statement.
+     *
+     * @param  array  $columns
+     * @return \Illuminate\Support\Collection
+     */
+    public function get($columns = ['*'])
+    {
+        return collect($this->onceWithColumns($columns, function () {
+            return $this->processor->processSelect($this, $this->runSelect());
+        }));
+    }
+
+    public function getElsResponse() {
+        return $this->processor->getResponse();
+    }
 }
 

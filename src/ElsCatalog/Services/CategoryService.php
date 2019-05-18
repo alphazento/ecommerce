@@ -67,20 +67,4 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
 		}
 		return $tree;
     }
-    
-    /**
-     * get a category's name
-     *
-     * @param \Zento\Contracts\Catalog\Model\Category $category
-     * @param boolean $withProductCount
-     * @return string
-     */
-    public function getName(\Zento\Contracts\Catalog\Model\Category $category, $withProductCount = false) {
-        return $category->name . ($withProductCount ? sprintf('(%s)', $category->products_count) : '');
-    }
-    
-    public function __call($method, $args) {
-        $model = $this->model;
-        return $model::{$method}(...$args);
-    }
 }

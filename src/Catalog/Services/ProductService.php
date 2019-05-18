@@ -6,6 +6,7 @@ use DB;
 use Store;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Catalog\Model\ORM\Product;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class ProductService implements \Zento\Contracts\Catalog\Service\ProductServiceInterface
 {
@@ -45,5 +46,29 @@ class ProductService implements \Zento\Contracts\Catalog\Service\ProductServiceI
 
     public function __call($method, $args) {
         return Product::{$method}(...$args);
+    }
+
+    public function getProductSwatches() {
+        $attributes = DynamicAttribute::with(['options'])
+            ->where('swatch_type', '>', '0')
+            ->where('enabled', 1)
+            ->get();
+        
+        $results = [];
+        foreach($attributes as $attr) {
+            $options = [];
+            foreach($attr->options as $option) {
+                $options[$option->value] = $option->swatch_value;
+            }
+            $results[$attr->attribute_name] = $options;
+        }
+        return $results;
+    }
+
+    public function getProductSearchables() {
+        return DynamicAttribute::where('is_search_layer', '>', '0')
+            ->where('enabled', 1)
+            ->pluck('attribute_name')
+            ->toArray();
     }
 }

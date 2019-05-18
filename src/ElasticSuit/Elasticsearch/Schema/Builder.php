@@ -9,7 +9,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
+use Zento\ElasticSuit\Elasticsearch\Schema\Blueprint;
 
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 
@@ -65,6 +66,9 @@ class Builder extends \Illuminate\Database\Schema\Builder
             case 'text':
                 $mapping = ['type' => 'text', 'fielddata' => true];
                 break;
+            case 'keyword':
+                $mapping = ['type' => 'keyword'];
+                break;
             default:
                 $mapping = ['type' => 'text', 'fielddata' => true];
                 break;
@@ -85,12 +89,28 @@ class Builder extends \Illuminate\Database\Schema\Builder
     }
 
     /**
+     * Create a new command set with a Closure.
+     *
+     * @param  string  $table
+     * @param  \Closure|null  $callback
+     * @return \Illuminate\Database\Schema\Blueprint
+     */
+    protected function createBlueprint($table, Closure $callback = null)
+    {
+        if (isset($this->resolver)) {
+            return call_user_func($this->resolver, $table, $callback);
+        }
+
+        return new Blueprint($table, $callback);
+    }
+
+    /**
      * Execute the blueprint to build / modify the table.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
      * @return void
      */
-    protected function build(Blueprint $blueprint)
+    protected function build(\Illuminate\Database\Schema\Blueprint $blueprint)
     {
         if ($this->blueprintCallback) {
             $callback = $this->blueprintCallback;

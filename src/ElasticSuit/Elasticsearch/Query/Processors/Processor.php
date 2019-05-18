@@ -9,6 +9,10 @@ use Illuminate\Database\Query\Processors\Processor as BaseProcessor;
 
 class Processor extends BaseProcessor
 {
+    protected $response;
+    public function getResponse() {
+        return $this->response;
+    }
     /**
      * Process an "insert get ID" query.
      *
@@ -35,8 +39,8 @@ class Processor extends BaseProcessor
      */
     public function processSelect(Builder $query, $values)
     {
-        $rsp = new Response($values);
-        return $rsp->getHits();
+        $this->response = new Response($values);
+        return $this->response->getHits();
     }
 
     /**
@@ -48,8 +52,9 @@ class Processor extends BaseProcessor
      */
     public function processSelectAggregate(Builder $query, $values)
     {
-        $rsp = new Response($values);
-        return $rsp->getAggregations();
+        $this->response = new Response($values);
+        dd($this->response);
+        return $this->response->getAggregations();
     }
 
     /**

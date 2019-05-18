@@ -174,12 +174,6 @@ class Connection extends BaseConnection
      * @return int
      */
     public function update($index_data, $data = []) {
-        // $data = [
-        //     'index'=> $this->indicesName,
-        //     'type'=> $type,
-        //     'body'=> ['doc'=>$data],
-        //     'id' => $docId
-        // ]
         return $this->elsAdapter()->update($index_data);
     }
 

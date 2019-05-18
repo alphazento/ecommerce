@@ -6,7 +6,7 @@ use Route;
 use Request;
 use ProductService;
 use Zento\RouteAndRewriter\Facades\RouteAndRewriterService;
-use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+// use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class ApiController extends \App\Http\Controllers\Controller
 {
@@ -20,7 +20,7 @@ class ApiController extends \App\Http\Controllers\Controller
               "plugins" => ["ec"]
             ],
             "use_query_search" => true,
-            'swatches' => $this->getProductSwatches(),
+            'swatches' => ProductService::getProductSwatches(),
             'reorder' => [],
             'constants' => []
         ];
@@ -104,22 +104,22 @@ class ApiController extends \App\Http\Controllers\Controller
           return ['status' => 200, 'data' => $data];
     }
 
-    protected function getProductSwatches() {
-        $attributes = DynamicAttribute::with(['options'])
-            ->where('swatch_type', '>', '0')
-            ->where('enabled', 1)
-            ->get();
+    // protected function getProductSwatches() {
+    //     $attributes = DynamicAttribute::with(['options'])
+    //         ->where('swatch_type', '>', '0')
+    //         ->where('enabled', 1)
+    //         ->get();
         
-        $results = [];
-        foreach($attributes as $attr) {
-            $options = [];
-            foreach($attr->options as $option) {
-                $options[$option->value] = $option->swatch_value;
-            }
-            $results[$attr->attribute_name] = $options;
-        }
-        return $results;
-    }
+    //     $results = [];
+    //     foreach($attributes as $attr) {
+    //         $options = [];
+    //         foreach($attr->options as $option) {
+    //             $options[$option->value] = $option->swatch_value;
+    //         }
+    //         $results[$attr->attribute_name] = $options;
+    //     }
+    //     return $results;
+    // }
 
     /**
      * provide reactjs url rewrite support
