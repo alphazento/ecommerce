@@ -113,8 +113,11 @@ class Builder extends \Illuminate\Database\Query\Builder
 
     public function aggs($columns = false) {
         if ($columns) {
-            $columns = is_array($columns) ? $columns : [$columns];
-            return $this->aggregate(__FUNCTION__, $columns); 
+            $function = 'aggs';
+            if (! is_array($columns)) {
+                $columns = [$columns];
+            }
+            $this->aggregate = compact('function', 'columns');
         }
         return $this;
     }
@@ -162,11 +165,7 @@ class Builder extends \Illuminate\Database\Query\Builder
 
         $this->bindings['select'] = [];
 
-        if ($function === 'aggs') {
-            $results = $this->getAggregate($columns);
-        } else {
-            $results = $this->limit(1)->getAggregate($columns);
-        }
+        $results = $this->limit(1)->getAggregate($columns);
 
         $this->aggregate = null;
 
@@ -174,14 +173,10 @@ class Builder extends \Illuminate\Database\Query\Builder
 
         $this->bindings['select'] = $previousSelectBindings;
 
-        if ($function === 'aggs') {
-            return $results;
+        if ($function !== 'stats') {
+            return $results['aggregate']['value'];
         } else {
-            if ($function !== 'stats') {
-                return $results['aggregate']['value'];
-            } else {
-                return $results['aggregate'];
-            }
+            return $results['aggregate'];
         }
     }
 
@@ -199,7 +194,6 @@ class Builder extends \Illuminate\Database\Query\Builder
         if (is_null($original)) {
             $this->columns = $columns;
         }
-
         $results = $this->processor->processSelectAggregate($this, $this->runSelect());
         $this->columns = $original;
 

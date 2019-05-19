@@ -16,7 +16,9 @@ class WebController extends \App\Http\Controllers\Controller
         // echo get_class(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Zoltan Gym Tee')->aggs('name.keyword'));
         // dd(\Zento\Catalog\Model\ORM\Product::where('id', '>', '0')->count());
         // dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')->count('name.keyword'));
-        dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')->aggs('categories')->paginate()->toArray());
+        dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')
+            ->where('visibility', '>', 1)
+            ->aggs(['categories', 'name.keyword'])->paginate()->toArray());
 
         $originRequest = Request::instance();
 
