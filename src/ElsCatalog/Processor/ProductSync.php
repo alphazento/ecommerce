@@ -25,7 +25,8 @@ class ProductSync {
             $product = new Product();
         }
         $data = $ormProduct->toArray();
-        $data['categories'] = $ormProduct->categories->pluck('id');
+        $data['category'] = $ormProduct->categories->pluck('id');
+        unset($data['categories']);
         $this->mergeSearchablesToParent($data);
         $product->forceFill($data);
         $product->save();

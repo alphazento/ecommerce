@@ -16,6 +16,7 @@ use Zento\Catalog\Model\ORM\ProductDescription;
 use Zento\Catalog\Providers\Facades\CategoryService;
 
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Zento\Kernel\Booster\Pagination\LengthAwarePaginator;
 
 class CatalogSearchService
 {
@@ -200,23 +201,21 @@ class CatalogSearchService
         }
         
         $statusCode = 200;
-        $items = $builder->paginate($per_page);
+        $paginator = $builder->paginate($per_page);
 
-        if ($items->lastPage() < $page && $items->total() > 0) {
+        if ($paginator->lastPage() < $page && $paginator->total() > 0) {
             $statusCode = 302;
-            $items = $builder->paginate($per_page, ['*'], 'page', $items->lastPage());
+            $paginator = $builder->paginate($per_page, ['*'], 'page', $paginator->lastPage());
         }
         
-        // $items = $items->toArray();
-        if ($withAggregate) {
-            $aggregate = $this->aggregate($aggregateQuery, $criteria);
-        } else {
-            $aggregate = [];
+        if ($paginator->total() == 0) {
+            return ['status' => 404];
         }
-        if ($items->total() == 0) {
-            $statusCode = 404;
-        }
-        return ['status' => $statusCode, 'data' => ['aggregate' =>  $aggregate, 'items'=> $items]];
+
+        $data = LengthAwarePaginator::fromPaginator($paginator, 
+            ['aggregate' => $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []]);
+        // $data->setExtraData('aggregate', $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []);
+        return ['status' => $statusCode, 'data' =>  $data];
     }
 
     protected function applyFilter($criteria, $withAggregate = true) {

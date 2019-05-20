@@ -9,7 +9,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Model;
-use Zento\ElasticSuit\Elasticsearch\Pagination\LengthAwarePaginator;
+use Zento\Kernel\Booster\Pagination\LengthAwarePaginator;
 
 class EloquentBuilder extends \Illuminate\Database\Eloquent\Builder
 {
@@ -42,14 +42,6 @@ class EloquentBuilder extends \Illuminate\Database\Eloquent\Builder
         return $this;
     }
 
-    // public function applyScopes() {
-    //     // $oldQuery = $this->getQuery();
-    //     $builder = parent::applyScopes();
-    //     // $newQuery = $builder->getQuery();
-    //     // $newQuery->keyname = $oldQuery->keyname;
-    //     // $newQuery->keyValue = $oldQuery->keyValue;
-    //     return $builder;
-    // }
 
     /**
      * Paginate the given query.

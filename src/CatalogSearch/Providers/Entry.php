@@ -14,7 +14,9 @@ class Entry extends ServiceProvider
             return new CatalogSearchService();
         });
         PackageManager::class_alias('\Zento\CatalogSearch\Providers\Facades\CatalogSearchService', 'CatalogSearchService');
+    }
 
+    public function boot() {
         $this->app['catalogsearch_service']->registerCriteriaFilter('visibility',
             function ($builder, $value) {
                 if (empty($value) || $value === 'storefront') {

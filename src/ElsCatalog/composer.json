@@ -35,9 +35,12 @@
                     "commands": [
                         "\\Zento\\ElsCatalog\\Console\\Commands\\SyncCategory2Els"
                     ],
-                    "providers": [],
+                    "providers": [
+                        "\\Zento\\ElsCatalog\\Providers\\Entry"
+                    ],
                     "depends": [
-                        "Zento_Catalog"
+                        "Zento_Catalog",
+                        "Zento_CatalogSearch"
                     ]
                 }
             }

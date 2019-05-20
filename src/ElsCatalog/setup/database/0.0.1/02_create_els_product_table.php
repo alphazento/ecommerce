@@ -9,8 +9,9 @@ class CreateElsProductTable extends \CreateProductTable
 {
     protected function getBuilder() {
         return Schema::connection('elasticsearch')->fromOrmModel(Product::class, function($table) {
-            // $table->removeColumn('name')->keyword('name');
-            $table->string('categories')->keyword(true)->index('not_analyzed');
+            $table->removeColumn('price')->float('price');
+            $table->removeColumn('cost')->float('cost');
+            $table->string('category')->keyword(true)->index('not_analyzed');
         });
     }
 }

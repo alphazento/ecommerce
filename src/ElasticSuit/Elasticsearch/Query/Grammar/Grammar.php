@@ -143,12 +143,14 @@ class Grammar extends BaseGrammar
                     case 'and_notnull':
                         $conditions['must_not'][] = $expressions;
                         break;
-
                     case 'or_null':
                         $conditions['should'][] = $expressions;
                         break;
                     case 'or_notnull':
                         $conditions['must_not'][] = $expressions;
+                        break;
+                    case 'and_inlike':
+                        $conditions['must'][] = $expressions;
                         break;
                     default:
                         $this->notSupport($method);
@@ -302,6 +304,36 @@ class Grammar extends BaseGrammar
      * @param  array  $where
      * @return string
      */
+    protected function whereInLike(Builder $query, $where)
+    {
+        if (empty($where['values'])) {
+            return false;
+        }
+        $column = $this->removeTableFromColumn($query, $where['column']);
+        $should = [];
+        foreach($where['values'] as $value) {
+            $should[] = ['match' => [
+                $column => [
+                        "query" => $value,
+                        "fuzziness" => "AUTO"
+                    ]
+                ]
+            ];
+        }
+        return [
+            "bool" => [
+                "should" => $should
+            ]
+        ];
+    }
+
+    /**
+     * Compile a "where in" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
     protected function whereIn(Builder $query, $where)
     {
         if (empty($where['values'])) {
@@ -310,7 +342,7 @@ class Grammar extends BaseGrammar
         $column = $this->removeTableFromColumn($query, $where['column']);
         return [
             "terms" => [
-              $column => $where['values']
+                $column => $where['values']
             ]
         ];
     }
@@ -433,7 +465,8 @@ class Grammar extends BaseGrammar
         if ($aggregate['function'] === 'aggs') {
             $items = [];
             foreach($aggregate['columns'] as $column) {
-                $items[$column] = ["terms" => ["field" => $column]];
+                $key = str_replace('.keyword', '', $column);
+                $items[$key] = ["terms" => ["field" => $column]];
             }
             return $items;
         } else {

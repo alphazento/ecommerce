@@ -14,7 +14,6 @@ use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Grammars\Grammar;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Query\Processors\Processor;
 
 class Builder extends \Illuminate\Database\Query\Builder
@@ -40,20 +39,6 @@ class Builder extends \Illuminate\Database\Query\Builder
     private function notSupport($keyword) {
         throw new RuntimeException(sprintf('keyword "%s" is not supported by Elasticsearch', $keyword));
     }
-
-    // /**
-    //  * Add a basic where clause to the query.
-    //  *
-    //  * @param  string|array|\Closure  $column
-    //  * @param  mixed   $operator
-    //  * @param  mixed   $value
-    //  * @param  string  $boolean
-    //  * @return $this
-    //  */
-    // public function where($column, $operator = null, $value = null, $boolean = 'and')
-    // {
-    //     return parent::where($column, $operator, $value, $boolean);
-    // }
 
     public function join($table, $one, $operator = null, $two = null, $type = 'inner', $where = false)
     {
@@ -145,6 +130,15 @@ class Builder extends \Illuminate\Database\Query\Builder
         return $this;
     }
 
+    public function whereMultiOr(array $columns, $not = false)
+    {
+        // $type = $not ? 'NotNull' : 'Null';
+        $type = "MultiOr";
+
+        $this->wheres[] = compact('type', 'columns');
+        return $this;
+    }
+
     /**
      * Execute an aggregate function on the database.
      *
@@ -231,25 +225,28 @@ class Builder extends \Illuminate\Database\Query\Builder
     }
 
     /**
-     * Paginate the given query into a simple paginator.
+     * Add a "where in" clause to the query.
      *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  string  $column
+     * @param  mixed   $values
+     * @param  string  $boolean
+     * @param  bool    $not
+     * @return $this
      */
-    // public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
-    // {
-    //     $page = $page ?: Paginator::resolveCurrentPage($pageName);
-    //     $results = $this->forPage($page, $perPage)->get($columns);
-    //     $results = $total ? $this->forPage($page, $perPage)->get($columns) : collect();
+    public function whereInLike($column, $values, $boolean = 'and', $not = false)
+    {
+        $type = 'InLike';
 
-    //     return $this->paginator($results, $total, $perPage, $page, [
-    //         'path' => Paginator::resolveCurrentPath(),
-    //         'pageName' => $pageName,
-    //     ]);
-    // }
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean');
+
+        foreach ($values as $value) {
+            if (! $value instanceof Expression) {
+                $this->addBinding($value, 'where');
+            }
+        }
+
+        return $this;
+    }
 
     /**
      * Execute the query as a "select" statement.
