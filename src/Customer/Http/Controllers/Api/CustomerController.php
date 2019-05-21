@@ -151,7 +151,7 @@ class CustomerController extends \App\Http\Controllers\Controller
     }
 
     protected function tapAcl(\Closure $callbak) {
-      if (Auth::user()->acl(Request::route()->getName(), $this->isMe())) {
+      if (Auth::user()->crossUserAcl($this->isMe())) {
           return \call_user_func($callbak);
       } else {
           return ['status'=>400, 'data'=> ['error'=>'ACL limit']];

@@ -48,10 +48,13 @@ class User extends Authenticatable
         return $this->where('email', $username)->first();
     }
 
-    public function acl($routeName, $isMe = false) {
-        if ($isMe) {
-            return true;
-        }
-        return true;
+    /**
+     * limit user only can access its resources
+     *
+     * @param boolean $isMe
+     * @return boolean
+     */
+    public function crossUserAcl($isMe = false) {
+        return $isMe;
     }
 }

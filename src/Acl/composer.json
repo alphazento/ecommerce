@@ -1,0 +1,63 @@
+{
+    "name": "alphazento/acl",
+    "description": "Zento ecommerce acl package",
+    "keywords": ["laravel", "zento", "ecommerce", "acl"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yongcheng.chen",
+            "email": "yongcheng.chen@live.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "alphazento/zento": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+        },
+        "files": [
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+            ],
+            "aliases": {
+            },
+            "zento": {
+                "Zento_Acl":{
+                    "version" : "0.0.1",
+                    "commands" : [
+                        "\\Zento\\Acl\\Console\\Commands\\SyncRoute",
+                        "\\Zento\\Acl\\Console\\Commands\\AddUser",
+                        "\\Zento\\Acl\\Console\\Commands\\EnableUser",
+                        "\\Zento\\Acl\\Console\\Commands\\DisableUser",
+                        "\\Zento\\Acl\\Console\\Commands\\UserPassword"
+                    ],
+                    "providers" : [
+                        "\\Zento\\Acl\\Providers\\Entry"
+                    ],
+                    "listeners":  {
+                    },
+                    "middlewaregroup": {
+                        "adminapi": {
+                            "after": [
+                                "\\Zento\\Backend\\Http\\Middleware\\AclCheck"
+                            ]
+                        }
+                    },
+                    "depends": [
+                        "Zento_Passport",
+                        "Zento_Backend"
+                    ]
+                }
+            }
+        }
+    }
+}
