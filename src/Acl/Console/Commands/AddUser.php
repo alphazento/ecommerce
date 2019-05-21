@@ -3,14 +3,14 @@
  *
  * @copyright
  * @license
- * @author      Yongcheng Chen tony@tonercity.com.au
+ * @author      Yongcheng Chen yongcheng.chen@live.com
  */
 
 namespace Zento\Acl\Console\Commands;
 
 use Zento\Acl\Model\Auth\User;
 
-class AddUser extends \Inkstation\Base\Console\Commands\Base
+class AddUser extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.

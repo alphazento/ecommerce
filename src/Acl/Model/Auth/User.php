@@ -5,21 +5,21 @@
   * @package    Base
   * @copyright
   * @license
-  * @author      Yongcheng Chen tony@tonercity.com.au
+  * @author      Yongcheng Chen yongcheng.chen@live.com
   */
 
 namespace Zento\Acl\Model\Auth;
-use Zento\Acl\Model\AdminPermissionItem;
-use Zento\Acl\Model\AdminUserPermissionWhiteList;
-use Zento\Acl\Model\AdminUserPermissionBlackList;
-use Zento\Acl\Model\AdminGroup;
-use Zento\Acl\Model\AdminGroupUser;
+use Zento\Acl\Model\PermissionItem;
+use Zento\Acl\Model\UserPermissionWhiteList;
+use Zento\Acl\Model\UserPermissionBlackList;
+use Zento\Acl\Model\UserGroup;
+use Zento\Acl\Model\GroupUserList;
 
-class User extends \Inkstation\Admin\Model\Auth\User implements ApcUserInterface
+class User extends \Zento\Backend\Model\ORM\Administrator implements AclUserInterface
 {
     private $_permissions;
     public function permissionwhitelist() {
-        return $this->hasManyThrough(AdminPermissionItem::class, AdminUserPermissionWhiteList::class,
+        return $this->hasManyThrough(PermissionItem::class, UserPermissionWhiteList::class,
             'user_id',
             'id',
             'id',
@@ -28,7 +28,7 @@ class User extends \Inkstation\Admin\Model\Auth\User implements ApcUserInterface
     }
 
     public function permissionblacklist() {
-        return $this->hasManyThrough(AdminPermissionItem::class, AdminUserPermissionBlackList::class,
+        return $this->hasManyThrough(PermissionItem::class, UserPermissionBlackList::class,
             'user_id',
             'id',
             'id',
@@ -37,7 +37,7 @@ class User extends \Inkstation\Admin\Model\Auth\User implements ApcUserInterface
     }
 
     public function groups() {
-        return $this->hasManyThrough(AdminGroup::class, AdminGroupUser::class,
+        return $this->hasManyThrough(UserGroup::class, GroupUserList::class,
             'user_id',
             'id',
             'id',

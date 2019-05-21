@@ -3,7 +3,7 @@
  *
  * @copyright
  * @license
- * @author      Yongcheng Chen tony@tonercity.com.au
+ * @author      Yongcheng Chen yongcheng.chen@live.com
  */
 
 namespace Zento\Acl\Console\Commands;
@@ -42,7 +42,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 
     public function option($key=null) {
         if ($key == 'path') {
-            return ltrim(\Inkstation\Admin\Consts::ADMIN_API_URI, '/');
+            return ltrim('/rest/v1/admin', '/');
         }
         return false;
     }

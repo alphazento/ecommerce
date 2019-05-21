@@ -3,7 +3,7 @@
  *
  * @copyright
  * @license
- * @author      Yongcheng Chen tony@tonercity.com.au
+ * @author      Yongcheng Chen yongcheng.chen@live.com
  */
 
 namespace Zento\Acl\Console\Commands;
@@ -11,7 +11,7 @@ namespace Zento\Acl\Console\Commands;
 use Auth;
 use Zento\Acl\Model\Auth\User;
 
-class UserPassword extends \Inkstation\Base\Console\Commands\Base
+class UserPassword extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.

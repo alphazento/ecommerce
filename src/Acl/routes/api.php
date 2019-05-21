@@ -1,13 +1,10 @@
 <?php
-use Inkstation\Store\Providers\Facades\Store;
-use Inkstation\Admin\Consts;
-
 //API entry
 Route::group(
     [
         'namespace' => '\Zento\Acl\Http\Controllers\Api',
         'middleware' => ['adminapi', 'apicors'],
-        'prefix' => Consts::ADMIN_API_URI . '/apc',
+        'prefix' => '/rest/v1/admin/acl',
         'as'=>'apc:'
     ], function () {
         Route::get('/users',

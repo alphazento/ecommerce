@@ -28,9 +28,9 @@ class PermissionCheck
 
     protected function isException($request) {
         $exceptions = [
-            sprintf('POST:%s', \Inkstation\Admin\Consts::ADMIN_API_URI . '/oauth/token'),
-            sprintf('POST:%s', \Inkstation\Admin\Consts::ADMIN_API_URI . '/oauth/token/google'),
-            sprintf('GET:%s', \Inkstation\Admin\Consts::ADMIN_API_URI . '/oauth/token/user')
+            sprintf('POST:%s', '/oauth/token'),
+            sprintf('POST:%s', '/oauth/token/google'),
+            sprintf('GET:%s', '/oauth/token/user')
         ];
 
         $req = sprintf('%s:/%s', $request->method(), $request->path());

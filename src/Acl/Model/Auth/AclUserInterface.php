@@ -5,12 +5,12 @@
   * @package    Base
   * @copyright
   * @license
-  * @author      Yongcheng Chen tony@tonercity.com.au
+  * @author      Yongcheng Chen yongcheng.chen@live.com
   */
 
 namespace Zento\Acl\Model\Auth;
 
-interface ApcUserInterface
+interface AclUserInterface
 {
     public function permissions();
 

@@ -5,14 +5,14 @@
   * @package    Base
   * @copyright
   * @license
-  * @author      Yongcheng Chen tony@tonercity.com.au
+  * @author      Yongcheng Chen yongcheng.chen@live.com
   */
 
 namespace Zento\Acl\Model\Auth;
 
 use Zento\Acl\Model\AdminGroup;
 
-class GuestUser implements ApcUserInterface
+class GuestUser implements AclUserInterface
 {
     public $_groups = null;
     public function permissionwhitelist() {
