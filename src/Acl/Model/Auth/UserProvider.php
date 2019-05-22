@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Acl\Model\Auth;
+namespace Zento\Acl\Model\Auth\Backend;
 
 class UserProvider extends \App\Backend\Model\Auth\UserProvider
 {

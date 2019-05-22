@@ -32,7 +32,7 @@ class CreatePermissionItemTable extends Migration
                 $table->unique(['method', 'uri']);
             });
 
-            DB::connection(\Zento\Acl\Consts::APC_DB)->table('permission_items')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('permission_items')->insert([
                 [
                     'scope' => 0,
                     'groupname' => 'root',

@@ -2,7 +2,7 @@
 
 namespace Zento\Acl\Http\Middleware;
 
-use APC;
+use ACL;
 use Closure;
 
 class PermissionCheck
@@ -18,7 +18,7 @@ class PermissionCheck
     public function handle($request, Closure $next, ...$extras)
     {
         if (!$this->isException($request)) {
-            if (!APC::checkRequest($request)) {
+            if (!ACL::checkRequest($request)) {
                 return response('Permission required. Please contact admininistator to get permission.', 401);
             }
         }

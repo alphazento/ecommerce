@@ -2,11 +2,57 @@
 
 namespace Zento\Passport\Providers;
 
-use Laravel\Passport\Passport;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\RequestGuard;
 
-class Entry extends ServiceProvider
+use League\OAuth2\Server\ResourceServer;
+use Laravel\Passport\Passport;
+use Laravel\Passport\TokenRepository;
+use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Guards\TokenGuard;
+
+class Entry extends \Illuminate\Support\ServiceProvider
 {
+    public function register() 
+    {
+        $this->registerGuard();
+    }
+    /**
+     * Register the token `guard.
+     *
+     * @return void
+     */
+    protected function registerGuard()
+    {
+        Auth::extend('passport', function ($app, $name, array $config) {
+            return tap($this->makeGuard($config), function ($guard) {
+                $this->app->refresh('request', $guard, 'setRequest');
+            });
+        });
+    }
+
+    /**
+     * Make an instance of the token guard.
+     *
+     * @param  array  $config
+     * @return \Illuminate\Auth\RequestGuard
+     */
+    protected function makeGuard(array $config)
+    {
+        return new RequestGuard(function ($request) use ($config) {
+            if ($user = (new TokenGuard(
+                $this->app->make(ResourceServer::class),
+                Auth::createUserProvider($config['provider']),
+                $this->app->make(TokenRepository::class),
+                $this->app->make(ClientRepository::class),
+                $this->app->make('encrypter')
+            ))->user($request)) {
+                (new \Zento\Passport\Passport)->callPostAuthcateHooks($user, $request);
+            }
+            return $user;
+        }, $this->app['request']);
+    }
+
     public function boot() {
         Passport::routes();
         Passport::tokensExpireIn(now()->addDays(15));

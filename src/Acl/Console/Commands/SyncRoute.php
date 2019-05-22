@@ -3,7 +3,7 @@
  *
  * @copyright
  * @license
- * @author      Yongcheng Chen yongcheng.chen@live.com
+ * @author      Yongcheng Chen tony@tonercity.com.au
  */
 
 namespace Zento\Acl\Console\Commands;
@@ -24,9 +24,10 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 
     protected $description = 'Turn api route as permission';
 
-    public static function register($serviceProvider, &$appContainer) {
+    public static function register($serviceProvider, $appContainer = null) {
         $class = static::class;
         $name = md5($class);
+        $appContainer = $appContainer ?? app();
         $appContainer->singleton($name, function ($app) use($class) {
             return $app[$class];
         });
@@ -42,7 +43,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 
     public function option($key=null) {
         if ($key == 'path') {
-            return ltrim('/rest/v1/admin', '/');
+            // return ltrim('/');
         }
         return false;
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateUserGroupTable extends Migration
 {
     protected function getBuilder() {
-        return Schema::connection(\Zento\Acl\Consts::APC_DB);
+        return Schema::connection(\Zento\Acl\Consts::DB);
     }
 
     /**
@@ -29,7 +29,7 @@ class CreateUserGroupTable extends Migration
                 $table->unique(['scope', 'name']);
             });
 
-            DB::connection(\Zento\Acl\Consts::APC_DB)->table('user_groups')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('user_groups')->insert([
                 [
                     'scope' => 0,
                     'name' => 'root',

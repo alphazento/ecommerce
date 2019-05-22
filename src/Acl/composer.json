@@ -54,7 +54,8 @@
                     },
                     "depends": [
                         "Zento_Passport",
-                        "Zento_Backend"
+                        "Zento_Backend",
+                        "Zento_Customer"
                     ]
                 }
             }

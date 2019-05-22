@@ -9,6 +9,7 @@ use Config;
 
 class UseCustomerModel
 {
+    static $Model = \Zento\Customer\Model\ORM\Customer::class;
     /**
      * Handle an incoming request.
      *
@@ -19,7 +20,7 @@ class UseCustomerModel
     public function handle($request, Closure $next)
     {
         // change auth setting for normal request
-        Config::set('auth.providers.users.model', \Zento\Customer\Model\ORM\Customer::class);
+        Config::set('auth.providers.users.model', self::$Model);
         return $next($request);
     }
 }

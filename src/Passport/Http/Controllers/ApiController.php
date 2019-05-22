@@ -1,16 +1,16 @@
 <?php
 
-namespace Zento\Passport\Http\Controllers\Api;
+namespace Zento\Passport\Http\Controllers;
 
 use Auth;
 use Request;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ZentoPassportController extends \Laravel\Passport\Http\Controllers\AccessTokenController
+class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
     protected $isRegistering = false;
 
-    public function apiOptions(ServerRequestInterface $request) {
+    public function apiHttpOptions(ServerRequestInterface $request) {
         return '';
     }
     
