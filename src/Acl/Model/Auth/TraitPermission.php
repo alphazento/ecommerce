@@ -10,40 +10,40 @@
 
 namespace Zento\Acl\Model\Auth;
 
-use Zento\Acl\Model\PermissionItem;
-use Zento\Acl\Model\UserPermissionWhiteList;
-use Zento\Acl\Model\UserPermissionBlackList;
-use Zento\Acl\Model\UserGroup;
-use Zento\Acl\Model\GroupUserList;
+use Zento\Acl\Model\ORM\AclPermissionItem;
+use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
+use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
+use Zento\Acl\Model\ORM\AclUserGroup;
+use Zento\Acl\Model\ORM\AclGroupUserList;
 
 trait TraitPermission
 {
     private $_permissions;
     public function permissionwhitelist() {
-        return $this->hasManyThrough(PermissionItem::class, UserPermissionWhiteList::class,
+        return $this->hasManyThrough(AclPermissionItem::class, AclUserPermissionWhiteList::class,
             'user_id',
             'id',
             'id',
             'item_id'
-        );
+        )->where(with(new AclUserPermissionWhiteList)->getTable() . '.scope', '=', static::$scope);
     }
 
     public function permissionblacklist() {
-        return $this->hasManyThrough(PermissionItem::class, UserPermissionBlackList::class,
+        return $this->hasManyThrough(AclPermissionItem::class, AclUserPermissionBlackList::class,
             'user_id',
             'id',
             'id',
             'item_id'
-        );
+        )->where(with(new AclUserPermissionBlackList)->getTable() . '.scope', '=', static::$scope);
     }
 
     public function groups() {
-        return $this->hasManyThrough(UserGroup::class, GroupUserList::class,
+        return $this->hasManyThrough(AclUserGroup::class, AclGroupUserList::class,
             'user_id',
             'id',
             'id',
             'group_id'
-        );
+        )->where(with(new AclGroupUserList)->getTable() . '.scope', '=', static::$scope);
     }
 
     public function permissions() {

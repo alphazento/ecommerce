@@ -26,7 +26,7 @@ class WebController extends \App\Http\Controllers\Controller
         $data = [];
         $appConfigs = [];
         
-        $request = Request::create('/rest/v1/reactapp/configs', 'GET');
+        $request = Request::create('/api/v1/reactapp/configs', 'GET');
         app()->instance('request', $request);
         $appConfigsResp = Route::dispatch($request);
         if ($appConfigsResp instanceof JsonResponse) {
@@ -34,7 +34,7 @@ class WebController extends \App\Http\Controllers\Controller
         }
 
         $categories = [];
-        $request = Request::create('/rest/v1/categories', 'GET');
+        $request = Request::create('/api/v1/categories', 'GET');
         app()->instance('request', $request);
         $categoriesResp = Route::dispatch($request);
         if ($categoriesResp instanceof JsonResponse) {
@@ -50,7 +50,7 @@ class WebController extends \App\Http\Controllers\Controller
         $url = Request::path();
         $urlRewrite = [];
         if ($url != '/') {
-            $request = Request::create('/rest/v1/urlrewrite', 'GET', ['url' => $url]);
+            $request = Request::create('/api/v1/urlrewrite', 'GET', ['url' => $url]);
             app()->instance('request', $request);
             $resp = Route::dispatch($request);
             $respData = $resp->getOriginalContent();
@@ -62,7 +62,7 @@ class WebController extends \App\Http\Controllers\Controller
         }
 
         // $pageconfigs = [];
-        // $request = Request::create('/rest/v1/pageconfigs', 'GET');
+        // $request = Request::create('/api/v1/pageconfigs', 'GET');
         // app()->instance('request', $request);
         // $resp = Route::dispatch($request);
         // if ($resp instanceof JsonResponse) {

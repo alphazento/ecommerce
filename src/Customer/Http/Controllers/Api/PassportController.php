@@ -6,7 +6,7 @@ use Auth;
 use Request;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PassportController extends \Zento\Passport\Http\Controllers\Api\ZentoPassportController
+class PassportController extends \Zento\Passport\Http\Controllers\ApiController
 {
     public function getOrCreateGuest(ServerRequestInterface $request) {
       if ($uuid = Request::header('Guest-Uuid')) {

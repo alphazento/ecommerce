@@ -44,8 +44,7 @@
                         "adminapi": {
                             "main": [
                                 "\\Zento\\Backend\\Http\\Middleware\\Backend",
-                                "\\Zento\\Passport\\Http\\Middleware\\CORS",
-                                "\\Zento\\Backend\\Http\\Middleware\\UseAdministratorModel"
+                                "\\Zento\\Passport\\Http\\Middleware\\CORS"
                             ]
                         }
                     }

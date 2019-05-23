@@ -2,7 +2,7 @@
 
 Route::group(
     [
-        'prefix' => '/rest/v1/oauth2',
+        'prefix' => '/api/v1/oauth2',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['setuppassport']
     ], function () {
@@ -17,7 +17,7 @@ Route::group(
 });
 
 Route::group([
-    'prefix' => '/rest/v1/customers',
+    'prefix' => '/api/v1/customers',
     'namespace' => '\Zento\Customer\Http\Controllers\Api',
     'middleware' => ['setuppassport']
 ], function () {
@@ -30,9 +30,10 @@ Route::group([
 
 Route::group(
     [
-        'prefix' => '/rest/v1/customers',
+        'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['setuppassport', 'auth:api']
+        'middleware' => ['setuppassport', 'auth:api'],
+        // 'as' => "user:frontend"
     ], function () {
     Route::get(
         '/{customer_id}', 

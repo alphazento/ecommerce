@@ -1,10 +1,11 @@
 <?php
 
-namespace Zento\Acl\Model;
+namespace Zento\Acl\Model\ORM;
 
-class UserGroup extends ApcDbModel
+class AclUserGroup extends AclBaseModel
 {
     protected $fillable = [
+        'scope',
         'name',
         'description',
         'active'
@@ -16,7 +17,7 @@ class UserGroup extends ApcDbModel
      * @return Collection of AdminPermissionItem
      */
     public function permissions() {
-        return $this->hasManyThrough(PermissionItem::class, GroupPermission::class,
+        return $this->hasManyThrough(AclPermissionItem::class, AclGroupPermission::class,
             'group_id',
             'id',
             'id',
@@ -25,6 +26,6 @@ class UserGroup extends ApcDbModel
     }
 
     public function groupusers() {
-        return $this->hasMany(GroupUserList::class, 'group_id', 'id');
+        return $this->hasMany(AclGroupUserList::class, 'group_id', 'id');
     }
 }

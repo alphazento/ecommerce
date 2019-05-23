@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserPermissionWhiteListTable extends Migration
+class CreateAclUserPermissionWhiteListTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -17,9 +17,10 @@ class CreateUserPermissionWhiteListTable extends Migration
     {
         $builder = $this->getBuilder();
 
-        if (!$builder->hasTable('user_permission_white_lists')) {
-            $builder->create('user_permission_white_lists', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_user_permission_white_lists')) {
+            $builder->create('acl_user_permission_white_lists', function (Blueprint $table) {
                 $table->increments('id');
+                $table->smallInteger('scope');  //0=> admin, 1=>frontend
                 $table->integer('user_id')->unsigned();
                 $table->integer('item_id')->unsigned();
                 $table->timestamps();
@@ -39,6 +40,6 @@ class CreateUserPermissionWhiteListTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('user_permission_white_lists');
+        $this->getBuilder()->drop('acl_user_permission_white_lists');
     }
 }

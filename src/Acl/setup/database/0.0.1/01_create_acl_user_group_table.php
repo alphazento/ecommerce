@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserGroupTable extends Migration
+class CreateAclUserGroupTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -17,8 +17,8 @@ class CreateUserGroupTable extends Migration
     public function up()
     {
         $builder = $this->getBuilder();
-        if (!$builder->hasTable('user_groups')) {
-            $builder->create('user_groups', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_user_groups')) {
+            $builder->create('acl_user_groups', function (Blueprint $table) {
                 $table->increments('id');
                 $table->smallInteger('scope');  //0=> admin, 1=>frontend
                 $table->string('name', 128);
@@ -29,7 +29,7 @@ class CreateUserGroupTable extends Migration
                 $table->unique(['scope', 'name']);
             });
 
-            DB::connection(\Zento\Acl\Consts::DB)->table('user_groups')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('acl_user_groups')->insert([
                 [
                     'scope' => 0,
                     'name' => 'root',
@@ -59,6 +59,6 @@ class CreateUserGroupTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('user_groups');
+        $this->getBuilder()->drop('acl_user_groups');
     }
 }

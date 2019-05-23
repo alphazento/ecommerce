@@ -5,7 +5,7 @@
 
     Route::group(
         [
-            'prefix' => '/rest/v1/oauth2',
+            'prefix' => '/api/v1/oauth2',
             'namespace' => '\Zento\Passport\Http\Controllers',
             'middleware' => ['setuppassport']
         ], function () {

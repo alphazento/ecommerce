@@ -16,7 +16,7 @@ class Routes implements \Zento\Contracts\RouteRule
         ];
         Route::group(
             [
-                'prefix' => '/rest/v1/customers',
+                'prefix' => '/api/v1/customers',
                 'namespace' => '\Zento\Customer\Http\Controllers\Api',
                 'middleware' => ['setuppassport', 'auth:api']
             ], function () use ($apiRoutes) {

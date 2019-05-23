@@ -1,13 +1,14 @@
 <?php
 
-namespace Zento\Acl\Model;
+namespace Zento\Acl\Model\ORM;
 
 use Illuminate\Routing\Route;
 
-class PermissionItem extends ApcDbModel
+class AclPermissionItem extends AclBaseModel
 {
     private $_route;
     protected $fillable = [
+        'scope',
         'method',
         'uri',
         'removed',

@@ -11,7 +11,7 @@ namespace Zento\Acl\Console\Commands;
 use Illuminate\Routing\Router;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zento\Acl\Model\AdminPermissionItem;
+use Zento\Acl\Model\ORM\AclPermissionItem;
 
 class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 {
@@ -20,9 +20,9 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
      *
      * @var string
      */
-    protected $signature = 'apc:syncroute';
+    protected $signature = 'acl:sync';
 
-    protected $description = 'Turn api route as permission';
+    protected $description = 'convert api route to permission';
 
     public static function register($serviceProvider, $appContainer = null) {
         $class = static::class;
@@ -49,10 +49,6 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     }
 
     public function handle() {
-        if (empty($this->routes)) {
-            return $this->error("Your application doesn't have any routes.");
-        }
-
         if (empty($routes = $this->getRoutes())) {
             return $this->error("Your application doesn't have any routes matching the given criteria.");
         }
@@ -61,17 +57,27 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         $this->displayRoutes($routes);
     }
 
+    protected function needPermission(array $route) {
+        if ($middleware = ($route['middleware'] ?? false)) {
+            return in_array('auth:api', explode(',', $middleware));
+        }
+        return false;
+    }
+
     protected function convertToPermissionItems(array $routes)
     {
         $ids = [1];
         $item = null;
         foreach($routes as $route) {
+            if (!$this->needPermission($route)){
+                continue;
+            }
             $methods = explode('|', $route['method']);
             foreach($methods as $method) {
                 if ($method != 'HEAD') {
-                    $item = AdminPermissionItem::where('method', $method)->where('uri', $route['uri'])->first();
+                    $item = AclPermissionItem::where('method', $method)->where('uri', $route['uri'])->first();
                     if (!$item) {
-                        $item = new AdminPermissionItem([
+                        $item = new AclPermissionItem([
                             'method' => $method,
                             'uri' => $route['uri'],
                             'removed' => 0,
@@ -80,9 +86,27 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                     }
                     if ($item) {
                         $names = explode(':', $route['name']);
+                        $names_count = count($names);
+                        switch($names_count) {
+                            case 1:
+                            $item->groupname = 'other';
+                            $item->scope = 2;
+                            $item->name = $names[0];
+                            break;
+                            case 2:
+                            $item->groupname = $names[0];
+                            $item->scope = 2;
+                            $item->name = $names[1];
+                            break;
 
-                        $item->groupname = count($names) > 1 ? $names[0] : 'other';
-                        $item->name = count($names) > 1 ? $names[1] : $names[0];
+                            default:
+                            $item->groupname = $names[0];
+                            $item->scope = $names[1] === 'admin' ? 0 : 1;
+                            $item->name = $names[2];
+                            break;
+                        }
+                        // $item->groupname = count($names) > 1 ? $names[0] : 'other';
+                        // $item->name = count($names) > 1 ? $names[1] : $names[0];
                         $item->removed = 0;
                         $item->save();
                         $ids[] = $item->id;
@@ -90,7 +114,6 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                 }
             }
         }
-
         if ($item) {
             $item->getConnection()
                 ->table($item->getTable())

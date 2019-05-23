@@ -1,7 +1,7 @@
 <?php
 Route::group(
     [
-        'prefix' => '/rest/v1',
+        'prefix' => '/api/v1',
         'namespace' => '\Zento\PaypalPayment\Http\Controllers',
         'middleware' => ['cors']
     ], function () {

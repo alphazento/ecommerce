@@ -10,13 +10,8 @@
 
 namespace Zento\Acl\Model\Auth\Backend;
 
-use Zento\Acl\Model\PermissionItem;
-use Zento\Acl\Model\UserPermissionWhiteList;
-use Zento\Acl\Model\UserPermissionBlackList;
-use Zento\Acl\Model\UserGroup;
-use Zento\Acl\Model\GroupUserList;
-
-class User extends \Zento\Backend\Model\ORM\Administrator implements AclUserInterface
+class Administrator extends \Zento\Backend\Model\ORM\Administrator implements AclUserInterface
 {
+    static $scope = \Zento\Acl\Consts::ADMIN_SCOPE;
     use TraitPermission;
 }

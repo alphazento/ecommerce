@@ -1,7 +1,7 @@
 <?php
 Route::group(
     [
-        'prefix' => '/rest/v1',
+        'prefix' => '/api/v1',
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
         'middleware' => ['cors']
     ], function () {
@@ -18,9 +18,9 @@ Route::group(
 //admin
 Route::group(
     [
-        'prefix' => '/rest/v1/admin',
+        'prefix' => '/api/v1/admin',
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
-        'middleware' => ['cors']
+        'middleware' => ['cors'],
     ], function () {
         Route::get(
             '/catalog/search', 

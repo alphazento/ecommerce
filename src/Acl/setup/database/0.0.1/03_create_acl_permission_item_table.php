@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePermissionItemTable extends Migration
+class CreateAclPermissionItemTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -17,8 +17,8 @@ class CreatePermissionItemTable extends Migration
     {
         $builder = $this->getBuilder();
 
-        if (!$builder->hasTable('permission_items')) {
-            $builder->create('permission_items', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_permission_items')) {
+            $builder->create('acl_permission_items', function (Blueprint $table) {
                 $table->increments('id');
                 $table->smallInteger('scope');  //0=> admin, 1=>frontend
                 $table->string('groupname', 255);
@@ -32,7 +32,7 @@ class CreatePermissionItemTable extends Migration
                 $table->unique(['method', 'uri']);
             });
 
-            DB::connection(\Zento\Acl\Consts::DB)->table('permission_items')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('acl_permission_items')->insert([
                 [
                     'scope' => 0,
                     'groupname' => 'root',
@@ -52,6 +52,6 @@ class CreatePermissionItemTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('permission_items');
+        $this->getBuilder()->drop('acl_permission_items');
     }
 }

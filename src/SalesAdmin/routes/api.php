@@ -1,9 +1,10 @@
 <?php
 Route::group(
     [
-        'prefix' => '/rest/v1/admin/sales',
+        'prefix' => '/api/v1/admin/sales',
         'namespace' => '\Zento\SalesAdmin\Http\Controllers',
-        'middleware' => ['cors']
+        'middleware' => ['cors', 'auth:api'],
+        'as' => 'sales:admin:'
         // 'middleware' => ['web']
     ], function () {
     Route::get(

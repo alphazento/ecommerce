@@ -2,9 +2,7 @@
 
 namespace Zento\Acl;
 
-use Exception;
-
-class AclException extends Exception
+class AclException extends \Illuminate\Auth\AuthenticationException
 {
     /**
      * Create a new authentication exception.

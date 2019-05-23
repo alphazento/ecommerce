@@ -10,13 +10,8 @@
 
 namespace Zento\Acl\Model\Auth;
 
-use Zento\Acl\Model\PermissionItem;
-use Zento\Acl\Model\UserPermissionWhiteList;
-use Zento\Acl\Model\UserPermissionBlackList;
-use Zento\Acl\Model\UserGroup;
-use Zento\Acl\Model\GroupUserList;
-
 class Customer extends \Zento\Customer\Model\ORM\Customer implements AclUserInterface
 {
+    static $scope = \Zento\Acl\Consts::CUSTOMER_SCOPE;
     use TraitPermission;
 }

@@ -1,9 +1,10 @@
 <?php
 Route::group(
     [
-        'prefix' => '/rest/v1',
+        'prefix' => '/api/v1',
         'namespace' => '\Zento\PaymentGateway\Http\Controllers',
-        'middleware' => ['setuppassport', 'auth:api']
+        'middleware' => ['setuppassport', 'auth:api'],
+        'as' => 'payment:'
     ], function () {
         Route::post(
             '/payment/estimate', 

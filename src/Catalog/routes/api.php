@@ -1,7 +1,7 @@
 <?php
 Route::group(
     [
-        'prefix' => '/rest/v1',
+        'prefix' => '/api/v1',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         'middleware' => ['cors']
     ], function () {
@@ -44,7 +44,7 @@ Route::group(
 //admin
 Route::group(
     [
-        'prefix' => '/rest/v1/admin',
+        'prefix' => '/api/v1/admin',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         'middleware' => ['cors']
     ], function () {

@@ -1,21 +1,21 @@
 <?php
 
-namespace Zento\Acl\Http\Controllers\Api;
+namespace Zento\Acl\Http\Controllers;
 
 use Route;
 use Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Zento\Acl\Model\Auth\User;
-use Zento\Acl\Model\AdminGroup;
-use Zento\Acl\Model\AdminGroupUser;
-use Zento\Acl\Model\AdminPermissionItem;
-use Zento\Acl\Model\AdminGroupPermission;
-use Zento\Acl\Model\AdminUserPermissionWhiteList;
-use Zento\Acl\Model\AdminUserPermissionBlackList;
+use Zento\Acl\Model\ORM\AclGroup;
+use Zento\Acl\Model\ORM\AclGroupUser;
+use Zento\Acl\Model\ORM\AclPermissionItem;
+use Zento\Acl\Model\ORM\AclGroupPermission;
+use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
+use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
 
 
-class ApcController extends Controller
+class AclController extends Controller
 {
     /**
      * Get all admin users including inactived users
@@ -65,13 +65,13 @@ class ApcController extends Controller
     public function addUserWhitePermission() {
         if ($user = User::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AdminPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AdminUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
+                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $pids = array_diff($ids, $exists);
                 foreach($pids as $id) {
-                    AdminUserPermissionWhiteList::create(['user_id'=>$user->id, 'item_id' => $id]);
+                    AclUserPermissionWhiteList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
-                AdminUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->delete();
+                AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->delete();
                 return ['status'=> 201];
             }
 
@@ -83,13 +83,13 @@ class ApcController extends Controller
     public function addUserBlackPermission() {
         if ($user = User::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AdminPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AdminUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
+                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $pids = array_diff($ids, $exists);
                 foreach($pids as $id) {
-                    AdminUserPermissionBlackList::create(['user_id'=>$user->id, 'item_id' => $id]);
+                    AclUserPermissionBlackList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
-                AdminUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
                 return ['status'=> 201];
             }
 
@@ -102,7 +102,7 @@ class ApcController extends Controller
         if ($user = User::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                AdminUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
             return ['status' => 200];
         }
@@ -114,7 +114,7 @@ class ApcController extends Controller
         if ($user = User::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                AdminUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
 
             return ['status' => 200];
@@ -138,11 +138,11 @@ class ApcController extends Controller
      * ]}
      */
     public function groups() {
-        return ['status' => 200, 'data' => AdminGroup::all()];
+        return ['status' => 200, 'data' => AclUserGroup::all()];
     }
 
     public function getGroupPermissions() {
-        if ($group = AdminGroup::find(Route::input('id'))) {
+        if ($group = AclUserGroup::find(Route::input('id'))) {
             return ['status' => 200, 'data' => $group->permissions];
         }
         return ['status'=>404];
@@ -154,7 +154,7 @@ class ApcController extends Controller
      * @return Array User
      */
     public function getGroupUsers() {
-        if ($group = AdminGroup::with(['groupusers.user'])->where('id', Route::input('id'))->first()) {
+        if ($group = AclUserGroup::with(['groupusers.user'])->where('id', Route::input('id'))->first()) {
             $data = [];
             foreach($group->groupusers ?? [] as $middle) {
                 if ($middle->user) {
@@ -260,13 +260,13 @@ class ApcController extends Controller
 
     public function addUsersToGroup() {
         $error = '';
-        if ($group = AdminGroup::find(Route::input('id'))) {
+        if ($group = AclUserGroup::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $uids = User::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists =  AdminGroupUser::where('group_id', $group_id)->whereIn('user_id', $uids)->pluck('user_id')->toArray();
+                $exists =  AclUserGroupUser::where('group_id', $group_id)->whereIn('user_id', $uids)->pluck('user_id')->toArray();
                 $uids = array_diff($uids, $exists);
                 foreach($uids as $id) {
-                    AdminGroupUser::create(['user_id'=>$id, 'group_id' => $group->id]);
+                    AclUserGroupUser::create(['user_id'=>$id, 'group_id' => $group->id]);
                 }
                 return ['status'=> 201];
             }
@@ -277,8 +277,8 @@ class ApcController extends Controller
     }
 
     public function removeUserFromGroup() {
-        if ($group = AdminGroup::find(Route::input('group_id'))) {
-            if ($item = AdminGroupUser::where('user_id', Route::input('user_id'))) {
+        if ($group = AclUserGroup::find(Route::input('group_id'))) {
+            if ($item = AclUserGroupUser::where('user_id', Route::input('user_id'))) {
                 $item->delete();
                 return ['status' => 200, 'data' => Route::input('user_id')];
             }
@@ -288,10 +288,10 @@ class ApcController extends Controller
 
     public function addGroup() {
         if ($name = Request::get('name', false)) {
-            if (AdminGroup::where('name', $name)->first()) {
+            if (AclUserGroup::where('name', $name)->first()) {
                 return ['status'=>'400', 'error' => sprintf('Group[%s] already exists.', $name)];
             }
-            $group = new AdminGroup(['name' => $name, 'description' => Request::get('description', ''), 'active' => Request::get('active', 1)]);
+            $group = new AclUserGroup(['name' => $name, 'description' => Request::get('description', ''), 'active' => Request::get('active', 1)]);
             $group->save();
             return ['status'=>'200', 'data' => $group];
         } else {
@@ -301,9 +301,9 @@ class ApcController extends Controller
 
     public function updateGroup() {
         if ($id = Route::input('id', false)) {
-            if ($group = AdminGroup::find($id)) {
+            if ($group = AclUserGroup::find($id)) {
                 $name = Request::get('name', $group->name);
-                if (AdminGroup::where('name', $name)->where('id', '!=', $id)->first()) {
+                if (AclUserGroup::where('name', $name)->where('id', '!=', $id)->first()) {
                     return ['status'=>'400', 'error' => sprintf('Group[%s] has been taken by other group.', $name)];
                 }
                 $group->name = $name;
@@ -322,9 +322,9 @@ class ApcController extends Controller
         $error = '';
         if ($user = User::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $gids = AdminGroup::whereIn('id', $ids)->pluck('id')->toArray();
+                $gids = AclUserGroup::whereIn('id', $ids)->pluck('id')->toArray();
                 foreach($gids as $gid) {
-                    AdminGroupUser::create(['user_id'=>$user->id, 'group_id' => $gid]);
+                    AclUserGroupUser::create(['user_id'=>$user->id, 'group_id' => $gid]);
                 }
                 return ['status'=> 201];
             }
@@ -335,18 +335,18 @@ class ApcController extends Controller
     }
 
     public function getPermissions() {
-        return ['status' => 200, 'data' => AdminPermissionItem::where('active', 1)->get()];
+        return ['status' => 200, 'data' => AclPermissionItem::where('active', 1)->get()];
     }
 
     public function addGroupPermissions() {
-        if ($group = AdminGroup::find(Route::input('id'))) {
+        if ($group = AclUserGroup::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AdminPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AdminGroupPermission::where('group_id', $group->id)
+                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclUserGroupPermission::where('group_id', $group->id)
                             ->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $ids = array_diff($ids, $exists);
                 foreach($ids as $id) {
-                    AdminGroupPermission::create(['item_id'=>$id, 'group_id' => $group->id]);
+                    AclUserGroupPermission::create(['item_id'=>$id, 'group_id' => $group->id]);
                 }
                 return ['status'=> 201];
             }
@@ -355,10 +355,10 @@ class ApcController extends Controller
     }
 
     public function removeGroupPermission() {
-        if ($group = AdminGroup::find(Route::input('gid'))) {
+        if ($group = AclUserGroup::find(Route::input('gid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                if ($item =  AdminGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->first()) {
+                if ($item =  AclUserGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->first()) {
                     $item->delete();
                 }
                 return ['status'=> 200];

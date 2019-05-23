@@ -2,174 +2,174 @@
 //API entry
 Route::group(
     [
-        'namespace' => '\Zento\Acl\Http\Controllers\Api',
-        'middleware' => ['adminapi', 'apicors'],
-        'prefix' => '/rest/v1/admin/acl',
-        'as'=>'apc:'
+        'namespace' => '\Zento\Acl\Http\Controllers',
+        'middleware' => ['adminapi', 'auth:api'],
+        'prefix' => '/api/v1/admin/acl',
+        'as' => 'acl:admin:'
     ], function () {
         Route::get('/users',
             [
                 'as'=>'get.users',
-                'uses'=>'ApcController@users'
+                'uses'=>'AclController@users'
             ]
         );
 
         Route::post('/users',
             [
                 'as'=>'add.user',
-                'uses'=>'ApcController@putUser'
+                'uses'=>'AclController@putUser'
             ]
         );
 
         Route::get('/users/{id}',
             [
                 'as'=>'get.users',
-                'uses'=>'ApcController@getUser'
+                'uses'=>'AclController@getUser'
             ]
         );
 
         Route::delete('/users/{id}',
             [
                 'as'=>'delete.user',
-                'uses'=>'ApcController@deleteUser'
+                'uses'=>'AclController@deleteUser'
             ]
         );
 
         Route::post('/users/{id}',
             [
                 'as'=>'update.user',
-                'uses'=>'ApcController@updateUser'
+                'uses'=>'AclController@updateUser'
             ]
         );
 
         Route::get('/users/{id}/groups',
         [
             'as'=>'get.groupsbyuser',
-            'uses'=>'ApcController@getGroupsByUser'
+            'uses'=>'AclController@getGroupsByUser'
         ]);
 
         Route::post('/users/{id}/groups',
         [
             'as'=>'add.groups.to.user',
-            'uses'=>'ApcController@addGroups2User'
+            'uses'=>'AclController@addGroups2User'
         ]);
 
         Route::delete('/users/{uid}/groups/{gid}',
         [
             'as'=>'del.groupbyuser',
-            'uses'=>'ApcController@delGroupByUser'
+            'uses'=>'AclController@delGroupByUser'
         ]);
 
         Route::get('/users/{id}/permissions',
         [
             'as'=>'get.user.permissions',
-            'uses'=>'ApcController@getUserPermissions'
+            'uses'=>'AclController@getUserPermissions'
         ]);
 
         Route::get('/users/{id}/white-permissions',
         [
             'as'=>'get.user.whitepermissions',
-            'uses'=>'ApcController@getUserWhitePermissions'
+            'uses'=>'AclController@getUserWhitePermissions'
         ]);
 
         Route::get('/users/{id}/black-permissions',
         [
             'as'=>'get.user.blackpermissions',
-            'uses'=>'ApcController@getUserBlackPermissions'
+            'uses'=>'AclController@getUserBlackPermissions'
         ]);
 
         Route::post('/users/{id}/white-permissions',
         [
             'as'=>'post.user.whitepermissions',
-            'uses'=>'ApcController@addUserWhitePermission'
+            'uses'=>'AclController@addUserWhitePermission'
         ]);
 
         Route::post('/users/{id}/black-permissions',
         [
             'as'=>'post.user.blackpermissions',
-            'uses'=>'ApcController@addUserBlackPermission'
+            'uses'=>'AclController@addUserBlackPermission'
         ]);
 
         Route::delete('/users/{uid}/white-permissions/{pid}',
         [
             'as'=>'delete.user.whitepermissions',
-            'uses'=>'ApcController@removeUserWhitePermission'
+            'uses'=>'AclController@removeUserWhitePermission'
         ]);
 
         Route::delete('/users/{uid}/black-permissions/{pid}',
         [
             'as'=>'delete.user.blackpermissions',
-            'uses'=>'ApcController@removeUserBlackPermission'
+            'uses'=>'AclController@removeUserBlackPermission'
         ]);
 
 
         Route::get('/groups',
             [
                 'as'=>'get.groups',
-                'uses'=>'ApcController@groups'
+                'uses'=>'AclController@groups'
             ]
         );
 
         Route::post('/groups',
             [
                 'as'=>'post.groups',
-                'uses'=>'ApcController@addGroup'
+                'uses'=>'AclController@addGroup'
             ]
         );
 
         Route::post('/groups/{id}',
             [
                 'as'=>'post.groups',
-                'uses'=>'ApcController@updateGroup'
+                'uses'=>'AclController@updateGroup'
             ]
         );
 
         Route::get('/groups/{id}/permissions',
             [
                 'as'=>'get.groups.permissions',
-                'uses'=>'ApcController@getGroupPermissions'
+                'uses'=>'AclController@getGroupPermissions'
             ]
         );
 
         Route::post('/groups/{id}/permissions',
             [
                 'as'=>'post.groups.permissions',
-                'uses'=>'ApcController@addGroupPermissions'
+                'uses'=>'AclController@addGroupPermissions'
             ]
         );
 
         Route::delete('/groups/{gid}/permissions/{pid}',
             [
                 'as'=>'delete.groups.permissions',
-                'uses'=>'ApcController@removeGroupPermission'
+                'uses'=>'AclController@removeGroupPermission'
             ]
         );
 
         Route::get('/groups/{id}/users',
             [
                 'as'=>'get.groups.users',
-                'uses'=>'ApcController@getGroupUsers'
+                'uses'=>'AclController@getGroupUsers'
             ]
         );
 
         Route::post('/groups/{id}/users',
             [
                 'as'=>'post.groups.users',
-                'uses'=>'ApcController@addUsersToGroup'
+                'uses'=>'AclController@addUsersToGroup'
             ]
         );
 
         Route::delete('/groups/{group_id}/users/{user_id}',
             [
                 'as'=>'delete.groups.user',
-                'uses'=>'ApcController@removeUserFromGroup'
+                'uses'=>'AclController@removeUserFromGroup'
             ]
         );
 
         Route::get('/permissions',
             [
                 'as'=>'get.permissions',
-                'uses'=>'ApcController@getPermissions'
+                'uses'=>'AclController@getPermissions'
             ]
         );
 

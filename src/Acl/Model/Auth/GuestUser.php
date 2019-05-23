@@ -12,8 +12,13 @@ namespace Zento\Acl\Model\Auth;
 
 use Zento\Acl\Model\AdminGroup;
 
+/**
+ * Guest user can get gust group permission
+ */
 class GuestUser implements AclUserInterface
 {
+    static $scope = \Zento\Acl\Consts::GUEST_SCOPE;
+
     public $_groups = null;
     public function permissionwhitelist() {
         return null;
