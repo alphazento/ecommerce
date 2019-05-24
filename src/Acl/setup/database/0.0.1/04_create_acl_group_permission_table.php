@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Zento\Acl\Consts;
 
 class CreateAclGroupPermissionTable extends Migration
 {
@@ -39,7 +40,7 @@ class CreateAclGroupPermissionTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_group_permissions')->insert([
                 [
-                    'scope' => 0,
+                    'scope' => Consts::ADMIN_SCOPE,
                     'group_id' => 1,
                     'item_id' => 1,
                 ]

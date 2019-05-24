@@ -17,7 +17,6 @@ use Zento\Acl\AclException;
 class Entry extends ServiceProvider
 {
     public function register() {
-        \Zento\Customer\Http\Middleware\UseCustomerModel::$Model = \Zento\Acl\Model\Auth\Customer::class;
         $this->app->singleton('acl', function ($app) {
             return new \Zento\Acl\Services\Acl();
         });
@@ -27,18 +26,5 @@ class Entry extends ServiceProvider
                 throw new AclException();
             }
         });
-    }
-
-    /**
-     * Perform post-registration booting of services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        // Auth::provider('admin_users', function()
-        // {
-        //     return new UserProvider();
-        // });
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Zento\Acl\Consts;
 
 class CreateAclUserGroupTable extends Migration
 {
@@ -20,7 +21,7 @@ class CreateAclUserGroupTable extends Migration
         if (!$builder->hasTable('acl_user_groups')) {
             $builder->create('acl_user_groups', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  //0=> admin, 1=>frontend
+                $table->smallInteger('scope');  // Zento\Acl\Consts
                 $table->string('name', 128);
                 $table->string('description', 255)->default('');
                 $table->boolean('active')->default(1);
@@ -31,21 +32,15 @@ class CreateAclUserGroupTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_user_groups')->insert([
                 [
-                    'scope' => 0,
+                    'scope' => Consts::ADMIN_SCOPE,
                     'name' => 'root',
                     'description' => 'Users in the group will have root permission. That means it can do anything.',
                     'active' => 1
                 ],
                 [
-                    'scope' => '0',
+                    'scope' => Consts::GUEST_SCOPE,
                     'name' => 'guest',
-                    'description' => 'Admin Guest user group.',
-                    'active' => 1
-                ],
-                [
-                    'scope' => '1',
-                    'name' => 'guest',
-                    'description' => 'Frontend Guest user group.',
+                    'description' => 'Guest user group.',
                     'active' => 1
                 ]
             ]);

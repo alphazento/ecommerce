@@ -3,6 +3,8 @@
 namespace Zento\Passport\Model;
 
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -56,5 +58,16 @@ class User extends Authenticatable
      */
     public function crossUserAcl($isMe = false) {
         return $isMe;
+    }
+    
+    public function randomPassword() {
+        return Str::random(16);
+    }
+
+    public function applyRandomPassword() {
+        $password = $this->randomPassword();
+        $this->password = Hash::make($password);
+        $this->save();
+        return $password;
     }
 }

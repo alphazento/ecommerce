@@ -5,6 +5,7 @@ namespace Zento\Passport\Http\Controllers;
 use Auth;
 use Request;
 use Psr\Http\Message\ServerRequestInterface;
+use Zento\Passport\Model\GoogleOAuthConnect;
 
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
@@ -25,6 +26,10 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         $response = parent::issueToken($request);
         return ['status'=>$response->getStatusCode(),
             'data'=>json_decode($response->getContent(), true)];
+    }
+
+    public function issueTokenConnectGoogle(ServerRequestInterface $request) {
+        return (new GoogleOAuthConnect)->googleOauthConnectPassport($request);
     }
 
     public function refreshToken(ServerRequestInterface $request)

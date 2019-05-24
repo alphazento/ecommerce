@@ -46,11 +46,7 @@
                     "listeners":  {
                     },
                     "middlewaregroup": {
-                        "adminapi": {
-                            "after": [
-                                "\\Zento\\Backend\\Http\\Middleware\\AclCheck"
-                            ]
-                        }
+                       
                     },
                     "depends": [
                         "Zento_Passport",

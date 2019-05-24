@@ -34,9 +34,7 @@
                     ],
                     "middlewares": {},
                     "middlewaregroup": {
-                        "setuppassport": {
-                            "main": []
-                        }
+                       
                     }
                 }
             }

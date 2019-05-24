@@ -12,6 +12,6 @@ namespace Zento\Acl\Model\Auth;
 
 class Customer extends \Zento\Customer\Model\ORM\Customer implements AclUserInterface
 {
-    static $scope = \Zento\Acl\Consts::CUSTOMER_SCOPE;
+    static $scope = \Zento\Acl\Consts::FRONTEND_SCOPE;
     use TraitPermission;
 }

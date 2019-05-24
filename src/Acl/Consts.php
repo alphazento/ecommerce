@@ -5,7 +5,8 @@ namespace Zento\Acl;
 abstract class Consts {
     const DB = 'acl_db';
 
-    const ADMIN_SCOPE = 0;
-    const CUSTOMER_SCOPE = 1;
-    const GUEST_SCOPE = 2;
+    const GUEST_SCOPE = 0;
+    const ADMIN_SCOPE = 1;
+    const FRONTEND_SCOPE = 2;
+    const BOTH_SCOPE = 3;
 }

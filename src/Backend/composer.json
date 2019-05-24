@@ -41,7 +41,7 @@
                     "listeners":  {
                     },
                     "middlewaregroup": {
-                        "adminapi": {
+                        "backend": {
                             "main": [
                                 "\\Zento\\Backend\\Http\\Middleware\\Backend",
                                 "\\Zento\\Passport\\Http\\Middleware\\CORS"

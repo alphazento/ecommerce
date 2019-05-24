@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Zento\Acl\Consts;
 
 class CreateAclGroupUserListTable extends Migration
 {
@@ -35,7 +36,7 @@ class CreateAclGroupUserListTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_group_user_lists')->insert([
                 [
-                    'scope' => 0,
+                    'scope' => Consts::ADMIN_SCOPE,
                     'user_id' => 1,
                     'group_id' => 1
                 ]

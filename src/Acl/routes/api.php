@@ -3,9 +3,9 @@
 Route::group(
     [
         'namespace' => '\Zento\Acl\Http\Controllers',
-        'middleware' => ['adminapi', 'auth:api'],
+        'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl',
-        'as' => 'acl:admin:'
+        'as' => 'admin:acl:'
     ], function () {
         Route::get('/users',
             [

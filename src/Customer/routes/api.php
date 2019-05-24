@@ -4,10 +4,9 @@ Route::group(
     [
         'prefix' => '/api/v1/oauth2',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['setuppassport']
     ], function () {
     Route::post(
-        '/zento_token', 
+        '/token', 
         ['uses' => 'PassportController@issueToken']
     );
     Route::post(
@@ -19,7 +18,6 @@ Route::group(
 Route::group([
     'prefix' => '/api/v1/customers',
     'namespace' => '\Zento\Customer\Http\Controllers\Api',
-    'middleware' => ['setuppassport']
 ], function () {
         Route::put(
             '/guest', 
@@ -32,8 +30,8 @@ Route::group(
     [
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['setuppassport', 'auth:api'],
-        // 'as' => "user:frontend"
+        'middleware' => ['auth:api'],
+        'as' => "both:user:"
     ], function () {
     Route::get(
         '/{customer_id}', 

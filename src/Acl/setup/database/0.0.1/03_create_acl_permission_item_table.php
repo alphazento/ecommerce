@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Zento\Acl\Consts;
 
 class CreateAclPermissionItemTable extends Migration
 {
@@ -34,7 +35,7 @@ class CreateAclPermissionItemTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_permission_items')->insert([
                 [
-                    'scope' => 0,
+                    'scope' => Consts::ADMIN_SCOPE,
                     'groupname' => 'root',
                     'name' => 'Admin super permiision',
                     'method' => '*',

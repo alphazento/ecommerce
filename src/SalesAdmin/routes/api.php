@@ -4,8 +4,7 @@ Route::group(
         'prefix' => '/api/v1/admin/sales',
         'namespace' => '\Zento\SalesAdmin\Http\Controllers',
         'middleware' => ['cors', 'auth:api'],
-        'as' => 'sales:admin:'
-        // 'middleware' => ['web']
+        'as' => 'admin:sales:'
     ], function () {
     Route::get(
         '/orders', 

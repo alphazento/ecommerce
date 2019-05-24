@@ -7,7 +7,6 @@
         [
             'prefix' => '/api/v1/oauth2',
             'namespace' => '\Zento\Passport\Http\Controllers',
-            'middleware' => ['setuppassport']
         ], function () {
         Route::post(
             '/token', 

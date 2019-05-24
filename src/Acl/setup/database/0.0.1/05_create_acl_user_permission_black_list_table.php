@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Zento\Acl\Consts;
 
 class CreateAclUserPermissionBlackListTable extends Migration
 {

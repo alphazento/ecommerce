@@ -12,6 +12,7 @@ use Illuminate\Routing\Router;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zento\Acl\Model\ORM\AclPermissionItem;
+use Zento\Acl\Consts;
 
 class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 {
@@ -39,7 +40,6 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         $method = method_exists($this, 'handle') ? 'handle' : 'fire';
         return $this->laravel->call([$this, $method]);
     }
-
 
     public function option($key=null) {
         if ($key == 'path') {
@@ -90,18 +90,18 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                         switch($names_count) {
                             case 1:
                             $item->groupname = 'other';
-                            $item->scope = 2;
+                            $item->scope = Consts::GUEST_SCOPE;
                             $item->name = $names[0];
                             break;
                             case 2:
                             $item->groupname = $names[0];
-                            $item->scope = 2;
+                            $item->scope = Consts::GUEST_SCOPE;
                             $item->name = $names[1];
                             break;
 
                             default:
-                            $item->groupname = $names[0];
-                            $item->scope = $names[1] === 'admin' ? 0 : 1;
+                            $item->scope = $names[0] === 'admin' ? (Consts::ADMIN_SCOPE) : (Consts::FRONTEND_SCOPE);
+                            $item->groupname = $names[1];
                             $item->name = $names[2];
                             break;
                         }
