@@ -2,24 +2,15 @@
 
 namespace Zento\Passport;
 
-use ShareBucket;
+use Config;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Passport
 {
-    // [
-    //     'driver' => 'eloquent',
-    //     'model' => \Zento\Passport\Model\User::class,
-    // ]; 
-    protected static $userProviderConfigs = null;
     protected static $callbacks = [];
 
-    public static function setProviderConfigs($configs) {
-        self::$userProviderConfig = $configs;
-    }
-
-    public static function getUserProviderConfigs($configs) {
-        return self::$userProviderConfig ?? $config;
+    public static function setPassportUserModel($modelClass) {
+        Config::set('auth.providers.users.model', $modelClass);
     }
 
     public static function registerPostAuthcateHook(\Closure $callback) {
@@ -33,9 +24,7 @@ class Passport
     }
 
     public static function issueTokenWithouPasswordInPasswordGrantType(ServerRequestInterface $request, $email = null) {
-        $provider = Config::get('auth.api.provider');
-        $userProviderConfigs = Config::get('auth.providers.' . $provider);
-        $userProvider = Auth::createUserProvider(\Zento\Passport\Passport::getUserProviderConfigs($userProviderConfigs));
+        $userProvider = Auth::createUserProvider(Config::get('auth.api.provider'));
 
         $localUser = $userProvider->findForPassport($email);
         if (!$localUser) {

@@ -28,7 +28,7 @@ class CreateAclUserPermissionWhiteListTable extends Migration
 
                 $table->foreign('item_id')
                         ->references('id')
-                        ->on('permission_items')
+                        ->on('alc_permission_items')
                         ->onDelete('cascade');
             });
         }

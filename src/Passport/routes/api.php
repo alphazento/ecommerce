@@ -7,6 +7,7 @@
         [
             'prefix' => '/api/v1/oauth2',
             'namespace' => '\Zento\Passport\Http\Controllers',
+            'middleware' => ['cors']
         ], function () {
         Route::post(
             '/token', 

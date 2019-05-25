@@ -4,6 +4,7 @@ Route::group(
     [
         'prefix' => '/api/v1/oauth2',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
+        'middleware' => ['cors']
     ], function () {
     Route::post(
         '/token', 
@@ -18,7 +19,8 @@ Route::group(
 Route::group([
     'prefix' => '/api/v1/customers',
     'namespace' => '\Zento\Customer\Http\Controllers\Api',
-], function () {
+    'middleware' => ['cors']
+    ], function () {
         Route::put(
             '/guest', 
             ['as' => 'customer.put.guest', 'uses' => 'PassportController@getOrCreateGuest']
@@ -30,7 +32,7 @@ Route::group(
     [
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['auth:api'],
+        'middleware' => ['cors', 'auth:api'],
         'as' => "both:user:"
     ], function () {
     Route::get(

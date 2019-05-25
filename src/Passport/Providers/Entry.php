@@ -42,8 +42,7 @@ class Entry extends \Illuminate\Support\ServiceProvider
         return new RequestGuard(function ($request) use ($config) {
             if ($user = (new TokenGuard(
                 $this->app->make(ResourceServer::class),
-                // Auth::createUserProvider($config['provider']),
-                Auth::createUserProvider(\Zento\Passport\Passport::getUserProviderConfigs($config)),
+                Auth::createUserProvider($config['provider']),
                 $this->app->make(TokenRepository::class),
                 $this->app->make(ClientRepository::class),
                 $this->app->make('encrypter')

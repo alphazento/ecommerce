@@ -29,12 +29,12 @@ class CreateAclGroupPermissionTable extends Migration
                 $table->unique(['group_id', 'item_id']);
                 $table->foreign('group_id')
                     ->references('id')
-                    ->on('user_groups')
+                    ->on('acl_user_groups')
                     ->onDelete('cascade');
 
                 $table->foreign('item_id')
                     ->references('id')
-                    ->on('permission_items')
+                    ->on('acl_permission_items')
                     ->onDelete('cascade');
             });
 

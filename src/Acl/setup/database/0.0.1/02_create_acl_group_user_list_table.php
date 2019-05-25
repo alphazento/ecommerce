@@ -30,7 +30,7 @@ class CreateAclGroupUserListTable extends Migration
                 $table->unique(['scope', 'user_id', 'group_id']);
                 $table->foreign('group_id')
                     ->references('id')
-                    ->on('user_groups')
+                    ->on('acl_user_groups')
                     ->onDelete('cascade');
             });
 
