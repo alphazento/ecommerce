@@ -23,7 +23,7 @@ class Backend
      */
     public function handle($request, Closure $next)
     {
-        Passport::setProviderConfigs(['driver' => 'eloquent', 'model' => \Zento\Acl\Model\Auth\Customer::class]);
+        Passport::setPassportUserModel(\Zento\Acl\Model\Auth\Administrator::class);
         
         //change default setting as admin setting
         if (Request::segment(1) == config('backend_url_prefix')) {

@@ -3,21 +3,17 @@
     "description": "Zento ecommerce backend package",
     "keywords": ["laravel", "zento", "ecommerce", "backend", "admin"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
     },
     "autoload": {
-        "psr-4": {
-        },
-        "files": [
-        ]
+        "psr-4": {},
+        "files": []
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -26,20 +22,16 @@
             "dev-master": "1.0-dev"
         },
         "laravel": {
-            "providers": [
-            ],
-            "aliases": {
-            },
+            "providers": [],
+            "aliases": {},
             "zento": {
-                "Zento_Backend":{
-                    "version" : "0.0.1",
-                    "commands" : [
-                    ],
-                    "providers" : [
+                "Zento_Backend": {
+                    "version": "0.0.1",
+                    "commands": [],
+                    "providers": [
                         "\\Zento\\Backend\\Providers\\Entry"
                     ],
-                    "listeners":  {
-                    },
+                    "listeners": {},
                     "middlewaregroup": {
                         "backend": {
                             "main": [
