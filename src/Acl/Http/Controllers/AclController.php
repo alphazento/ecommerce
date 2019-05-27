@@ -7,7 +7,7 @@ use Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Zento\Acl\Model\Auth\User;
-use Zento\Acl\Model\ORM\AclGroup;
+use Zento\Acl\Model\ORM\AclUserGroup;
 use Zento\Acl\Model\ORM\AclGroupUser;
 use Zento\Acl\Model\ORM\AclPermissionItem;
 use Zento\Acl\Model\ORM\AclGroupPermission;
