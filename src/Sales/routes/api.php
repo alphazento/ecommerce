@@ -4,7 +4,6 @@ Route::group(
         'prefix' => '/api/v1/sales',
         'namespace' => '\Zento\Sales\Http\Controllers\Api',
         'middleware' => ['cors']
-        // 'middleware' => ['web']
     ], function () {
     Route::post(
         '/orders/create', 

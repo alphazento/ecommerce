@@ -47,7 +47,7 @@ class Entry extends \Illuminate\Support\ServiceProvider
                 $this->app->make(ClientRepository::class),
                 $this->app->make('encrypter')
             ))->user($request)) {
-                (new \Zento\Passport\Passport)->callPostAuthcateHooks($user, $request);
+                $user->acl($request);
             }
             return $user;
         }, $this->app['request']);
@@ -55,7 +55,12 @@ class Entry extends \Illuminate\Support\ServiceProvider
 
     public function boot() {
         Passport::routes();
+        Passport::tokensCan([
+            'Profile' => 'Access your profile',
+            'Email'   => 'Access your Email',
+        ]);
         Passport::tokensExpireIn(now()->addDays(15));
+        // Passport::tokensExpireIn(now()->addMinutes(60));
         Passport::refreshTokensExpireIn(now()->addDays(30));
     }
 }

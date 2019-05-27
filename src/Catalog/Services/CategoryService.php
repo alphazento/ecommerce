@@ -2,7 +2,7 @@
 
 namespace Zento\Catalog\Services;
 
-// use Zento\Catalog\Model\ORM\Category;
+use Illuminate\Database\Eloquent\Model;
 
 class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServiceInterface 
 {
@@ -74,7 +74,7 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
         return $ids;
     }
 
-    protected function getCategoryIdsInCategory(Category $category, array &$ids) {
+    protected function getCategoryIdsInCategory(Model $category, array &$ids) {
         $ids[] = $category->id;
         foreach($category->children ?? [] as $item) {
             $this->getCategoryIdsInCategory($item, $ids);

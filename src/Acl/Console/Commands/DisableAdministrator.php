@@ -10,14 +10,14 @@ namespace Zento\Acl\Console\Commands;
 
 use Zento\Acl\Model\Auth\User;
 
-class DisableUser extends \Zento\Kernel\PackageManager\Console\Commands\Base
+class DisableAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'apc:user:disable {email : email address}';
+    protected $signature = 'acl:user:disable {email : email address}';
 
     protected $description = 'Enable a exists user';
 

@@ -14,17 +14,8 @@ use Zento\Catalog\Providers\Facades\CategoryService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 use Zento\Kernel\Booster\Pagination\LengthAwarePaginator;
 
-class CatalogSearchService
+class CatalogSearchService extends \Zento\CatalogSearch\Services\CatalogSearchService
 {
-    protected $joined_tables = [];
-
-    /**
-     * the filters which will apply to search even not include in search criteria
-     *
-     * @var array
-     */
-    protected $default_filters = [];
-
     /**
      * the filters which match with criteria params
      *
@@ -139,7 +130,7 @@ class CatalogSearchService
         if (!empty($criteria['sort_by'])) {
             // $this->applyOrderBy($builder, $criteria['sort_by']);
         }
-        $this->aggregate($builder);
+        $this->aggregate($builder, $criteria);
         $statusCode = 200;
         $paginator = $builder->paginate($per_page);
 
@@ -180,7 +171,7 @@ class CatalogSearchService
         return $builder;
     }
 
-    protected function aggregate($builder) {
+    protected function aggregate($builder, &$criteria) {
         $aggraegatableDAs = $this->getSearchLayerDynAttributes();
         $attrs = ['category'];
         foreach($aggraegatableDAs as $da) {

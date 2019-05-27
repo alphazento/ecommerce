@@ -35,10 +35,10 @@
                     "version" : "0.0.1",
                     "commands" : [
                         "\\Zento\\Acl\\Console\\Commands\\SyncRoute",
-                        "\\Zento\\Acl\\Console\\Commands\\AddUser",
-                        "\\Zento\\Acl\\Console\\Commands\\EnableUser",
-                        "\\Zento\\Acl\\Console\\Commands\\DisableUser",
-                        "\\Zento\\Acl\\Console\\Commands\\UserPassword"
+                        "\\Zento\\Acl\\Console\\Commands\\AddAdministrator",
+                        "\\Zento\\Acl\\Console\\Commands\\EnableAdministrator",
+                        "\\Zento\\Acl\\Console\\Commands\\DisableAdministrator",
+                        "\\Zento\\Acl\\Console\\Commands\\AdministratorPassword"
                     ],
                     "providers" : [
                         "\\Zento\\Acl\\Providers\\Entry"

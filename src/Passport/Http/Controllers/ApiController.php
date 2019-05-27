@@ -74,4 +74,8 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         Auth::user()->token()->revoke();
         return ['status'=>200, 'data' => 'Successfully logged out'];
     }
+
+    public function profile() {
+        return ['status' => 200, 'data' => Auth::user()];
+    }
 }

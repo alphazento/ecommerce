@@ -25,4 +25,9 @@
             '/logout', 
             ['as' => 'oauth.logout', 'uses' => 'ApiController@logout']
         )->middleware('auth:api');
+
+        Route::get(
+            '/profile', 
+            ['as' => 'oauth.profile', 'uses' => 'ApiController@profile']
+        );
     });

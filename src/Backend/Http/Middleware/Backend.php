@@ -6,6 +6,7 @@ use Closure;
 
 use Request;
 use Config;
+use ShareBucket;
 use Zento\Passport\Passport;
 use Zento\Passport\NotUsingPassportException;
 
@@ -24,7 +25,7 @@ class Backend
     public function handle($request, Closure $next)
     {
         Passport::setPassportUserModel(\Zento\Acl\Model\Auth\Administrator::class);
-        
+        ShareBucket::put('app_portal', 'admin');
         //change default setting as admin setting
         if (Request::segment(1) == config('backend_url_prefix')) {
             if (config(self::BACKEND_IP_RESTRICT)

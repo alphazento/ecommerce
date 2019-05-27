@@ -2,7 +2,7 @@
 
 namespace Zento\ElsCatalog\Services;
 
-// use Zento\Catalog\Model\ORM\Category;
+use Illuminate\Database\Eloquent\Model;
 
 class CategoryService extends \Zento\Catalog\Services\CategoryService 
 {
@@ -19,7 +19,7 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
         $model = $this->model;
         $builder = $model::whereIn('id', $identifiers);
         if ($activeOnly) {
-            $builder->active($activeOnly);
+            $builder->where('active', '=', 1);
         }
         $categories = $builder->get();
         $ids = [];
@@ -29,7 +29,7 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
         return $ids;
     }
 
-    protected function getCategoryIdsInCategory(Category $category, array &$ids) {
+    protected function getCategoryIdsInCategory(Model $category, array &$ids) {
         $ids[] = $category->id;
         foreach($category->children ?? [] as $item) {
             $this->getCategoryIdsInCategory($item, $ids);
@@ -50,7 +50,7 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
         if (!isset($this->cache[$cacheKey])) {
             $builder = $model::where('level', $level);
             if ($activeOnly) {
-                $builder->active($activeOnly);
+                $builder->where('active', '=', 1);
             }
             $this->cache[$cacheKey] = $builder->orderBy('sort_by')->get();
         }

@@ -11,14 +11,14 @@ namespace Zento\Acl\Console\Commands;
 use Auth;
 use Zento\Acl\Model\Auth\User;
 
-class UserPassword extends \Zento\Kernel\PackageManager\Console\Commands\Base
+class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'apc:userpw {email : email address} {password : password}';
+    protected $signature = 'acl:userpw {email : email address} {password : password}';
 
     protected $description = 'Change a admin user password.';
 

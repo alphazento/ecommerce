@@ -46,7 +46,7 @@ Route::group(
     [
         'prefix' => '/api/v1/admin',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
-        'middleware' => ['cors']
+        'middleware' => ['backend']
     ], function () {
         Route::get(
             '/categories', 

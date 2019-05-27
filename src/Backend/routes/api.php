@@ -40,6 +40,13 @@ Route::group(
             ['as' => 'admin.put.model', 'uses' => 'ModelController@updateModel']
         );
 
+        Route::get(
+            '/administrator', 
+            [
+                'as' => 'customer.getbyid', 
+                'uses' => '\Zento\Passport\Http\Controllers\ApiController@profile'
+            ]
+        );
     }
 );
 
