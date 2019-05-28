@@ -6,14 +6,15 @@ use Route;
 use Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use Zento\Acl\Model\Auth\User;
+use Zento\Acl\Model\Auth\Customer;
+use Zento\Acl\Model\Auth\Administrator;
 use Zento\Acl\Model\ORM\AclUserGroup;
 use Zento\Acl\Model\ORM\AclGroupUser;
 use Zento\Acl\Model\ORM\AclPermissionItem;
 use Zento\Acl\Model\ORM\AclGroupPermission;
 use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
 use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
-
+use Zento\Acl\Consts;
 
 class AclController extends Controller
 {
@@ -26,7 +27,38 @@ class AclController extends Controller
      * ]}
      */
     public function users() {
-        return ['status' => 200, 'data' => User::all()];
+        $model = $this->getUserModel();
+        return ['status' => 200, 'data' => $model::all()];
+    }
+
+    protected function getUserModel() {
+        $scope = Route::input('scope');
+        $model = '';
+        switch($scope) {
+            case 'administrator':
+                $model = Administrator::class;
+                break;
+            case 'customer':
+            default;
+                $model = Customer::class;
+                break;
+        }
+        return $model;
+    }
+
+    protected function getScopes() {
+        $scope = Route::input('scope');
+        switch($scope) {
+            case 'administrator':
+                return [Consts::ADMIN_SCOPE, Consts::BOTH_SCOPE];
+            case 'customer':
+                return [Consts::FRONTEND_SCOPE, Consts::BOTH_SCOPE];
+            case 'all':
+                return [Consts::GUEST_SCOPE, Consts::FRONTEND_SCOPE, Consts::ADMIN_SCOPE, Consts::BOTH_SCOPE];
+            default:
+                return [\Zento\Acl\Consts::GUEST_SCOPE];
+        }
+        return [\Zento\Acl\Consts::GUEST_SCOPE];
     }
 
     /**
@@ -38,32 +70,37 @@ class AclController extends Controller
      * ]}
      */
     public function getUser() {
-        return ['status' => 200, 'data' => User::all()];
+        $model = $this->getUserModel();
+        return ['status' => 200, 'data' => $model::all()];
     }
 
     public function getUserPermissions() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             return ['status' => 200, 'data' => $user->permissions()];
         }
         return ['status'=>404];
     }
 
     public function getUserWhitePermissions() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             return ['status' => 200, 'data' => $user->permissionwhitelist];
         }
         return ['status'=>404];
     }
 
     public function getUserBlackPermissions() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             return ['status' => 200, 'data' => $user->permissionblacklist];
         }
         return ['status'=>404];
     }
 
     public function addUserWhitePermission() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
                 $exists = AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
@@ -81,7 +118,8 @@ class AclController extends Controller
     }
 
     public function addUserBlackPermission() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
                 $exists = AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
@@ -99,7 +137,8 @@ class AclController extends Controller
     }
 
     public function removeUserWhitePermission() {
-        if ($user = User::find(Route::input('uid'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
                 AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
@@ -111,7 +150,8 @@ class AclController extends Controller
 
 
     public function removeUserBlackPermission() {
-        if ($user = User::find(Route::input('uid'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
                 AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
@@ -123,7 +163,8 @@ class AclController extends Controller
     }
 
     public function getGroupsByUser() {
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             return ['status' => 200, 'data' => $user->groups];
         }
         return ['status'=>404];
@@ -138,7 +179,7 @@ class AclController extends Controller
      * ]}
      */
     public function groups() {
-        return ['status' => 200, 'data' => AclUserGroup::all()];
+        return ['status' => 200, 'data' => AclUserGroup::whereIn('scope', $this->getScopes())->get()];
     }
 
     public function getGroupPermissions() {
