@@ -8,7 +8,7 @@ use Zento\Acl\Model\Auth\Administrator;
 class AclGroupUserList extends AclBaseModel
 {
     protected $fillable = [
-        'user_scope',
+        'scope',
         'user_id',
         'group_id'
     ];
@@ -17,7 +17,7 @@ class AclGroupUserList extends AclBaseModel
         return $this->belongsTo(Customer::class, 'user_id', 'id');
     }
 
-    public function administators() {
+    public function administrators() {
         return $this->belongsTo(Administrator::class, 'user_id', 'id');
     }
 }

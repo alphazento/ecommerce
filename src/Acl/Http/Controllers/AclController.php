@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Zento\Acl\Model\Auth\Customer;
 use Zento\Acl\Model\Auth\Administrator;
 use Zento\Acl\Model\ORM\AclUserGroup;
-use Zento\Acl\Model\ORM\AclGroupUser;
+use Zento\Acl\Model\ORM\AclGroupUserList;
 use Zento\Acl\Model\ORM\AclPermissionItem;
 use Zento\Acl\Model\ORM\AclGroupPermission;
 use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
@@ -44,6 +44,21 @@ class AclController extends Controller
                 break;
         }
         return $model;
+    }
+
+    protected function getScope() {
+        $scope = Route::input('scope');
+        switch($scope) {
+            case 'administrator':
+                return Consts::ADMIN_SCOPE;
+            case 'customer':
+                return Consts::FRONTEND_SCOPE;
+            case 'all':
+                return Consts::BOTH_SCOPE;
+            default:
+                return Consts::GUEST_SCOPE;
+        }
+        return Consts::GUEST_SCOPE;
     }
 
     protected function getScopes() {
@@ -195,11 +210,13 @@ class AclController extends Controller
      * @return Array User
      */
     public function getGroupUsers() {
-        if ($group = AclUserGroup::with(['groupusers.user'])->where('id', Route::input('id'))->first()) {
+        $scope = Route::input('scope');
+        $type = \Illuminate\Support\Str::plural($scope);
+        if ($group = AclUserGroup::with(['groupusers.' . $type])->where('id', Route::input('id'))->first()) {
             $data = [];
             foreach($group->groupusers ?? [] as $middle) {
-                if ($middle->user) {
-                    $data[] = $middle->user;
+                if ($middle->{$type}) {
+                    $data[] = $middle->{$type};
                 }
             }
             return ['status' => 200, 'data' => $data];
@@ -217,11 +234,11 @@ class AclController extends Controller
      * }
      */
     public function putUser() {
-        $data = Request::only('email','first_name', 'last_name');
+        $data = Request::only('email','firstname', 'lastname');
         $validator = Validator::make($data, [
             'email' => 'required|max:255|email',
-            'first_name' => 'required|max:128',
-            'last_name' => 'required|max:128'
+            'firstname' => 'required|max:128',
+            'lastname' => 'required|max:128'
         ]);
 
         if ($validator->fails()) {
@@ -233,10 +250,11 @@ class AclController extends Controller
             return ['status' => 400, 'error' => 'password and confirm password not match.'];
         }
 
+        $model = $this->getUserModel();
         if ($id = Request::get('id', false)) {
-            $user = User::find($id);
-            $user->first_name = $data['first_name'];
-            $user->last_name = $data['last_name'];
+            $user = $model::find($id);
+            $user->firstname = $data['firstname'];
+            $user->lastname = $data['lastname'];
         } else {
             $validator = Validator::make(['password' => $password], [
                 'password' => 'required|max:16|min:8'
@@ -244,16 +262,16 @@ class AclController extends Controller
             if ($validator->fails()) {
                 return ['status' => 400, 'error' => json_encode($validator->errors())];
             }
-            if (User::where('email', $data['email'])->exists()) {
+            if ($model::where('email', $data['email'])->exists()) {
                 return ['status'=>'400', 'error' => $data['email'] . ' has exists'];
             }
-            $user = new User($data);
+            $user = new $model($data);
         }
 
         if (!empty($password)) {
             $user->password = $user->encryptPassword($password);
         }
-        $user->name = sprintf('%s %s', $user->first_name, $user->last_name);
+        $user->name = sprintf('%s %s', $user->firstname, $user->lastname);
 
         $user->save();
         return ['status'=>'200', 'data' => $user];
@@ -271,7 +289,8 @@ class AclController extends Controller
      */
     public function deleteUser() {
         $id = Route::input('id');
-        if ($user = User::find($id)) {
+        $model = $this->getUserModel();
+        if ($user = $model::find($id)) {
             $user->delete();
             return ['status'=>200, 'data' => ['id' => $id]];
         }
@@ -281,7 +300,8 @@ class AclController extends Controller
     public function updateUser() {
         $id = Route::input('id');
         $params = Request::get('data');
-        if ($user = User::find($id)) {
+        $model = $this->getUserModel();
+        if ($user = $model::find($id)) {
             foreach($params as $key=>$value) {
                 switch($key) {
                     case 'id':
@@ -303,11 +323,17 @@ class AclController extends Controller
         $error = '';
         if ($group = AclUserGroup::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $uids = User::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists =  AclUserGroupUser::where('group_id', $group_id)->whereIn('user_id', $uids)->pluck('user_id')->toArray();
+                $model = $this->getUserModel();
+                $uids = $model::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists =  AclGroupUserList::where('scope', $this->getScope())
+                    ->where('group_id', $group->id)
+                    ->whereIn('user_id', $uids)->pluck('user_id')->toArray();
                 $uids = array_diff($uids, $exists);
                 foreach($uids as $id) {
-                    AclUserGroupUser::create(['user_id'=>$id, 'group_id' => $group->id]);
+                    AclGroupUserList::create([
+                        'scope' => $this->getScope(),
+                        'user_id'=>$id, 
+                        'group_id' => $group->id]);
                 }
                 return ['status'=> 201];
             }
@@ -319,8 +345,9 @@ class AclController extends Controller
 
     public function removeUserFromGroup() {
         if ($group = AclUserGroup::find(Route::input('group_id'))) {
-            if ($item = AclUserGroupUser::where('user_id', Route::input('user_id'))) {
-                $item->delete();
+            if ($user_id = Route::input('user_id')) {
+                $user_ids = explode(',', $user_id);
+                AclGroupUserList::where('scope', $this->getScope())->whereIn('user_id', $user_ids)->delete();
                 return ['status' => 200, 'data' => Route::input('user_id')];
             }
         }
@@ -361,11 +388,14 @@ class AclController extends Controller
 
     public function addGroups2User() {
         $error = '';
-        if ($user = User::find(Route::input('id'))) {
+        $model = $this->getUserModel();
+        if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $gids = AclUserGroup::whereIn('id', $ids)->pluck('id')->toArray();
+                $gids = AclUserGroup::where('scope',$this->getScope())->whereIn('id', $ids)->pluck('id')->toArray();
                 foreach($gids as $gid) {
-                    AclUserGroupUser::create(['user_id'=>$user->id, 'group_id' => $gid]);
+                    AclGroupUserList::create([
+                        'scope' => $this->getScope(),
+                        'user_id'=>$user->id, 'group_id' => $gid]);
                 }
                 return ['status'=> 201];
             }
@@ -383,11 +413,14 @@ class AclController extends Controller
         if ($group = AclUserGroup::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AclUserGroupPermission::where('group_id', $group->id)
+                $exists = AclGroupPermission::where('group_id', $group->id)
                             ->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $ids = array_diff($ids, $exists);
                 foreach($ids as $id) {
-                    AclUserGroupPermission::create(['item_id'=>$id, 'group_id' => $group->id]);
+                    AclGroupPermission::create([
+                        'scope' => $this->getScope(),
+                        'item_id'=>$id, 
+                        'group_id' => $group->id]);
                 }
                 return ['status'=> 201];
             }
@@ -399,9 +432,7 @@ class AclController extends Controller
         if ($group = AclUserGroup::find(Route::input('gid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                if ($item =  AclUserGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->first()) {
-                    $item->delete();
-                }
+                AclGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->delete();
                 return ['status'=> 200];
             }
         }
