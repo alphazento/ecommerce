@@ -26,10 +26,10 @@ class Entry extends ServiceProvider
             }
         });
 
-        $this->app->extend('catalogsearch_service', function ($service, $app) {
+        $this->app->singleton('catalogsearch_service', function ($service, $app) {
             switch (ShareBucket::get('app_portal', 'frontend')) {
                 case 'admin':
-                    return $service;
+                    return new ORMCatalogSearchService();
                     break;
                 case 'frontend':
                     return new CatalogSearchService();

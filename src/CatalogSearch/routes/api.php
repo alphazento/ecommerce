@@ -20,7 +20,7 @@ Route::group(
     [
         'prefix' => '/api/v1/admin',
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
-        'middleware' => ['cors'],
+        'middleware' => ['backend', 'cors'],
     ], function () {
         Route::get(
             '/catalog/search', 
@@ -28,6 +28,6 @@ Route::group(
         );
         Route::post(
             '/catalog/search', 
-            ['as' => 'admin.get.products', 'uses' => 'CatalogSearchController@adminSearch']
+            ['as' => 'admin.post.products', 'uses' => 'CatalogSearchController@adminSearch']
         );
 });
