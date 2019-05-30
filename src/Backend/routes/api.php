@@ -65,4 +65,9 @@ Route::group(
         '/register', 
         ['uses' => 'PassportController@register']
     );
+    Route::post(
+        '/token/google', 
+        ['as' => 'admin.oauth.token.google', 
+        'uses' => '\Zento\Passport\Http\Controllers\ApiController@issueTokenConnectGoogle']
+    );
 });

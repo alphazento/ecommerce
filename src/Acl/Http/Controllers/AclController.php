@@ -242,12 +242,12 @@ class AclController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return ['status' => 400, 'error' => json_encode($validator->errors())];
+            return ['status' => 400, 'data' => json_encode($validator->errors())];
         }
 
         $password = Request::get('password', '');
         if ($password != Request::get('password', '')) {
-            return ['status' => 400, 'error' => 'password and confirm password not match.'];
+            return ['status' => 400, 'data' => 'password and confirm password not match.'];
         }
 
         $model = $this->getUserModel();
@@ -260,10 +260,10 @@ class AclController extends Controller
                 'password' => 'required|max:16|min:8'
             ]);
             if ($validator->fails()) {
-                return ['status' => 400, 'error' => json_encode($validator->errors())];
+                return ['status' => 400, 'data' => json_encode($validator->errors())];
             }
             if ($model::where('email', $data['email'])->exists()) {
-                return ['status'=>'400', 'error' => $data['email'] . ' has exists'];
+                return ['status'=>'400', 'data' => $data['email'] . ' has exists'];
             }
             $user = new $model($data);
         }
@@ -340,7 +340,7 @@ class AclController extends Controller
         } else {
             $error = 'Group not found';
         }
-        return ['status' => 400, 'error' => $error];
+        return ['status' => 400, 'data' => $error];
     }
 
     public function removeUserFromGroup() {
@@ -356,33 +356,40 @@ class AclController extends Controller
 
     public function addGroup() {
         if ($name = Request::get('name', false)) {
-            if (AclUserGroup::where('name', $name)->first()) {
-                return ['status'=>'400', 'error' => sprintf('Group[%s] already exists.', $name)];
+            $scope = $this->getScope();
+            if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->first()) {
+                return ['status'=>'400', 'data' => sprintf('Group[%s] already exists.', $name)];
             }
-            $group = new AclUserGroup(['name' => $name, 'description' => Request::get('description', ''), 'active' => Request::get('active', 1)]);
+            $group = new AclUserGroup([
+                'scope' => $scope, 
+                'name' => $name, 
+                'description' => Request::get('description', ''), 
+                'active' => Request::get('active', 1)
+                ]);
             $group->save();
-            return ['status'=>'200', 'data' => $group];
+            return ['status'=>200, 'data' => $group];
         } else {
-            return ['status'=>'400', 'error' => 'parameters not valid'];
+            return ['status'=>400, 'data' => 'parameters not valid'];
         }
     }
 
     public function updateGroup() {
         if ($id = Route::input('id', false)) {
+            $scope = $this->getScope();
             if ($group = AclUserGroup::find($id)) {
                 $name = Request::get('name', $group->name);
-                if (AclUserGroup::where('name', $name)->where('id', '!=', $id)->first()) {
-                    return ['status'=>'400', 'error' => sprintf('Group[%s] has been taken by other group.', $name)];
+                if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->where('id', '!=', $id)->first()) {
+                    return ['status'=>400, 'data' => sprintf('Group[%s] has been taken by other group.', $name)];
                 }
                 $group->name = $name;
                 $group->description =  Request::get('description', $group->description);
                 $group->active =  Request::get('active', $group->active);
                 $group->save();
-                return ['status'=>'200', 'data' => $group];
+                return ['status'=>200, 'data' => $group];
             }
-            return ['status'=>'400', 'error' => sprintf('Group[%s] not exists.', $id)];
+            return ['status'=>400, 'data' => sprintf('Group[%s] not exists.', $id)];
         } else {
-            return ['status'=>'400', 'error' => 'parameters not valid'];
+            return ['status'=>400, 'data' => 'parameters not valid'];
         }
     }
 
@@ -402,7 +409,7 @@ class AclController extends Controller
         } else {
             $error = 'User not found';
         }
-        return ['status' => 400, 'error' => $error];
+        return ['status' => 400, 'data' => $error];
     }
 
     public function getPermissions() {

@@ -3,13 +3,15 @@
 namespace Zento\Passport\Model;
 
 use Config;
+use Request;
 use Zento\Passport\Passport;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GoogleOAuthConnect {
-  public function googleOauthConnectPassport(ServerRequestInterface $request) {
+  public function googleOauthConnectPassport(ServerRequestInterface $request, $issuer) {
     $user = Request::get('user');
     if ($this->verifyGoogleToken($user['idToken'], $user['id'])) {
-        if ($token= Passport::issueTokenWithouPasswordInPasswordGrantType($request, $user['email'])) {
+        if ($token= Passport::issueTokenWithouPasswordInPasswordGrantType($request, $user['email'], $issuer)) {
             return $token;
         }
     }
@@ -24,8 +26,8 @@ class GoogleOAuthConnect {
    * @return void
    */
   protected function verifyGoogleToken($token, $userid) {
-    $client_id = Store::getConfig(Consts::GOOGLE_ACCOUNT_CLIENT_ID);
-    $client_id = '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com';
+    // $client_id = Config::get(Consts::GOOGLE_ACCOUNT_CLIENT_ID);
+    $client_id = '212041113546-ujdudnc4j4a7hrgd6fittjr7rvvs3cfd.apps.googleusercontent.com';
 
     $client = new \Google_Client(['client_id' => $client_id]);
     // Specify the CLIENT_ID of the app that accesses the backend

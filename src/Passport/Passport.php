@@ -2,6 +2,7 @@
 
 namespace Zento\Passport;
 
+use Auth;
 use Config;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -23,15 +24,15 @@ class Passport
         }
     }
 
-    public static function issueTokenWithouPasswordInPasswordGrantType(ServerRequestInterface $request, $email = null) {
-        $userProvider = Auth::createUserProvider(Config::get('auth.api.provider'));
-
-        $localUser = $userProvider->findForPassport($email);
+    public static function issueTokenWithouPasswordInPasswordGrantType(ServerRequestInterface $request, $email = null, $issuer) {
+        // $userProvider = Auth::createUserProvider(Config::get('auth.guards.api.provider'));
+        $model = Config::get('auth.providers.users.model');
+        $localUser = (new $model)->findForPassport($email);
         if (!$localUser) {
             return false;
         }
 
-        $oldPassword = $localUser->getPassword();
+        $oldPassword = $localUser->password;
         $parsedBody = $request->getParsedBody();
         $configs = [];
         if (!isset($parsedBody['client_id'])) {
@@ -44,8 +45,9 @@ class Passport
         $configs['password'] = $localUser->applyRandomPassword();
 
         $request = $request->withParsedBody(array_merge($configs, $parsedBody));
-        $issuedToken = $this->issueToken($request);
-        $localUser->setPassword($oldPassword);
+        $issuedToken = $issuer->issueToken($request);
+        $localUser->password = $oldPassword;
+        $localUser->update();
         return $issuedToken;
     }
 }

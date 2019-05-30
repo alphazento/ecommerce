@@ -29,7 +29,7 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
     }
 
     public function issueTokenConnectGoogle(ServerRequestInterface $request) {
-        return (new GoogleOAuthConnect)->googleOauthConnectPassport($request);
+        return (new GoogleOAuthConnect)->googleOauthConnectPassport($request, $this);
     }
 
     public function refreshToken(ServerRequestInterface $request)

@@ -2,7 +2,6 @@
     Route::options('/{all}', 
         '\Zento\Passport\Http\Controllers\ApiController@apiHttpOptions')
         ->where('all', '.*')->middleware('cors');
-
     Route::group(
         [
             'prefix' => '/api/v1/oauth2',
@@ -12,6 +11,10 @@
         Route::post(
             '/token', 
             ['as' => 'oauth.token', 'uses' => 'ApiController@issueToken']
+        );
+        Route::post(
+            '/token/google', 
+            ['as' => 'oauth.token.google', 'uses' => 'ApiController@issueTokenConnectGoogle']
         );
         Route::post(
             '/refresh', 
