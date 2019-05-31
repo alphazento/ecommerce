@@ -14,6 +14,7 @@ class CreateSalesOrderTable extends Migration
     {
         Schema::create('sales_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('order_number', 16);
             $table->integer('invoice_no')->unsigned();
             $table->smallInteger('store_id')->unsigned();
             $table->integer('status_id')->unsigned();

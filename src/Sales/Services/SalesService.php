@@ -9,6 +9,7 @@ use Zento\Sales\Model\ORM\SalesOrder;
 use Zento\Sales\Model\ORM\SalesOrderPayment;
 use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
+use Zento\Sales\Model\OrderNumberGenerator;
 
 class SalesService
 {
@@ -19,6 +20,7 @@ class SalesService
     $shipping_fee = '',
     $customer_note = '') {
     $order = SalesOrder::create([
+      'order_number' => app(OrderNumberGenerator::class)->generate(0),
       'invoice_no' => 0,
       'store_id' => 0,
       'status_id' => 0,
@@ -29,7 +31,7 @@ class SalesService
       'ext_order_id' => 0,
       'customer_note' => $customer_note,
       'applied_rule_ids' => $cart->applied_rule_ids,
-      'remote_ip' => '',
+      'remote_ip' => $cart->client_ip,
       'total_item_count' => $cart->items_count,
       'cart_address_id' => $cart->shipping_address_id,
       'cart_id' => $cart->id,

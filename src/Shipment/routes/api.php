@@ -7,7 +7,7 @@ Route::group(
     [
         'prefix' => '/api/v1/shipment',
         'namespace' => '\Zento\Shipment\Http\Controllers\Api',
-        'middleware' => ['setuppassport', 'auth:api'],
+        'middleware' => ['cors', 'auth:api'],
         'as' => 'both:shipment:'
     ], function () use ($apiRoutes) {
         foreach($apiRoutes as $name => $route) {

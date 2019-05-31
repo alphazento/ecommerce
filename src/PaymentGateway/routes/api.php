@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\PaymentGateway\Http\Controllers',
-        'middleware' => ['setuppassport'],
+        'middleware' => ['cors'],
         'as' => 'both:payment:'
     ], function () {
         Route::post(

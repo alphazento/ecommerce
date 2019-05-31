@@ -11,6 +11,7 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     protected $fillable = [
+        'order_number',
         'invoice_no',
         'store_id',
         'status_id',

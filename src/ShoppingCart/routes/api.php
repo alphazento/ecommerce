@@ -23,7 +23,7 @@ Route::group(
     [
         'prefix' => '/api/v1/cart',
         'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['setuppassport', 'auth:api'],
+        'middleware' => ['cors', 'auth:api'],
         'as' => 'both:cart:'
     ], function () use ($apiRoutes) {
         foreach($apiRoutes as $name => $route) {

@@ -115,7 +115,7 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
     public function tree($activeOnly = true) {
-		static $tree = 0;
+        static $tree = 0;
 		if (!$tree) {
 			$tree = $this->getCategoriesByLevel($this->treeLevelFrom, $activeOnly);
 		}
