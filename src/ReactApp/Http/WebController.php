@@ -13,13 +13,6 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 class WebController extends \App\Http\Controllers\Controller
 {
     public function appServe() {
-        // echo get_class(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Zoltan Gym Tee')->aggs('name.keyword'));
-        // dd(\Zento\Catalog\Model\ORM\Product::where('id', '>', '0')->count());
-        // dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')->count('name.keyword'));
-        dd(\Zento\ElsCatalog\Model\ElsIndex\Product::where('name', '=', 'Tee')
-            ->where('visibility', '>', 1)
-            ->aggs(['categories', 'name.keyword'])->paginate()->toArray());
-
         $originRequest = Request::instance();
 
         app()->instance('middleware.disable', true);
@@ -36,6 +29,7 @@ class WebController extends \App\Http\Controllers\Controller
         $categories = [];
         $request = Request::create('/api/v1/categories', 'GET');
         app()->instance('request', $request);
+
         $categoriesResp = Route::dispatch($request);
         if ($categoriesResp instanceof JsonResponse) {
             $categories = $categoriesResp->getOriginalContent();
