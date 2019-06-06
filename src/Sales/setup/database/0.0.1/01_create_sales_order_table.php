@@ -14,6 +14,7 @@ class CreateSalesOrderTable extends Migration
     {
         Schema::create('sales_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('is_backorder');
             $table->string('order_number', 16);
             $table->integer('invoice_no')->unsigned();
             $table->smallInteger('store_id')->unsigned();
@@ -34,9 +35,6 @@ class CreateSalesOrderTable extends Migration
             $table->boolean('email_sent')->default(0);
             $table->boolean('is_resend_order')->default(0);
             $table->decimal('total_amount_include_tax')->default(0);
-            $table->string('base_currency_code')->default(0);
-            $table->string('order_currency_code')->default(0);
-            $table->string('base_to_order_currency_rate')->default(0);
             $table->timestamps();
         });
     }

@@ -12,6 +12,7 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
 
     protected $fillable = [
         'order_number',
+        'is_backorder',
         'invoice_no',
         'store_id',
         'status_id',
