@@ -21,9 +21,9 @@ Route::group([
     'namespace' => '\Zento\Customer\Http\Controllers\Api',
     'middleware' => ['cors']
     ], function () {
-        Route::put(
+        Route::post(
             '/guest', 
-            ['as' => 'customer.put.guest', 'uses' => 'PassportController@getOrCreateGuest']
+            ['as' => 'customer.guest', 'uses' => 'PassportController@getOrCreateGuest']
         );
     }
 );
@@ -40,23 +40,23 @@ Route::group(
         ['as' => 'customer.getbyid', 'uses' => 'CustomerController@getCustomer']
     );
 
-    Route::put(
+    Route::patch(
         '/{customer_id}', 
         ['as' => 'customer.putbyid', 'uses' => 'CustomerController@setCustomer']
     );
 
     //admin only
-    Route::put(
+    Route::patch(
         '/{customer_id}/activate', 
         ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
     );
 
-    Route::put(
+    Route::patch(
         '/me/password', 
         ['as' => 'customer.mypassword', 'uses' => 'CustomerController@setMyPassword']
     );
 
-    Route::put(
+    Route::patch(
         '/{customer_id}/password', 
         ['as' => 'customer.setpassword', 'uses' => 'CustomerController@setCustomerPassword']
     );
@@ -81,12 +81,12 @@ Route::group(
     //     ['as' => 'customer.add.address', 'uses' => 'CustomerController@addCustomerAddress']
     // );
 
-    Route::put(
+    Route::patch(
         '/{customer_id}/default_billing_address/{address_id}', 
         ['as' => 'customer.put.mydefault_billing_address', 'uses' => 'CustomerController@setDefaultBillingAddress']
     );
 
-    Route::put(
+    Route::patch(
         '/{customer_id}/default_shipping_address/{address_id}', 
         ['as' => 'customer.put.mydefault_shipping_address', 'uses' => 'CustomerController@setDefaultShippingAddress']
     );

@@ -6,8 +6,11 @@ Route::group(
         'middleware' => ['cors']
     ], function () {
     Route::post(
-        '/orders/create', 
+        '/orders', 
         ['as' => 'orders.create', 'uses' => 'SalesController@createOrder']
     );
-    // PUT    /V1/orders/:parent_id
+
+    Route::patch( '/orders/{id}', 
+        ['as' => 'orders.update', 'uses' => 'SalesController@updateOrder']
+    );
 });

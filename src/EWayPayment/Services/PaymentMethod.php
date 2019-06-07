@@ -6,6 +6,7 @@ use Config;
 use Registry;
 use Closure;
 use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
+use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
@@ -107,20 +108,27 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         $result = (new CapturePaymentResult($this->getCode(), $payment_data['AccessCode'], true))
             ->setMessages($messages)
             ->success($success);
-        if ($result->isSuccess()) {
-            $totalAmount = $eWayResponse['TotalAmount']/100;
-            $result->setPaymentDetail([
+        $transaction = PaymentTransaction::create(
+            [
                 'payment_method' => $this->getCode(),
                 'payment_transaction_id' => $eWayResponse['TransactionID'],
                 'comment' => '', 
-                'total_due' => 0,
+                'amount_due' => $totalAmount,
                 'amount_authorized' => $totalAmount,
                 'amount_paid' => $totalAmount, 
                 'amount_refunded' => 0,
-                'amount_canceled' => 0
+                'amount_canceled' => 0,
+                'success' => $result->isSuccess(),
+                'raw_response' => json_encode($payment_data)
             ]);
+        if ($result->isSuccess()) {
+            $totalAmount = $eWayResponse['TotalAmount']/100;
+            $result->setPaymentTransaction($transaction);
         }
         return $result;
+    }
+
+    protected function logTransaction(CapturePaymentResult $paymentResult) {
     }
 
     public function prepareForClientSide($clientType = 'web') {

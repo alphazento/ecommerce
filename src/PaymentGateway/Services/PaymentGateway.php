@@ -121,7 +121,7 @@ class PaymentGateway {
             {
                 $paymentResult = $method->capture($params);
                 if ($paymentResult->canCreateOrderAfterCapture()) { //payment success
-                    $order = CheckoutService::createOrder($paymentResult->getPaymentDetail(), $shoppingCart);
+                    $order = CheckoutService::createOrder($paymentResult->getPaymentTransaction(), $shoppingCart);
                     $order->addData('payment_data', $paymentResult->toArray());
                     return [$order->isSuccess(), $order->getData()];
                 } else {

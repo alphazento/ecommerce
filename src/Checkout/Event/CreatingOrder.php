@@ -2,25 +2,28 @@
 
 namespace Zento\Checkout\Event;
 
+use Zento\Contracts\Catalog\Model\ShoppingCart;
+use Zento\PaymentGateway\Model\PaymentTransaction;
+
 class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'shoppingCart',
-        'paymentDetail'
+        'paymentTransaction'
     ];
 
     /**
      * Create a new event instance.
      *
      * @param  array $shoppingCart
-     * @param  string  $paymentDetail
+     * @param  string  $paymentTransaction
      * @return void
      */
-    public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart, 
-        \Zento\PaymentGateway\Interfaces\PaymentDetail $paymentDetail)
+    public function __construct(ShoppingCart $shoppingCart, 
+        PaymentTransaction $paymentTransaction)
     {
         $this->data = [
             'shoppingCart' => $shoppingCart,
-            'paymentDetail' => $paymentDetail
+            'paymentTransaction' => $paymentTransaction
         ];
     }
 }

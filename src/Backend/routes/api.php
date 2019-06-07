@@ -21,7 +21,7 @@ Route::group(
             ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getGroupValues']
         );
 
-        Route::put(
+        Route::post(
             '/configs/{key}', 
             ['as' => 'admin.configs.set.value', 'uses' => 'ConfigurationController@setConfigValue']
         );
@@ -31,12 +31,12 @@ Route::group(
             ['as' => 'admin.da.get', 'uses' => 'DAController@getAttributes']
         );
 
-        Route::post(
+        Route::patch(
             '/dynamicattributes/{id}', 
             ['as' => 'admin.put.da', 'uses' => 'DAController@updateAttribute']
         );
 
-        Route::put('/model/{model}/{id}', 
+        Route::patch('/model/{model}/{id}', 
             ['as' => 'admin.put.model', 'uses' => 'ModelController@updateModel']
         );
 

@@ -2,10 +2,12 @@
 
 namespace Zento\PaymentGateway\Interfaces;
 
+use Zento\PaymentGateway\Model\PaymentTransaction;
+
 class CapturePaymentResult
 {
   protected $data;
-  protected $payment_detail;
+  protected $payment_transaction;
 
   /**
    * allow next to auto create order after succesful payment
@@ -38,14 +40,14 @@ class CapturePaymentResult
     return $this->data['payment_raw_data'];
   }
 
-  public function setPaymentDetail(array $data) {
-    $this->payment_detail = \array2ReadOnlyObject($data, '\Zento\PaymentGateway\Interfaces\PaymentDetail');
-    \zento_assert($this->payment_detail);
+  public function setPaymentTransaction(PaymentTransaction $transaction) {
+    $this->payment_transaction = $transaction;
+    #\zento_assert($this->payment_transaction);
     return $this;
   }
 
-  public function getPaymentDetail() {
-    return $this->payment_detail;
+  public function getPaymentTransaction() {
+    return $this->payment_transaction;
   }
 
   public function getPaymentName() {
@@ -66,7 +68,7 @@ class CapturePaymentResult
   }
 
   public function toArray() {
-    return array_merge($this->data, ['payment_detail' => $this->payment_detail ? $this->payment_detail->toArray() : null]);
+    return array_merge($this->data, ['payment_transaction' => $this->payment_transaction ? $this->payment_transaction->toArray() : null]);
   }
 
   public function canCreateOrderAfterCapture() {

@@ -4,6 +4,7 @@ namespace Zento\PaypalPayment\Services;
 
 use Zento\PaypalPayment\Model\PaymentCapturer;
 use Zento\PaypalPayment\Model\PaymentPrimer;
+use Zento\PaymentGateway\Model\PaymentTransaction;
 use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
@@ -99,20 +100,24 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         $result = (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
             $this->getCode(), 
             $payment_data['payment'], 
-            true))
-            ->success($returns['success']);
+            true))->success($returns['success']);
+        
+        
         if ($result->isSuccess()) {
             $totalAmount = $returns['data']['transactions'][0]['amount']['total'];
-            $result->setPaymentDetail([
-                'payment_method' => $this->getCode(),
-                'payment_transaction_id' => $returns['transaction_id'],
-                'comment' => '', 
-                'total_due' => 0,
-                'amount_authorized' => $totalAmount,
-                'amount_paid' => $totalAmount, 
-                'amount_refunded' => 0,
-                'amount_canceled' => 0
-            ]);
+            $result->setPaymentTransaction(PaymentTransaction::create(
+                [
+                    'payment_method' => $this->getCode(),
+                    'payment_transaction_id' => $returns['transaction_id'],
+                    'comment' => '', 
+                    'amount_due' => $totalAmount,
+                    'amount_authorized' => $totalAmount,
+                    'amount_paid' => $totalAmount, 
+                    'amount_refunded' => 0,
+                    'amount_canceled' => 0,
+                    'raw_response' => json_encode($returns),
+                    'success' => $result->isSuccess()
+                ]));
         }
         return $result;
     }

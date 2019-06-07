@@ -35,7 +35,7 @@ Route::group(
             ]
         );
 
-        Route::post('/users/{id}',
+        Route::patch('/users/{id}',
             [
                 'as'=>'update.user',
                 'uses'=>'AclController@updateUser'
@@ -117,7 +117,7 @@ Route::group(
             ]
         );
 
-        Route::post('/groups/{id}',
+        Route::patch('/groups/{id}',
             [
                 'as'=>'post.groups',
                 'uses'=>'AclController@updateGroup'

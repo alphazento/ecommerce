@@ -17,7 +17,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
 {
     protected function run($event) {
         $order = SalesService::placeOrder($event->shoppingCart, 
-            $event->paymentDetail,
+            $event->paymentTransaction,
             'freeshipping', 
             'free',
             '0',
@@ -52,7 +52,7 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $order->save();
 
         // $this->createShipmentRecord($order->id, $event->shoppingCart);
-        $this->createPaymentRecord($order->id, $event->paymentDetail);
+        $this->createPaymentRecord($order->id, $event->paymentTransaction);
         return $event->createResult(true, ['order' =>  $order]);
     }
 
@@ -83,8 +83,8 @@ class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseListener
         $shipment->save();
     }
 
-    protected function createPaymentRecord($orderId, $paymentDetail) {
-        $payment = new SalesOrderPayment($paymentDetail->toArray());
+    protected function createPaymentRecord($orderId, $paymentTransaction) {
+        $payment = new SalesOrderPayment($paymentTransaction->toArray());
         $payment->order_id = $orderId;
         $payment->save();
     }
