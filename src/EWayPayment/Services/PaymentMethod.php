@@ -108,21 +108,22 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         $result = (new CapturePaymentResult($this->getCode(), $payment_data['AccessCode'], true))
             ->setMessages($messages)
             ->success($success);
-        $transaction = PaymentTransaction::create(
-            [
-                'payment_method' => $this->getCode(),
-                'payment_transaction_id' => $eWayResponse['TransactionID'],
-                'comment' => '', 
-                'amount_due' => $totalAmount,
-                'amount_authorized' => $totalAmount,
-                'amount_paid' => $totalAmount, 
-                'amount_refunded' => 0,
-                'amount_canceled' => 0,
-                'success' => $result->isSuccess(),
-                'raw_response' => json_encode($payment_data)
-            ]);
+        
         if ($result->isSuccess()) {
             $totalAmount = $eWayResponse['TotalAmount']/100;
+            $transaction = PaymentTransaction::create(
+                [
+                    'payment_method' => $this->getCode(),
+                    'payment_transaction_id' => $eWayResponse['TransactionID'],
+                    'comment' => '', 
+                    'amount_due' => $totalAmount,
+                    'amount_authorized' => $totalAmount,
+                    'amount_paid' => $totalAmount, 
+                    'amount_refunded' => 0,
+                    'amount_canceled' => 0,
+                    'success' => $result->isSuccess(),
+                    'raw_response' => json_encode($payment_data)
+                ]);
             $result->setPaymentTransaction($transaction);
         }
         return $result;

@@ -11,11 +11,12 @@ class PaymentTransaction extends \Illuminate\Database\Eloquent\Model {
         'payment_transaction_id_hash',
         'payment_status',
         'customer_id',
-        'total_due',
+        'amount_due',
         'amount_authorized',
         'amount_paid',
         'amount_refunded',
         'amount_canceled',
+        'success',
         'raw_response'
     ];
 
