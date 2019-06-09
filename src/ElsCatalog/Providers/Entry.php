@@ -4,10 +4,10 @@ namespace Zento\ElsCatalog\Providers;
 
 use ShareBucket;
 
-use Zento\ElsCatalog\Services\CatalogSearchService;
 use Zento\CatalogSearch\Services\CatalogSearchService as ORMCatalogSearchService;
 use Zento\Catalog\Services\CategoryService as ORMCategoryService;
-use Zento\ElsCatalog\Services\CategoryService;
+use Zento\ElsCatalog\Services\CategoryService  as ElsCategoryService;
+use Zento\ElsCatalog\Services\CatalogSearchService as ElsCatalogSearchService;
 use Zento\Kernel\Facades\PackageManager;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,7 +21,7 @@ class Entry extends ServiceProvider
                     return new ORMCategoryService();
                     break;
                 case 'frontend':
-                    return new CategoryService();
+                    return new ElsCategoryService();
                     break;
             }
         });
@@ -32,7 +32,7 @@ class Entry extends ServiceProvider
                     return new ORMCatalogSearchService();
                     break;
                 case 'frontend':
-                    return new CatalogSearchService();
+                    return new ElsCatalogSearchService();
                     break;
             }
         });

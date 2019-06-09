@@ -141,7 +141,6 @@ class Connection extends BaseConnection
      * @return array
      */
     public function select($query, $bindings = [], $useReadPdo = true) {
-        // dd($query);die;
         return $this->elsAdapter()->search($query);
     }
 
