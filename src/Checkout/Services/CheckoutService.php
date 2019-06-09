@@ -18,10 +18,10 @@ class CheckoutService
      * @param \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart
      * @return void
      */
-    public function createOrder(PaymentTransaction $paymentTransaction, ShoppingCart $shoppingCart) {
+    public function draftOrder(PaymentTransaction $paymentTransaction, ShoppingCart $shoppingCart) {
         // \zento_assert($paymentTransaction);
         \zento_assert($shoppingCart);
-        $eventResult = (new \Zento\Checkout\Event\CreatingOrder(
+        $eventResult = (new \Zento\Checkout\Event\DraftOrder(
                 $shoppingCart, 
                 $paymentTransaction)
             )->fireUntil();

@@ -13,11 +13,13 @@ class SalesOrderPayment extends \Illuminate\Database\Eloquent\Model
     protected $fillable = [
         'order_id',
         'comment',
-        'total_due',
+        'payment_method',
+        'payment_transaction_id',
+        'amount_due',
         'amount_authorized',
         'amount_paid',
         'amount_refunded',
-        'amount_canceled',
+        'amount_canceled'
     ];
 
     public static function getPreloadRelations() {

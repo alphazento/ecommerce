@@ -111,7 +111,10 @@ class PaymentGateway {
         return [false, 'data' => ['messages'=>['Payment method not support by server.']]];
     }
 
-    public function capturePayment(string $methodName, $params) {
+    public function capturePayment(string $methodName, array $params) {
+        if (!isset($params['shopping_cart'])) {
+            return [false, ['messages'=>['Parameter error.']]];
+        }
         if ($method = PaymentGateway::getMethod($methodName)) {
             $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', $params['shopping_cart']);
             \zento_assert($shoppingCart);
@@ -120,8 +123,8 @@ class PaymentGateway {
             if ($eventResult->isSuccess())
             {
                 $paymentResult = $method->capture($params);
-                if ($paymentResult->canCreateOrderAfterCapture()) { //payment success
-                    $order = CheckoutService::createOrder($paymentResult->getPaymentTransaction(), $shoppingCart);
+                if ($paymentResult->canDraftOrderAfterCapture()) { //payment success
+                    $order = CheckoutService::draftOrder($paymentResult->getPaymentTransaction(), $shoppingCart);
                     $order->addData('payment_data', $paymentResult->toArray());
                     return [$order->isSuccess(), $order->getData()];
                 } else {

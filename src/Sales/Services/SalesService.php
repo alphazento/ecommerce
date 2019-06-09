@@ -41,6 +41,8 @@ class SalesService
         'total_amount_include_tax' => $cart->total
       ]);
 
+      $this->createPaymentRecord($order->id, $payment);
+
       $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
       $billing_address = new SalesAddress($cartBillingAddress->getAttributes());
       $billing_address->id = null;
@@ -68,20 +70,55 @@ class SalesService
       // ]);
 
       // $shipment->save();
-
-      $payment = new SalesOrderPayment([
-        'order_id' => $order->id,
-        'comment' => '',
-        'total_due' => 0,
-        'amount_authorized' => $cart->total,
-        'amount_paid' => $cart->total,
-        'amount_refunded' => 0,
-        'amount_canceled' => 0,
-      ]);
-      $payment->order_id = $order->id;
-      $payment->save();
-      // $payment->storePaymentItems($cart);
-
       return $order;
+  }
+
+  protected function createSalesAddressRecord($shippingAddress) {
+    $id = $shippingAddress['id'];
+    unset($shippingAddress['id']);
+    unset($shippingAddress['hash']);
+    $address = new SalesAddress($shippingAddress->toArray());
+    $address->save();
+    $shippingAddress['id'] = $id;
+    return $address->id;
+  }
+
+  protected function createShipmentRecord($ordeId, $shoppingCart) {
+    $shipment = new SalesShipment();
+    $shipment->order_id = $ordeId;
+    $shipment->customer_id = $shoppingCart['customer_id'];
+    $shipment->shipment_status = 0;
+    $shipment->shipping_address_id = $this->createSalesAddressRecord($shoppingCart['shipping_address']);
+    //    $shipment->billing_address_id = $this->storeSalesAddress($shoppingCart['shipping_address']); //ship_to_billingaddesss
+    $shipment->shipping_method = '';
+    // $shipment->shipping_carrier = $shipping_carrier;
+    $shipment->shipment_instruction = '';
+    // $table->decimal('total_weight', 12, 4)->nullable();
+    // $table->decimal('total_qty', 12, 4)->nullable();
+    // $table->boolean('can_ship_partially')->default(0);
+    // $table->smallInteger('can_ship_partially_item')->unsigned()->nullable();
+    $shipment->save();
+  }
+
+  protected function createPaymentRecord($order_id, $paymentTransaction) {
+    $comment = $paymentTransaction->comment;
+    $payment_method = $paymentTransaction->payment_method;
+    $payment_transaction_id = $paymentTransaction->payment_transaction_id;
+    $amount_due = $paymentTransaction->amount_due;
+    $amount_authorized = $paymentTransaction->amount_authorized;
+    $amount_paid = $paymentTransaction->amount_paid;
+    $amount_refunded = $paymentTransaction->amount_refunded;
+    $amount_canceled = $paymentTransaction->amount_canceled;
+    $payment = new SalesOrderPayment(compact('order_id',
+      'order_id',
+      'comment',
+      'payment_method',
+      'payment_transaction_id',
+      'amount_due',
+      'amount_authorized',
+      'amount_paid',
+      'amount_refunded',
+      'amount_canceled'));
+    $payment->save();
   }
 }

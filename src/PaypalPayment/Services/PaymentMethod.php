@@ -101,23 +101,26 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             $this->getCode(), 
             $payment_data['payment'], 
             true))->success($returns['success']);
-        
-        if ($result->isSuccess()) {
+        $totalAmount =  0;
+        if ($result->isSuccess() && ($returns['data']['transactions'] ?? false)) {
             $totalAmount = $returns['data']['transactions'][0]['amount']['total'];
-            $result->setPaymentTransaction(PaymentTransaction::create(
-                [
-                    'payment_method' => $this->getCode(),
-                    'payment_transaction_id' => $returns['transaction_id'],
-                    'comment' => '', 
-                    'amount_due' => $totalAmount,
-                    'amount_authorized' => $totalAmount,
-                    'amount_paid' => $totalAmount, 
-                    'amount_refunded' => 0,
-                    'amount_canceled' => 0,
-                    'raw_response' => json_encode($returns),
-                    'success' => $result->isSuccess()
-                ]));
+        } else {
+            $result->success(false);
         }
+        $result->setPaymentTransaction(PaymentTransaction::create(
+            [
+                'payment_method' => $this->getCode(),
+                'payment_transaction_id' => $returns['transaction_id'],
+                'comment' => '', 
+                'customer_id' => 0, 
+                'amount_due' => $totalAmount,
+                'amount_authorized' => $totalAmount,
+                'amount_paid' => $totalAmount, 
+                'amount_refunded' => 0,
+                'amount_canceled' => 0,
+                'raw_response' => json_encode($returns),
+                'success' => $result->isSuccess()
+            ]));
         return $result;
     }
 

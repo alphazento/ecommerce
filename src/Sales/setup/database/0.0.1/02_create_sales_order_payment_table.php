@@ -18,7 +18,7 @@ class CreateSalesOrderPaymentTable extends Migration
             $table->string('payment_method', 128)->nullable();
             $table->string('payment_transaction_id', 128)->nullable();
             $table->text('comment')->nullable();
-            $table->decimal('total_due', 12, 4)->default(0);
+            $table->decimal('amount_due', 12, 4)->default(0);
             $table->decimal('amount_authorized', 12, 4)->default(0);
             $table->decimal('amount_paid', 12, 4)->default(0);
             $table->decimal('amount_refunded', 12, 4)->default(0);

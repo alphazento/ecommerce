@@ -12,12 +12,12 @@ class CapturePaymentResult
   /**
    * allow next to auto create order after succesful payment
    *
-   * @param boolean $canCreateOrderAfterCapture
+   * @param boolean $canDraftOrderAfterCapture
    */
-  public function __construct($method_name, $payment_req_data, $canCreateOrderAfterCapture) {
+  public function __construct($method_name, $payment_req_data, $canDraftOrderAfterCapture) {
     $this->data['method_name'] = $method_name;
     $this->data['payment_req_data'] = $payment_req_data;
-    $this->data['can_create_order'] = $canCreateOrderAfterCapture;
+    $this->data['can_create_order'] = $canDraftOrderAfterCapture;
   }
 
   /**
@@ -71,7 +71,7 @@ class CapturePaymentResult
     return array_merge($this->data, ['payment_transaction' => $this->payment_transaction ? $this->payment_transaction->toArray() : null]);
   }
 
-  public function canCreateOrderAfterCapture() {
+  public function canDraftOrderAfterCapture() {
     return $this->data['success'] && $this->data['can_create_order'];
   }
 }

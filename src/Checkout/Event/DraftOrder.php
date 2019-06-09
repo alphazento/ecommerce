@@ -5,7 +5,7 @@ namespace Zento\Checkout\Event;
 use Zento\Contracts\Catalog\Model\ShoppingCart;
 use Zento\PaymentGateway\Model\PaymentTransaction;
 
-class CreatingOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
+class DraftOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
         'shoppingCart',
         'paymentTransaction'

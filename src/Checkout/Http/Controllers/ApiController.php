@@ -21,7 +21,7 @@ class ApiController extends \App\Http\Controllers\Controller
     public function createOrder() {
         $paymentTransaction = \array2ReadOnlyObject(Request::get('payment_transaction'), '\Zento\PaymentGateway\Model\PaymentTransaction');
         $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
-        $order = CheckoutService::createOrder($paymentTransaction, $shoppingCart);
+        $order = CheckoutService::draftOrder($paymentTransaction, $shoppingCart);
         return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];
     }
 }
