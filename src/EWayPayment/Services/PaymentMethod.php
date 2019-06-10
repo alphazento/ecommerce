@@ -115,7 +115,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             $transaction = PaymentTransaction::create(
                 [
                     'payment_method' => $this->getCode(),
-                    'payment_transaction_id' => $eWayResponse['TransactionID'],
+                    'ref_id' => $eWayResponse['TransactionID'],
                     'comment' => '', 
                     'customer_id' => 0, 
                     'amount_due' => $totalAmount,

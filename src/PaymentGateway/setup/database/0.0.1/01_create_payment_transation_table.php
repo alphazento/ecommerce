@@ -15,8 +15,8 @@ class CreatePaymentTransactionTable extends Migration
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('payment_method', 32);
-            $table->string('payment_transaction_id', 255);              //payment id from method vendor
-            $table->string('payment_transaction_id_hash', 32)->index(); //payment id hash
+            $table->string('ref_id', 255);              //payment id from method vendor
+            $table->string('ref_id_hash', 32)->index(); //payment id hash
             $table->boolean('success');           //payment status from method vendor
             $table->integer('customer_id')->unsign();
             $table->decimal('amount_due', 15, 4)->default(0);
@@ -27,7 +27,7 @@ class CreatePaymentTransactionTable extends Migration
             $table->text('raw_response');
             $table->text('comment');
             $table->timestamps();
-            $table->unique(['payment_method', 'payment_transaction_id_hash']);
+            $table->unique(['payment_method', 'ref_id_hash']);
         });
     }
   

@@ -29,7 +29,8 @@ class ShipmentService
     return $this;
   }
 
-  public function estimate(IShoppingCart $cart, IAddress $shipping_address, $customer, $arrivalDate): EstimateResult {
+  // public function estimate(IShoppingCart $cart, IAddress $shipping_address, $customer, $arrivalDate): EstimateResult {
+  public function estimate(IShoppingCart $cart, IAddress $shipping_address, $customer, $arrivalDate) {
     // zento_assert($cart);
     zento_assert($shipping_address);
     

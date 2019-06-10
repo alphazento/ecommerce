@@ -41,7 +41,6 @@ class SalesService
         'cart_id' => $cart->id,
         'total_amount_include_tax' => $cart->total
       ]);
-
       $this->createPaymentRecord($order->id, $payment);
 
       $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
@@ -104,7 +103,7 @@ class SalesService
   protected function createPaymentRecord($order_id, $paymentTransaction) {
     $comment = $paymentTransaction->comment;
     $payment_method = $paymentTransaction->payment_method;
-    $payment_transaction_id = $paymentTransaction->payment_transaction_id;
+    $payment_transaction_id = $paymentTransaction->id;
     $amount_due = $paymentTransaction->amount_due;
     $amount_authorized = $paymentTransaction->amount_authorized;
     $amount_paid = $paymentTransaction->amount_paid;
