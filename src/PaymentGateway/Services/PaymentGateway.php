@@ -116,7 +116,7 @@ class PaymentGateway {
         if (!isset($params['shopping_cart'])) {
             return [false, ['messages'=>['Parameter error.']]];
         }
-        if ($method = PaymentGateway::getMethod($methodName)) {
+        if ($method = $this->getMethod($methodName)) {
             $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', $params['shopping_cart']);
             \zento_assert($shoppingCart);
             $eventResult = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
