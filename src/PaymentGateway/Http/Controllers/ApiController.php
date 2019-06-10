@@ -35,7 +35,7 @@ class ApiController extends Controller {
 
     /**
      * capture or validate caputred payment
-     * if the want to create order directlly in this method, it wll call create order
+     * if you want to create order directlly in this method, it wll call create order
      *
      * @return void
      */

@@ -7,6 +7,7 @@ use Registry;
 use Closure;
 use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 use Zento\PaymentGateway\Model\PaymentTransaction;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
@@ -93,7 +94,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
         return $this->accesscodeRepo;
     }
 
-    public function prepare(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
+    public function prepare(IShoppingCart $shoppingCart) {
         return $this->getAccesscodeRepo()->requestNewCode($shoppingCart);
     }
 

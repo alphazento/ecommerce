@@ -5,8 +5,9 @@ namespace Zento\ShoppingCart\Model\ORM;
 use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
-class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\ShoppingCart
+class ShoppingCart extends \Illuminate\Database\Eloquent\Model implements IShoppingCart
 {
     protected $fillable = self::PROPERTIES;
     public function billing_address() {

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseListener
 {
     /**
-     * @param \Zento\Contracts\Catalog\Model\ShoppingCart $event
+     * @param \Zento\Contracts\Interfaces\Catalog\IShoppingCart $event
      * @return void
      */
     protected function run($event) {

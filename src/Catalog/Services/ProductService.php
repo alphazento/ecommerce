@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
-class ProductService implements \Zento\Contracts\Catalog\Service\ProductServiceInterface
+class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServiceInterface
 {
     public function getProductById($id) {
         return Product::find($id);

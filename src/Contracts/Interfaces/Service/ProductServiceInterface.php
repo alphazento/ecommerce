@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Contracts\Catalog\Service;
+namespace Zento\Contracts\Interfaces\Catalog\Service;
 
 interface ProductServiceInterface
 {
@@ -8,7 +8,7 @@ interface ProductServiceInterface
      * Retrieve a user by their unique identifier.
      *
      * @param  mixed  $identifier
-     * @return \Zento\Contracts\Catalog\Model\Product|null
+     * @return \Zento\Contracts\Interfaces\Catalog\IProduct|null
      */
     public function getProductById($id);
 
@@ -16,7 +16,7 @@ interface ProductServiceInterface
      * Retrieve a user by their unique identifier and "remember me" token.
      *
      * @param  mixed   $identifier
-     * @return \Zento\Contracts\Catalog\Model\Product|null
+     * @return \Zento\Contracts\Interfaces\Catalog\IProduct|null
      */
     public function getProductBySku($sku);
 

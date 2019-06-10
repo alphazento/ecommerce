@@ -10,6 +10,7 @@ use CheckoutService;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Zento\Contracts\ROModel\ROPaymentTransaction;
 
 class ApiController extends \App\Http\Controllers\Controller
 {
@@ -19,7 +20,8 @@ class ApiController extends \App\Http\Controllers\Controller
      * @return void
      */
     public function createOrder() {
-        $paymentTransaction = \array2ReadOnlyObject(Request::get('payment_transaction'), '\Zento\PaymentGateway\Model\PaymentTransaction');
+        // $paymentTransaction = \array2ReadOnlyObject(Request::get('payment_transaction'), '\Zento\PaymentGateway\Model\PaymentTransaction');
+        $paymentTransaction = new ROPaymentTransaction(Request::get('payment_transaction'));
         $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::get('shopping_cart'));
         $order = CheckoutService::draftOrder($paymentTransaction, $shoppingCart);
         return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];

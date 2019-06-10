@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Support\Collection;
 use Zento\Catalog\Model\HasManyInAggregatedField;
 
-class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Address
+class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Interfaces\IAddress
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
     public static function getPreloadRelations() {

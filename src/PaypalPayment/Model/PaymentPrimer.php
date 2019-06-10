@@ -4,7 +4,7 @@ namespace Zento\PaypalPayment\Model;
 use Carbon\Carbon;
 
 class PaymentPrimer {
-    public function getPaymentData(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+    public function getPaymentData(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
         $details = [];
         $details['subtotal'] = $cart->subtotal;
 

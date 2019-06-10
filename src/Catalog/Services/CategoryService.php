@@ -3,8 +3,9 @@
 namespace Zento\Catalog\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Zento\Contracts\Interfaces\Catalog\ICategory ;
 
-class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServiceInterface 
+class CategoryService implements \Zento\Contracts\Interfaces\Service\CategoryServiceInterface 
 {
     protected $rootId;
     protected $treeLevelFrom;
@@ -24,7 +25,7 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
      * Retrieve a user by their unique identifier.
      *
      * @param  mixed  $identifier
-     * @return \Zento\Contracts\Catalog\Model\Category|null
+     * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
      */
     public function getCategoryById($identifier)
     {
@@ -105,7 +106,7 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
     /**
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @return \Zento\Contracts\Catalog\Model\Category|null
+     * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
      */
     public function root() {
         return $this->getCategoryById(1);
@@ -125,11 +126,11 @@ class CategoryService implements \Zento\Contracts\Catalog\Service\CategoryServic
     /**
      * get a category's name
      *
-     * @param \Zento\Contracts\Catalog\Model\Category $category
+     * @param \Zento\Contracts\Interfaces\Catalog\ICategory $category
      * @param boolean $withProductCount
      * @return string
      */
-    public function getName(\Zento\Contracts\Catalog\Model\Category $category, $withProductCount = false) {
+    public function getName(ICategory $category, $withProductCount = false) {
         return $category->name . ($withProductCount ? sprintf('(%s)', $category->products_count) : '');
     }
     

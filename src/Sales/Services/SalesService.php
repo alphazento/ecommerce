@@ -11,10 +11,11 @@ use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
 use Zento\Sales\Model\OrderNumberGenerator;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
 class SalesService
 {
-  public function placeOrder(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
+  public function placeOrder(IShoppingCart $cart, 
     $payment, 
     $ship_method_code, 
     $shipping_carrier = '',

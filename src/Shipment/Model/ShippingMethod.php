@@ -3,6 +3,9 @@
 namespace Zento\Shipment\Model;
 
 use Config;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\Interfaces\IAddress;
+use Zento\Contracts\Shipment\EstimateResult;;
 
 abstract class ShippingMethod implements \Zento\Contracts\Shipment\Method
 {
@@ -36,8 +39,8 @@ abstract class ShippingMethod implements \Zento\Contracts\Shipment\Method
     }
   }
 
-  abstract public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-    \Zento\Contracts\Address $shipping_address, 
+  abstract public function estimate(IShoppingCart $cart,
+    IAddress $shipping_address, 
     $customer,
-    $arrivalDate) : \Zento\Contracts\Shipment\EstimateResult;
+    $arrivalDate) : EstimateResult;
 }

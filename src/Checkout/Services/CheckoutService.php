@@ -6,7 +6,7 @@ use DB;
 use Store;
 use Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zento\Contracts\Catalog\Model\ShoppingCart;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class CheckoutService
@@ -15,10 +15,10 @@ class CheckoutService
      * create order method
      *
      * @param \Zento\PaymentGateway\Model\PaymentTransaction $paymentTransaction
-     * @param \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart
+     * @param \Zento\Contracts\Interfaces\Catalog\IShoppingCart $shoppingCart
      * @return void
      */
-    public function draftOrder(PaymentTransaction $paymentTransaction, ShoppingCart $shoppingCart) {
+    public function draftOrder(PaymentTransaction $paymentTransaction, IShoppingCart $shoppingCart) {
         // \zento_assert($paymentTransaction);
         \zento_assert($shoppingCart);
         $eventResult = (new \Zento\Checkout\Event\DraftOrder(

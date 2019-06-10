@@ -4,6 +4,9 @@ namespace Zento\Shipment\Services;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\Interfaces\IAddress;
+use Zento\Contracts\Shipment\EstimateResult;;
 
 class ShipmentService 
 {
@@ -26,10 +29,7 @@ class ShipmentService
     return $this;
   }
 
-  public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-      \Zento\Contracts\Address $shipping_address, 
-       $customer,
-       $arrivalDate) {
+  public function estimate(IShoppingCart $cart, IAddress $shipping_address, $customer, $arrivalDate): EstimateResult {
     // zento_assert($cart);
     zento_assert($shipping_address);
     

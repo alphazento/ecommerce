@@ -1,8 +1,8 @@
 <?php
 
-namespace Zento\Contracts\Catalog\Model;
+namespace Zento\Contracts\Interfaces\Catalog;
 
-interface ShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface 
+interface IShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface 
 {
     const PROPERTIES = [
         'id', 

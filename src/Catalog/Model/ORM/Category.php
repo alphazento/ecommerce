@@ -3,8 +3,9 @@
 namespace Zento\Catalog\Model\ORM;
 
 use Zento\Catalog\Model\HasManyInAggregatedField;
+use Zento\Contracts\Interfaces\Catalog\ICategory;
 
-class Category extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\Category
+class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;

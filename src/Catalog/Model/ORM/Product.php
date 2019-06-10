@@ -3,8 +3,9 @@
 namespace Zento\Catalog\Model\ORM;
 
 use Illuminate\Support\Collection;
+use Zento\Contracts\Interfaces\Catalog\IProduct;
 
-class Product extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Catalog\Model\Product
+class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
     use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;

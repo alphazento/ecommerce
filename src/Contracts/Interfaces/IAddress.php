@@ -1,14 +1,14 @@
 <?php
 
-namespace Zento\Contracts\Catalog\Model;
+namespace Zento\Contracts\Interfaces;
 
-interface ShoppingCartAddress  extends \Zento\Contracts\AssertAbleInterface 
+interface IAddress extends \Zento\Contracts\AssertAbleInterface 
 {
     const PROPERTIES = [
         'firstname', 
         'lastname', 
         'company',
-        'address1', 
+        'address1',
         'address2',  
         'city', 
         'country', 

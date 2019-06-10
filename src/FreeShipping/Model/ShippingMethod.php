@@ -3,6 +3,8 @@
 namespace Zento\FreeShipping\Model;
 
 use Zento\Contracts\Shipment\EstimateResult;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\Interfaces\IAddress;
 
 class ShippingMethod extends \Zento\Shipment\Model\ShippingMethod 
 {
@@ -10,10 +12,7 @@ class ShippingMethod extends \Zento\Shipment\Model\ShippingMethod
   protected $uqiue_method_name = self::CODE;
   protected $extraAttributes = ['threshold', 'fixed_shipping_fee'];
 
-  public function estimate(\Zento\Contracts\Catalog\Model\ShoppingCart $cart,
-      \Zento\Contracts\Address $shipping_address, 
-       $customer,
-       $arrivalDate): \Zento\Contracts\Shipment\EstimateResult {
+  public function estimate(IShoppingCart $cart, IAddress $shipping_address, $customer, $arrivalDate): EstimateResult {
         $result = new EstimateResult();
         if ($this->active_frontend) {
           $result->method_code = self::CODE;

@@ -13,10 +13,10 @@ class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseEvent {
     /**
      * Create a new event instance.
      *
-     * @param  \Zento\Contracts\Catalog\Model\ShoppingCart  $shoppingCart
+     * @param  \Zento\Contracts\Interfaces\Catalog\IShoppingCart  $shoppingCart
      * @return void
      */
-    public function __construct(\Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart)
+    public function __construct(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $shoppingCart)
     {
         $this->data = [
             'shoppingCart' => $shoppingCart

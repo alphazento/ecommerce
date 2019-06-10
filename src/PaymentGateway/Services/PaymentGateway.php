@@ -4,6 +4,7 @@ namespace Zento\PaymentGateway\Services;
 
 use Closure;
 use CheckoutService;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
 class PaymentGateway {
     protected $app;
@@ -96,7 +97,7 @@ class PaymentGateway {
         return $this;
     }
 
-    public function preparePaymentData(string $methodName, \Zento\Contracts\Catalog\Model\ShoppingCart $shoppingCart) {
+    public function preparePaymentData(string $methodName, \Zento\Contracts\Interfaces\Catalog\IShoppingCart $shoppingCart) {
         if ($method = $this->getMethod($methodName)) {
             \zento_assert($shoppingCart);
             $eventResult = (new \Zento\PaymentGateway\Event\BeforePreparePayment($methodName, $shoppingCart))

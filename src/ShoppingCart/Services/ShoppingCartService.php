@@ -10,6 +10,9 @@ use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 
 use Zento\ShoppingCart\Event\ShoppingCartUpdated;
 use Zento\ShoppingCart\Event\PreAddProduct;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\Interfaces\Catalog\IProduct;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCartItem;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -76,8 +79,8 @@ class ShoppingCartService
         return false;
     }
 
-    public function setBillingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Address $address, 
+    public function setBillingAddress(IShoppingCart $cart, 
+        \Zento\Contracts\Interfaces\IAddress $address, 
         $ship_to_billingaddesss = false) {
         // zento_assert($cart);
         // zento_assert($address);
@@ -96,7 +99,7 @@ class ShoppingCartService
         return true;
     }
 
-    public function setShippingAddress(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Address $address) {
+    public function setShippingAddress(IShoppingCart $cart, \Zento\Contracts\Interfaces\IAddress $address) {
         // zento_assert($cart);
         // zento_assert($address);
         $address->save();
@@ -107,10 +110,10 @@ class ShoppingCartService
         return true;
     }
 
-    public function setShippingInfo(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Address $billing_address,
+    public function setShippingInfo(IShoppingCart $cart, 
+        \Zento\Contracts\Interfaces\IAddress $billing_address,
         bool $ship_to_billingaddesss,
-        \Zento\Contracts\Address $shipping_address,
+        \Zento\Contracts\Interfaces\IAddress $shipping_address,
         string $shipping_carrier_code,
         string $shipping_method_code) {
         // zento_assert($cart);
@@ -146,7 +149,7 @@ class ShoppingCartService
      * @param array $options
      * @return void
      */
-    protected function findExistItemByProductOption(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, array $options = []) {
+    protected function findExistItemByProductOption(IShoppingCart $cart, $product_id, array $options = []) {
         $optionStr = json_encode($options);
         foreach($cart->items ?? [] as $item) {
             if ($item->product_id == $product_id) {
@@ -161,7 +164,7 @@ class ShoppingCartService
         return null;
     }
 
-    public function addProductById(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $product_id, $quantity, $url, array $options =[]) {
+    public function addProductById(IShoppingCart $cart, $product_id, $quantity, $url, array $options =[]) {
         // zento_assert($cart);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
@@ -175,7 +178,7 @@ class ShoppingCartService
         }
     }
 
-    public function addProduct(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, \Zento\Contracts\Catalog\Model\Product $product, $quantity, $url, array $options =[]) {
+    public function addProduct(IShoppingCart $cart, IProduct $product, $quantity, $url, array $options =[]) {
         // zento_assert($cart);
         // zento_assert($product);
         if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
@@ -196,8 +199,8 @@ class ShoppingCartService
     }
 
     protected function addProductAsNewItem(
-        \Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Catalog\Model\Product $product, 
+        IShoppingCart $cart, 
+        IProduct $product, 
         $quantity, $url, array $options =[]) {
         // zento_assert($cart);
         // zento_assert($product);
@@ -229,8 +232,7 @@ class ShoppingCartService
         }
     }
 
-    public function addItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, 
-        \Zento\Contracts\Catalog\Model\ShoppingCartItem $cartItem, 
+    public function addItem(IShoppingCart $cart, IShoppingCartItem $cartItem, 
         $trigger_event = true) {
         // zento_assert($cart);
         // zento_assert($item);
@@ -253,11 +255,11 @@ class ShoppingCartService
         }
     }
 
-    public function updateItem(\Zento\Contracts\Catalog\Model\ShoppingCartItem $item, $options) {
+    public function updateItem(IShoppingCartItem $item, $options) {
         
     }
 
-    public function updateItemQuantity(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $item_id, $quantity) {
+    public function updateItemQuantity(IShoppingCart $cart, $item_id, $quantity) {
         if ($quantity <=0) {
             return $this->deleteItem($cart, $item_id);
         }
@@ -282,7 +284,7 @@ class ShoppingCartService
         return false;
     }
 
-    public function deleteItem(\Zento\Contracts\Catalog\Model\ShoppingCart $cart, $item_id) {
+    public function deleteItem(IShoppingCart $cart, $item_id) {
         // zento_assert($cart);
         foreach($cart->items as $item) {
             if ($item->id == $item_id) {
@@ -294,7 +296,7 @@ class ShoppingCartService
         return false;
     }
 
-    public function ShoppingCartUpdated(\Zento\Contracts\Catalog\Model\ShoppingCart $cart) {
+    public function ShoppingCartUpdated(IShoppingCart $cart) {
         // zento_assert($cart);
         $cart->load('items');
         return (new ShoppingCartUpdated($cart))->fireUntil();

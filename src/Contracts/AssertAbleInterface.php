@@ -2,7 +2,7 @@
 
 namespace Zento\Contracts;
 
-require('helpers.php');
+require_once('helpers.php');
 
 interface AssertAbleInterface 
 {

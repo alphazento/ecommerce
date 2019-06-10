@@ -2,7 +2,7 @@
 
 namespace Zento\Checkout\Event;
 
-use Zento\Contracts\Catalog\Model\ShoppingCart;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class DraftOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
@@ -18,7 +18,7 @@ class DraftOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
      * @param  string  $paymentTransaction
      * @return void
      */
-    public function __construct(ShoppingCart $shoppingCart, 
+    public function __construct(IShoppingCart $shoppingCart, 
         PaymentTransaction $paymentTransaction)
     {
         $this->data = [
