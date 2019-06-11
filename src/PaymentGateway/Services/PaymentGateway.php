@@ -6,6 +6,7 @@ use Closure;
 use CheckoutService;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\ROModel\ROShoppingCart;
+use Zento\Kernel\Facades\InnerApiClient;
 
 class PaymentGateway {
     protected $app;

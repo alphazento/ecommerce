@@ -5,11 +5,11 @@ namespace Zento\Checkout\Http\Controllers;
 
 use Request;
 use Registry;
-use CheckoutService;
 
 use Illuminate\Support\Collection;
 use Zento\Contracts\ROModel\ROPaymentTransaction;
 use Zento\Contracts\ROModel\ROShoppingCart;
+use Zento\Checkout\Providers\Facades\CheckoutService;
 
 class ApiController extends \App\Http\Controllers\Controller
 {
@@ -18,7 +18,7 @@ class ApiController extends \App\Http\Controllers\Controller
      *
      * @return void
      */
-    public function createOrder() {
+    public function draftOrder() {
         $paymentTransaction = new ROPaymentTransaction(Request::get('payment_transaction'));
         $shoppingCart = new ROShoppingCart(Request::get('shopping_cart'));
         $order = CheckoutService::draftOrder($paymentTransaction, $shoppingCart);
