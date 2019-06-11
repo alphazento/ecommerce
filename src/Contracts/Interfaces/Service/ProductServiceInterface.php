@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Contracts\Interfaces\Catalog\Service;
+namespace Zento\Contracts\Interfaces\Service;
 
 interface ProductServiceInterface
 {

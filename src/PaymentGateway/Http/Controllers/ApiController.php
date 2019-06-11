@@ -6,6 +6,7 @@ use Route;
 use Request;
 use App\Http\Controllers\Controller;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
+use Zento\Contracts\ROModel\ROShoppingCart;
 
 class ApiController extends Controller {
     use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
@@ -29,7 +30,7 @@ class ApiController extends Controller {
      */
     public function prepare() {
         list($ret, $data) = PaymentGateway::preparePaymentData(Route::input('method'),
-        \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', Request::all()));
+            new ROShoppingCart(Request::get('shopping_cart')));
         return ['status' => $ret ? 200 : 420, 'data' => $data];
     }
 

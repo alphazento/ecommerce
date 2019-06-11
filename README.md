@@ -2,7 +2,7 @@
 
 #### 1. request to PaymentGateway
 
-by call api: /api/v1/payment/capture/paypalexpress
+by call api: /api/v1/payment/capture/{payment_method}
 
 which will calls PaymentGateway::capturePayment
 
