@@ -8,12 +8,10 @@
         "magento 2"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
@@ -30,19 +28,7 @@
         },
         "laravel": {
             "providers": [],
-            "aliases": {},
-            "zento": {
-                "Zento_M2Data": {
-                    "version": "0.0.1",
-                    "commands": [
-                    ],
-                    "providers": [
-                    ],
-                    "depends":[
-                        "Zento_Catalog"
-                    ]
-                }
-            }
+            "aliases": {}
         }
     }
 }

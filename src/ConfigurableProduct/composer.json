@@ -9,12 +9,10 @@
         "configurableproduct"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
@@ -31,19 +29,7 @@
         },
         "laravel": {
             "providers": [],
-            "aliases": {},
-            "zento": {
-                "Zento_ConfigurableProduct": {
-                    "version": "0.0.1",
-                    "commands": [],
-                    "providers": [
-                        "\\Zento\\ConfigurableProduct\\Providers\\Entry"
-                    ],
-                    "depends":[
-                        "Zento_Catalog"
-                    ]
-                }
-            }
+            "aliases": {}
         }
     }
 }

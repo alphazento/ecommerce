@@ -11,7 +11,7 @@
         "php": ">=7.0",
         "laravel/passport": "^7.0",
         "alphazento/zento": "dev-master",
-        "eway/eway-rapid-php":">=1.3.4"
+        "eway/eway-rapid-php": ">=1.3.4"
     },
     "autoload": {
         "psr-4": {},
@@ -25,17 +25,7 @@
         },
         "laravel": {
             "providers": [],
-            "aliases": {},
-            "zento": {
-                "Zento_EWayPayment": {
-                    "version": "0.0.1",
-                    "commands": [],
-                    "providers": [
-                        "\\Zento\\EWayPayment\\Providers\\Entry"
-                    ],
-                    "depends": ["Zento_PaymentGateway"]
-                }
-            }
+            "aliases": {}
         }
     }
 }

@@ -8,12 +8,10 @@
         "reactjs"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng.chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
         "alphazento/zento": "dev-master"
@@ -30,23 +28,7 @@
         },
         "laravel": {
             "providers": [],
-            "aliases": {},
-            "zento": {
-                "Zento_ReactApp": {
-                    "version": "0.0.1",
-                    "commands": [
-                        "\\Zento\\ReactApp\\Console\\Commands\\BuildApp"
-                    ],
-                    "providers": [
-                        "\\Zento\\ReactApp\\Providers\\Entry"
-                    ],
-                    "depends":[
-                        "Zento_RouteAndRewriter",
-                        "Zento_Catalog"
-                    ],
-                    "theme": true
-                }
-            }
+            "aliases": {}
         }
     }
 }
