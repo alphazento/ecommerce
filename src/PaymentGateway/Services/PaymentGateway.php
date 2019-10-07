@@ -5,6 +5,8 @@ namespace Zento\PaymentGateway\Services;
 use Closure;
 use CheckoutService;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\ROModel\ROShoppingCart;
+use Zento\Kernel\Facades\InnerApiClient;
 
 class PaymentGateway {
     protected $app;
@@ -97,7 +99,7 @@ class PaymentGateway {
         return $this;
     }
 
-    public function preparePaymentData(string $methodName, \Zento\Contracts\Interfaces\Catalog\IShoppingCart $shoppingCart) {
+    public function preparePaymentData(string $methodName, IShoppingCart $shoppingCart) {
         if ($method = $this->getMethod($methodName)) {
             \zento_assert($shoppingCart);
             $eventResult = (new \Zento\PaymentGateway\Event\BeforePreparePayment($methodName, $shoppingCart))
@@ -117,7 +119,7 @@ class PaymentGateway {
             return [false, ['messages'=>['Parameter error.']]];
         }
         if ($method = $this->getMethod($methodName)) {
-            $shoppingCart = \generateReadOnlyModelFromArray('\Zento\ShoppingCart\Model\ORM\ShoppingCart', $params['shopping_cart']);
+            $shoppingCart = new ROShoppingCart($params['shopping_cart']);
             \zento_assert($shoppingCart);
             $eventResult = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
                 ->fireUntil();

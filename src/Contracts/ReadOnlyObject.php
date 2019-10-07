@@ -13,11 +13,18 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable
     protected $attrs;
 
     public function __construct(array $attrs) {
-        $this->attrs = $attrs;
+        $this->attrs = [];
+        foreach($attrs as $key => $value) {
+            if (is_array($value)) {
+                $this->attrs[$key] = new static($value);
+            } else {
+                $this->attrs[$key] = $value;
+            }
+        }
     }
 
     public function __get($key) {
-        return isset($this->attrs[$key]) ? $this->attrs[$key] : null;
+        return array_key_exists($key, $this->attrs) ? $this->attrs[$key] : null;
     }
 
     public function __set($key, $value) {
@@ -25,7 +32,15 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable
     }
 
     public function toArray() {
-        return $this->attrs;
+        $attrs = [];
+        foreach($this->attrs as $key => $value) {
+            if ($value instanceof static) {
+                $attrs[$key] = $value->toArray();
+            } else {
+                $attrs[$key] = $value;
+            }
+        }
+        return $attrs;
     }
 
     public function getAttributes() {
@@ -59,12 +74,12 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable
      */
     public function offsetExists($offset)
     {
-        return isset($this->attrs[$offset]);
+        return array_key_exists($offset, $this->attrs);
     }
 
     public function offsetGet($offset)
     {
-        return isset($this->attrs[$offset]) ? $this->attrs[$offset] : null;
+        return array_key_exists($offset, $this->attrs) ? $this->attrs[$offset] : null;
     }
 
     public function offsetSet($offset, $value)

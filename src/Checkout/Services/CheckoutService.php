@@ -19,7 +19,6 @@ class CheckoutService
      * @return void
      */
     public function draftOrder(PaymentTransaction $paymentTransaction, IShoppingCart $shoppingCart) {
-        // \zento_assert($paymentTransaction);
         \zento_assert($shoppingCart);
         $eventResult = (new \Zento\Checkout\Event\DraftOrder(
                 $shoppingCart, 

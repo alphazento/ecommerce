@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Contracts\Service;
+namespace Zento\Contracts\Interfaces\Service;
 use Zento\Contracts\Interfaces\Catalog\ICategory;
 
 interface CategoryServiceInterface
