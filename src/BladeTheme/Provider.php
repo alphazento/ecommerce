@@ -7,6 +7,7 @@ use Zento\BladeTheme\View\DirectiveExtend;
 use Zento\BladeTheme\View\Factory as ViewFactory;
 use Zento\BladeTheme\View\Processer\BladeViewEnhance;
 use Zento\BladeTheme\Services\BladeTheme;
+use Zento\Kernel\Facades\PackageManager;
 
 class Provider extends ServiceProvider
 {
@@ -21,5 +22,7 @@ class Provider extends ServiceProvider
         $this->app->singleton('bladetheme', function ($app) {
             return new BladeTheme();
         });
+
+        PackageManager::class_alias('\Zento\BladeTheme\Facades\BladeTheme', 'BladeTheme');
     }
 }

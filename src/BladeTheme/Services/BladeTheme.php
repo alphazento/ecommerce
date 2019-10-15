@@ -4,6 +4,9 @@ namespace Zento\BladeTheme\Services;
 use Illuminate\Container\Container;
 use Illuminate\Support\Str;
 
+use View;
+use Route;
+use Request;
 use Closure;
 use Illuminate\Support\Arr;
 use Zento\BladeTheme\View\ViewCache;
@@ -16,7 +19,7 @@ class BladeTheme {
     protected $viewCollection;
 
     protected $stubProcessors = [];
-    protected $breadcrumbData = ['tree' => []];
+    protected $breadcrumbData = [];
 
     public function __construct() {
         $this->viewCollection = new ViewCollection();
@@ -49,24 +52,13 @@ class BladeTheme {
         }
     }
 
-    public function breadcrumb($url, $name, $isExtraData = false) {
-        if (empty($this->breadcrumbData['tree'])) {
-            $this->breadcrumbData['tree'] = [['url'=>route('home'), 'name'=>'Home' ]];
-        }
-        if ($isExtraData) {
-            $this->breadcrumbData[$url] = $name;
-        } else {
-            $this->breadcrumbData['tree'][] = compact('url', 'name');
-        }
+    public function breadcrumb($url, $title) {
+        $this->breadcrumbData[] = compact('url', 'title');
         return $this;
     }
 
-    public function renderBreadcrumb($view = 'components.breadcrumb') {
-        if (!empty($this->breadcrumbData['tree'])) {
-            return view($view, $this->breadcrumbData)->render();
-        } else {
-            return '';
-        }
+    public function getBreadcrumb() {
+        return $this->breadcrumbData;
     }
 
     public function renderCachedView($env, $vars, $cacheKey, $view, $data = []) {
@@ -74,16 +66,28 @@ class BladeTheme {
         return $cacheview->render();
     }
 
-    public function view($view, $data = []) {
-        View::share($data);
+    public function view($view, $data = null) {
+        $data && View::share($data);
         return view($view);
     }
 
-    public function noLocalCacheView($view, $data =[], $headers = []) {
-        View::share($data);
+    public function noLocalCacheView($view, $data =null, $headers = []) {
+        $data && View::share($data);
         return response()
             ->view($view)
             ->header("Cache-Control",
                 "no-cache, max-age=0, must-revalidate, no-store");
+    }
+
+    public function innerApiProxy($method, $url, $data = []) {
+        $originRequest = Request::instance();
+        app()->instance('middleware.disable', true);
+
+        $request = Request::create($url, $method, $data);
+        app()->instance('request', $request);
+        $resp = Route::dispatch($request);
+        $respData = $resp->getOriginalContent();
+        app()->instance('request', $originRequest);
+        return $respData;
     }
 }

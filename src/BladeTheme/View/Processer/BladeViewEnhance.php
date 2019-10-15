@@ -10,7 +10,7 @@ use Zento\BladeTheme\View\ContentContainerView;
 use Zento\BladeTheme\Facades\BladeTheme;
 
 class BladeViewEnhance implements ProcessorInterface {
-    public function process(Factory $factory, $view, $data = [], $mergeData = []) {
+    public function process(Factory $factory, string $view, $data = [], $mergeData = []) {
         $replaced = BladeTheme::isViewReplaced($view);
         $deleted = BladeTheme::isViewDeleted($view);
         if ($replaced || $deleted) {
@@ -21,7 +21,7 @@ class BladeViewEnhance implements ProcessorInterface {
             if ($deleted) {
                 $contentContainer->appendComment($view);
             }
-            return $compose;
+            return $contentContainer;
         }
         return false;
     }
