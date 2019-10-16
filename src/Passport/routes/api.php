@@ -1,7 +1,8 @@
 <?php
-    Route::options('/{all}', 
+    Route::options('/api/{all}', 
         '\Zento\Passport\Http\Controllers\ApiController@apiHttpOptions')
         ->where('all', '.*')->middleware('cors');
+        // ->where('all', '^(?!api/).*$')->middleware('cors');
     Route::group(
         [
             'prefix' => '/api/v1/oauth2',

@@ -18,7 +18,7 @@ interface IProduct extends \Zento\Contracts\AssertAbleInterface
         // 'model',
         // 'dimension',
         // 'manufacturer',
-        'url_path',
+        // 'url_path',
         'image',
         'gift_message_available',
         // 'minimal_price',

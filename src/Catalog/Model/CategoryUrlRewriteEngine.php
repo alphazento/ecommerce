@@ -11,7 +11,7 @@ class CategoryUrlRewriteEngine extends \Zento\RouteAndRewriter\Engine\UrlRewrite
 {
     public function findRewriteRule(string $url) {
         $url = Str::endsWith($url, '.html') ? substr($url, 0, -5) : $url;
-        if ($category = Category::where('url_path', '=', $url)
+        if ($category = Category::where('url_key', '=', $url)
                 ->first(['id'])) 
         {
             $rule = new RuleModel();

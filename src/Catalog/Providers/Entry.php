@@ -36,11 +36,11 @@ class Entry extends ServiceProvider
 
                 //uri builder for web
                 $rewriteSvc->setUriBuilder('category', function($id) {
-                    return sprintf('/category/%s', $id);
+                    return sprintf('/categories/%s', $id);
                 });
                 $rewriteSvc->setUriBuilder('product', function($id) {
                     // return route('product', ['id' => $id]);
-                    return sprintf('/product/%s', $id);
+                    return sprintf('/products/%s', $id);
                 });
             });
         }

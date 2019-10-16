@@ -8,11 +8,14 @@ use View;
 use Route;
 use Request;
 use Closure;
-use Illuminate\Support\Arr;
 use Zento\BladeTheme\View\ViewCache;
 use Zento\BladeTheme\View\ViewCollection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Traits\Macroable;
 
 class BladeTheme {
+    use Macroable;
+
     /**
      * @var ViewCollection
      */

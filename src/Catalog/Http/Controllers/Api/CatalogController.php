@@ -68,7 +68,13 @@ class CatalogController extends Controller
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);
-        return ['status'=>200, 'data'=>$category->products()->paginate(Request::get('per_page', 9))];
+        return [
+            'status'=>200, 
+            'data'=>[
+                'category' => $category, 
+                'products' => $category->products()->paginate(Request::get('per_page', 9))
+            ]
+        ];
     }
 
     public function products() {
