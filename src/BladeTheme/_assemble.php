@@ -14,6 +14,11 @@ return [
                     '\Zento\Kernel\ThemeManager\Middleware\ThemeByBrowser',
                 ],
             ],
+        ],
+        "depends"=> [
+            "Zento_Customer",
+            "Zento_Catalog",
+            "Zento_WebShoppingCart"
         ]
     ]
 ];

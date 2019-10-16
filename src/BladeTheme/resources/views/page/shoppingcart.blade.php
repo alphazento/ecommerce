@@ -1,0 +1,1 @@
+This is a shopping cart page from Zento_BladeTheme
