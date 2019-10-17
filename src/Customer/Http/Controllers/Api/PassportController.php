@@ -10,7 +10,6 @@ class PassportController extends \Zento\Passport\Http\Controllers\ApiController
 {
     public function getOrCreateGuest(ServerRequestInterface $request) {
       if ($uuid = Request::header('Guest-Uuid')) {
-        dd($uuid);
         if (strlen($uuid) > 36) {
           list($customer, $password) = \Zento\Customer\Model\ORM\Customer::requestDummyCustomer($uuid);
           $user = [
