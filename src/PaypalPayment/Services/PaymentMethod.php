@@ -85,7 +85,8 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function prepare($params) {
-        return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
+        // return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
+        return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart($params['cart_id']));
     }
 
     /**

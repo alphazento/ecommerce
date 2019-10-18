@@ -2,7 +2,7 @@
 return [
     'Zento_BladeTheme' => [
         "version"=> "0.0.1",
-        "theme" => true,
+        "theme" => false,
         "commands"=> [],
         "providers"=> [
             "\\Zento\\BladeTheme\\Provider"
@@ -22,9 +22,10 @@ return [
                     \Illuminate\Session\Middleware\StartSession::class,
                     \Illuminate\View\Middleware\ShareErrorsFromSession::class,
                     // \App\Http\Middleware\VerifyCsrfToken::class,
-                    \Zento\Kernel\Booster\Middleware\VerifyCsrfToken,
+                    \Zento\Kernel\Booster\Middleware\VerifyCsrfToken::class,
                     \Illuminate\Routing\Middleware\SubstituteBindings::class,
-                    Zento\Kernel\ThemeManager\Middleware\ThemeByBrowser::class,
+                    \Zento\Kernel\ThemeManager\Middleware\ThemeByBrowser::class, 
+                    \Zento\Customer\Http\Middleware\AuthGuestUser::class
                 ]
               ],
         ],

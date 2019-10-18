@@ -4,7 +4,8 @@ namespace Zento\PaypalPayment\Model;
 use Carbon\Carbon;
 
 class PaymentPrimer {
-    public function getPaymentData(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
+    /**Old version paypal express */
+    public function getPaymentData0(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
         $details = [];
         $details['subtotal'] = $cart->subtotal;
 
@@ -70,6 +71,53 @@ class PaymentPrimer {
                             "state"=> 'NSW'
                         ]
                     ]
+                ]
+            ]
+        ];
+
+        return [true, $payment];
+    }
+
+    /**
+     * sdk/js version
+     *
+     * @param \Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart
+     * @return void
+     */
+    public function getPaymentData(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
+        $details = [];
+        $details['subtotal'] = $cart->subtotal;
+
+        $items = [];
+        foreach($cart->items as $item) {
+            $attrs = [];
+            $attrs['name'] = $item->name;
+            $attrs['description'] = $item->description;
+            $attrs['quantity'] = $item->quantity;
+            $attrs['price'] = $item->unit_price;
+            $attrs['sku'] = $item->product_id;
+            $attrs['currency'] = 'AUD';
+            $items[] = $attrs;
+        }
+        $details['shipping'] = $item->shipping_fee;
+        // $details['handling'] = $item->handle_fee;
+        $shippingaddress = $cart->shipping_address;
+        // $shippingCountryCode = $shippingaddress->country;
+        $shippingCountryCode = 'AU';
+
+        $payment = [
+            // 'intent' => 'sale', //'authorize'
+            'payer' => [
+                'payer_info' => [
+                    'email' => $cart->email
+                ]
+            ],
+            'purchase_units'=> [
+                [
+                    'amount'=> [
+                        'value'=> $cart->total,
+                        // 'currency_code'=> "AUD",
+                    ],
                 ]
             ]
         ];

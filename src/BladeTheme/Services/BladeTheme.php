@@ -87,6 +87,7 @@ class BladeTheme {
         app()->instance('middleware.disable', true);
 
         $request = Request::create($url, $method, $data);
+        
         app()->instance('request', $request);
         $resp = Route::dispatch($request);
         $respData = $resp->getOriginalContent();

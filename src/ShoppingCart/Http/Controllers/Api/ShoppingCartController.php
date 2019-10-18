@@ -5,7 +5,6 @@ namespace Zento\ShoppingCart\Http\Controllers\Api;
 
 use Auth;
 use Route;
-use Request;
 use Response;
 use Registry;
 use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
@@ -13,6 +12,7 @@ use Zento\Catalog\Providers\Facades\ProductService;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -30,13 +30,13 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         return ['status'=> ($cart ? 201 : 420), 'data' => $cart];
     }
 
-    public function addItem() {
-        return $this->tapCart(function($cart) {
+    public function addItem(Request $request) {
+        return $this->tapCart(function($cart) use ($request) {
             if ($item = ShoppingCartService::addProductById($cart, 
-                Request::get('product_id'), 
-                Request::get('quantity', 1),
-                Request::get('url'),
-                Request::get('options', []))) {
+                $request->get('product_id'), 
+                $request->get('quantity', 1),
+                $request->get('url'),
+                $request->get('options', []))) {
                 return ['status'=> 201, 'data' => ['cart_id' => $cart->guid]];
             } else {
                 return ['status'=> 420, 'error' => 'fail to add item to cart'];
@@ -86,10 +86,10 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         ShoppingCartService::deleteCoupon();
     }
 
-    public function setBillingAddress() {
-        return $this->tapCart(function($cart) {
-            $address = new ShoppingCartAddress(Request::all());
-            ShoppingCartService::setBillingAddress($cart, $address, Request::get('ship_to_billingaddesss'));
+    public function setBillingAddress(Request $request) {
+        return $this->tapCart(function($cart) use ($request) {
+            $address = new ShoppingCartAddress($request->all());
+            ShoppingCartService::setBillingAddress($cart, $address, $request->get('ship_to_billingaddesss'));
             return ['status'=> 200, 'data' => null];
         });
     }
@@ -122,9 +122,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     }
 
-    public function setCustomer() {
-        return $this->tapCart(function($cart) {
-            if ($cart->mode == 0 && $cart->guest_guid == Request::get('client_guid')) {
+    public function setCustomer(Request $request) {
+        return $this->tapCart(function($cart) use ($request) {
+            if ($cart->mode == 0 && $cart->guest_guid == $request->get('client_guid')) {
                 $cart->customer_id = Route::input('customer_id');
                 $cart->mode = 1;
                 $cart->save();
@@ -135,9 +135,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         });
     }
 
-    public function updateEmail() {
-        return $this->tapCart(function($cart) {
-            $cart->email = Request::get('email');
+    public function updateEmail(Request $request) {
+        return $this->tapCart(function($cart) use ($request) {
+            $cart->email = $request->get('email');
             $cart->save();
             return ['status' => 200];
         });

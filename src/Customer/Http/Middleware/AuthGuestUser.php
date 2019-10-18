@@ -6,9 +6,10 @@ use Auth;
 use Closure;
 use Zento\Kernel\Facades\ShareBucket;
 use Zento\Customer\Mixins\AuthGuard;
-class SessionGuest
+
+class AuthGuestUser
 {
-/**
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -19,8 +20,8 @@ class SessionGuest
      */
     public function handle($request, Closure $next) {
         if (!Auth::user()) {
-            Auth::mixin(new \Zento\BladeTheme\Mixins\AuthGuard);
-            Auth::guestUser();
+            Auth::mixin(new \Zento\Customer\Mixins\AuthGuardGuest);
+            Auth::loadGuestUser();
         }
         return $next($request);
     }

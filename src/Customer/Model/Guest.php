@@ -9,4 +9,8 @@ class Guest extends ORM\Customer {
         $this->guest_email = $this->email;
         $this->id = $attrs['i'] ?? 0;
     }
+
+    public function save(array $options = []) {
+        return $this;
+    }
 }

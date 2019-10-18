@@ -1,4 +1,7 @@
 <?php
+if (!config('zento.use_web_theme')) {
+    return;
+}
 Route::group(
     [
         'prefix' => '/payment/',

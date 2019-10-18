@@ -57,7 +57,9 @@ class PaymentGateway {
         foreach($this->method_services as $serviceName => $instance) {
             $service = $this->getMethod($serviceName);
             // if ($service->isAvailable($quote, $user, $shippingAddress)) {
-                $availables[] = $service->prepareForClientSide($clientType);
+                if ($method = $service->prepareForClientSide($clientType)) {
+                    $availables[] = $method;
+                }
             // }
         }
         return $availables;
