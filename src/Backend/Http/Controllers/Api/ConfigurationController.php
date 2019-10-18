@@ -13,8 +13,8 @@ class ConfigurationController extends Controller
 {
     public function getMenus() {
         $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
-        foreach($enabledPackageConfigs ?? [] as $packageConfig) {
-            $namespace = (PackageManager::getNameSpace($packageConfig->name));
+        foreach($enabledPackageConfigs ?? [] as $name => $packageConfig) {
+            $namespace = (PackageManager::getNameSpace($name));
             $className = sprintf('\\%s\\Config\\Admin', $namespace);
             if (class_exists($className)) {
                 (new $className)->registerMenus();
