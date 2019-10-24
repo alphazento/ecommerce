@@ -1,0 +1,143 @@
+
+@import '/Users/nancy3912/Documents/work/node_modules/susy/sass/susy';
+@import '/Users/nancy3912/Documents/work/node_modules/susy/sass/plugins/svg-grid';
+
+$susy: (   
+  'columns': susy-repeat(4),
+  'gutters': 0.5,
+  'spread':'narrow',
+  'container-spread':'narrow',
+  
+);
+ 
+$container:1200px; 
+ 
+@mixin container{
+  max-width: $container;
+  margin-left: auto; 
+  margin-right: auto; 
+} 
+
+// @include container {
+// }
+// @include susy-at($med) {
+// }
+// width: span(2); // 2 of 4
+
+//susy-use
+@mixin susy-use( $config) {
+    //  parse and normalize any shorthand arguments
+    $config: susy-compile($config); // record the global settings -
+    // and update the global variable with our new settings
+    $global: $susy;
+    $susy: map-merge($susy, $config) !global; // any content inside this mixin
+    // will use the local settings
+    @content; // return the global variable to its initial value
+    $susy: $global !global;
+}
+
+//susy-at
+@mixin susy-at( $config) {
+    //  parse and normalize any shorthand arguments
+    $config: susy-compile($config); // build min-and-max queries
+    $min: map-get($config, 'min-width');
+    $min: if($min, '(min-width: #{$min})', null);
+    $max: map-get($config, 'max-width');
+    $max: if($max, '(max-width: #{$max})', null); // combine them if we need both
+    $and: if($min and $max, '#{$min} and #{$max}', null); // or fall back to the value we need…
+    $query: $and or $min or $max; // apply the results…
+    @media #{$query} {
+        @include susy-use($config) {
+            @content;
+        }
+    }
+}
+
+//@include gallery(2 of 8);
+@mixin gallery(
+  $span,
+  $config: ()
+) {
+  $grid: susy-compile($span, $config);
+  $span: map-get($grid, 'span');
+  $column-count: length(map-get($grid, 'columns'));
+  $count: floor($column-count / $span);
+  $spread: map-get($grid, 'spread') + 2;
+  $container-spread: map-get($grid, 'container-spread') + 2;
+  $extra: ($container-spread - $spread) * 0.5;
+  $extra-push: su-call('su-gutter', $grid) * $extra;
+  
+  float: left;
+  margin-right: -100%;
+
+  @for $n from 1 through ($count) {
+    $nth: unquote('#{$count}n + #{$n}');
+    $location: $span * ($n - 1) + 1;    
+    
+    &:nth-child(#{$nth}) {
+      $width: susy-compile($span at $location, $grid);
+      width: su-call('su-span', $width);
+
+      @if ($location > 1) {
+        $wide: susy-compile('first' $location - 1 'wide', $grid);
+        clear: none;
+        margin-left: su-call('su-span', $wide) + $extra-push;
+      } @else {
+        clear: both;
+        margin-left: if($extra-push > 0, $extra-push, 0);
+      }
+    }
+  }
+}
+
+// @include maintain-ratio(4 3);
+@mixin maintain-ratio($ratio: 4 3) {
+    @if length($ratio) < 2 or length($ratio) > 2 {
+        @warn "$ratio must be a list with two values.";
+    }
+    $width: 100%;
+    $height: percentage(nth($ratio, 2) / nth($ratio, 1));
+    width: $width;
+    height: 0;
+    padding-bottom: $height;
+}
+
+
+// it is safe to add non-Susy data to Susy maps
+$small: (
+  'min-width':0,
+  'columns': susy-repeat(4),
+  'gutters': 0.5,
+);
+
+$med: (
+  'min-width':640px,
+  'columns': susy-repeat(8),
+  'gutters': 0.5,
+);
+
+$large: (
+  'min-width':768px,
+  'columns': susy-repeat(8),
+  'gutters': 0.5,
+);
+$large-9: (
+  'min-width':768px,
+  'columns': susy-repeat(12),
+  'gutters': 0.5,
+);
+$wide: (
+  'min-width':1024px,
+  'columns': susy-repeat(12),
+  'gutters': 0.5,
+);
+
+$huge: (
+  'min-width':1280px,
+  'columns': susy-repeat(12),
+  'gutters': 0.5,
+);
+
+
+
+

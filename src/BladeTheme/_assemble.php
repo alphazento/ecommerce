@@ -2,8 +2,10 @@
 return [
     'Zento_BladeTheme' => [
         "version"=> "0.0.1",
-        "theme" => false,
-        "commands"=> [],
+        "theme" => true,
+        "commands"=> [
+            '\Zento\BladeTheme\Console\Commands\PrepareVueTheme'
+        ],
         "providers"=> [
             "\\Zento\\BladeTheme\\Provider"
         ],
@@ -17,11 +19,10 @@ return [
 
             'web' => [
                 'main' => [
-                    \App\Http\Middleware\EncryptCookies::class,
+                    \Illuminate\Cookie\Middleware\EncryptCookies::class,
                     \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
                     \Illuminate\Session\Middleware\StartSession::class,
                     \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-                    // \App\Http\Middleware\VerifyCsrfToken::class,
                     \Zento\Kernel\Booster\Middleware\VerifyCsrfToken::class,
                     \Illuminate\Routing\Middleware\SubstituteBindings::class,
                     \Zento\Kernel\ThemeManager\Middleware\ThemeByBrowser::class, 
@@ -31,8 +32,7 @@ return [
         ],
         "depends"=> [
             "Zento_Customer",
-            "Zento_Catalog",
-            "Zento_WebShoppingCart"
+            "Zento_Catalog"
         ]
     ]
 ];

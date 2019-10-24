@@ -1,0 +1,203 @@
+#rwd_nav {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    margin: 0;
+    z-index: 9999;
+    cursor: pointer;
+    background: none;
+    border: none;
+    &:before {
+        @extend %fa;
+        content: "\f0c9";
+        font-size: 2em;
+        color: #333;
+    }
+    @include susy-at($large) {
+        display: none
+    }
+}
+
+
+
+#pageslide {
+    //jq產生包覆nav
+    display: none;
+    position: absolute;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    z-index: 99999;
+    width: 60%; //行動滑開的寬度
+    //padding: 20px 0;
+    @include susy-at($large) {
+        visibility: hidden;
+    }
+}
+
+#nav {
+    width: 60%; //行動滑開的寬度
+    display: none;
+    position: absolute;
+    position: fixed;
+    top: 0px;
+    padding-top: 60px;
+    height: 100%;
+    z-index: 9999;
+    background: #fff;
+    overflow-y: auto; //滾軸 
+    @include box-shadow(0px 10px 10px #555);
+
+    @include susy-at($large) {
+        position: relative;
+        width: 100%;
+        background: #fff;
+        display: flex;
+        height: auto;
+        padding: 0;
+        top: auto;
+        overflow: visible; //滾軸
+        overflow-y: initial; //取消滾軸
+        @include box-shadow(none);
+        justify-content: flex-end;
+    } //滾軸美化
+    &::-webkit-scrollbar-track {
+        /*-webkit-box-shadow: inset 0 0 6px rgba(3, 3, 3, 0.3);*/
+        background-color: none;
+    }
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: none;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #444;
+    } // * {
+    //     @include transition(all 0 ease 0 !important);
+    // }
+    a.bars_close {
+        width: 100%;
+        height: 100%;
+        position: fixed; //background-color: #000;
+        //@include opacity(0.4);
+        z-index: 100;
+        top: 0;
+        background: none;
+        &:hover {
+            background: none!important;
+        }
+        @include susy-at($large) {
+            display: none!important;
+        }
+    }
+
+
+    a {
+        padding: 10px 15px;
+        display: block;
+        font-size: 1.125rem;
+        position: relative;
+        color: #222;
+        z-index: 10000;
+        &:hover {
+            color: #fff;
+            text-decoration: none;
+            background: #4484c1;
+        }
+
+
+        @include susy-at($large) {
+
+            align-items: center;
+            padding: 10px 15px;
+            display: flex;
+            &:hover {
+                background: none;
+                color: #fcad02;
+            }
+            &.nav_on{
+                color:#fcad02; 
+            }
+        }
+    }
+}
+
+
+
+.menu_top1 {
+    @include susy-at($large) {
+        @include translate(0, -3em);
+        z-index: 10000;
+        left: 0;
+        height: auto;
+        top: 0!important;
+        height: auto!important;
+        width: 100%!important;
+        background: #fff!important;
+        @include opacity(0.9);
+        display: block;
+        justify-content: center!important;
+        position: fixed!important;
+        @include transition(all 0.3s ease-in-out);
+        border-bottom: 1px solid #555;
+    }
+}
+
+.menu_top2 {
+    @include susy-at($large) {
+        @include translate(0, 0);
+    }
+}
+
+.header_fixed {
+    position: fixed!important;
+    padding: 10px;
+
+    z-index: 1000;
+    background: #fff;
+    img {
+        max-height: 100%;
+    }
+}
+
+
+
+//左邊選單
+.menu_left {
+    width: 100%;
+    ul {
+        list-style: none;
+        margin:0 0 50px 0;
+        padding: 0;
+        li {
+
+            padding: 0;
+
+
+            margin-bottom: 5px;
+            text-align: center;
+            a {
+                color: #222;
+                border: 1px solid #999;
+                display: block;
+                padding: 8px 20px;
+                &:hover {
+                    text-decoration: none;
+                    background: #4484c1;
+                    color: #fff;
+                    border: 1px solid #4484c1;
+                }
+            }
+            &.li_on a {
+                text-decoration: none;
+                background: #fcad02;
+                color: #fff;
+                border: 1px solid #fcad02;
+            }
+        }
+    }
+
+    @include susy-at($large) {
+        width: span(2);
+    }
+}

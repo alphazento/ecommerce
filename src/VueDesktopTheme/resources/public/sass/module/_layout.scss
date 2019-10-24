@@ -1,0 +1,391 @@
+//圓弧效果  @include border-radius(50px); 
+//區塊陰影  @include box-shadow(30px 30px 30px #000);   
+//背景漸層  @include background(linear-gradient(white,black));
+//透明度    @include opacity(0.2); 
+//過渡     @include transition(all 0.5s ease-in-out);
+//@include transform(translate(-50%,0));
+body {
+    background: #fff;
+    margin: 0!important;
+    @include susy-at($large) {}
+}
+
+img {
+    max-width: 100%;
+}
+
+* {
+    &:hover {
+        @include transition(all 0.25s ease-in-out);
+    }
+
+    outline: none;
+}
+
+header {
+
+    position: relative;
+    background: #fff;
+
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    @include susy-at($large) {
+        padding: 24px 0;
+        display: flex;
+        @include container;
+        margin-bottom: 0;
+        height: 60px;
+        height: auto;
+        text-align: left;
+    }
+    #logo {
+        width: 100%;
+
+        @include susy-at($large) {
+            width: span(2); // 2 of 8
+        }
+    }
+
+    #m_nav {
+        display: flex;
+        justify-content: flex-end; // // 2 of 4  background:#fff;
+        @include susy-at($large) {
+            width: span(6); // 6 of 8
+        }
+    }
+}
+
+//上方會員登入,商品搜尋 icon
+.search_icon {
+
+    margin: 0;
+    position: absolute;
+    top: 22px;
+    cursor: pointer; //margin: 10px 0 0 0;
+    align-items: center;
+    display: flex;
+    @include susy-at($large) {
+        margin: 0;
+        position: relative;
+        top: auto;
+    }
+
+    background: none;
+    border:none;
+    &:before {
+        content: "\f002";
+        @extend %fa;
+        color: #222;
+        font-size: 1.6em;
+        padding: 3px 6px;
+        margin: 0;
+        @include susy-at($large) {
+            font-size: 1.2em;
+        }
+    }
+}
+
+#search {
+    width: 300px;
+    position: relative;
+    @extend %btn-search;
+    text-align: center;
+    height: auto;
+    @include susy-at($large) {
+        width: 400px;
+    }
+}
+
+.index_h1 {
+    display: block;
+    margin: 3rem 0;
+    text-align: center;
+    font-size: 1.2rem;
+    &:after {
+        content: " ";
+        display: block;
+        background: #666;
+        height: 1px;
+        margin-top: 5px;
+    }
+    @include susy-at($large) {
+        font-size: 1.6rem;
+        &:after,
+        &:before {
+            content: " ";
+            display: inline-block;
+            width: 6rem;
+            background: #666;
+            height: 1px;
+            letter-spacing: -3px;
+            margin: 0 10px;
+            position: relative;
+        }
+    }
+}
+
+#index_news {
+
+    width: 100%;
+    background: url("../image/new_bg.jpg");
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    @include susy-at($large) {
+        padding: 30px 0;
+    }
+    .news_wrap {
+        position: relative;
+        @include container; //display: flex;
+        margin-bottom: 50px;
+
+
+        .news_list {
+            border: 1px solid #cfcfcf;
+            padding: 15px;
+            background: #fff;
+            &:hover {
+                border: 1px solid #4484c1;
+                a {
+                    color: #4484c1;
+                    text-decoration: none;
+                }
+            }
+            @include gallery(4 of 4);
+            span {
+                //日期
+                color: #b65a76;
+                background:none;
+                font-size: 0.875rem;
+                display: block;
+                margin: 10px 0;
+                padding: 0;
+            }
+            h2 {
+                font-size: 1.125rem;
+            }
+
+            a {
+                color: #222;
+                &:hover {
+                    color: #4484c1
+                }
+            }
+            @include susy-at($large-9) {
+                @include gallery(3 of 9);
+                &:last-of-type {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+//商品區
+#product_index {
+    position: relative;
+    @include container;
+    padding: 10px;
+    @include susy-at($large) {
+        padding: 0;
+    }
+}
+h2.page_cr_h2 {
+    font-size: 1.125rem;
+    font-weight: normal;
+    margin-bottom: 40px;
+    padding-left: 10px;
+    &:before{
+         @extend %fa;
+        content:"\f0ae";
+        font-size: 1.125em;
+        color: #333;
+        padding-right: 10px;
+    }
+}
+.pp_wrap,
+.pp_wrap_c {
+    display: block;
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+
+.pp_wrap_c {
+    .pp_list {
+        @include susy-at($large-9) {
+            @include gallery(3 of 9);
+            text-align: center;
+        }
+    }
+}
+
+.pp_list {
+    @include gallery(4 of 4);
+    border: 1px solid transparent;
+    margin-bottom: 2rem;
+    &:hover {
+        border: 1px solid #ddd;
+    }
+    @include susy-at($large) {
+        @include gallery(2 of 8);
+    }
+
+    div {
+        //圖
+        position: relative;
+        @include maintain-ratio(4 3);
+        text-align: center;
+        font-size: 0;
+        a:hover {
+            @include opacity(0.9);
+        }
+        a {
+            display: inline-block;
+        }
+        span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            &:before {
+                content: "";
+                height: 100%; // width: 1px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+        img {
+            max-height: 100%;
+            vertical-align: middle
+        }
+        a {
+            display: inline-block;
+        }
+        span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            &:before {
+                content: "";
+                height: 100%; // width: 1px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+    p {
+        //商品名稱
+        a {
+            color: #333;
+            font-size: 1.125rem;
+            text-align: center;
+        }
+    }
+}
+
+//about
+#index_about {
+    width: 100%;
+
+    background: url("../image/about_bg.jpg");
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    @include susy-at($large) {
+        padding: 80px 0;
+    }
+    .about_wrap {
+        position: relative;
+        @include container;
+        @include susy-at($large) {
+            display: flex;
+        }
+        .about_img1,
+        .about_cc1 {
+            width: 100%;
+            @include susy-at($large) {
+                width: span(4);
+            }
+        }
+        .about_cc1 {
+            padding: 20px;
+            color: #fff;
+        }
+    }
+}
+
+a.b_more {
+    position: relative;
+    padding: 8px 40px;
+    color: #333;
+    display: inline-block;
+    text-align: center;
+    clear: both;
+    margin: 50px auto;
+    left: 50%;
+    @include transform(translate(-50%,
+    0));
+
+    border: 1px solid #4484c1;
+    background: #4484c1;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+    &:hover {
+        border: 1px solid #4484c1;
+        background: #fff;
+        color: #4484c1;
+        text-decoration: none;
+    }
+}
+
+footer {
+    background: #373737;
+    padding: 30px 0;
+    .foot {
+        position: relative;
+        @include container;
+        color: #fff;
+
+        h3 {}
+        p {
+            font-size: 0.875rem;
+        }
+        span {
+            display: block;
+        }
+        div,
+        .logo_foot,
+        .img_qr {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+        }
+        @include susy-at($large) {
+            display: flex;
+
+            div {
+                width: span(6);
+                text-align: left;
+            }
+
+            .logo_foot {
+                width: span(1);
+                text-align: left;
+            }
+            .img_qr {
+                width: span(1);
+                text-align: left;
+            }
+        }
+    }
+}

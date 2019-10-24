@@ -1,0 +1,203 @@
+#page_wrap {
+    position: relative;
+    @include container;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    @include susy-at($large) {
+        //display: flex;
+        padding: 40px 0;
+    }
+    .page_c {}
+    .page_cr {
+        width: 100%;
+        @include susy-at($large) {
+            width: span(6);
+            padding: 0 0 0 20px;
+        }
+    }
+}
+
+.breadCrumb { 
+    display: none;
+    @include susy-at($large) {
+        text-align: right;
+        display: block;
+    }
+    margin:20px 20px 10px 0;
+
+    a {
+        color: #666;
+        &:hover {
+            color: #111;
+        }
+        &:before {
+            @extend %fa;
+            content: "\f105";
+            padding-right: 4px;
+        }
+        &.breadCrumb_no:before {
+            content: "\f041";
+        }
+    }
+}
+
+
+
+.page_num {
+    width: 100%; //float: left;
+    text-align: center;
+    margin: 30px;
+    a {
+        display: inline-block;
+        padding: 1px 6px;
+        border: 1px solid #eee;
+        color: #333;
+        margin: 3px;
+        &:hover {
+            border: 1px solid #4484c1;
+            background: #4484c1;
+            color: #fff;
+        }
+        &.page_num_on {
+            border: 1px solid #4484c1;
+            background: #4484c1;
+            color: #fff;
+        }
+    }
+}
+
+.page_news {
+    .news_date {}
+    .news_title {
+        font-size: 1.125rem;
+        margin-bottom: 30px;
+        color: #823434;
+    }
+    .news_cc {}
+}
+
+.news_list {
+    width: 100%;
+    float: left;
+    span{
+       font-size: 0.875rem;
+    padding: 0 15px;
+    display: inline-block;
+    background-color: #af6767;
+    color: #fff;
+    }
+    @include susy-at($large-9) {
+        @include gallery(3 of 9);
+    }
+    margin: 10px 0;
+    list-style: none;
+    border:1px solid #eee;
+    padding: 15px;
+    &:hover {
+        border: 1px solid #4484c1;
+        a {
+            color: #4484c1;
+        }
+    }
+    li {
+        margin: 10px 0 0 0;
+        padding: 5px 0;
+        display: block;
+        a {
+            font-size: 1.125rem;display: block;
+        }
+    }
+}
+
+
+.detail_top {
+    display: flex;
+    .detail_pic {
+        width: 100%;
+        @include susy-at($large) {
+
+            width: span(4);
+        }
+    }
+    .detail_c1 {
+        width: 100%;
+        text-align: left; //價錢
+        .price {
+            color: #c92b07;
+            font-size: 1.25rem;
+        }
+        @include susy-at($large) {
+
+            width: span(4);
+        }
+    }
+}
+
+h2.np_title {
+    font-size: 1.25rem;
+    font-weight: normal;
+    border-bottom: 1px solid #999;
+}
+
+
+
+#tab-demo {
+    width: 100%;
+    min-height: 300px;
+    margin-top: 30px;
+}
+
+#tab-demo>ul {
+    display: block;
+    margin: 0;
+    list-style: none;
+    text-align: left;
+    padding: 0;
+}
+
+.tab-title {
+    list-style: none; border-bottom: 1px solid #BCBCBC;
+}
+
+#tab-demo>ul>li {
+    display: inline-block;
+    vertical-align: top;
+    //font-family: '微軟正黑體';
+    margin: 0 -1px -1px 0;
+    border-bottom: 1px solid #BCBCBC;
+    //height: 25px;
+    //line-height: 25px;
+    background: #cdcdcd;
+    padding:6px 20px;
+    font-size: 1.125rem;
+    color:#fff;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+#tab-demo>ul>li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#tab-demo>ul>li.active {
+    //border-bottom: 1px solid #fff;
+    background:#4484c1;
+}
+
+#tab-demo>.tab-inner {
+    clear: both;
+    color: #000;
+    //border: 1px #BCBCBC solid;
+}
+
+.tab-inner {
+    padding: 15px;
+    width: 100%;
+    padding: 15px;
+
+    display: table;
+}
