@@ -17,17 +17,14 @@ foreach($products as &$product) {
 ?>
 <div id="app" >
     <section id="banner">
-        <div class="slider-pro sp-horizontal" id="example1">
-            <div class="sp-slides-container">
-                <div class="sp-slides">
-                    <!-- This comp. can have a modal included. -->
-                    <image-slider style="width: 5120px;height: 600px;"
-                        :speed="1"
-                        :img-data="images"
-                        ></image-slider>
-                </div>
-            </div>
-        </div>
+        <!-- This comp. can have a modal included. -->
+        <image-carsousel 
+            :speed="1"
+            :img-data="images"
+            >
+        </image-carsousel>
+        <image-gallery>
+        </image-gallery>
     </section>
     <section id="product_index">
             <h1 class="index_h1">HOT PRODUCT</h1>

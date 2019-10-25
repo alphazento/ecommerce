@@ -141,41 +141,19 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
     }
 
     protected function genRegisterComponentDevFile() {
-        $contents = ['var Vue = window.Vue;'];
-        $contents = ['var configs = [];'];
-        $imports = [];
-        foreach($this->componentJsonFiles as $themeName => $components) {
-            $configName = $themeName . '_Components';
-            $imports[] = sprintf('import %s from %s', $configName, $components);
-            $contents[] = sprintf('configs.push(%s);', $configName);
-
-            // $alias = '@' . $themeName;
-            // $jsFolder = strtolower($themeName);
-            // foreach($components as $name => $file) {
-            //     if (isset($contents[$name])) {
-            //         $this->warn(sprintf('Vue component [%s] has been defined in other module', $name));
-            //         $this->warn(sprintf('Here is the previous defination', $contents[$name]));
-            //     } 
-            //     $lines = [];
-            //     $variableName = sprintf('Dynamic%sComponent', Str::studly($name));
-            //     $lines[] = sprintf('const %s= ()=> import("%s/%s" /* webpackChunkName:"%s/js/cmps/%s" */);', 
-            //         $variableName,
-            //         $alias,
-            //         $file,
-            //         $jsFolder,
-            //         Str::slug($name)
-            //     );
-            //     $lines[] = sprintf('Vue.component("%s", %s);', $name, $variableName);
-            //     $contents[$name] = implode(PHP_EOL, $lines);
-            // }
+        $contents = [];
+        $imports = ['var Vue = window.Vue;'];
+        foreach($this->componentJsonFiles as $themeName => $jsFile) {
+            $configName = $themeName . '_Configs';
+            $imports[] = sprintf('import %s from "%s"', $configName, $jsFile);
+            $contents[] = sprintf('
+for (const [key, value] of Object.entries(%s)) {
+    Vue.component(
+        key,
+        () => import(`@%s/${value}` /* webpackChunkName:"vue-dev-watch/%s" */ )
+    );
+}', $configName, $themeName, Str::slug($themeName));
         }
-        $contents[] = '
-    for (var i = 0; i < configs; i++) {
-        for (const [key, value] of Object.entries(configs[i])) {
-            console.log(key, value);
-        }
-    }
-        ';
         $imports[] = '';
 
         if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.dev.js'])) {

@@ -1,4 +1,6 @@
 export default {
-  "image-slider": "components/ImageSlider.vue",
+  "image-section": "components/ImageSection.vue",
+  "image-carsousel": "components/ImageCarousel.vue",
+  "image-gallery": "components/ImageGallery.vue",
   "product-list": "components/ProductList.vue"
 }
