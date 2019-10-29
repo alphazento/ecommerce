@@ -1,0 +1,103 @@
+<template>
+<div>
+  <!-- <v-app-bar hide-on-scroll> -->
+  <v-app-bar app hide-on-scroll>
+     <v-app-bar-nav-icon icon @click.stop="drawer = !drawer">
+     </v-app-bar-nav-icon>
+     <v-img :src="logo" :max-height="60" :contain="true"></v-img>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        Home
+      </v-btn>
+       <v-btn icon>
+        Home
+      </v-btn>
+       <v-btn icon>
+        Home
+      </v-btn>
+      <v-spacer></v-spacer>
+    
+      <v-text-field
+        v-if="searcher"
+        append-icon="mdi-magnify"
+        flat
+        hide-details
+        solo-inverted
+        style="max-width: 300px;"
+      /> 
+      <v-btn icon v-if="!searcher" @click.stop="searcher = !searcher">
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+  </v-app-bar>
+
+  <v-navigation-drawer
+    v-model="drawer"
+    absolute
+    temporary
+  >
+      <v-list dense nav>
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>John Leider</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>John Leider</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      
+        <v-divider></v-divider>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+  </v-navigation-drawer>
+</div>
+</template>
+
+<script>
+  export default {
+    name: 'toolbar',
+    props: {
+      links: {
+        type: Array
+      },
+      logo: {
+        type: String
+      }
+    },
+     data () {
+      return {
+        drawer: false,
+        searcher: false,
+        items: [
+          { title: 'Home', icon: 'dashboard' },
+          { title: 'About', icon: 'question_answer' },
+        ],
+      }
+    },
+    methods: {
+      onClick (e, item) {
+        e.stopPropagation()
+        if (item.to || !item.href) return
+        this.$vuetify.goTo(item.href)
+      }
+    }
+  }
+</script>

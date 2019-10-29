@@ -145,7 +145,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $imports = ['var Vue = window.Vue;'];
         foreach($this->componentJsonFiles as $themeName => $jsFile) {
             $configName = $themeName . '_Configs';
-            $imports[] = sprintf('import %s from "%s"', $configName, $jsFile);
+            $imports[] = sprintf('import %s from "@%s/_components.js"', $configName, $themeName);
             $contents[] = sprintf('
 for (const [key, value] of Object.entries(%s)) {
     Vue.component(

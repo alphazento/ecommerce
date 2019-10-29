@@ -42,6 +42,7 @@
     },
     created(){
       this.pagiData = this.pagination;
+      console.log('pagination', this.pagination);
     },
     mounted(){
     },

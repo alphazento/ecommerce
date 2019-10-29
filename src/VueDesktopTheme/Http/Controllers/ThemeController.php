@@ -54,8 +54,9 @@ class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogControll
 
     public function home() {
         // $categories = $this->fetchCategories();
-        $products = Product::limit(8)->get();
-        return view('page.index', compact('products'));
+        $items = Product::limit(8)->get();
+        $pagination = new \Zento\Kernel\Booster\Pagination\LengthAwarePaginator($items, 1, 1, 1);
+        return view('page.index', compact('pagination'));
     }
 
     public function news() {
