@@ -4,17 +4,8 @@
   <v-app-bar app hide-on-scroll>
      <v-app-bar-nav-icon icon @click.stop="drawer = !drawer">
      </v-app-bar-nav-icon>
-     <v-img :src="logo" :max-height="60" :contain="true"></v-img>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        Home
-      </v-btn>
-       <v-btn icon>
-        Home
-      </v-btn>
-       <v-btn icon>
-        Home
-      </v-btn>
+      <v-img :src="logo" :max-height="60" :contain="true"></v-img>
       <v-spacer></v-spacer>
     
       <v-text-field
@@ -24,6 +15,7 @@
         hide-details
         solo-inverted
         style="max-width: 300px;"
+        placeholder="Search..."
       /> 
       <v-btn icon v-if="!searcher" @click.stop="searcher = !searcher">
         <v-icon>mdi-magnify</v-icon>

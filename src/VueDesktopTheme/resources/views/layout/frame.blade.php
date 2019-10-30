@@ -10,9 +10,9 @@
     <v-app>
         <v-content>
             <v-container>
-                <toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'"> </toolbar>
+                <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'"> </theme-toolbar>
                 @yield('pagecontent')
-                <myfooter/>
+                <theme-footer></theme-footer>
             </v-container>
         </v-content>
     </v-app>
