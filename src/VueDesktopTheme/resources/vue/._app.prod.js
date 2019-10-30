@@ -1,0 +1,1 @@
+var Vue = window.Vue;

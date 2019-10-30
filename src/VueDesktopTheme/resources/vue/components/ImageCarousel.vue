@@ -1,16 +1,17 @@
 <template>
   <slick  ref="slick"  :options="options"  >
-    <image-section v-for="(item, index) in img_data" :key="index" :item="item">
-    </image-section>
+    <image-card v-for="(item, index) in img_data" :key="index" :item="item">
+    </image-card>
   </slick>
 </template>
 
 <script>
+
 import Slick from 'vue-slick';
-import ImageSection from './ImageSection';
+// import ImageSection from './ImageSection';
+import ImageCard from './ImageCard';
 
 export default {
-    name: 'imagecarsousel',
     props: {
       imgData: {
         type: Array
@@ -48,7 +49,8 @@ export default {
     },
     components: {
       Slick,
-      ImageSection
+      // ImageSection
+      ImageCard
     }
   }
 </script>

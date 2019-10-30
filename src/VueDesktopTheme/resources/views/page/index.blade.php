@@ -7,8 +7,8 @@
 @section('pagecontent')
     <?php 
     $images = [
-        ['img'=> '/zento_vuedesktoptheme/image/banner.jpg', 'title' => ""],
-        ['img'=> '/zento_vuedesktoptheme/image/banner2.jpg', 'title' => ""]
+        ['img'=> '/zento_vuedesktoptheme/image/banner.jpg', 'title' => "Image 1"],
+        ['img'=> '/zento_vuedesktoptheme/image/banner2.jpg', 'title' => "Image 2"]
     ];
     ?>
     <section id="banner">
