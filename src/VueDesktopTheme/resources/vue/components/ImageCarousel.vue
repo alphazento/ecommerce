@@ -6,7 +6,6 @@
 </template>
 
 <script>
-
 import Slick from 'vue-slick';
 // import ImageSection from './ImageSection';
 import ImageCard from './ImageCard';

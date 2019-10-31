@@ -1,15 +1,22 @@
 <template>
-    <v-container fluid >
-      <v-layout row>
-        <v-flex v-for="(item , index) in pagiData.data" :key="index" md4 xs6>
-          <product-card :product="item">
-          </product-card>
-        </v-flex>
-      </v-layout>
-      <div v-if="pageable" class="page_num">
-          <a v-for="i in (1, pagiData.last_page)" @click="navPage(i)" :key="i" :class="pagiData.current_page === i ? 'page_num_on' : '' ">{{i}}</a>
-      </div>
-  </v-container>
+  <div style="display:grid;">
+    <div class="pp_wrap_c ">
+        <div class="pp_list" v-for="(item , index) in pagiData.data" :key="index">
+            <div>
+                <a :href="getProductUrl(item)">
+                    <span><img :src="getProductImageUrl(item)"></span>
+                </a>
+            </div>
+            <p>
+                <a :href="getProductUrl(item)">{{item.name}}</a>
+            </p>
+        </div>
+    </div>
+
+    <div v-if="pageable" class="page_num">
+        <a v-for="i in (1, pagiData.last_page)" @click="navPage(i)" :key="i" :class="pagiData.current_page === i ? 'page_num_on' : '' ">{{i}}</a>
+    </div>
+  </div>
 </template>
 
 <script>
