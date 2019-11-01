@@ -22,10 +22,10 @@
           </div>
 
           <div class="align-self-center">
-            <v-btn class="btn__addtocart" 
+            <v-btn class="btn__view" 
               :href="getProductUrl(product)"
             >
-            Add To Cart
+            View
             </v-btn>
 
             <v-btn icon class="wishlist-icon">
@@ -54,7 +54,7 @@
 
 
 <style scoped>
-.btn__addtocart {
+.btn__view {
   color: #fff;
   background-color: #600BD2 !important;
 }

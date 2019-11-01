@@ -2,8 +2,8 @@
     <v-container fluid >
       <v-layout row>
         <v-flex v-for="(item , index) in pagiData.data" :key="index" md4 xs6>
-          <product-card :product="item">
-          </product-card>
+          <product-simple-card :product="item">
+          </product-simple-card>
         </v-flex>
       </v-layout>
       <div v-if="pageable" class="page_num">

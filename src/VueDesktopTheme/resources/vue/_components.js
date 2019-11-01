@@ -5,6 +5,8 @@ export default {
   "image-section": "components/ImageSection.vue",
   "image-carsousel": "components/ImageCarousel.vue",
   "image-gallery": "components/ImageGallery.vue",
-  "product-card": "components/ProductCard.vue",
+  "product-simple-card": "components/ProductSimpleCard.vue",
+  "product-full-card": "components/ProductFullCard.vue",
+  "product-detail": "components/ProductDetail.vue",
   "product-list": "components/ProductList.vue"
 }

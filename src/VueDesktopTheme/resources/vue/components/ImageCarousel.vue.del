@@ -1,30 +1,8 @@
 <template>
-    <v-carousel
-      :show-arrows="true"
-      cycle
-      :height="'350px'"
-    >
-      <v-carousel-item
-        v-for="(item, index) in img_data"
-        :key="index"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
-      >
-        <v-sheet
-          :color="color"
-          height="100%"
-          tile
-        >
-          <v-row
-            class="fill-height"
-            align="center"
-            justify="center"
-          >
-            <image-card :item="item"></image-card>
-          </v-row>
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
+  <slick  ref="slick"  :options="options"  >
+    <image-card v-for="(item, index) in img_data" :key="index" :item="item">
+    </image-card>
+  </slick>
 </template>
 
 <script>
@@ -75,3 +53,8 @@ export default {
     }
   }
 </script>
+
+<style lang="scss">
+  @import '@Zento_VueDesktopTheme/components/slick-theme.scss';
+  @import 'node_modules/slick-carousel/slick/slick.scss';
+</style>

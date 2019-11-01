@@ -11,6 +11,7 @@
         <v-content>
             <v-container>
                 <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'"> </theme-toolbar>
+                @include('widget.breadcrumbs')
                 @yield('pagecontent')
                 <theme-footer></theme-footer>
             </v-container>

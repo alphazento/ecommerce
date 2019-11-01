@@ -5,15 +5,7 @@
 @endpush
 
 @section('pagecontent')
-    <section id="product_index">
-        <h1 class="index_h1">{{ strtoupper($product->name)}}</h1>
-        <v-container fluid >
-            <v-layout row>
-              <v-flex>
-              </v-flex>
-            </v-layout>
-        </v-container>
-    </section>
+    <product-full-card :product="product" :tabs="detailTabs"></product-full-card>
 @endsection
 
 @push('tail')
@@ -22,7 +14,8 @@
         el: '#app',
         vuetify: new Vuetify(),
         data: {
-            product: @json($product)
+            product: @json($product),
+            detailTabs: @json($jsonFields)
         },
     });
     </script>

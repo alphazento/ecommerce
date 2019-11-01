@@ -14,7 +14,8 @@ class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogControll
         if ($view = parent::categories()) {
             $data = $view->getData();
             $category = $data['pageData']['category'];
-            BladeTheme::breadcrumb(url(BladeTheme::getCategoryUrl($category)), $category->name);
+            BladeTheme::breadcrumb('/', 'Home')
+                ->breadcrumb(url(BladeTheme::getCategoryUrl($category)), $category->name);
             $data['apiUrl'] = sprintf('/api/v1/categories/%s/products', Route::input('id'));
             return $view;
         }
@@ -25,6 +26,7 @@ class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogControll
             $data = $view->getData();
             $categories = $this->fetchCategories();
             $product = $data['product'];
+            BladeTheme::breadcrumb('/', 'Home');
             if ($category = ($product->categories[0] ?? false)) {
                 BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($category), $category->name);
             }
@@ -56,16 +58,19 @@ class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogControll
         // $categories = $this->fetchCategories();
         $items = Product::limit(9)->get();
         $pagination = new \Zento\Kernel\Booster\Pagination\LengthAwarePaginator($items, 1, 1, 1);
-        return view('page.index', compact('pagination'));
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->view('page.index', compact('pagination'));
     }
 
     public function news() {
-        return BladeTheme::breadcrumb(route('get.news'), 'News')
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb(route('get.news'), 'News')
             ->view('page.news');
     }
 
     public function about() {
-        return BladeTheme::breadcrumb(route('get.about'), '公司簡介')
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb(route('get.about'), '公司簡介')
             ->view('page.about');
     }
 
@@ -74,12 +79,14 @@ class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogControll
     }
   
     function contact() {
-        return BladeTheme::breadcrumb('/contact', 'Contact Us')
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb('/contact', 'Contact Us')
             ->view('page.contact');
     }
 
     function cooperation() {
-        return BladeTheme::breadcrumb('/cooperation', 'Cooperation')
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb('/cooperation', 'Cooperation')
             ->view('page.cooperation');
     }
 }
