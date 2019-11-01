@@ -8,5 +8,6 @@ export default {
   "product-simple-card": "components/ProductSimpleCard.vue",
   "product-full-card": "components/ProductFullCard.vue",
   "product-detail": "components/ProductDetail.vue",
-  "product-list": "components/ProductList.vue"
+  "product-list": "components/ProductList.vue",
+  "shopping-cart-card": "components/ShoppingCartCard.vue"
 }

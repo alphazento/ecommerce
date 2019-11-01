@@ -35,8 +35,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function cartPage() {
         $cart = $this->getCart();
-        return BladeTheme::breadcrumb(route('web.get.cart'), 'Shopping Cart')
-                ->view('page.shoppingcart', compact('cart'));
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb(route('web.get.cart'), 'Shopping Cart')
+            ->view('page.shoppingcart', compact('cart'));
     }
 
     public function addItem() {

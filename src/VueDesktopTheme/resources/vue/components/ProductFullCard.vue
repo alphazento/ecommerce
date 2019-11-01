@@ -16,21 +16,26 @@
                 </div>
               </v-flex>
             </v-layout>
-            <v-layout row>
-              <v-flex md1 xs1></v-flex>
-              <v-flex md6 xs6>
-                <v-select
-                  :items="qtys"
-                  label="Quantity"
-                  outlined
-                ></v-select>
-              </v-flex>
-              <v-flex md5 xs5>
-                <v-btn depressed large class="btn__addtocart">
-                  Add to Cart
-                </v-btn>
-              </v-flex>
-            </v-layout>
+            <v-form :action="`/shoppingcart/add_product/${product.id}`" method="POST">
+              <v-layout row>
+                  <v-flex md1 xs1></v-flex>
+                  <v-flex md6 xs6>
+                    <v-select
+                      :items="qtys"
+                      label="Quantity"
+                      outlined
+                      required
+                      v-model="selectedQty"
+                    ></v-select>
+                  </v-flex>
+                  <input type="hidden" name="qty" v-model="selectedQty"/>
+                  <v-flex md5 xs5>
+                    <v-btn depressed large class="btn__addtocart" type="submit">
+                      Add to Cart
+                    </v-btn>
+                  </v-flex>
+              </v-layout>
+            </v-form>
           </v-content>
         </v-flex>
       </v-layout>
@@ -70,6 +75,7 @@
     },
     data() {
       return {
+        selectedQty: 1,
         qtys: [
           1,2,3,4,5,6,7,8,9,10
         ],
