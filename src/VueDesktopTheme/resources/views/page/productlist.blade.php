@@ -1,4 +1,4 @@
-@extends('layout.frame', ['nav_page' => 'home'])
+@extends('layout.frame', ['nav_page' => 'products'])
 @push('head')
     <title>BaicyTek Home page</title>
 @endpush
@@ -18,7 +18,7 @@
 <script>
 const app = new Vue({
   el: '#app',
-  mixins: [mixin],
+  // mixins: [mixin],
   data: {
     pagination: @json($pageData['products'])
   },

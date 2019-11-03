@@ -47,6 +47,30 @@ Route::group(
 
 Route::group(
     [
+        'prefix' => '/{protocal}/shoppingcart',
+        'namespace' => '\Zento\BladeTheme\Http\Controllers',
+        'middleware' => ['web'],
+    ], function () {
+        Route::get('/', [
+            'as' =>'ajax.get.cart', 'uses' => 'ShoppingCartController@cartPage'
+        ]);
+
+        Route::post('/add_product/{pid}', [
+            'as' => 'ajax.post.cart.add.product', 'uses' => 'ShoppingCartController@addItem'
+        ]);
+
+        Route::post('/delete_item/{item_id}', [
+            'as' => 'ajax.post.cart.delete.item', 'uses' => 'ShoppingCartController@deleteItem'
+        ]);
+
+        Route::post('/update_item_qty/{pid}', [
+            'as' => 'ajax.post.cart.update.itemqty', 'uses' => 'ShoppingCartController@deleteItemQty'
+        ]);
+    }
+);
+
+Route::group(
+    [
         'prefix' => '/checkout',
         'namespace' => '\Zento\BladeTheme\Http\Controllers',
         'middleware' => ['web'],

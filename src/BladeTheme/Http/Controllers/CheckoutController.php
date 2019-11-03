@@ -14,8 +14,9 @@ class CheckoutController extends ShoppingCartController
         $cart = $this->getCart();
         $user = Auth::user();
         $paymentmethods = PaymentGateway::estimate($cart, $user, null, 'web');
-        return BladeTheme::breadcrumb(route('web.get.checkout'), 'Checkout')
-            ->view('page.checkout.index', compact('cart', 'user', 'paymentmethods'));
+        return BladeTheme::breadcrumb('/', 'Home')
+            ->breadcrumb(route('web.get.checkout'), 'Checkout')
+            ->view('page.checkout', compact('cart', 'user', 'paymentmethods'));
     }
     
     public function process() {
@@ -23,6 +24,6 @@ class CheckoutController extends ShoppingCartController
     }
 
     public function success() {
-        return view('page.checkout.success');
+        return view('page.order-success');
     }
 }

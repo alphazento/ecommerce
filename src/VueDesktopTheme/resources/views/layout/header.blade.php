@@ -7,7 +7,7 @@
         <nav id="nav">
             <a href="/" {{ $nav_page == 'home' ? 'class=nav_on' : '' }} >Home </a>
             <a href="/about" {{ $nav_page == 'about' ? 'class=nav_on' : '' }}>About Baicytek </a>
-            <a href="/products" {{ $nav_page == 'product' ? 'class=nav_on' : '' }}>Products</a>
+            <a href="/products" {{ $nav_page == 'products' ? 'class=nav_on' : '' }}>Products</a>
             <a href="/cooperation" {{ $nav_page == 'cooperation' ? 'class=nav_on' : '' }}>Cooperation </a>
             <a href="/news" {{ $nav_page == 'news' ? 'class=nav_on' : '' }}>News</a>
             <a href="/contact" {{ $nav_page == 'contact' ? 'class=nav_on' : '' }}>Contact us</a>

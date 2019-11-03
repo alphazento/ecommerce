@@ -10,7 +10,9 @@
     <v-app>
         <v-content>
             <v-container>
-                <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'"> </theme-toolbar>
+                <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'" 
+                :cart-api="'{{route('ajax.get.cart', ['webprotocal'=>'ajax'])}}'">
+            </theme-toolbar>
                 @include('widget.breadcrumbs')
                 @yield('pagecontent')
                 <theme-footer></theme-footer>
