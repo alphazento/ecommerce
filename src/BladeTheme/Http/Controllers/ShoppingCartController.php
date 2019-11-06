@@ -34,7 +34,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     }
 
     public function cartPage() {
-        $protocal = Route::input('protocal') ?? 'web';
+        $protocal = Route::input('protocal', 'web');
         $resp = $this->getCart(true);
         if ($protocal === 'web') {
             $cart = $resp['data'];
@@ -50,7 +50,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function addItem() {
         $product_id = Route::input('pid');
-        $protocal = Route::input('protocal');
+        $protocal = Route::input('protocal', 'web');
 
         $cart = $this->getCart();
         if (!$cart) {
@@ -81,7 +81,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function deleteItem() {
         $item_id = Route::input('item_id');
-        $protocal = Route::input('protocal', web);
+        $protocal = Route::input('protocal', 'web');
         
         if ($cart = $this->getCart()) {
             if ($resp = BladeTheme::innerApiProxy(
