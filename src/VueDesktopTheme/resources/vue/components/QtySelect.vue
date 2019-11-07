@@ -1,5 +1,5 @@
 <template>
-  <v-select class="limit-width" :items="qtys" label="Quantity" outlined required v-model="_value" v-on:change="handleUpdate()"></v-select>
+  <v-select class="limit-width" :items="qtys" label="Quantity"  required v-model="_value" v-on:change="handleUpdate()"></v-select>
 </template>
 
 <script>

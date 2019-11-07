@@ -40,7 +40,7 @@ export default {
       businessname: "",
       nameRules: [
         v =>
-          (v && v.length <= 60) ||
+          !v || (v && v.length <= 60) ||
           "Business Name must be less than 120 characters"
       ]
     };

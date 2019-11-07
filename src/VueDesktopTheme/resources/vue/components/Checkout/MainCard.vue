@@ -1,10 +1,10 @@
 <template>
-  <v-layout row>
-    <v-flex md3 xs12>
+  <v-layout class="cart-row">
+    <v-flex md4 xs12>
       <checkout-cart-card :cart="cart"></checkout-cart-card>
     </v-flex>
 
-    <v-flex md9 xs12>
+    <v-flex md8 xs12>
       <v-stepper v-model="e6" vertical>
         <v-stepper-step :complete="e6>1" step="1" class="step-header-container">
           <v-layout class="step-header">
@@ -70,6 +70,12 @@ export default {
 </script>
 
 <style lang="scss">
+.cart-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+}
+
 .v-stepper__label {
   width:100%;
   .step-header {
