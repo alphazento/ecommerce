@@ -1,6 +1,10 @@
 <template>
-  <v-layout>
-    <v-flex md12>
+  <v-layout row>
+    <v-flex md3 xs12>
+      <checkout-cart-card :cart="cart"></checkout-cart-card>
+    </v-flex>
+
+    <v-flex md9 xs12>
       <v-stepper v-model="e6" vertical>
         <v-stepper-step :complete="e6>1" step="1" class="step-header-container">
           <v-layout class="step-header">
@@ -29,11 +33,17 @@
         </v-stepper-content>
       </v-stepper>
     </v-flex>
+  
   </v-layout>
 </template>
 
 <script>
 export default {
+  props: {
+    cart: {
+      type: Object
+    }
+  },
   data() {
     return {
       valid: false,

@@ -1,31 +1,33 @@
 <template>
-  <v-container fluid>
-    <v-layout>
+  <v-container>
+    <v-layout class="cart-row">
       <v-flex md8 xs12>
-        <v-layout>
-          <v-flex md3>Item</v-flex>
-          <v-flex md4>Description</v-flex>
-          <v-flex md2>Quantity</v-flex>
-          <v-flex md3>Subtotal</v-flex>
+        <v-layout class="cart-row">
+          <v-flex md3 xs3>Item</v-flex>
+          <v-flex md4 xs4>Description</v-flex>
+          <v-flex md2 xs3>Quantity</v-flex>
+          <v-flex md2 xs2 text-right>Subtotal</v-flex>
+          <v-flex md1 xs0></v-flex>
         </v-layout>
 
-        <v-layout v-for="(item, idx) in cart.items" :key="idx" :href="`#tab-${idx}`">
-          <v-flex md12>
+        <v-layout class="cart-row" v-for="(item, idx) in cart.items" :key="idx" :href="`#tab-${idx}`">
+          <v-flex md12 xs12>
             <v-layout>
-              <v-flex md3>
+              <v-flex md3 xs3>
                 <v-img :src="getProductImageUrl(item.product)" width="130" height="130"></v-img>
               </v-flex>
-              <v-flex class="v-middle" md4>
+              <v-flex class="v-middle" md4 xs4>
                 <a :href="getProductUrl(item.product)">{{ item.name }}</a>
               </v-flex>
-              <v-flex class="v-middle" md2>
-                <strong class="product-quantity">× {{ item.quantity }}</strong>
+              <v-flex class="v-middle" md2 xs3>
+                <qty-select :max="20" v-model="item.quantity"></qty-select>
               </v-flex>
-              <v-flex class="v-middle" md3>${{ item.row_price }}</v-flex>
+              <v-flex class="v-middle text-right" md2 xs2>${{ item.row_price }}</v-flex>
+              <v-flex md1 xs0></v-flex>
             </v-layout>
             <v-layout>
-              <v-flex md10></v-flex>
-              <v-flex md2>
+              <v-flex md10 xs10></v-flex>
+              <v-flex md2 xs2 text-center>
                 <v-btn icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
@@ -77,5 +79,10 @@ export default {
 .v-middle {
   margin-top: auto;
   margin-bottom: auto;
+}
+.cart-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
 }
 </style>

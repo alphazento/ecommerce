@@ -31,14 +31,7 @@
             </template>
           </v-badge>
         </template>
-
-        <v-list>
-          <v-list-item v-for="n in 5" :key="n" @click="() => {}">
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-        <v-btn :href="'/shoppingcart'">View Cart</v-btn>
-        <v-btn :href="'/checkout'">Checkout</v-btn>
+        <mini-cart-card :cart="cart"></mini-cart-card>
       </v-menu>
     </v-app-bar>
 

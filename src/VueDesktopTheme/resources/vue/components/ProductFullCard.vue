@@ -18,7 +18,7 @@
             <v-layout row>
               <v-flex md1 xs1></v-flex>
               <v-flex md6 xs6>
-                <v-select :items="qtys" label="Quantity" outlined required v-model="selectedQty"></v-select>
+                <qty-select :max="20" v-model="selectedQty"></qty-select>
               </v-flex>
               <input type="hidden" name="qty" v-model="selectedQty" />
               <v-flex md5 xs5>
