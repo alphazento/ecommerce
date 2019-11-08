@@ -2,6 +2,7 @@
 
 @push('head')
     <title>Checkout</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe1exctmeJjIb4guyT6newSpyJ7kA3aLc&libraries=places"></script>
 @endpush
 
 @section('pagecontent')

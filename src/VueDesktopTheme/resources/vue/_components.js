@@ -1,3 +1,15 @@
+var Vue = window.Vue;
+
+// import * as VueGoogleMaps from "vue2-google-maps";
+
+// Vue.use(VueGoogleMaps, {
+//   load: {
+//     key: "AIzaSyB597ZGnu1TcZMuV4cMqvSnZYbITk0RLws",
+//     libraries: "places"
+//   }
+// });
+
+
 export default {
   "theme-toolbar": "components/ThemeToolbar.vue",
   "theme-footer": "components/ThemeFooter.vue",

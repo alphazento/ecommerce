@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <v-card
-      class="mx-auto"
-      fill-width
-    >
+    <v-card class="mx-auto" fill-width>
       <v-list-item two-line  v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar
           tile
@@ -56,7 +53,9 @@
         </v-container>
       </v-card-actions>
     </v-card>
-      <hr/>
+    
+    <hr/>
+    
     <v-layout>
       <v-expansion-panels accordion light>
         <v-expansion-panel>
