@@ -1,6 +1,9 @@
 <template>
   <v-form v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
+      <div class="user-info" v-if="userInfo">
+        <span class="name">{{userInfo.email}}</span>
+      </div>
       <v-text-field v-model="email" :rules="emailRules" label="Email Address" required></v-text-field>
       <v-text-field v-model="name" :counter="60" :rules="nameRules" label="Full Name" required></v-text-field>
     </v-card>
@@ -17,7 +20,7 @@ export default {
     },
     complete: {
       type: Boolean
-    },
+    }
   },
   data() {
     return {
@@ -37,6 +40,12 @@ export default {
   methods: {
     childMessage() {
       this.$emit("childMessage", this.step);
+    }
+  },
+  computed: {
+    userInfo() {
+      console.log("get user info", this.$store);
+      return this.$store.state.userInfo;
     }
   }
 };

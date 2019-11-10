@@ -1,8 +1,8 @@
 <template>
   <v-form v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
-      <v-expansion-panels accordion focusable>
-        <v-expansion-panel v-for="(item,i) in 5" :key="i">
+      <v-expansion-panels accordion>
+        <v-expansion-panel v-for="(item,i) in 1" :key="i">
           <v-expansion-panel-header>
             <v-layout>
               <v-flex md2>
@@ -15,7 +15,9 @@
               </v-flex>
             </v-layout>
           </v-expansion-panel-header>
-          <v-expansion-panel-content>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-expansion-panel-content>
+          <v-expansion-panel-content>
+            <paypal-card></paypal-card>
+          </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-card>
@@ -46,6 +48,23 @@ export default {
   methods: {
     childMessage() {
       this.$emit("childMessage", this.step);
+    },
+    estimatePayment() {
+      axios.get(this.apiUrl + "?page=" + page).then(response => {
+        this.pagiData = response.data.data.products;
+      });
+
+      return HttpClient.withMessage("Estimating Payment...")
+        .post("/payment/estimate", {
+          cart: ShoppingCartAgent.getReducedCartData(),
+          shipping_address: address
+        })
+        .then(resp => {
+          if (resp.status === 200) {
+            this.paymentMethods.apply(resp.data);
+            this.estimatingIndicator().value(false);
+          }
+        });
     }
   }
 };

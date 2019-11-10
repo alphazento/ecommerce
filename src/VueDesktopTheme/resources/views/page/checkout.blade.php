@@ -12,8 +12,10 @@
 
 @push('tail')
     <script>
+    const store = window.vStore.default;
     const app = new Vue({
         el: '#app',
+        store,
         vuetify: new Vuetify(),
         data: {
           cart: @json($cart)
