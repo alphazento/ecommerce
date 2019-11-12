@@ -133,6 +133,9 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             case 'reactjs':
                 return $this->prepareForReactjs();
                 break;
+            case 'vue': 
+                return $this->prepareForVue();
+                break;
         }
     }
 
@@ -159,6 +162,33 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
                     // ]
                 ],
                 "entry" => asset("js/paypalexpress.js?v="  . time())
+            ],
+            'params' => [
+                'capture_url' => str_replace('https:', 'http:', $url)
+            ]
+        ];
+    }
+
+    protected function prepareForVue() {
+        $url = (string)(route('both:payment:payment.capture', ['method' => $this->getCode() ]));
+        $mode = config('paymentgateway.paypalexpress.mode');
+        $clientId = config(sprintf('paymentgateway.paypalexpress.%s.client_id', $mode));
+        return [
+            'name' => $this->getCode(),
+            'title' => $this->getTitle(),
+            'component' => 'paypal-card',
+            'withCards' =>false,
+            'image' => 'https://yes.edu.my/wp-content/uploads/2018/10/paypal.png',
+            'mode' => $mode,
+            'credentials' => [
+                'sandbox' => $mode === 'sandbox' ? $clientId : '',
+                'production'  => $mode === 'sandbox' ? '' : $clientId
+            ],
+            'style' => [
+                'label' => "checkout",
+                'size' => "responsive",
+                'shape'=> "pill",
+                'color'=> "gold"
             ],
             'params' => [
                 'capture_url' => str_replace('https:', 'http:', $url)

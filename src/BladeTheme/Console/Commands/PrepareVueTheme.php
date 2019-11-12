@@ -29,8 +29,11 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
     protected $themeName = '';
 
+    protected $mergedPackages = [];
+
     public function handle() {
         $this->themeName = 'Zento_VueDesktopTheme';
+        $this->mergeVueComponentPackageConfig();
         $this->mergeThemePackageConfig($this->themeName);
         $this->genWebpackMixJs();
         $this->genRegisterComponentProdFile();
@@ -48,11 +51,23 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->warn(sprintf('    npm run hot "\'--theme=%s\'"', $this->themeName)); 
     }
 
+    protected function mergeVueComponentPackageConfig() {
+        $packageConfigs = PackageManager::loadPackagesConfigs();
+        foreach($packageConfigs ?? [] as $name => $packageConfig) {
+            if (!isset($this->mergedPackages[$name])) {
+                $assembly = PackageManager::assembly($name);
+                if (!empty($assembly) && ($assembly['vue_component'] ?? false)) {
+                    $this->_mergeThemePackageConfig($name, $assembly, $packageConfig);
+                }
+            }
+        }
+    }
+
     protected function mergeThemePackageConfig($packageName) {
         if ($packageConfig = PackageManager::getPackageConfig($packageName)) {
             if ($packageConfig['enabled'] ?? false) {
                 if ($assembly = PackageManager::assembly($packageName)) {
-                    if ($assembly['theme']) {
+                    if (isset($assembly['theme'])) {
                         if (is_string($assembly['theme'])) {
                             $this->mergeThemePackageConfig($assembly['theme']);
                         }
@@ -66,15 +81,23 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
     }
 
     protected function _mergeThemePackageConfig($packageName, $assembly, $packageConfig) {
-        if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_.js'])) {
+        $this->mergedPackages['packageName'] = true;
+        if ($file = PackageManager::packagePath($packageName, ['resources', 'vue'])) {
             if (file_exists($file)) {
                 $aliasValue =  substr(PackageManager::packagePath($packageName, ['resources', 'vue']), strlen(base_path()) + 1);
                 $this->aliases[$packageName] = $aliasValue;
-                $content = file_get_contents($file);
-                $aliasName = '@' . $packageName;
-                $this->mix[$packageName] = str_replace($aliasName, $aliasValue, $content);
             }
+
+            if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_.js'])) {
+                if (file_exists($file)) {
+                    $content = file_get_contents($file);
+                    $aliasName = '@' . $packageName;
+                    $this->mix[$packageName] = str_replace($aliasName, $aliasValue, $content);
+                }
+            } 
         }
+
+        
 
         if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_depress.json'])) {
             if (file_exists($file)) {
@@ -100,8 +123,8 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $contents = [];
         foreach($this->mix as $packageName => $content) {
             if ($packageName !== 'Zento_BladeTheme') {
-                if ($aliasto = ($this->aliases[$packageName] ?? false)) {
-                    $contents[] = sprintf('mix.alias("@%s", "%s");', $packageName, $aliasto);
+                foreach($this->aliases as $name => $value) {
+                    $contents[] = sprintf('mix.alias("@%s", "%s");', $name, $value);
                 }
             }
             if (!in_array($packageName, $this->mixDepress)) {

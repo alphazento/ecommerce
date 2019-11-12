@@ -1,7 +1,7 @@
 const mix = require('laravel-mix');
 require('laravel-mix-alias');
 require('laravel-mix-merge-manifest');
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+// const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
 mix.options({
         postCss: [

@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid" lazy-validation>
+  <v-form ref="checkout_user_form" v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
       <div class="user-info" v-if="userInfo">
         <span class="name">{{userInfo.email}}</span>
@@ -39,7 +39,9 @@ export default {
   },
   methods: {
     childMessage() {
-      this.$emit("childMessage", this.step);
+      if (this.$refs.checkout_user_form.validate()) {
+        this.$emit("childMessage", this.step);
+      }
     }
   },
   computed: {

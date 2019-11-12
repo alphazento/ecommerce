@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid" lazy-validation>
+  <v-form ref="checkout_address_form" v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
       <v-text-field
         v-model="businessname"
@@ -59,9 +59,12 @@ export default {
   },
   methods: {
     childMessage() {
-      this.$emit("childMessage", this.step);
+      // if (this.$refs.checkout_user_form.validate()) {
+        this.$emit("childMessage", this.step);
+      // }
     },
     getAddressData: function (addressData, placeResultData, id) {
+      console.log('placeResultData', addressData, placeResultData, id)
       this.address = addressData;
     }
   },

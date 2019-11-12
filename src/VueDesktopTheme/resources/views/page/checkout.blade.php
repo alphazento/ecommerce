@@ -18,8 +18,12 @@
         store,
         vuetify: new Vuetify(),
         data: {
-          cart: @json($cart)
+          cart: @json($cart),
+          paymentmethods: @json($paymentmethods)
         },
+        created() {
+            this.$store.dispatch('initConsts', {paymentmethods: this.paymentmethods });
+        }
     });
     </script>
 @endpush
