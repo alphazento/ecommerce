@@ -6,17 +6,13 @@
           <v-expansion-panel-header>
             <v-layout>
               <v-flex md2>
-                <v-img
-                  width="56px"
-                  height="56px"
-                  contain
-                  :src="item.image"></v-img>
+                <v-img width="56px" height="56px" contain :src="item.image"></v-img>
                 {{item.title}}
               </v-flex>
             </v-layout>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <paypal-card :configs="item"></paypal-card>
+            <component :is="item.component" v-bind="{configs: item}"></component>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -71,6 +67,9 @@ export default {
     consts() {
       console.log("consts", this.$store.state.consts);
       return this.$store.state.consts;
+    },
+    paymentProperties: function(item) {
+      return { configs: item };
     }
   }
 };
