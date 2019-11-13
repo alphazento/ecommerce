@@ -1,1 +1,1 @@
-This is a shopping cart page from Zento_BladeTheme
+Zento_BladeTheme/resources/views/page/shoppingcart.blade.php

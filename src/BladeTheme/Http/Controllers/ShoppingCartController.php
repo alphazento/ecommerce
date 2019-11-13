@@ -10,6 +10,8 @@ use BladeTheme;
 
 class ShoppingCartController extends \App\Http\Controllers\Controller
 {
+    use TraitThemeRouteOverwritable;
+
     public function getCart($fullResp = false) {
         $cartId = Auth::user() ? 'mine' : (session()->getId());
         if ($resp = BladeTheme::innerApiProxy('GET', sprintf('/api/v1/cart/%s', $cartId))) {

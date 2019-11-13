@@ -10,13 +10,29 @@ use Zento\Catalog\Model\ORM\Category;
 
 class ThemeController extends \Zento\BladeTheme\Http\Controllers\CatalogController
 {
+    protected $apiBase = '/api/v1';
+    public function __construct() {
+        BladeTheme::addGlobalViewData([
+            'api_eps' => [
+                'base' => $this->apiBase,
+            ]
+        ]);
+    }
+
     public function categories() {
+        BladeTheme::addGlobalViewData([
+            'api_eps' => [
+                'product_list' => sprintf('%s/categories/${}/products', $this->apiBase, Route::input('id'));
+            ]
+        ]);
+
         if ($view = parent::categories()) {
             $data = $view->getData();
             $category = $data['pageData']['category'];
+           
+
             BladeTheme::breadcrumb('/', 'Home')
                 ->breadcrumb(url(BladeTheme::getCategoryUrl($category)), $category->name);
-            $data['apiUrl'] = sprintf('/api/v1/categories/%s/products', Route::input('id'));
             return $view;
         }
     }

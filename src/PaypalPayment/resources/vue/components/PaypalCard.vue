@@ -1,9 +1,9 @@
 <template>
   <PayPal
-    amount="10.00"
-    currency="AUD"
-    :client="configs.credentials"
     :env="configs.mode"
+    :amount="cart.grand_total"
+    :currency="cart.currency"
+    :client="configs.credentials"
     :button-style="configs.style"
   ></PayPal>
 </template>
@@ -17,31 +17,20 @@ export default {
     }
   },
   data() {
-    // return {
-    //   credentials: {
-    //     sandbox: "",
-    //     production: "<production client id>"
-    //   },
-    //   btstyle: {
-    //     label: "checkout",
-    //     size: "responsive",
-    //     shape: "pill",
-    //     color: "gold"
-    //   }
-    // };
+    return {};
   },
   methods: {
     childMessage() {
       this.$emit("childMessage", this.step);
     }
   },
+  computed: {
+    cart() {
+      return this.$store.state.cart;
+    }
+  },
   components: {
     PayPal
   },
-  // computed: {
-  //   userInfo() {
-  //     return this.$store.state.consts;
-  //   }
-  // }
 };
 </script>

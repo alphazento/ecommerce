@@ -9,8 +9,8 @@ return [
         ],
         "middlewares"=> [
             "cors"=> "\\Zento\\Passport\\Http\\Middleware\\CORS",
-            "scopes"=> "\\Laravel\\Passport\\Http\\Middleware\\CheckScopes=>=>class",
-            "scope"=> "\\Laravel\\Passport\\Http\\Middleware\\CheckForAnyScope=>=>class"
+            "scopes"=> "\\Laravel\\Passport\\Http\\Middleware\\CheckScopes",
+            "scope"=> "\\Laravel\\Passport\\Http\\Middleware\\CheckForAnyScope"
         ],
         "middlewaregroup"=> []
     ]

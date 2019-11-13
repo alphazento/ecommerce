@@ -1,1 +1,0 @@
-This is a checkout index page from Zento_BladeTheme

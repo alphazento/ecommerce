@@ -13,6 +13,7 @@ export default {
   "shopping-cart-card": "components/ShoppingCartCard.vue",
   "mini-cart-card": "components/MiniCartCard.vue",
   "checkout-contact-card": "components/Checkout/ContactDetailsCard.vue",
+  "google-address-autocomplete": "components/MyGoogleAddressAutoComplete.vue",
   "checkout-address-card": "components/Checkout/AddressCard.vue",
   "checkout-payment-card": "components/Checkout/PaymentCard.vue",
   "checkout-cart-card": "components/Checkout/CartCard.vue",

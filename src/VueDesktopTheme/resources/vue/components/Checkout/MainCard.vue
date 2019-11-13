@@ -24,7 +24,7 @@
           </v-layout>
         </v-stepper-step>
         <v-stepper-content step="2">
-          <checkout-address-card :complete="e6>2" :step="2" v-on:childMessage="getChildMessage"></checkout-address-card>
+          <checkout-address-card :address="cart.shipping_address" :complete="e6>2" :step="2" v-on:childMessage="getChildMessage"></checkout-address-card>
         </v-stepper-content>
 
         <v-stepper-step :complete="e6 > 3" step="3">Payment Options</v-stepper-step>

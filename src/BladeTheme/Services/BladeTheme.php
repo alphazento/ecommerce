@@ -24,9 +24,16 @@ class BladeTheme {
     protected $stubProcessors = [];
     protected $breadcrumbData = [];
 
+    protected $globalViewData = [];
+
     public function __construct() {
         $this->viewCollection = new ViewCollection();
     }
+
+    public function __toString() {
+        return json_encode($this->breadcrumbData, JSON_PRETTY_PRINT);
+    }
+
     public function removeView($viewName) {
         $this->viewCollection->addToDelete($viewName);
         return $this;
@@ -70,7 +77,10 @@ class BladeTheme {
     }
 
     public function view($view, $data = null) {
-        $data && View::share($data);
+        if ($data) {
+            $this->addGlobalViewData($data);
+        }
+        count($this->globalViewData) && View::share($this->globalViewData);
         return view($view);
     }
 
@@ -93,5 +103,10 @@ class BladeTheme {
         $respData = $resp->getOriginalContent();
         app()->instance('request', $originRequest);
         return $respData;
+    }
+
+    public function addGlobalViewData(array $data) {
+        $this->globalViewData = array_merge_recursive($this->globalViewData, $data);
+        return $this;
     }
 }

@@ -3,16 +3,16 @@
     <v-card color="lighten-1" class="mb-12" flat>
       <v-expansion-panels accordion>
         <v-expansion-panel v-for="(item,i) in consts['paymentmethods']" :key="i">
-          <v-expansion-panel-header>
-            <v-layout>
-              <v-flex md2>
-                <v-img width="56px" height="56px" contain :src="item.image"></v-img>
-                {{item.title}}
-              </v-flex>
-            </v-layout>
+          <v-expansion-panel-header text-left>
+            <span>
+              <v-img :width="item.image.width" :height="item.image.height" contain :src="item.image.src"></v-img>
+            </span>
+            <span>
+              {{item.title}}
+            </span>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <component :is="item.component" v-bind="{configs: item}"></component>
+            <component :is="item.component" v-bind="item"></component>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -67,9 +67,6 @@ export default {
     consts() {
       console.log("consts", this.$store.state.consts);
       return this.$store.state.consts;
-    },
-    paymentProperties: function(item) {
-      return { configs: item };
     }
   }
 };

@@ -1,4 +1,6 @@
 <?php
+
+//general route for a website
 Route::group(
     [
         'prefix' => '/',
@@ -6,20 +8,53 @@ Route::group(
         'middleware' => ['web']
     ], function () {
     Route::get(
-        'categories/{id}', 
-        ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categories']
+        '/', 
+        ['as' =>'web.get.home', 'uses' => 'GeneralController@home']
     );
 
     Route::get(
-        'products/{id}', 
-        ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+        'about-us', 
+        ['as' =>'web.get.aboutus', 'uses' => 'GeneralController@aboutUs']
     );
-
     Route::get(
-        'products', 
-        ['as' =>'web.get.products', 'uses' => 'CatalogController@products']
+        'contact-us', 
+        ['as' =>'web.get.contactus', 'uses' => 'GeneralController@contactUs']
+    );
+    Route::get(
+        'news', 
+        ['as' =>'web.get.news', 'uses' => 'GeneralController@news']
+    );
+    Route::get(
+        'privacy', 
+        ['as' =>'web.get.privacy', 'uses' => 'GeneralController@privacy']
+    );
+    Route::get(
+        'terms-conditions', 
+        ['as' =>'web.get.terms', 'uses' => 'GeneralController@terms']
     );
 });
+
+Route::group(
+    [
+        'prefix' => '/',
+        'namespace' => '\Zento\BladeTheme\Http\Controllers',
+        'middleware' => ['web']
+    ], function () {
+        Route::get(
+            'categories/{id}', 
+            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categories']
+        );
+    
+        Route::get(
+            'products/{id}', 
+            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+        );
+    
+        Route::get(
+            'products', 
+            ['as' =>'web.get.products', 'uses' => 'CatalogController@products']
+        );
+    });
 
 Route::group(
     [
@@ -76,7 +111,7 @@ Route::group(
         'middleware' => ['web'],
     ], function () {
         Route::get('/', [
-            'as' =>'web.get.checkout', 'uses' => 'CheckoutController@page'
+            'as' =>'web.get.checkout', 'uses' => 'CheckoutController@index'
         ]);
 
         Route::post('/checkout/process', [

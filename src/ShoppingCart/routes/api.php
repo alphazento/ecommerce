@@ -12,8 +12,8 @@ $apiRoutes = [
     'cart.put.coupon' => [ 'method' => 'put', 'path' => '/{cart_guid}/coupon/{coupon_code}', 'uses' => 'ShoppingCartController@putCoupon', 'allow_guest' => true],
     'cart.get.billing_address' => [ 'method' => 'get', 'path' => '/{cart_guid}/billing_address', 'uses' => 'ShoppingCartController@getBillingAddress', 'allow_guest' => true],
     'cart.put.billing_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/billing_address', 'uses' => 'ShoppingCartController@setBillingAddress', 'allow_guest' => true],
-    'cart.get.shopping_address' => [ 'method' => 'get', 'path' => '/{cart_guid}/shopping_address', 'uses' => 'ShoppingCartController@getShoppingAddress', 'allow_guest' => true],
-    'cart.put.shopping_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/shopping_address', 'uses' =>  'ShoppingCartController@setShoppingAddress', 'allow_guest' => true],
+    'cart.get.shipping_address' => [ 'method' => 'get', 'path' => '/{cart_guid}/shipping_address', 'uses' => 'ShoppingCartController@getShippingAddress', 'allow_guest' => true],
+    'cart.put.shipping_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/shipping_address', 'uses' =>  'ShoppingCartController@setShippingAddress', 'allow_guest' => true],
     'cart.merge' => [ 'method' => 'post', 'path' => '/{cart_guid}/to/{to_cart_guid}', 'uses' => 'ShoppingCartController@mergeCart', 'allow_guest' => false],
     'cart.get.customer' => [ 'method' => 'get', 'path' => '/{cart_guid}/customer', 'uses' => 'ShoppingCartController@getCustomer', 'allow_guest' => false],
     'cart.put.customer' => [ 'method' => 'put', 'path' => '/{cart_guid}/customer/{customer_id}', 'uses' => 'ShoppingCartController@setCustomer', 'allow_guest' => false],
@@ -23,13 +23,18 @@ Route::group(
     [
         'prefix' => '/api/v1/cart',
         'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['cors', 'auth:api'],
+        'middleware' => ['cors'],
         'as' => 'both:cart:'
     ], function () use ($apiRoutes) {
         foreach($apiRoutes as $name => $route) {
-            Route::{$route['method']}(
+            $routeItem = Route::{$route['method']}(
                 $route['path'],
                 ['as' => $name, 'uses' => $route['uses']]
             );
+            if (!($route['allow_guest'] ?? false)) {
+                $routeItem->middleware('auth:api');
+            } else {
+                $routeItem->middleware('web');
+            }
         }
 });

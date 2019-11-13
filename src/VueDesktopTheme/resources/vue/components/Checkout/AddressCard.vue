@@ -7,24 +7,17 @@
         :rules="nameRules"
         label="Business Name(Optional)"
       ></v-text-field>
-      <div class="v-input theme--light v-text-field v-text-field--is-booted">
-        <div class="v-input__control">
-          <div class="v-input__slot">
-            <div class="v-text-field__slot">
-              <vue-google-autocomplete
-                  id="map"
-                  classname="form-control"
-                  placeholder="Start typing your address..."
-                  v-on:placechanged="getAddressData"
-                  country="au"
-              >
-              </vue-google-autocomplete>
-            </div>
-          </div>
-        </div>
-      </div>
+      <google-address-autocomplete
+          id="map"
+          classname="form-control"
+          placeholder="Start typing your address..."
+          v-on:placechanged="getAddressData"
+          country="au"
+          :address="addressText"
+          :rules="addressRules"
+      >
+      </google-address-autocomplete>
     </v-card>
-
     <v-btn color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
   </v-form>
 </template>
@@ -39,17 +32,20 @@ export default {
     },
     complete: {
       type: Boolean
+    },
+    address: {
+      type: Object
     }
   },
   data() {
     return {
+      addressData: this.address,
+      dataChanged: false,
       valid: false,
-      address: "",
       addressRules: [
-        v => !!v || "Address is required",
-        v => (v && v.length <= 120) || "Name must be less than 120 characters"
+        v => !!v || "Address is required"
       ],
-      businessname: "",
+      businessname: this.address ? this.address.businessname : '',
       nameRules: [
         v =>
           !v || (v && v.length <= 60) ||
@@ -59,13 +55,40 @@ export default {
   },
   methods: {
     childMessage() {
-      // if (this.$refs.checkout_user_form.validate()) {
+      if (this.$refs.checkout_address_form.validate()) {
+        if (this.dataChanged) {
+          this.$store.dispatch('setShippingAddress',  this.addressData )
+        }
         this.$emit("childMessage", this.step);
-      // }
+      }
     },
-    getAddressData: function (addressData, placeResultData, id) {
-      console.log('placeResultData', addressData, placeResultData, id)
-      this.address = addressData;
+    getAddressData(addressData, placeResultData, id) {
+      this.addressData = this.convertGoogleAddressToAddress(addressData);
+      this.addressChanged = true;
+      this.$store.dispatch('setShippingAddress', this.addressData);
+    },
+    convertGoogleAddressToAddress(googleAddress) {
+      var address = {};
+      address.city = googleAddress.locality;
+      address.state = googleAddress.administrative_area_level_1;
+      // address.statel2 = googleAddress.administrative_area_level_2;
+      address.country = googleAddress.country;
+      address.latitude = googleAddress.latitude;
+      address.longitude = googleAddress.longitude;
+      address.postal_code = googleAddress.postal_code;
+      address.street_address1 = googleAddress.street_number;
+      address.street_address2 = googleAddress.route;
+      return address;
+    }
+  },
+  computed: {
+    addressText() {
+      const address = this.address;
+      if (address) {
+        return `${address.street_address1} ${address.street_address2} ${address.city} ${address.state} ${address.postal_code}, ${address.country}`;
+      } else {
+        return '';
+      }
     }
   },
   components: { VueGoogleAutocomplete }

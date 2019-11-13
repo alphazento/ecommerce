@@ -178,20 +178,27 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             'title' => $this->getTitle(),
             'component' => 'paypal-card',
             'withCards' =>false,
-            'image' => 'https://yes.edu.my/wp-content/uploads/2018/10/paypal.png',
-            'mode' => $mode,
-            'credentials' => [
-                'sandbox' => $mode === 'sandbox' ? $clientId : '',
-                'production'  => $mode === 'sandbox' ? '' : $clientId
+            'image' => [
+                'src' => 'https://yes.edu.my/wp-content/uploads/2018/10/paypal.png',
+                'width' => '170px',
+                'height' => '60px',
             ],
-            'style' => [
-                'label' => "checkout",
-                'size' => "responsive",
-                'shape'=> "pill",
-                'color'=> "gold"
-            ],
-            'params' => [
-                'capture_url' => str_replace('https:', 'http:', $url)
+            'configs' => [
+                'mode' => $mode,
+                'currency' => 'AUD',
+                'credentials' => [
+                    'sandbox' => $mode === 'sandbox' ? $clientId : '',
+                    'production'  => $mode === 'sandbox' ? '' : $clientId
+                ],
+                'style' => [
+                    'label' => "checkout",
+                    'size' => "responsive",
+                    'shape'=> "pill",
+                    'color'=> "gold"
+                ],
+                'params' => [
+                    'capture_url' => str_replace('https:', 'http:', $url)
+                ]
             ]
         ];
     }

@@ -1,1 +1,0 @@
-This is a checkout success page from Zento_BladeTheme

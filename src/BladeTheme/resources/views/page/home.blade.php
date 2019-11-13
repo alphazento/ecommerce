@@ -1,0 +1,1 @@
+Zento_BladeTheme/resources/views/page/home.blade.php

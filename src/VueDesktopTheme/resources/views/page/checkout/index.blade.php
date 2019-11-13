@@ -2,7 +2,7 @@
 
 @push('head')
     <title>Checkout</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe1exctmeJjIb4guyT6newSpyJ7kA3aLc&libraries=places"></script>
+    <script src={{sprintf("https://maps.googleapis.com/maps/api/js?key=%s&libraries=places", config("google.place.api.key"))}}></script>
 @endpush
 
 @section('pagecontent')
@@ -22,7 +22,8 @@
           paymentmethods: @json($paymentmethods)
         },
         created() {
-            this.$store.dispatch('initConsts', {paymentmethods: this.paymentmethods });
+            this.$store.dispatch('initConsts', { paymentmethods: this.paymentmethods });
+            this.$store.dispatch('updateCart', this.cart);
         }
     });
     </script>

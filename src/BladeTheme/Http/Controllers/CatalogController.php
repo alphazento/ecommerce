@@ -9,9 +9,10 @@ use App\Http\Controllers\Controller;
 
 class CatalogController extends Controller
 {
+    use TraitThemeRouteOverwritable;
     protected $allCategories;
 
-    public function categories() {
+    public function category() {
         if ($currentCateId = Route::input('id')) {
             return $this->_categories($currentCateId);
         }
@@ -45,7 +46,7 @@ class CatalogController extends Controller
         }
     }
 
-    protected function fetchCategories() {
+    public function fetchCategories() {
         if (!$this->allCategories) {
             if ($resp = BladeTheme::innerApiProxy('GET', '/api/v1/categories')) {
                 $this->allCategories = $resp['data'];
