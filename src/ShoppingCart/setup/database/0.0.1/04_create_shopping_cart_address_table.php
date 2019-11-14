@@ -15,9 +15,7 @@ class CreateShoppingCartAddressTable extends Migration
         Schema::create('shopping_cart_addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id')->unsigned()->nullable();
-            $table->string('firstname', 255);
-            $table->string('middlename', 255)->nullable();
-            $table->string('lastname', 255);
+            $table->string('name', 255);
             $table->string('company', 128)->nullable();
             $table->string('address1', 255);
             $table->string('address2', 255)->nullable();

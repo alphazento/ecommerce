@@ -19,10 +19,15 @@ class AuthGuestUser
      * @throws \Illuminate\Auth\AuthenticationException
      */
     public function handle($request, Closure $next) {
-        if (!Auth::user()) {
+        $guest = !Auth::user();
+        if ($guest) {
             Auth::mixin(new \Zento\Customer\Mixins\AuthGuardGuest);
             Auth::loadGuestUser();
         }
-        return $next($request);
+        $response = $next($request);
+        if ($guest) {
+            Auth::user()->save();
+        }
+        return $response;
     }
 }

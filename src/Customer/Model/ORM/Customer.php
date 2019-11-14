@@ -13,11 +13,8 @@ class Customer extends \Zento\Passport\Model\User
     protected $fillable = [
         'group_id',
         'store_id',
-        'firstname',
-        'middlename',
-        'lastname',
+        'name',
         'email',
-        'guest_email',
         'password',
         'is_guest'
     ];
@@ -37,14 +34,6 @@ class Customer extends \Zento\Passport\Model\User
         return $this->hasOne(CustomerAddress::class, 'id', 'default_shipping_address_id');
     }
 
-    public function getNameAttribute($value) {
-        if ($this->middlename) {
-            return sprinft('%s %s %s', $this->firstname, $this->middlename, $this->lastname);
-        } else {
-            return sprinft('%s %s', $this->firstname, $this->lastname);
-        }
-    }
-
     public static function findDummyCustomer($uuid) {
         $email = 'dm'. $uuid;
         return static::where('email', $email)->first();
@@ -53,18 +42,17 @@ class Customer extends \Zento\Passport\Model\User
     public static function requestDummyCustomer($uuid) {
         $password = Str::random(8);
 
-        $email = 'dm'. $uuid;
-        if ($dummy = static::where('email', $email)->first()) {
+        $email_hash = md5('dm'. $uuid);
+        if ($dummy = static::where('email_hash', $email_hash)->first()) {
             $dummy->password = bcrypt($password);
             $dummy->save();
         } else {
             $dummy = static::create([
                 'group_id' => 0,
                 'store_id' => 0,
-                'firstname' => 'Guest',
-                'lastname' => '',
-                'email' => $email,
-                'guest_email' => '',
+                'name' => 'Guest',
+                'email' => '',
+                'email_hash' => $email_hash,
                 'password' => bcrypt($password),
                 'is_guest' => 1
             ]);

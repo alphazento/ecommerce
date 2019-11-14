@@ -16,11 +16,9 @@ class CreateCustomerTable extends Migration
             $table->increments('id');
             $table->integer('group_id')->unsigned()->nullable();
             $table->integer('store_id')->unsigned();
-            $table->string('firstname', 64);
-            $table->string('middlename', 64)->nullable();
-            $table->string('lastname', 64);
+            $table->string('name', 255);
             $table->string('email', 255);//->unique();
-            $table->string('guest_email', 255);//->unique();
+            $table->string('email_hash', 32)->index();
             $table->string('password', 255);
             $table->string('remember_token', 255)->nullable();
             $table->boolean('is_active')->default(1);

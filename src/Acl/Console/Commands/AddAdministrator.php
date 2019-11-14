@@ -28,8 +28,7 @@ class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Bas
         if (!$user) {
             $user = new Administrator;
             $user->email = $email;
-            $user->firstname = explode('@', $email)[0];
-            $user->lastname = '';
+            $user->name = explode('@', $email)[0];
             $password = $user->applyRandomPassword();
             $this->info(sprintf('Administrator(%s) has been created. Password is %s', $email, $password));
         } else {

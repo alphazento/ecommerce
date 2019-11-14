@@ -24,7 +24,7 @@
           </v-layout>
         </v-stepper-step>
         <v-stepper-content step="2">
-          <checkout-address-card :address="cart.shipping_address" :complete="e6>2" :step="2" v-on:childMessage="getChildMessage"></checkout-address-card>
+          <checkout-address-card :fullname="fullname" :address="cart.shipping_address" :complete="e6>2" :step="2" v-on:childMessage="getChildMessage"></checkout-address-card>
         </v-stepper-content>
 
         <v-stepper-step :complete="e6 > 3" step="3">Payment Options</v-stepper-step>
@@ -46,6 +46,7 @@ export default {
   },
   data() {
     return {
+      fullname: '',
       valid: false,
       e6: 1,
       nameRules: [
@@ -63,10 +64,13 @@ export default {
   created() {},
   methods: {
     getChildMessage(step) {
+      if (step == 1) {
+        this.fullname = this.$store.state.userInfo.name;
+      }
       this.e6 = step + 1;
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

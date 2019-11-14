@@ -88,10 +88,8 @@ class CustomerController extends \App\Http\Controllers\Controller
     public function addAddress() {
       return $this->tapAcl(function() {
         Request::validate([
-          'firstname'=>"required|string|max:80",
-          'middlename'=>"string|max:80|nullable",
-          'lastname'=>"required|string|max:80",
-          'company'=>"string|max:128|nullable",
+          'name'=>"required|string|max:255",
+          'company'=>"string|max:255|nullable",
           'address1'=>"required|string|max:255",
           'address2'=>"string|max:255|nullable",
           'city'=>"required|string|max:64",

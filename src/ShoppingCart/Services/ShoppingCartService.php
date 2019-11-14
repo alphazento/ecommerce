@@ -40,7 +40,7 @@ class ShoppingCartService
         $user = Auth::user();
         $cart = new ShoppingCart([
             'guid' => guidv4(),
-            'email' => $user->is_guest ? $user->guest_email : $user->getEmail(),
+            'email' => $user->getEmail(),
             'customer_id' => $user->getId(),
             "currency" => 'AUD',
             'client_ip' => '',

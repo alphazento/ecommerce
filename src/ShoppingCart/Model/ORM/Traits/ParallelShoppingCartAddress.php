@@ -16,16 +16,8 @@ trait ParallelShoppingCartAddress
         return $this->customer_id;
     }
 
-    public function getFirstName() {
-        return $this->firstname;
-    }
-    
-    public function getMiddleName() {
-        return $this->middlename;
-    }
-    
-    public function getLastName() {
-        return $this->lastname;
+    public function getName() {
+        return $this->name;
     }
     
     public function getCompany() {

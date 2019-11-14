@@ -16,9 +16,7 @@ class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Ze
 
     protected $fillable = [
         'customer_id',
-        'firstname',
-        'middlename',
-        'lastname',
+        'name',
         "company",
         "address1",
         "address2",

@@ -1,29 +1,27 @@
 <?php
 $apiRoutes = [
-    'cart.create' => [ 'method' => 'post', 'path' => '/', 'uses' => 'ShoppingCartController@createCart', 'allow_guest' => true],
-    'cart.getone' => [ 'method' => 'get', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@getCart', 'allow_guest' => true],
-    'cart.delete' => [ 'method' => 'delete', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@deleteCart', 'allow_guest' => true],
-    'cart.add.item' => [ 'method' => 'post', 'path' =>'/{cart_guid}/items', 'uses' => 'ShoppingCartController@addItem', 'allow_guest' => true],
-    'cart.update.email' => [ 'method' => 'post', 'path' =>'/{cart_guid}/email/', 'uses' => 'ShoppingCartController@updateEmail', 'allow_guest' => true],
-    'cart.delete.item' => [ 'method' => 'delete', 'path' =>'/{cart_guid}/items/{item_id}', 'uses' => 'ShoppingCartController@deleteItem', 'allow_guest' => true],
-    'cart.patch.item.quantity' => [ 'method' => 'patch', 'path' => '/{cart_guid}/items/{item_id}/quantity/{quantity}', 'uses' => 'ShoppingCartController@updateItemQuantity', 'allow_guest' => true],
-    'cart.get.coupon' => [ 'method' => 'get', 'path' => '/{cart_guid}/coupon', 'uses' => 'ShoppingCartController@getCoupon', 'allow_guest' => true],
-    'cart.delete.coupon' => [ 'method' => 'delete', 'path' => '/{cart_guid}/coupon', 'uses' => 'ShoppingCartController@deleteCoupon', 'allow_guest' => true],
-    'cart.put.coupon' => [ 'method' => 'put', 'path' => '/{cart_guid}/coupon/{coupon_code}', 'uses' => 'ShoppingCartController@putCoupon', 'allow_guest' => true],
-    'cart.get.billing_address' => [ 'method' => 'get', 'path' => '/{cart_guid}/billing_address', 'uses' => 'ShoppingCartController@getBillingAddress', 'allow_guest' => true],
-    'cart.put.billing_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/billing_address', 'uses' => 'ShoppingCartController@setBillingAddress', 'allow_guest' => true],
-    'cart.get.shipping_address' => [ 'method' => 'get', 'path' => '/{cart_guid}/shipping_address', 'uses' => 'ShoppingCartController@getShippingAddress', 'allow_guest' => true],
-    'cart.put.shipping_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/shipping_address', 'uses' =>  'ShoppingCartController@setShippingAddress', 'allow_guest' => true],
-    'cart.merge' => [ 'method' => 'post', 'path' => '/{cart_guid}/to/{to_cart_guid}', 'uses' => 'ShoppingCartController@mergeCart', 'allow_guest' => false],
-    'cart.get.customer' => [ 'method' => 'get', 'path' => '/{cart_guid}/customer', 'uses' => 'ShoppingCartController@getCustomer', 'allow_guest' => false],
-    'cart.put.customer' => [ 'method' => 'put', 'path' => '/{cart_guid}/customer/{customer_id}', 'uses' => 'ShoppingCartController@setCustomer', 'allow_guest' => false],
+    'cart.create' => [ 'method' => 'post', 'path' => '/', 'uses' => 'ShoppingCartController@createCart'],
+    'cart.getone' => [ 'method' => 'get', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@getCart'],
+    'cart.delete' => [ 'method' => 'delete', 'path' =>'/{cart_guid}', 'uses' => 'ShoppingCartController@deleteCart'],
+    'cart.add.item' => [ 'method' => 'post', 'path' =>'/{cart_guid}/items', 'uses' => 'ShoppingCartController@addItem'],
+    'cart.update.email' => [ 'method' => 'post', 'path' =>'/{cart_guid}/email/', 'uses' => 'ShoppingCartController@updateEmail'],
+    'cart.delete.item' => [ 'method' => 'delete', 'path' =>'/{cart_guid}/items/{item_id}', 'uses' => 'ShoppingCartController@deleteItem'],
+    'cart.patch.item.quantity' => [ 'method' => 'patch', 'path' => '/{cart_guid}/items/{item_id}/quantity/{quantity}', 'uses' => 'ShoppingCartController@updateItemQuantity'],
+    'cart.get.coupon' => [ 'method' => 'get', 'path' => '/{cart_guid}/coupon', 'uses' => 'ShoppingCartController@getCoupon'],
+    'cart.delete.coupon' => [ 'method' => 'delete', 'path' => '/{cart_guid}/coupon', 'uses' => 'ShoppingCartController@deleteCoupon'],
+    'cart.put.coupon' => [ 'method' => 'put', 'path' => '/{cart_guid}/coupon/{coupon_code}', 'uses' => 'ShoppingCartController@putCoupon'],
+    'cart.put.billing_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/billing_address', 'uses' => 'ShoppingCartController@setBillingAddress'],
+    'cart.put.shipping_address' => [ 'method' => 'put', 'path' => '/{cart_guid}/shipping_address', 'uses' =>  'ShoppingCartController@setShippingAddress'],
+    'cart.merge' => [ 'method' => 'post', 'path' => '/{cart_guid}/to/{to_cart_guid}', 'uses' => 'ShoppingCartController@mergeCart'],
+    'cart.get.customer' => [ 'method' => 'get', 'path' => '/{cart_guid}/customer', 'uses' => 'ShoppingCartController@getCustomer'],
+    'cart.put.customer' => [ 'method' => 'put', 'path' => '/{cart_guid}/customer/{customer_id}', 'uses' => 'ShoppingCartController@setCustomer'],
 ];
 
 Route::group(
     [
         'prefix' => '/api/v1/cart',
         'namespace' => '\Zento\ShoppingCart\Http\Controllers\Api',
-        'middleware' => ['cors'],
+        'middleware' => ['cors', 'auth:api'],
         'as' => 'both:cart:'
     ], function () use ($apiRoutes) {
         foreach($apiRoutes as $name => $route) {
@@ -31,10 +29,8 @@ Route::group(
                 $route['path'],
                 ['as' => $name, 'uses' => $route['uses']]
             );
-            if (!($route['allow_guest'] ?? false)) {
-                $routeItem->middleware('auth:api');
-            } else {
-                $routeItem->middleware('web');
+            if ($route['middlewares'] ?? false) {
+                $routeItem->middleware($route['middlewares']);
             }
         }
 });

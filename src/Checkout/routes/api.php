@@ -1,14 +1,13 @@
 <?php
 Route::group(
     [
-        'prefix' => '/api/v1',
+        'prefix' => '/ajax/checkout',
         'namespace' => '\Zento\Checkout\Http\Controllers',
-        'middleware' => ['cors'],
-        'as' => 'both:checkout:'
+        'middleware' => ['web'],
     ], function () {
-        Route::post(
-            '/checkout/orders',
-            ['as' => 'checkout.post.order', 'uses' => 'ApiController@draftOrder']
+        Route::put(
+            '/guest-customer',
+            ['as' => 'ajax.checkout.put.guest-customer', 'uses' => 'ApiController@setGuestDetails']
         );
     }
 );

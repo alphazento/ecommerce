@@ -15,9 +15,7 @@ class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements
     }
     protected $fillable = [
         'customer_id',
-        'firstname',  
-        'middlename',  
-        'lastname',  
+        'name',  
         "company",
         "address1",
         "address2",

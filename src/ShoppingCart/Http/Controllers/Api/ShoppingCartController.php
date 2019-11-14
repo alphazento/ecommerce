@@ -94,16 +94,12 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         });
     }
 
-    public function getBillingAddress() {
-
-    }
-
-    public function setShippingAddress() {
-
-    }
-
-    public function getShippingAddress() {
-
+    public function setShippingAddress(Request $request) {
+        return $this->tapCart(function($cart) use ($request) {
+            $address = new ShoppingCartAddress($request->all());
+            ShoppingCartService::setShippingAddress($cart, $address);
+            return ['status'=> 200, 'data' => $cart];
+        });
     }
 
     public function mergeCart() {

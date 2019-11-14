@@ -18,12 +18,14 @@
         store,
         vuetify: new Vuetify(),
         data: {
+          user: @json($user),
           cart: @json($cart),
           paymentmethods: @json($paymentmethods)
         },
         created() {
             this.$store.dispatch('initConsts', { paymentmethods: this.paymentmethods });
             this.$store.dispatch('updateCart', this.cart);
+            this.$store.dispatch('initUserInfo', this.user);
         }
     });
     </script>

@@ -2,7 +2,7 @@
 
 namespace Zento\Checkout\Http\Controllers;
 
-
+use Auth;
 use Request;
 use Registry;
 
@@ -23,5 +23,27 @@ class ApiController extends \App\Http\Controllers\Controller
         $shoppingCart = new ROShoppingCart(Request::get('shopping_cart'));
         $order = CheckoutService::draftOrder($paymentTransaction, $shoppingCart);
         return ['status' => $order->isSuccess() ? 201 : 420, 'data' => $order->getData()];
+    }
+
+    /**
+     * only for guest user
+     *
+     * @return void
+     */
+    public function setGuestDetails() {
+        $details = Request::all();
+        $user = Auth::user();
+        
+        $id = $details['id'] ?? 0;
+        unset($details['id']);
+
+        foreach($details ?? [] as $key => $value) {
+            $user->{$key} = $value;
+        }
+        if (!$user->id) {
+            $user->id = $id;
+        }
+        $user->save();
+        return ['status' => 200, 'data' => Auth::user()];
     }
 }

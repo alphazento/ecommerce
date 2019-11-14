@@ -234,11 +234,10 @@ class AclController extends Controller
      * }
      */
     public function putUser() {
-        $data = Request::only('email','firstname', 'lastname');
+        $data = Request::only('email', 'name');
         $validator = Validator::make($data, [
             'email' => 'required|max:255|email',
-            'firstname' => 'required|max:128',
-            'lastname' => 'required|max:128'
+            'name' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -253,8 +252,7 @@ class AclController extends Controller
         $model = $this->getUserModel();
         if ($id = Request::get('id', false)) {
             $user = $model::find($id);
-            $user->firstname = $data['firstname'];
-            $user->lastname = $data['lastname'];
+            $user->name = $data['name'];
         } else {
             $validator = Validator::make(['password' => $password], [
                 'password' => 'required|max:16|min:8'
@@ -271,7 +269,6 @@ class AclController extends Controller
         if (!empty($password)) {
             $user->password = $user->encryptPassword($password);
         }
-        $user->name = sprintf('%s %s', $user->firstname, $user->lastname);
 
         $user->save();
         return ['status'=>'200', 'data' => $user];

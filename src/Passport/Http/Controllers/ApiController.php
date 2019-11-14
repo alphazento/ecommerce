@@ -51,9 +51,7 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
 
         // Request::validate([
-        //     'firstname' => 'required|string|max:64',
-        //     'middlename' => 'string|max:64',
-        //     'lastname' => 'required|string|max:64',
+        //     'name' => 'required|string|max:255',
         //     'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
         //     'password' => 'required|string|min:6'
         // ]);

@@ -14,7 +14,7 @@ class GeneralController
 
     public function home() {
         return BladeTheme::breadcrumb('/', 'Home')
-            ->view('page.home', compact('pagination'));
+            ->view('page.home'));
     }
 
     public function news() {

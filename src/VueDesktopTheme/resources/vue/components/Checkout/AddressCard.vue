@@ -1,22 +1,48 @@
 <template>
   <v-form ref="checkout_address_form" v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
-      <v-text-field
-        v-model="businessname"
-        :counter="60"
-        :rules="nameRules"
-        label="Business Name(Optional)"
-      ></v-text-field>
-      <google-address-autocomplete
-          id="map"
-          classname="form-control"
-          placeholder="Start typing your address..."
-          v-on:placechanged="getAddressData"
-          country="au"
-          :address="addressText"
-          :rules="addressRules"
-      >
-      </google-address-autocomplete>
+      <v-container>
+        <v-layout row>
+          <v-flex md6 xs12>
+            <v-text-field
+              v-model="addressData.name"
+              label="Receiver Full Name"
+              @change="addressChanged"
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex md6 xs12>
+            <v-text-field
+              v-model="addressData.phone"
+              label="Receiver Phone Number"
+              @change="addressChanged"
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex md6 xs12>
+            <google-address-autocomplete
+                id="map"
+                classname="form-control"
+                placeholder="Start typing your address..."
+                v-on:placechanged="getAddressData"
+                country="au"
+                :address="addressText"
+                :rules="addressRules"
+            >
+            </google-address-autocomplete>
+          </v-flex>
+
+          <v-flex md6 xs12>
+            <v-text-field
+              v-model="addressData.company"
+              :rules="nameRules"
+              label="Company Name(Optional)"
+              @change="addressChanged"
+            ></v-text-field>
+          </v-flex>
+
+        </v-layout>
+      </v-container>
     </v-card>
     <v-btn color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
   </v-form>
@@ -33,64 +59,90 @@ export default {
     complete: {
       type: Boolean
     },
+    fullname: {
+      type: String
+    },
     address: {
       type: Object
     }
   },
+
   data() {
     return {
-      addressData: this.address,
+      addressData: this.address ? this.address : {
+        name: this.fullname ? this.fullname : '',
+        company: '',
+        address1: '',
+        address2: '',
+        city: '',
+        country: '',
+        postal_code: '',
+        state: '',
+        phone: ''
+      },
       dataChanged: false,
       valid: false,
       addressRules: [
         v => !!v || "Address is required"
       ],
-      businessname: this.address ? this.address.businessname : '',
       nameRules: [
         v =>
-          !v || (v && v.length <= 60) ||
-          "Business Name must be less than 120 characters"
+          !v || (v && v.length <= 255) ||
+          "Company Name must be less than 255 characters"
       ]
     };
   },
+
   methods: {
     childMessage() {
       if (this.$refs.checkout_address_form.validate()) {
         if (this.dataChanged) {
-          this.$store.dispatch('setShippingAddress',  this.addressData )
+          this.$store.dispatch('setShippingAddress',  this.addressData).then(response => {
+            this.$emit("childMessage", this.step);
+          }, error => {
+              console.error("Got nothing from server. Prompt user to check internet connection and try again")
+          })
         }
-        this.$emit("childMessage", this.step);
       }
     },
-    getAddressData(addressData, placeResultData, id) {
-      this.addressData = this.convertGoogleAddressToAddress(addressData);
+    addressChanged() {
+      this.dataChanged = true;
+    },
+    getAddressData(googleAddress, placeResultData, id) {
+      this.convertGoogleAddressToAddress(googleAddress);
       this.addressChanged = true;
-      this.$store.dispatch('setShippingAddress', this.addressData);
     },
     convertGoogleAddressToAddress(googleAddress) {
-      var address = {};
-      address.city = googleAddress.locality;
-      address.state = googleAddress.administrative_area_level_1;
+      this.addressData.city = googleAddress.locality;
+      this.addressData.state = googleAddress.administrative_area_level_1;
       // address.statel2 = googleAddress.administrative_area_level_2;
-      address.country = googleAddress.country;
-      address.latitude = googleAddress.latitude;
-      address.longitude = googleAddress.longitude;
-      address.postal_code = googleAddress.postal_code;
-      address.street_address1 = googleAddress.street_number;
-      address.street_address2 = googleAddress.route;
-      return address;
+      this.addressData.country = googleAddress.country;
+      this.addressData.latitude = googleAddress.latitude;
+      this.addressData.longitude = googleAddress.longitude;
+      this.addressData.postal_code = googleAddress.postal_code;
+      this.addressData.address1 = googleAddress.street_number;
+      this.addressData.address2 = googleAddress.route;
     }
   },
+
   computed: {
     addressText() {
       const address = this.address;
       if (address) {
-        return `${address.street_address1} ${address.street_address2} ${address.city} ${address.state} ${address.postal_code}, ${address.country}`;
+        return `${address.address1} ${address.address2} ${address.city} ${address.state} ${address.postal_code}, ${address.country}`;
       } else {
         return '';
       }
     }
   },
-  components: { VueGoogleAutocomplete }
+
+  components: { VueGoogleAutocomplete },
+  watch: { 
+      fullname: function(newVal, oldVal) { // watch it
+        if ('' === this.addressData.name) {
+          this.addressData.name = newVal;
+        }
+      }
+    }
 };
 </script>

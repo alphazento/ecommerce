@@ -16,9 +16,7 @@ class CreateCustomerAddressTable extends Migration
             $table->increments('id');
             $table->string('hash', 32)->index();
             $table->integer('customer_id')->unsigned();
-            $table->string('firstname', 255);
-            $table->string('middlename', 255)->nullable();
-            $table->string('lastname', 255);
+            $table->string('name', 255);
             $table->string('company', 128)->nullable();
             $table->string('address1', 255);
             $table->string('address2', 255)->nullable();

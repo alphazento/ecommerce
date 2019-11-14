@@ -57,8 +57,7 @@ class TestModel extends \Zento\ElasticSuit\Elasticsearch\Model {
 ```php
 
 $testmodel = new TestModel();
-$testmodel->first_name = 'firstname';
-$testmodel->last_name = 'lastname';
+$testmodel->name = 'name';
 $testmodel->age = 20;
 $testmodel->save();
 ```
@@ -66,20 +65,19 @@ $testmodel->save();
 3. Search a collection
 
 ```php
-$collection = TestModel::where('first_name', 'like', 'firstname')
+$collection = TestModel::where('name', 'like', 'name')
     ->whereIn('_id', [1,2,3,4,5])
     ->whereNotIn('_id', [5,6,7,8,9])
     ->where('_id', '=', 1)
     ->where('age', '>', 18)
-    ->orWhere('last_name', 'like', 'lastname')
     ->whereNull('nick_name')
     ->whereNotNull('age')
-    ->whereMultiMatch(['last_name', 'description'], 'search words', '60%')
+    ->whereMultiMatch(['name', 'description'], 'search words', '60%')
     ->skip(10)
     ->forPage(1, 20)
     ->take(10)
     ->limit(10)
-    ->select(['first_name', 'last_name', 'age'])
+    ->select(['name', 'age'])
     ->get();
 
 * also support sum(), avg(), min(), max(), stats(), count()
@@ -92,7 +90,7 @@ $collection = TestModel::where('first_name', 'like', 'firstname')
 
 ```php
     //get relations
-    TestModel::with('childmodel')->where('first_name', 'like', 'firstname')->get();
+    TestModel::with('childmodel')->where('name', 'like', 'name')->get();
 
 ```
 

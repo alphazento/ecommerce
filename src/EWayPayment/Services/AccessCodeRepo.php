@@ -43,8 +43,7 @@ class AccessCodeRepo {
     protected function prepareParams($shoppingCart, $reference) {
         $shippingAddress = $shoppingCart['shipping_address'];
         $customer = [
-            'FirstName' => $shippingAddress['firstname'],
-            'LastName' => $shippingAddress['lastname'],
+            'name' => $shippingAddress['name'],
             'Title' => 'Prof',
             'Street1'=> $shippingAddress['address1'],
             'Street2'=> $shippingAddress['address2'],

@@ -1,11 +1,8 @@
 <template>
   <v-form ref="checkout_user_form" v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
-      <div class="user-info" v-if="userInfo">
-        <span class="name">{{userInfo.email}}</span>
-      </div>
-      <v-text-field v-model="email" :rules="emailRules" label="Email Address" required></v-text-field>
-      <v-text-field v-model="name" :counter="60" :rules="nameRules" label="Full Name" required></v-text-field>
+      <v-text-field v-model="userInfo.email" :rules="emailRules" label="Email Address" required></v-text-field>
+      <v-text-field v-model="userInfo.name" :counter="60" :rules="nameRules" label="Full Name" required></v-text-field>
     </v-card>
     <v-card></v-card>
     <v-btn color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
@@ -25,12 +22,11 @@ export default {
   data() {
     return {
       valid: false,
-      name: "",
+      userInfo: this.$store.state.userInfo,
       nameRules: [
         v => !!v || "Name is required",
         v => (v && v.length <= 60) || "Name must be less than 10 characters"
       ],
-      email: "",
       emailRules: [
         v => !!v || "E-mail is required",
         v => /.+@.+\..+/.test(v) || "E-mail must be valid"
@@ -40,14 +36,9 @@ export default {
   methods: {
     childMessage() {
       if (this.$refs.checkout_user_form.validate()) {
+        this.$store.dispatch('setUserInfo', this.userInfo);
         this.$emit("childMessage", this.step);
       }
-    }
-  },
-  computed: {
-    userInfo() {
-      console.log("get user info", this.$store);
-      return this.$store.state.userInfo;
     }
   }
 };

@@ -51,7 +51,7 @@ class PaymentPrimer {
                     "item_list"=>[
                         "items"=> $items,
                         // "shipping_address" => [
-                        //     "recipient_name"=> sprintf('%s %s', $shippingaddress->firstname, $shippingaddress->lastname),
+                        //     "recipient_name"=> $shippingaddress->name,
                         //     "line1"=> substr($shippingaddress->address1, 0, 100),
                         //     "line2"=> substr($shippingaddress->address2, 0, 100),
                         //     "city"=> substr($shippingaddress->city, 0, 64),

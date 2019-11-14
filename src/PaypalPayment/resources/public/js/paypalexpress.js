@@ -137,7 +137,7 @@
                     item_list: {
                         items: items,
                         shipping_address: {
-                            recipient_name: cart.shipping_address.firstname + ' ' + cart.shipping_address.lastname,
+                            recipient_name: cart.shipping_address.name,
                             line1: cart.shipping_address.address1,
                             line2: cart.shipping_address.address2,
                             city: cart.shipping_address.city,

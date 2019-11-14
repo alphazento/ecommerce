@@ -17,9 +17,7 @@ class SalesAddress extends \Illuminate\Database\Eloquent\Model
     }
 
     protected $fillable = [
-        'firstname',
-        'middlename',
-        'lastname',
+        'name',
         'company',
         'address1',
         'address2',
