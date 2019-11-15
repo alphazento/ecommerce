@@ -1,11 +1,11 @@
 <?php
 
-namespace Zento\Customer\Model;
+namespace Zento\Passport\Model;
 
-class SessionGuest extends ORM\Customer {
-    const STORE_KEY = 'guest_user';
+use Illuminate\Support\Str;
+
+class ApiGuest extends user {
     public function __construct(array $attrs = []) {
-        $attrs = session()->get(self::STORE_KEY, []);
         parent::__construct($attrs);
         $this->is_guest = true;
         $this->attributes['id'] = $this->id ?? session()->getId();

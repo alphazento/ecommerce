@@ -3,8 +3,8 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\PaymentGateway\Http\Controllers',
-        'middleware' => ['cors'],
-        'as' => 'both:payment:'
+        'middleware' => ['cors', 'guesttoken', 'auth:api'],
+        'as' => 'api:payment:'
     ], function () {
         Route::post(
             '/payment/estimate', 

@@ -1,39 +1,10 @@
 <?php
-
-Route::group(
-    [
-        'prefix' => '/api/v1/oauth2',
-        'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['cors']
-    ], function () {
-    Route::post(
-        '/token', 
-        ['uses' => 'PassportController@issueToken']
-    );
-    Route::post(
-        '/register', 
-        ['uses' => 'PassportController@register']
-    );
-});
-
-Route::group([
-    'prefix' => '/api/v1/customers',
-    'namespace' => '\Zento\Customer\Http\Controllers\Api',
-    'middleware' => ['cors']
-    ], function () {
-        Route::post(
-            '/guest', 
-            ['as' => 'customer.guest', 'uses' => 'PassportController@getOrCreateGuest']
-        );
-    }
-);
-
 Route::group(
     [
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['cors', 'auth:api'],
-        'as' => "both:user:"
+        'middleware' => ['cors', 'guesttoken', 'auth:api'],
+        'as' => "api:user:"
     ], function () {
     Route::get(
         '/{customer_id}', 
@@ -45,7 +16,6 @@ Route::group(
         ['as' => 'customer.putbyid', 'uses' => 'CustomerController@setCustomer']
     );
 
-    //admin only
     Route::patch(
         '/{customer_id}/activate', 
         ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
@@ -64,7 +34,7 @@ Route::group(
     Route::get(
         '/{customer_id}/addresses', 
         ['as' => 'customer.get.addresses', 'uses' => 'CustomerController@getAddresses']
-    );
+    )->unshiftMiddleware('guesttoken');
 
     Route::get(
         '/{customer_id}/address/{address_id}', 
@@ -76,11 +46,6 @@ Route::group(
         ['as' => 'customer.add.address', 'uses' => 'CustomerController@addAddress']
     );
 
-    // Route::delete(
-    //     '/{customer_id}/addresses/{id}', 
-    //     ['as' => 'customer.add.address', 'uses' => 'CustomerController@addCustomerAddress']
-    // );
-
     Route::patch(
         '/{customer_id}/default_billing_address/{address_id}', 
         ['as' => 'customer.put.mydefault_billing_address', 'uses' => 'CustomerController@setDefaultBillingAddress']
@@ -89,5 +54,24 @@ Route::group(
     Route::patch(
         '/{customer_id}/default_shipping_address/{address_id}', 
         ['as' => 'customer.put.mydefault_shipping_address', 'uses' => 'CustomerController@setDefaultShippingAddress']
+    );
+});
+
+//admin
+Route::group(
+    [
+        'prefix' => '/api/v1/admin/customers',
+        'namespace' => '\Zento\Customer\Http\Controllers\Api',
+        'middleware' => ['cors', 'backend'],
+    ], function () {
+    //admin only
+    Route::patch(
+        '/{customer_id}/activate', 
+        ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
+    );
+
+    Route::delete(
+        '/{customer_id}/addresses/{id}', 
+        ['as' => 'customer.add.address', 'uses' => 'CustomerController@addCustomerAddress']
     );
 });

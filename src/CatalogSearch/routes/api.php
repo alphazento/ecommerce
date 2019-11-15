@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
-        'middleware' => ['cors']
+        'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
         Route::post(
             '/catalog/search', 
@@ -20,7 +20,7 @@ Route::group(
     [
         'prefix' => '/api/v1/admin',
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
-        'middleware' => ['backend', 'cors'],
+        'middleware' => ['cors', 'backend'],
     ], function () {
         Route::get(
             '/catalog/search', 

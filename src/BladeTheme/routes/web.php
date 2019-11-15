@@ -47,13 +47,13 @@ Route::group(
     
         Route::get(
             'products/{id}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+            ['as' =>'web.get.product', 'uses' => 'CatalogController@products']
         );
     
-        Route::get(
-            'products', 
-            ['as' =>'web.get.products', 'uses' => 'CatalogController@products']
-        );
+        // Route::get(
+        //     'products', 
+        //     ['as' =>'web.get.products', 'uses' => 'CatalogController@products']
+        // );
     });
 
 Route::group(

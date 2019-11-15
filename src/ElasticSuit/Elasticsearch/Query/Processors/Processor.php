@@ -53,7 +53,6 @@ class Processor extends BaseProcessor
     public function processSelectAggregate(Builder $query, $values)
     {
         $this->response = new Response($values);
-        dd($this->response);
         return $this->response->getAggregations();
     }
 

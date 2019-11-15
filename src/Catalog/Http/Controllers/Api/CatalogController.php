@@ -78,10 +78,6 @@ class CatalogController extends Controller
     }
 
     public function products() {
-        return ['status'=>200, 'data'=> \Zento\Catalog\Model\ORM\Product::limit(12)];
-    }
-
-    public function product() {
         $product = ProductService::getProductById(Route::input('id'));
         return ['status'=>200, 'data'=> $product];
     }

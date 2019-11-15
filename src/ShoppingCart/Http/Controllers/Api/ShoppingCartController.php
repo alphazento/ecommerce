@@ -37,7 +37,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
                 $request->get('quantity', 1),
                 $request->get('url'),
                 $request->get('options', []))) {
-                return ['status'=> 201, 'data' => ['cart_id' => $cart->guid]];
+                return ['status'=> 201, 'data' => $cart];
             } else {
                 return ['status'=> 420, 'error' => 'fail to add item to cart'];
             }
@@ -47,7 +47,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function updateItemQuantity() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::updateItemQuantity($cart, Route::input('item_id'), Route::input('quantity'))) {
-                return ['status'=> 200, 'data' => null];
+                return ['status'=> 200, 'data' => $cart];
             } else {
                 return ['status'=> 420, 'data' => ['Can not update quantity for item ' . Route::input('item_id')]];
             }
@@ -57,7 +57,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function deleteItem() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::deleteItem($cart, Route::input('item_id'))) {
-                return ['status'=> 200, 'data' => null];
+                return ['status'=> 200, 'data' => $cart];
             } else {
                 return ['status'=> 420, 'error' => 'fail to delete item ' . Route::input('item_id')];
             }
@@ -120,7 +120,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function setCustomer(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
-            if ($cart->mode == 0 && $cart->guest_guid == $request->get('client_guid')) {
+            if ($cart->mode == 0) {
                 $cart->customer_id = Route::input('customer_id');
                 $cart->mode = 1;
                 $cart->save();

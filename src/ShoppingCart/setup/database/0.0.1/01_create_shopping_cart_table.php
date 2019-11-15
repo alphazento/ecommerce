@@ -14,11 +14,9 @@ class CreateShoppingCartTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('guid', 36)->unique();
             $table->string('email', 255)->nullable();
             $table->integer('store_id')->unsigned()->default(0);
-            $table->integer('customer_id')->unsigned()->index();
-            $table->string('guest_guid', 36)->nullable();
+            $table->string('customer_id', 36)->index();
             $table->tinyInteger('mode')->default(0); //0:guest, 1:customer, 2:admin
             $table->string('currency', 16)->default('USD');
             $table->string('applied_rules', 255)->nullable();

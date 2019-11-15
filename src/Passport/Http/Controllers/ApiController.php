@@ -7,6 +7,8 @@ use Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
 
+use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
+
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
     protected $isRegistering = false;
@@ -75,5 +77,23 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
 
     public function profile() {
         return ['status' => 200, 'data' => Auth::user()];
+    }
+
+    public function guestToken() {
+        //if has session
+        if ($user = GuestTokenMiddleware::prepareGuestForApi(Request::instance())) {
+            return [
+                'status'=> 200,
+                'data'=> [
+                    'access_token' => encrypt(json_encode($user->toArray())),
+                    'token_type' => 'Guest'
+                ]
+            ];
+        } else {
+            return [
+                'status'=> 401,
+                'data'=> []
+            ];
+        }
     }
 }

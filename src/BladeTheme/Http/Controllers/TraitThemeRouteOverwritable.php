@@ -15,6 +15,9 @@ trait TraitThemeRouteOverwritable
         if (self::$OverwriteBy) {
             $pthis = app(self::$OverwriteBy);
         }
+        if (method_exists($pthis, 'beforeCallAction')) {
+            $pthis->beforeCallAction($method);
+        }
         return $pthis->{$method}($parameters);
     }
 }

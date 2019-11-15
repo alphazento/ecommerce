@@ -10,11 +10,9 @@ class Provider extends ServiceProvider
     public function register()
     {
         ThemeManager::whenSetTheme('Zento_VueDesktopTheme', function($app) {
-            \Zento\BladeTheme\Http\Controllers\CatalogController::$OverwriteBy = '\Zento\VueDesktopTheme\Http\Controllers\ThemeController';
+            \Zento\BladeTheme\Http\Controllers\CatalogController::$OverwriteBy = '\Zento\VueDesktopTheme\Http\Controllers\CatalogController';
             \Zento\BladeTheme\Http\Controllers\GeneralController::$OverwriteBy = '\Zento\VueDesktopTheme\Http\Controllers\GeneralController';
-            // $this->app->singleton('Zento\BladeTheme\Http\Controllers\CatalogController', function() {
-            //     return new \Zento\VueDesktopTheme\Http\Controllers\ThemeController;
-            // });
+            \Zento\BladeTheme\Http\Controllers\ShoppingCartController::$OverwriteBy = '\Zento\VueDesktopTheme\Http\Controllers\ShoppingCartController';
             \Zento\BladeTheme\Services\BladeTheme::mixin(new \Baicy\DesktopTheme\Mixins\BladeTheme);
         });
     }

@@ -13,8 +13,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     use TraitThemeRouteOverwritable;
 
     public function getCart($fullResp = false) {
-        $cartId = Auth::user() ? 'mine' : (session()->getId());
-        if ($resp = BladeTheme::innerApiProxy('GET', sprintf('/api/v1/cart/%s', $cartId))) {
+        if ($resp = BladeTheme::innerApiProxy('GET', '/api/v1/cart')) {
             if ($resp['status'] == 404) {
                 return null;
             } else {
@@ -64,7 +63,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         $url = Request::get('url', 'https://alphazento.local.test/xl-518.html');
         if ($resp = BladeTheme::innerApiProxy(
             'POST',
-            sprintf('/api/v1/cart/%s/items', $cart->guid),
+            '/api/v1/cart/items',
             compact('product_id', 'quantity', 'options', 'url')
         )) {
             if ($protocal === 'web') {
@@ -88,7 +87,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         if ($cart = $this->getCart()) {
             if ($resp = BladeTheme::innerApiProxy(
                 'DELETE',
-                sprintf('/api/v1/cart/%s/items/%s', $cart->guid, $item_id)
+                sprintf('/api/v1/cart/items/%s', $item_id)
             )) {
                 if ($protocal === 'web') {
                     if($resp['status'] != 420) {

@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
-        'middleware' => ['cors']
+        'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
         Route::get(
             '/categories', 
@@ -27,7 +27,7 @@ Route::group(
 
         Route::get(
             '/products/{id}', 
-            ['as' => 'product', 'uses' => 'CatalogController@product']
+            ['as' => 'product', 'uses' => 'CatalogController@products']
         );
 
         Route::get(
@@ -70,7 +70,7 @@ Route::group(
 
         Route::get(
             '/products/{id}', 
-            ['as' => 'admin.get.product', 'uses' => 'CatalogController@product']
+            ['as' => 'admin.get.product', 'uses' => 'CatalogController@products']
         );
 
         Route::get(

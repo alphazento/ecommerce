@@ -7,6 +7,6 @@ Route::group(
     ], function () {
     Route::get(
         '/products', 
-        ['as' => 'web.get.products', 'uses' => 'ThemeController@products']
+        ['as' => 'web.get.products', 'uses' => 'CatalogController@products']
     );
 });

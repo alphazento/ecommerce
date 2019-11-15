@@ -8,6 +8,8 @@ use View;
 use Route;
 use Request;
 use Closure;
+use ShareBucket;
+
 use Zento\BladeTheme\View\ViewCache;
 use Zento\BladeTheme\View\ViewCollection;
 use Illuminate\Support\Arr;
@@ -80,8 +82,8 @@ class BladeTheme {
         if ($data) {
             $this->addGlobalViewData($data);
         }
-        count($this->globalViewData) && View::share($this->globalViewData);
-        return view($view);
+        count($this->globalViewData) &&  View::share($this->globalViewData);
+        return view($view, $this->globalViewData);
     }
 
     public function noLocalCacheView($view, $data =null, $headers = []) {
@@ -92,13 +94,20 @@ class BladeTheme {
                 "no-cache, max-age=0, must-revalidate, no-store");
     }
 
-    public function innerApiProxy($method, $url, $data = []) {
+    public function innerApiProxy($method, $url, $data = [], $headers = []) {
         $originRequest = Request::instance();
         app()->instance('middleware.disable', true);
 
         $request = Request::create($url, $method, $data);
-        
+        if ($token = $this->globalViewData['apiGuestToken'] ?? false) {
+            $request->headers->add(['authorization' => $token]);
+        }
+        if (count($headers)) {
+            $request->headers->add($headers);
+        }
+
         app()->instance('request', $request);
+        ShareBucket::put(\Zento\Passport\Http\Middleware\GuestToken::ALLOW_GUEST_API, true);
         $resp = Route::dispatch($request);
         $respData = $resp->getOriginalContent();
         app()->instance('request', $originRequest);
@@ -108,5 +117,9 @@ class BladeTheme {
     public function addGlobalViewData(array $data) {
         $this->globalViewData = array_merge_recursive($this->globalViewData, $data);
         return $this;
+    }
+
+    public function getGlobalViewData($key) {
+        return $this->globalViewData[$key] ?? null;
     }
 }

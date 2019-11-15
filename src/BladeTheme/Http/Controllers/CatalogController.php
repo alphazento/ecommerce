@@ -26,23 +26,18 @@ class CatalogController extends Controller
             ) {
             $pageData = $resp['data'];
         }
-        return view('page.productlist', compact('categories', 'currentCateId', 'pageData'));
+        return BladeTheme::view('page.productlist', compact('categories', 'currentCateId', 'pageData'));
     }
 
     public function products() {
-        $categories = $this->fetchCategories();
-        return view('page.productlist', compact('categories'));
-    }
-
-    public function product() {
         if ($productId = Route::input('id')) {
             if ($resp = BladeTheme::innerApiProxy('GET', 
                 sprintf('/api/v1/products/%s', $productId))
                 ) {
                 $product = $resp['data'];
-                return view('page.product', compact('product'));
+                return BladeTheme::view('page.product', compact('product'));
             }
-            return view('page.404');
+            return BladeTheme::view('page.404');
         }
     }
 

@@ -57,14 +57,14 @@ Route::group(
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['backend', 'cors']
     ], function () {
-    Route::post(
-        '/token', 
-        ['uses' => 'PassportController@issueToken']
-    );
-    Route::post(
-        '/register', 
-        ['uses' => 'PassportController@register']
-    );
+    // Route::post(
+    //     '/token', 
+    //     ['uses' => 'PassportController@issueToken']
+    // );
+    // Route::post(
+    //     '/register', 
+    //     ['uses' => 'PassportController@register']
+    // );
     Route::post(
         '/token/google', 
         ['as' => 'admin.oauth.token.google', 

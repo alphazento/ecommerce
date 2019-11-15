@@ -4,7 +4,7 @@ namespace Zento\Contracts\Interfaces\Catalog;
 
 interface IShoppingCart  extends \Zento\Contracts\AssertAbleInterface 
 {
-    const PROPERTIES = ['guid', 'email', 'customer_id', 'guest_guid', 
+    const PROPERTIES = ['email', 'customer_id', 
         'mode', 'status', 'items_quantity',
         'ship_to_billingaddesss', 'billing_address', 'shipping_address',
         'order_id', 'currency', 'total_weight', 

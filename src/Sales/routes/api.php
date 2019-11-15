@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1/sales',
         'namespace' => '\Zento\Sales\Http\Controllers\Api',
-        'middleware' => ['cors']
+        'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
     Route::post(
         '/orders', 

@@ -22,6 +22,6 @@ class CheckoutController extends ShoppingCartController
     }
     
     public function success() {
-        return view('page.checkout.success');
+        return BladeTheme::view('page.checkout.success');
     }
 }

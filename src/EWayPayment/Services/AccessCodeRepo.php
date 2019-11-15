@@ -76,7 +76,7 @@ class AccessCodeRepo {
      * @return void
      */
     public function requestNewCode($shoppingCart) {
-        $ref = $shoppingCart['guid'];
+        $ref = $shoppingCart['id'];
         $transaction = $this->prepareParams($shoppingCart, $ref);
         $response = $this->getApiClient()->createTransaction(
             ApiMethod::TRANSPARENT_REDIRECT,

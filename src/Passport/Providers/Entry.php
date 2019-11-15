@@ -2,6 +2,8 @@
 
 namespace Zento\Passport\Providers;
 
+use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\RequestGuard;
 
@@ -48,6 +50,10 @@ class Entry extends \Illuminate\Support\ServiceProvider
                 $this->app->make('encrypter')
             ))->user($request)) {
                 $user->acl($request);
+            }
+            if (!$user) {
+                $user = GuestTokenMiddleware::prepareGuestForApi($request);
+                // $user->acl($request);
             }
             return $user;
         }, $this->app['request']);

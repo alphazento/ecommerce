@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\ReactApp\Http\Controllers',
-        'middleware' => ['cors']
+        'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
         Route::get(
             '/reactapp/configs', 

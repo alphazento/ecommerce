@@ -21,6 +21,7 @@ class ShoppingCartService
     protected $cartCache = [];
     
     public function getMyCart($forceCreateForMine = false) {
+        $user = Auth::user();
         if ($myCart = $this->getCartByUserId(Auth::user()->id)) {
             return $myCart;
         } elseif ($forceCreateForMine) {
@@ -39,36 +40,35 @@ class ShoppingCartService
     public function createCart() {
         $user = Auth::user();
         $cart = new ShoppingCart([
-            'guid' => guidv4(),
             'email' => $user->getEmail(),
             'customer_id' => $user->getId(),
             "currency" => 'AUD',
             'client_ip' => '',
         ]);
         $cart->save();  
-        $this->cartCache[$cart->guid] = $cart;
-        session()->put('shopping_cart', $cart->guid);
+        $this->cartCache[$cart->id] = $cart;
+        session()->put('shopping_cart', $cart->id);
         return $cart;
     }
 
-    public function cart($guid) {
-        if (!isset($this->cartCache[$guid])) {
-            if ($cart = ShoppingCart::where('guid', $guid)->first()) {
-                $this->cartCache[$guid] = $cart;
+    public function cart($id) {
+        if (!isset($this->cartCache[$id])) {
+            if ($cart = ShoppingCart::find($id)) {
+                $this->cartCache[$id] = $cart;
                 return $cart;
             } else {
                 return null;
             }
         }
-        return $this->cartCache[$guid];
+        return $this->cartCache[$id];
     }
 
     public function cartBuilder() {
         return ShoppingCart::getQuery();
     }
 
-    public function deleteCart($guid) {
-        if ($cart = ShoppingCart::where('guid', $guid)->first()) {
+    public function deleteCart($id) {
+        if ($cart = ShoppingCart::find($id)) {
             foreach($cart->items as $item) {
                 if ($item) {
                     $item->delete();

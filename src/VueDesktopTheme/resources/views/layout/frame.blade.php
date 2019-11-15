@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src=@asset("zento_vuedesktoptheme/js/app.js") type="text/javascript"></script>
     @include('layout.head')
 </head>
 
@@ -11,7 +10,7 @@
         <v-content>
             <v-container>
                 <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'" 
-                :cart-api="'{{route('ajax.get.cart', ['webprotocal'=>'ajax'])}}'">
+                :cart-api="'{{route('api:cart:get')}}'">
             </theme-toolbar>
                 @include('widget.breadcrumbs')
                 @yield('pagecontent')
