@@ -11,7 +11,6 @@ return [
                 "20"=> "\\Zento\\ShoppingCart\\Event\\Listener\\OrderCreated"
             ],
             "Zento\\Customer\\Event\\PassportTokenIssued"=> [
-                "20"=> "\\Zento\\ShoppingCart\\Event\\Listener\\PassportTokenIssued"
             ]
         ],
         "depends"=> [

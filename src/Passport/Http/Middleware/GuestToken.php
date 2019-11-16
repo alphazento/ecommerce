@@ -32,10 +32,11 @@ class GuestToken
         if ($guestMode = ShareBucket::get(self::ALLOW_GUEST_API)) {
             $request->mixin(new RequestGuestToken());
             if ($token = $request->guestToken()) {
-                return new ApiGuest(json_decode(decrypt($token), true));
+                return app()->make('\Zento\Passport\Model\PassportGuestUser',
+                    ['attrs' => json_decode(decrypt($token), true)]);
             } else {
                 if ($guestMode !== self::RestrictMode) {
-                    return new ApiGuest();
+                    return app()->make('\Zento\Passport\Model\PassportGuestUser');
                 }
             }
         }

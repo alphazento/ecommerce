@@ -1,0 +1,123 @@
+.items {
+    margin: 0;
+    padding: 0;
+    list-style: none none;
+}
+.order-links .item {
+    line-height: 40px;
+    margin: 0 0 -1px;
+}
+
+.order-details-items {
+    border: 1px solid #ccc;
+    margin-bottom: 40px;
+    padding: 10px;
+}
+.order-links .item strong {
+    background: #fff;
+    border: 1px solid #ccc;
+    display: block;
+    font-weight: 400;
+    padding: 0 20px;
+}
+.order-links .item a {
+    background: #f6f6f6;
+    color: #7d7d7d;
+    border: 1px solid #ccc;
+    display: block;
+    font-weight: 400;
+    padding: 0 20px;
+}
+.order-links .item a:hover {
+    background: #fff;
+    text-decoration: none;
+}
+.order-details-items .order-title {
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 10px;
+}
+.account .table-wrapper {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e4e4e4;
+}
+.order-details-items .table-wrapper {
+    margin: 0;
+}
+.order-details-items .table-wrapper:not(:last-child) {
+    margin-bottom: 30px;
+}
+.order-details-items .order-title>strong {
+    font-size: 24px;
+    font-weight: 300;
+}
+a.action {
+    color: #1c9ca4;
+    font-weight: bold;
+}
+.order-details-items .product-item-name {
+    font-size: 18px;
+    font-weight: 400;
+}
+.order-details-items .table-order-items tbody td {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+.block-title{
+  border-bottom: 1px solid #c6c6c6;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  font-size: 22px;
+  font-weight: 400;
+}
+.block-title strong{
+  font-weight: 300;
+}
+.block-order-details-view .box-title {
+    font-weight: 600;
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+.table tfoot {
+    background: #f5f5f5;
+}
+.table tfoot th{
+  border-top: 0;
+}
+.table tfoot th.mark{
+  background: none;
+}
+.table tfoot .mark {
+    font-weight: 400;
+    text-align: right;
+}
+.table td, .table th{
+  border-top: 0;
+}
+@media (min-width: 768px), print{
+  .order-details-items {
+      margin-top: -1px;
+      padding: 25px;
+  }
+  .order-links .item {
+      float: left;
+      margin: 0 -1px 0 0;
+  }
+  .order-links .item a {
+      padding: 1px 35px;
+  }
+  .order-links .item strong {
+      border-bottom: 0;
+      margin-bottom: -1px;
+      padding: 1px 35px 2px 35px;
+  }
+  .actions-toolbar {
+    text-align: left;
+}
+
+
+}
+@media (min-width: 640px){
+  .order-details-items .order-title .action {
+    margin: 12px 0 0 30px;
+  }
+}

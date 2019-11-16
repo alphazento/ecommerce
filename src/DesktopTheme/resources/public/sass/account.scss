@@ -1,0 +1,275 @@
+@import 'mixins';
+
+.pagecontent{
+  margin-top: 20px;
+}
+@media( min-width:768px ){
+  .pagecontent__side{
+    width: 270px;
+  }
+  .pagecontent__main{
+    width: calc( 100% - 270px );
+  }
+}
+
+.mobaccordion--acount{
+  top:50px;
+  z-index: 0;
+
+  .mobaccordion__head{
+    padding: 17px 20px 17px 35px;
+    font-weight: 400;
+    border: 1px solid #666666;
+    @include noselect();
+    font-weight: bold;
+
+    @media (max-width: 768px){
+      padding: 13px 20px 13px 20px;
+    }
+  }
+
+
+  .mobaccordion__body{
+    border-color: #666666;
+  }
+  .mobaccordion__item{
+    border-color: #666666;
+
+  }
+  .mobaccordion__item a{
+    font-weight: 400;
+    padding: 15px 20px 15px 25px;
+    @include noselect();
+
+    &:hover{
+      background: #eeeeee;
+    }
+  }
+  .mobaccordion__item.active a{
+    font-weight: 600;
+    position: relative;
+    color: #000000;
+
+    &:after{
+      content: '';
+      width: 3px;
+      background: #ff5501;
+      display: block;
+      position: absolute;
+      left: 8px;
+      top: 10px;
+      bottom: 10px;
+    }
+
+    &:hover{
+      background: #ffffff;
+      cursor: default;
+    }
+  }
+}
+
+/* block-dashboard */
+.block-dashboard{
+
+}
+.block-dashboard__title{
+  border-bottom: 1px solid #c6c6c6;
+  margin-bottom: 25px;
+  padding-bottom: 0px;
+  h1{
+    font-size: 28px;
+    font-weight: bold !important;
+    line-height: 34px;
+  }
+  h2{
+    font-size: 20px;
+    font-weight: bold !important;
+    line-height: 24px;
+  }
+}
+
+/* box-info */
+.box-info{
+  font-size: 14px;
+  margin-bottom: 10px;
+
+  .table td, .table th{
+    padding: .5rem;
+  }
+}
+.box-info__title{
+  background: #20a9b2;
+  color: #fff;
+  letter-spacing: 0.3px;
+  line-height: 18px;
+  overflow: hidden;
+  padding: 7px 20px;
+  position: relative;
+  width: 100%;
+  font-weight: bold;
+}
+.box-info__title--size2{
+  font-size: 20px;
+  line-height: 1;
+}
+.box-info__content{
+  padding: 15px 0;
+}
+.box-info__seperater{
+  color: #a6a6a6;
+  font-size: 12px;
+  vertical-align: top;
+  display: inline-block;
+  margin: 0 8px;
+  margin-top: 3px;
+}
+.box-info__anchor{
+  color: #1c9ca4;
+  font-weight: bold;
+  font-size: 14px;
+  &:hover,
+  &:focus{
+    color: #1c9ca4;
+    text-decoration: none;
+  }
+}
+.box-info__anchor--white{
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  &:hover,
+  &:focus{
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+.minw-100{
+  min-width: 100px;
+}
+.alert{
+  .fa-check-circle{
+    font-weight: 900;
+    font-size: 21px;
+    line-height: 0;
+    margin-top: 10px;
+    vertical-align: top;
+    margin-left: -10px;
+    margin-right: 5px;
+  }
+}
+
+
+
+/* Edit Account Information */
+.pl-20{
+  padding-left: 20px;
+}
+
+.form-group label{
+  font-weight: 600;
+}
+
+
+
+
+
+/* My Cartridges */
+.mycartriges{
+  margin-bottom: 50px;
+}
+.mycartriges__single{
+  transition: 0.23s;
+  &:hover{
+    height: 300px;
+    position: relative;
+    z-index: 111;
+  }
+  margin: 0 auto 20px;
+  max-width:240px;
+}
+.mycartriges__single-inner{
+}
+.mycartriges__single:hover .mycartriges__single-inner{
+  background: #fff;
+  box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.3);
+  border: 1px solid #bbb;
+  padding:10px;
+}
+.mycartriges__single-img{
+  margin-bottom: 10px;
+}
+.single-cartrige__title{
+
+}
+.mycartriges__single-price{
+  font-weight: bold;
+  margin-top: 5px;
+}
+.mycartriges__single-edit{
+  position: relative;
+  z-index: 1;
+  margin-left:0;
+  margin-right:0;
+  display: none;
+}
+.mycartriges__single:hover{
+  .mycartriges__single-inner{
+    position: absolute;
+  }
+  .mycartriges__single-edit{
+    display: block;
+  }
+}
+.mycartriges__single-comment{
+  width: 100%;
+  padding:5px 10px;
+  margin-top: 5px;
+}
+.mycartriges__single-qty{
+  padding:5px 10px;
+  display: inline-block;
+  width: 70px;
+}
+.mycartriges__single-atc{
+  vertical-align: top;
+  border-radius: 2px;
+  padding:5px 10px;
+}
+.mycartriges__single-a{
+  color: #1c9ca4;
+  font-weight: bold;
+  &:hover, &:focus{
+    color: #1c9ca4;
+  }
+}
+.mycartriges__single-remove{
+  color: #cecece;
+  font-weight: bold;
+  margin-left: 25px;
+  line-height: 0;
+  &:hover{
+    text-decoration: none;
+    color: #999999;
+  }
+}
+
+@import 'orders';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

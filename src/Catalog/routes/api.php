@@ -6,18 +6,13 @@ Route::group(
         'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
         Route::get(
-            '/categories', 
-            ['as' => 'get.categories', 'uses' => 'CatalogController@categories']
-        );
-        
-        Route::get(
             '/categories/tree', 
             ['as' => 'get.categories.tree', 'uses' => 'CatalogController@categoriesTree']
         );
 
         Route::get(
             '/categories/{ids}/',
-            ['as' => 'category', 'uses' => 'CatalogController@category']
+            ['as' => 'category', 'uses' => 'CatalogController@categories']
         )->where('ids', '([\d\/]+)?');
 
         Route::get(
@@ -27,17 +22,7 @@ Route::group(
 
         Route::get(
             '/products/{id}', 
-            ['as' => 'product', 'uses' => 'CatalogController@products']
-        );
-
-        Route::get(
-            '/section/newproducts', 
-            ['as' => 'section.newproducts', 'uses' => 'CatalogController@newProductSection']
-        );
-
-        Route::get(
-            '/section/shoppingcollection', 
-            ['as' => 'section.shoppingcollection', 'uses' => 'CatalogController@shoppingCollectionSection']
+            ['as' => 'product', 'uses' => 'CatalogController@product']
         );
 });
 
@@ -54,14 +39,14 @@ Route::group(
         );
         
         Route::get(
+            '/categories/{ids}/',
+            ['as' => 'admin.get.category', 'uses' => 'CatalogController@categories']
+        )->where('ids', '([\d\/]+)?');
+
+        Route::get(
             '/categories/tree', 
             ['as' => 'admin.get.categories.tree', 'uses' => 'CatalogController@categoriesTree']
         );
-
-        Route::get(
-            '/categories/{ids}/',
-            ['as' => 'admin.get.category', 'uses' => 'CatalogController@category']
-        )->where('ids', '([\d\/]+)?');
 
         Route::get(
             '/categories/{id}/products',
@@ -70,7 +55,7 @@ Route::group(
 
         Route::get(
             '/products/{id}', 
-            ['as' => 'admin.get.product', 'uses' => 'CatalogController@products']
+            ['as' => 'admin.get.product', 'uses' => 'CatalogController@product']
         );
 
         Route::get(

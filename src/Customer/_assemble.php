@@ -9,7 +9,6 @@ return [
         ],
         "listeners"=> [
             "Zento\\Customer\\Event\\PassportTokenIssued"=> [
-                "10"=> "\\Zento\\Customer\\Event\\Listener\\PassportTokenIssued"
             ]
         ],
         "middlewaregroup"=> [

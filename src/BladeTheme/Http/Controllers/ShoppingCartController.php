@@ -12,17 +12,6 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 {
     use TraitThemeRouteOverwritable;
 
-    public function getCart($fullResp = false) {
-        if ($resp = BladeTheme::innerApiProxy('GET', '/api/v1/cart')) {
-            if ($resp['status'] == 404) {
-                return null;
-            } else {
-                return $fullResp ? $resp : $resp['data'];
-            }
-        }
-        return null;
-    }
-
     protected function createCart() {
         if ($resp = BladeTheme::innerApiProxy('POST', '/api/v1/cart')) {
             if ($resp['status'] == 404) {

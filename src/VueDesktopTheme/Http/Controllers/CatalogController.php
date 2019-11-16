@@ -10,32 +10,23 @@ use Zento\Catalog\Model\ORM\Category;
 
 class CatalogController extends \Zento\BladeTheme\Http\Controllers\CatalogController
 {
-    use TraitControllerPrepare;
-
-    public function categories() {
+    public function category() {
         if ($view = parent::categories()) {
             $data = $view->getData();
             $category = $data['pageData']['category'];
            
-
             BladeTheme::breadcrumb('/', 'Home')
                 ->breadcrumb(url(BladeTheme::getCategoryUrl($category)), $category->name);
             return $view;
         }
     }
 
-    public function products() {
-        if ($view = parent::products()) {
+    public function product() {
+        if ($view = parent::product()) {
             $data = $view->getData();
-            $categories = $this->fetchCategories();
             $product = $data['product'];
-            BladeTheme::breadcrumb('/', 'Home');
-            if ($category = ($product->categories[0] ?? false)) {
-                BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($category), $category->name);
-            }
-            BladeTheme::breadcrumb(BladeTheme::getProductUrl($product), $product->name);
+            $category = $data['category'];
             $view->with('currentCateId', $category->id)
-                ->with('categories', $categories)
                 ->with('jsonFields', [
                     'physic' =>'物理参数',
                     'electronic'=> '电学参数',

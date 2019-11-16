@@ -24,18 +24,15 @@ class CatalogController extends Controller
         $all = Request::get('all', false);
         return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
     }
-    
+
     public function categories() {
-        $all = Request::get('all', false);
-        return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
-    }
-
-    public function category() {
         $ids = explode('/', Route::input('ids'));
-        $category = CategoryService::getCategoryById(last($ids));
-        \zento_assert($category);
-
-        return ['status'=>200, 'data'=> $category];
+        $ids = array_unique($ids);
+        $categories = [];
+        foreach($ids as $id) {
+            $categories[] = CategoryService::getCategoryById($id);
+        }
+        return ['status'=>200, 'data'=> $categories];
     }
 
     /**
@@ -77,7 +74,7 @@ class CatalogController extends Controller
         ];
     }
 
-    public function products() {
+    public function product() {
         $product = ProductService::getProductById(Route::input('id'));
         return ['status'=>200, 'data'=> $product];
     }

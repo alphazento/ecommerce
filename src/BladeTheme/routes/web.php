@@ -42,18 +42,18 @@ Route::group(
     ], function () {
         Route::get(
             'categories/{id}', 
-            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categories']
+            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@category']
         );
     
         Route::get(
             'products/{id}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@products']
+            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
         );
-    
-        // Route::get(
-        //     'products', 
-        //     ['as' =>'web.get.products', 'uses' => 'CatalogController@products']
-        // );
+
+        Route::get(
+            'products/{id}/categories/{category_ids}', 
+            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+        );
     });
 
 Route::group(

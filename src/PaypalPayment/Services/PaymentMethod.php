@@ -140,7 +140,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     protected function prepareForReactjs() {
-        $url = (string)(route('both:payment:payment.capture', ['method' => $this->getCode() ]));
+        $url = (string)(route('api:payment:capture', ['method' => $this->getCode() ]));
         return [
             "name" => $this->getCode(),
             "title" => $this->getTitle(),
@@ -170,7 +170,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     protected function prepareForVue() {
-        $url = (string)(route('both:payment:payment.capture', ['method' => $this->getCode() ]));
+        $url = (string)(route('api:payment:capture', ['method' => $this->getCode() ]));
         $mode = config('paymentgateway.paypalexpress.mode');
         $clientId = config(sprintf('paymentgateway.paypalexpress.%s.client_id', $mode));
         return [

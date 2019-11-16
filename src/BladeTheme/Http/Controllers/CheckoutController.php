@@ -8,7 +8,7 @@ use Request;
 use BladeTheme;
 use PaymentGateway;
 
-class CheckoutController extends ShoppingCartController
+class CheckoutController extends \App\Http\Controllers\Controller
 {
     use TraitThemeRouteOverwritable;
 

@@ -5,6 +5,7 @@ namespace Zento\ShoppingCart\Services;
 use DB;
 use Store;
 use Auth;
+use Request;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 
@@ -14,6 +15,7 @@ use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCartItem;
 
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ShoppingCartService
@@ -21,33 +23,37 @@ class ShoppingCartService
     protected $cartCache = [];
     
     public function getMyCart($forceCreateForMine = false) {
-        $user = Auth::user();
-        if ($myCart = $this->getCartByUserId(Auth::user()->id)) {
+        $user = Request::user();
+        if ($myCart = $this->getCartByUser($user)) {
             return $myCart;
         } elseif ($forceCreateForMine) {
             return $this->createCart();
         }
     }
 
-    public function getCartByUserId($userId) {
-        return ShoppingCart::with(['billing_address', 'shipping_address', 'items', 'items.product'])
-            ->where('customer_id', '=', $userId)
+    public function getCartByUser($user) {
+        $query = ShoppingCart::with(['billing_address', 'shipping_address', 'items', 'items.product'])
             ->where('status', '=', 0)
-            ->orderBy('updated_at', 'desc')
-            ->first();
+            ->orderBy('updated_at', 'desc');
+        if ($user->is_guest) {
+            $query->where('uuid', '=', $user->id);
+        } else {
+            $query->where('customer_id', '=', $user->id);
+        }
+        return $query->first();
     }
 
     public function createCart() {
         $user = Auth::user();
         $cart = new ShoppingCart([
-            'email' => $user->getEmail(),
-            'customer_id' => $user->getId(),
+            'uuid' => $user->is_guest ? $user->id : Str::uuid(),
+            'email' => $user->email,
+            'customer_id' => $user->is_guest ? 0 : $user->id,
             "currency" => 'AUD',
             'client_ip' => '',
         ]);
         $cart->save();  
         $this->cartCache[$cart->id] = $cart;
-        session()->put('shopping_cart', $cart->id);
         return $cart;
     }
 
