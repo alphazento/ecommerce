@@ -16,8 +16,10 @@
     </section>
 </div>
 <script>
+const store = window.vStore.default;
 const app = new Vue({
   el: '#app',
+  store,
   // mixins: [mixin],
   data: {
     pagination: @json($pageData['products']),
