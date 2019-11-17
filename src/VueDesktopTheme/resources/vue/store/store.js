@@ -102,6 +102,19 @@ export default new Vuex.Store({
                     reject(error);
                 });
             });
+        },
+        deleteCartItem({
+            commit
+        }, item) {
+            var url = `/api/v1/cart/items/${item.id}`;
+            return new Promise((resolve, reject) => {
+                axios.delete(url).then(response => {
+                    commit('setCart', response.data.data)
+                    resolve(response.data);
+                }, error => {
+                    reject(error);
+                });
+            });
         }
     }
 })

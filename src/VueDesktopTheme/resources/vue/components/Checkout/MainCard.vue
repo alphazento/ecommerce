@@ -70,7 +70,6 @@ export default {
       address: ""
     };
   },
-  created() {},
 
   methods: {
     getChildMessage(step) {

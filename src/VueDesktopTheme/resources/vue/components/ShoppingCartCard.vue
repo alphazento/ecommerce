@@ -33,7 +33,7 @@
             <v-layout>
               <v-flex md10 xs10></v-flex>
               <v-flex md2 xs2 text-center>
-                <v-btn icon>
+                <v-btn icon @click="deleteCartItem(item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-flex>
@@ -80,16 +80,14 @@ export default {
   },
   methods: {
     updateCartItemQty(item) {
-      this.$store.dispatch("updateCartItemQty", item).then(
-        response => {
-          console.log("updateCartItemQty ", response);
-        },
-        error => {
-          console.error(
-            "Got nothing from server. Prompt user to check internet connection and try again"
-          );
-        }
-      );
+      this.$store.dispatch("updateCartItemQty", item).then(response => {
+        console.log("updateCartItemQty ", response);
+      });
+    },
+    deleteCartItem(item) {
+      this.$store.dispatch("deleteCartItem", item).then(response => {
+        console.log("deleteCartItem ", response);
+      });
     }
   }
 };

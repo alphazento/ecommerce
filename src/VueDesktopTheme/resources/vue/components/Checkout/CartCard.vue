@@ -11,7 +11,7 @@
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">{{ item.name }}</v-flex>
               <v-flex md5 xs5 class="v-middle text-right">
-                <v-btn icon>
+                <v-btn icon @click="deleteCartItem(item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-flex>
@@ -96,16 +96,14 @@ export default {
   },
   methods: {
     updateCartItemQty(item) {
-      this.$store.dispatch("updateCartItemQty", item).then(
-        response => {
-          console.log("updateCartItemQty ", response);
-        },
-        error => {
-          console.error(
-            "Got nothing from server. Prompt user to check internet connection and try again"
-          );
-        }
-      );
+      this.$store.dispatch("updateCartItemQty", item).then(response => {
+        console.log("updateCartItemQty ", response);
+      });
+    },
+    deleteCartItem(item) {
+      this.$store.dispatch("deleteCartItem", item).then(response => {
+        console.log("deleteCartItem", response);
+      });
     }
   }
 };
