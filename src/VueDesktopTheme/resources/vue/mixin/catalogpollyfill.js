@@ -1,12 +1,17 @@
 export default {
     methods: {
         getProductUrl: function (product) {
-            console.log('prodduct', product);
-            return `/${product.url_key}.html`;
+            if (product) {
+                return `/${product.url_key}.html`;
+            }
+            return '#';
         },
         getProductImageUrl: function (product, relativePath) {
-            relativePath = relativePath || '/zento_vuedesktoptheme/image/product'
-            return `${relativePath}/${product.name}.png`;
+            if (product) {
+                relativePath = relativePath || '/zento_vuedesktoptheme/image/product'
+                return `${relativePath}/${product.name}.png`;
+            }
+            return 'not-found.png';
         }
     }
 }

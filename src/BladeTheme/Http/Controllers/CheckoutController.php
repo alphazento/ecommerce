@@ -16,8 +16,7 @@ class CheckoutController extends \App\Http\Controllers\Controller
         $cart = $this->getCart();
         $user = Auth::user();
         $paymentmethods = PaymentGateway::estimate($cart, $user, null, 'vue');
-        return BladeTheme::breadcrumb('/', 'Home')
-            ->breadcrumb(route('web.get.checkout'), 'Checkout')
+        return BladeTheme::breadcrumb(route('web.get.checkout'), 'Checkout')
             ->view('page.checkout.index', compact('cart', 'user', 'paymentmethods'));
     }
     

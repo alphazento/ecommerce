@@ -12,28 +12,25 @@ class CatalogController extends Controller
     use TraitThemeRouteOverwritable;
     protected $allCategories;
 
-    public function category() {
+    public function categoryProducts() {
         if ($category_id = Route::input('id')) {
-            return $this->categoryProducts($category_id);
+            $pageData = [];
+            list($succeed, $pageData, $rawData) = BladeTheme::requestInnerApi('GET', 
+            $this->genApiUrl(sprintf('categories/%s/products?%s', $category_id, Request::getQueryString()))
+            );
+            if ($succeed) {
+                return BladeTheme::view('page.productlist', compact('category_id', 'pageData'));
+            }
         }
-    }
-
-    protected function categoryProducts($category_id) {
-        $pageData = [];
-        if ($resp = BladeTheme::innerApiProxy('GET', 
-            sprintf('/api/v1/categories/%s/products?%s', $category_id, Request::getQueryString()))
-            ) {
-            $pageData = $resp['data'];
-        }
-        return BladeTheme::view('page.productlist', compact('category_id', 'pageData'));
+        return view('page.404');
     }
 
     public function product() {
         if ($productId = Route::input('id')) {
-            if ($resp = BladeTheme::innerApiProxy('GET',
-                $this->genApiUrl(sprintf('products/%s', $productId)))
-            ) {
-                $product = $resp['data'];
+            list($succeed, $product, $rawData) = BladeTheme::requestInnerApi('GET', 
+                $this->genApiUrl(sprintf('products/%s', $productId))
+            );
+            if ($succeed) {
                 $categories = [];
                 if ($category_ids = Route::input('category_ids')) {
                     if ($categories = $this->fetchCategories()) {
@@ -54,22 +51,17 @@ class CatalogController extends Controller
 
     protected function fetchAllCategories() {
         if (!$this->allCategories) {
-            if ($resp = BladeTheme::innerApiProxy('GET', '/api/v1/categories')) {
-                $this->allCategories = $resp['data'];
-            } else {
-                $this->allCategories = null;
-            }
+            list($succeed, $categories, $rawData) = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
+            $this->allCategories = $succeed ? $categories : null;
         }
         return $this->allCategories;
     }
 
     protected function fetchCategories($category_ids) {
-        if ($resp = BladeTheme::innerApiProxy('GET',
-            $this->genApiUrl(sprintf('categories/%s', $category_ids)))
-        ) {
-            if ($resp['status'] == 200) {
-                return $resp['data'];
-            }
+        list($succeed, $categories, $rawData) = BladeTheme::requestInnerApi('GET', 
+            $this->genApiUrl(sprintf('categories/%s', $category_ids)));
+        if ($succeed) {
+            return $categories;
         }
     }
 }

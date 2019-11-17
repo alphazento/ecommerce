@@ -10,7 +10,12 @@
           <v-flex md1 xs0></v-flex>
         </v-layout>
 
-        <v-layout class="cart-row" v-for="(item, idx) in cart.items" :key="idx" :href="`#tab-${idx}`">
+        <v-layout
+          class="cart-row"
+          v-for="(item, idx) in cart.items"
+          :key="idx"
+          :href="`#tab-${idx}`"
+        >
           <v-flex md12 xs12>
             <v-layout>
               <v-flex md3 xs3>
@@ -20,7 +25,7 @@
                 <a :href="getProductUrl(item.product)">{{ item.name }}</a>
               </v-flex>
               <v-flex class="v-middle" md2 xs3>
-                <qty-select :max="20" v-model="item.quantity"></qty-select>
+                <qty-select :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></qty-select>
               </v-flex>
               <v-flex class="v-middle text-right" md2 xs2>${{ item.row_price }}</v-flex>
               <v-flex md1 xs0></v-flex>
@@ -65,11 +70,26 @@
 
 <script>
 var mixin = require("../mixin/catalogpollyfill");
+import { mapState } from "vuex";
 export default {
   mixins: [mixin.default],
-  props: {
-    cart: {
-      type: Object
+  computed: {
+    cart() {
+      return this.$store.state.cart;
+    }
+  },
+  methods: {
+    updateCartItemQty(item) {
+      this.$store.dispatch("updateCartItemQty", item).then(
+        response => {
+          console.log("updateCartItemQty ", response);
+        },
+        error => {
+          console.error(
+            "Got nothing from server. Prompt user to check internet connection and try again"
+          );
+        }
+      );
     }
   }
 };
@@ -81,8 +101,8 @@ export default {
   margin-bottom: auto;
 }
 .cart-row {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
 }
 </style>

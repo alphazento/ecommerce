@@ -65,13 +65,27 @@ export default new Vuex.Store({
         setShippingAddress({
             commit
         }, address) {
-            var cartId = this.state.cart.id;
             var url = `/api/v1/cart/shipping_address`;
             return new Promise((resolve, reject) => {
                 axios.put(url, address).then(response => {
-                    console.log('updateCart', response.data)
-                    commit('updateCart', response.data)
+                    console.log('setCart', response.data)
+                    commit('setCart', response.data.data)
                     resolve(response);
+                }, error => {
+                    reject(error);
+                });
+            });
+        },
+
+        updateCartItemQty({
+            commit
+        }, item) {
+            var url = `/api/v1/cart/items/${item.id}/quantity/${item.quantity}`;
+            return new Promise((resolve, reject) => {
+                axios.patch(url).then(response => {
+                    console.log('setCart', response.data)
+                    commit('setCart', response.data.data)
+                    resolve(response.data);
                 }, error => {
                     reject(error);
                 });

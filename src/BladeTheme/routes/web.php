@@ -42,7 +42,7 @@ Route::group(
     ], function () {
         Route::get(
             'categories/{id}', 
-            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@category']
+            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categoryProducts']
         );
     
         Route::get(
@@ -63,7 +63,7 @@ Route::group(
         'middleware' => ['web'],
     ], function () {
         Route::get('/', [
-            'as' =>'web.get.cart', 'uses' => 'ShoppingCartController@cartPage'
+            'as' =>'web.get.cart', 'uses' => 'ShoppingCartController@index'
         ]);
 
         Route::post('/add_product/{pid}', [

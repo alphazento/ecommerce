@@ -304,7 +304,7 @@ class ShoppingCartService
 
     public function ShoppingCartUpdated(IShoppingCart $cart) {
         // zento_assert($cart);
-        $cart->load('items');
+        $cart->load('items.product');
         return (new ShoppingCartUpdated($cart))->fireUntil();
     }
 }

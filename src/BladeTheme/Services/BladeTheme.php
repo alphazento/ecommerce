@@ -94,7 +94,7 @@ class BladeTheme {
                 "no-cache, max-age=0, must-revalidate, no-store");
     }
 
-    public function innerApiProxy($method, $url, $data = [], $headers = []) {
+    public function requestInnerApi($method, $url, $data = [], $headers = []) {
         $originRequest = Request::instance();
         app()->instance('middleware.disable', true);
 
@@ -111,7 +111,7 @@ class BladeTheme {
         $resp = Route::dispatch($request);
         $respData = $resp->getOriginalContent();
         app()->instance('request', $originRequest);
-        return $respData;
+        return [$respData['status'] < 400, $respData['data'] ?? null , $respData];
     }
 
     public function addGlobalViewData(array $data) {

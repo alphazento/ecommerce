@@ -33,12 +33,9 @@ trait TraitThemeRouteOverwritable
     }
 
     protected function getCart($fullResp = false) {
-        if ($resp = BladeTheme::innerApiProxy('GET', $this->genApiUrl('cart'))) {
-            if ($resp['status'] == 404) {
-                return null;
-            } else {
-                return $fullResp ? $resp : $resp['data'];
-            }
+        list($succeed, $cart, $rawData) = BladeTheme::requestInnerApi('GET', $this->genApiUrl('cart'));
+        if ($succeed) {
+            return $fullResp ? $rawData : $cart;
         }
         return null;
     }

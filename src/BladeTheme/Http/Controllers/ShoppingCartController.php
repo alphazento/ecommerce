@@ -13,23 +13,20 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     use TraitThemeRouteOverwritable;
 
     protected function createCart() {
-        if ($resp = BladeTheme::innerApiProxy('POST', '/api/v1/cart')) {
-            if ($resp['status'] == 404) {
-                return null;
-            } else {
-                return $resp['data'];
-            }
+        list($succeed, $cart, $rawData) = BladeTheme::requestInnerApi('POST', 
+            $this->genApiUrl('cart'));
+        if ($succeed) {
+            return $cart;
         }
         return null;
     }
 
-    public function cartPage() {
+    public function index() {
         $protocal = Route::input('protocal', 'web');
         $resp = $this->getCart(true);
         if ($protocal === 'web') {
             $cart = $resp['data'];
-            return BladeTheme::breadcrumb('/', 'Home')
-                ->breadcrumb(route('web.get.cart'), 'Shopping Cart')
+            return BladeTheme::breadcrumb(route('web.get.cart'), 'Shopping Cart')
                 ->view('page.shoppingcart', compact('cart'));
         } else {
             if ($protocal === 'ajax') {
@@ -50,20 +47,21 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         $quantity = Request::get('qty', 1);
         $options = Request::get('options', []);
         $url = Request::get('url', 'https://alphazento.local.test/xl-518.html');
-        if ($resp = BladeTheme::innerApiProxy(
-            'POST',
-            '/api/v1/cart/items',
+        list($succeed, $cart, $rawData) = BladeTheme::requestInnerApi('POST', 
+            $this->genApiUrl('cart/items'),
             compact('product_id', 'quantity', 'options', 'url')
-        )) {
+        );
+        
+        if ($succeed) {
             if ($protocal === 'web') {
-                if($resp['status'] == 201) {
+                if($rawData['status'] == 201) {
                     return redirect()->route('web.get.cart')
                         ->withMessage('Product has been added to Shopping Cart.');
                 } else {
-                    return Redirect::back()->withErrors([$resp['error']]);
+                    return Redirect::back()->withErrors([$rawData['error']]);
                 }
             } else {
-                return $resp;
+                return $rawData;
             }
         }
         return Redirect::back()->withErrors(['Fail to add product to your Shopping Cart.']);
@@ -74,19 +72,20 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         $protocal = Route::input('protocal', 'web');
         
         if ($cart = $this->getCart()) {
-            if ($resp = BladeTheme::innerApiProxy(
-                'DELETE',
-                sprintf('/api/v1/cart/items/%s', $item_id)
-            )) {
+            list($succeed, $cart, $rawData) = BladeTheme::requestInnerApi('DELETE', 
+                $this->genApiUrl(sprintf('cart/items/%s', $item_id))
+            );
+
+            if ($succeed) {
                 if ($protocal === 'web') {
-                    if($resp['status'] != 420) {
+                    if($rawData['status'] != 420) {
                         return redirect()->route('web.get.cart')
                             ->withMessage('Product has been added to Shopping Cart.');
                     } else {
-                        return Redirect::back()->withErrors([$resp['error']]);
+                        return Redirect::back()->withErrors([$rawData['error']]);
                     }
                 } else {
-                    return $resp;
+                    return $rawData;
                 }
             }
         }
