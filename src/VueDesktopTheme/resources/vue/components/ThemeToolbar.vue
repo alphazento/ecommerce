@@ -90,8 +90,7 @@ export default {
       items: [
         { title: "Home", icon: "dashboard" },
         { title: "About", icon: "question_answer" }
-      ],
-      cart: null
+      ]
     };
   },
   methods: {
@@ -99,18 +98,17 @@ export default {
       e.stopPropagation();
       if (item.to || !item.href) return;
       this.$vuetify.goTo(item.href);
-    },
-    loadCart() {
-      if (this.cartApi)
-        axios.get(this.cartApi).then(response => {
-          if (response.data && response.data.status === 200) {
-            this.cart = response.data.data;
-          }
-        });
+    }
+  },
+  computed: {
+    cart() {
+      return this.$store.state.cart;
     }
   },
   created() {
-    this.loadCart();
+    if (!this.cart.uuid) {
+      this.$store.dispatch("loadCart");
+    }
   }
 };
 </script>

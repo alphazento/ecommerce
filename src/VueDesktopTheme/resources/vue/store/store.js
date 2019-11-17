@@ -12,7 +12,9 @@ export default new Vuex.Store({
             email: "",
             name: ""
         },
-        cart: {}
+        cart: {
+            items: []
+        }
     },
     getters: {
 
@@ -33,6 +35,16 @@ export default new Vuex.Store({
             commit
         }, consts) {
             commit('setConsts', consts)
+        },
+
+        loadCart({
+            commit
+        }) {
+            axios.get('/api/v1/cart').then(response => {
+                if (response.data && response.data.status === 200) {
+                    commit('setCart', response.data.data)
+                }
+            });
         },
 
         updateCart({
