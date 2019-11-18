@@ -20,7 +20,8 @@ class SalesService
     $ship_method_code, 
     $shipping_carrier = '',
     $shipping_fee = '',
-    $customer_note = '') {
+    $customer_note = '') 
+  {
       $customer = $cart->customer;
       $order = SalesOrder::create([
         'order_number' => app(OrderNumberGenerator::class)->generate(0),
@@ -36,25 +37,26 @@ class SalesService
         'customer_note' => $customer_note,
         'applied_rule_ids' => $cart->applied_rule_ids,
         'remote_ip' => $cart->client_ip,
-        'total_item_count' => $cart->items_count,
+        'total_item_count' => $cart->items_quantity,
         'cart_address_id' => $cart->shipping_address_id,
         'cart_id' => $cart->id,
         'total_amount_include_tax' => $cart->total
       ]);
-      $this->createPaymentRecord($order->id, $payment);
+      // $this->createPaymentRecord($order->id, $payment);
+      $this->updatePaymentRecord($order->id, $payment);
 
-      $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
-      $billing_address = new SalesAddress($cartBillingAddress->getAttributes());
-      $billing_address->id = null;
-      $billing_address->save();
+      // $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
+      // $billing_address = new SalesAddress($cartBillingAddress->getAttributes());
+      // $billing_address->id = null;
+      // $billing_address->save();
 
-      if ($cart->ship_to_billingaddesss) {
-        $shipping_address = $billing_address;
-      } else {
-        $shipping_address = new SalesAddress($cart->shipping_address->getAttributes());
-        $shipping_address->id = null;
-        $shipping_address->save();
-      }
+      // if ($cart->ship_to_billingaddesss) {
+      //   $shipping_address = $billing_address;
+      // } else {
+      //   $shipping_address = new SalesAddress($cart->shipping_address->getAttributes());
+      //   $shipping_address->id = null;
+      //   $shipping_address->save();
+      // }
 
       // $shipment = SalesShipment::create([
       //   'order_id' => $order->id,
@@ -101,7 +103,7 @@ class SalesService
   }
 
   protected function createPaymentRecord($order_id, $paymentTransaction) {
-    $comment = $paymentTransaction->comment;
+    // $comment = $paymentTransaction->comment;
     $payment_method = $paymentTransaction->payment_method;
     $payment_transaction_id = $paymentTransaction->id;
     $amount_due = $paymentTransaction->amount_due;
