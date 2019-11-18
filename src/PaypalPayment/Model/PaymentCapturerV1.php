@@ -3,7 +3,7 @@
 namespace Zento\PaypalPayment\Model;
 use Config;
 
-class PaymentCapturer {
+class PaymentCapturerV1 {
     const MESSAGES = [
         'UNABLE_TO_COMPLETE_TRANSACTION' => 'Unable to complete transaction',
         'INVALID_PAYMENT_METHOD' => 'Invalid payment method', 
@@ -62,7 +62,7 @@ class PaymentCapturer {
                     $this->errors[] = 'Paypal Server caused unknow error.';
                     break;
             }
-            $reqData['raw_status'] = $status;
+            $reqData['raw_status'] = $status;            
         }
         return ['success'=>false, 'data' => [$reqData], 'messages' => $this->errors];
     }
@@ -129,8 +129,10 @@ class PaymentCapturer {
     }
 
     protected function getPaymentCheckUrl($payId, $extraPath = '') {
-        // ('production' == ) ? 'https://api.paypal.com/v1/payments/payment' : 
         $url = 'https://api.sandbox.paypal.com/v1/payments/payment';
+        if ('production' == $this->mode) {
+            $url = 'https://api.paypal.com/v1/payments/payment';
+        }
         return sprintf('%s/%s/%s', $url, $payId, $extraPath);
     }
 }

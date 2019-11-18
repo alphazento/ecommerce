@@ -19,13 +19,13 @@ class CreatePaymentTransactionTable extends Migration
             $table->string('ref_id_hash', 32)->index(); //payment id hash
             $table->boolean('success');           //payment status from method vendor
             $table->integer('customer_id')->unsign();
+            $table->string('cart_uuid', 40)->unique();
             $table->decimal('amount_due', 15, 4)->default(0);
             $table->decimal('amount_authorized', 15, 4)->default(0);
             $table->decimal('amount_paid', 15, 4)->default(0);
             $table->decimal('amount_refunded', 15, 4)->default(0);
             $table->decimal('amount_canceled', 15, 4)->default(0);
             $table->text('raw_response');
-            $table->text('comment');
             $table->timestamps();
             $table->unique(['payment_method', 'ref_id_hash']);
         });

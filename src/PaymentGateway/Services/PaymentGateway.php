@@ -7,6 +7,7 @@ use CheckoutService;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\ROModel\ROShoppingCart;
 use Zento\Kernel\Facades\InnerApiClient;
+use Zento\PaymentGateway\Event\BeforeCapturePayment;
 
 class PaymentGateway {
     protected $app;
@@ -120,26 +121,20 @@ class PaymentGateway {
         if (!isset($params['shopping_cart'])) {
             return [false, ['messages'=>['Parameter error.']]];
         }
+        $errorMessage = 'Payment method not support by server.';
         if ($method = $this->getMethod($methodName)) {
             $shoppingCart = new ROShoppingCart($params['shopping_cart']);
             \zento_assert($shoppingCart);
-            $eventResult = (new \Zento\PaymentGateway\Event\BeforeCapturePayment($methodName, $shoppingCart))
-                ->fireUntil();
-            if ($eventResult->isSuccess())
-            {
-                $paymentResult = $method->capture($params);
-                if ($paymentResult->canDraftOrderAfterCapture()) { //payment success
-                    $order = CheckoutService::draftOrder($paymentResult->getPaymentTransaction(), $shoppingCart);
-                    $order->addData('payment_data', $paymentResult->toArray());
-                    return [$order->isSuccess(), $order->getData()];
-                } else {
+            if ($result = (new BeforeCapturePayment($methodName, $shoppingCart))->fireUntil()) {
+                if ($result->isSuccess())
+                {
+                    $paymentResult = $method->capture($params);
                     return [$paymentResult->isSuccess(), $paymentResult->toArray()];
+                } else {
+                    return [false, $result->getData()];
                 }
-            } else {
-                return [false, $eventResult->getData()];
             }
-        } else {
-            return [false, ['messages'=>['Payment method not support by server.']]];
         }
+        return [false, ['messages'=>[$errorMessage]]];
     }
 }

@@ -106,7 +106,7 @@ export default {
     }
   },
   created() {
-    if (!this.cart.uuid) {
+    if (!this.cart || !this.cart.uuid) {
       this.$store.dispatch("loadCart");
     }
   }

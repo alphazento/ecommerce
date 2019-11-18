@@ -102,6 +102,8 @@ export default {
           }, error => {
               console.error("Got nothing from server. Prompt user to check internet connection and try again")
           })
+        } else {
+          this.$emit("childMessage", this.step);
         }
       }
     },

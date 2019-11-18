@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout class="cart-row">
+    <v-layout v-if="cart && cart.items && cart.items.length > 0">
       <v-flex md8 xs12>
         <v-layout class="cart-row">
           <v-flex md3 xs3>Item</v-flex>
@@ -65,6 +65,16 @@
         </v-layout>
       </v-flex>
     </v-layout>
+
+    <v-layout v-if="!cart || cart.items.length == 0">
+      <v-flex md12 text-center>
+        <div class="empty-shopping-cart">
+            <p class="title">Shopping Cart is Empty</p>
+            <p>You have no items in your shopping cart.</p>
+            <p>Click <a href="/">here</a> to continue shopping</p>
+        </div>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -97,10 +107,5 @@ export default {
 .v-middle {
   margin-top: auto;
   margin-bottom: auto;
-}
-.cart-row {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1 1 auto;
 }
 </style>

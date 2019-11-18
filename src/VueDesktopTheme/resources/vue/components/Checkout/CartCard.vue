@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-card class="mx-auto" fill-width>
       <v-list-item two-line v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar tile size="80">
@@ -67,7 +67,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>

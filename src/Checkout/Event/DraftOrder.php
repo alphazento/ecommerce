@@ -3,7 +3,7 @@
 namespace Zento\Checkout\Event;
 
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
-use Zento\PaymentGateway\Model\PaymentTransaction;
+use Zento\Contracts\Interfaces\IPaymentTransaction;
 
 class DraftOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
@@ -19,7 +19,7 @@ class DraftOrder extends \Zento\Kernel\Booster\Events\BaseEvent {
      * @return void
      */
     public function __construct(IShoppingCart $shoppingCart, 
-        PaymentTransaction $paymentTransaction)
+        IPaymentTransaction $paymentTransaction)
     {
         $this->data = [
             'shoppingCart' => $shoppingCart,

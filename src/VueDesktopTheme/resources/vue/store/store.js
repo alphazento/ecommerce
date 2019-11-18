@@ -62,7 +62,7 @@ export default new Vuex.Store({
         setUserInfo({
             commit
         }, userInfo) {
-            var url = `/ajax/checkout/guest-customer`;
+            var url = '/api/v1/checkout/guest-customer';
             return new Promise((resolve, reject) => {
                 axios.put(url, userInfo).then(response => {
                     commit('setUserInfo', response.data.data)

@@ -111,13 +111,14 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             ->success($success);
         
         if ($result->isSuccess()) {
+            $cart = $payment_data['shopping_cart'];
             $totalAmount = $eWayResponse['TotalAmount']/100;
             $transaction = PaymentTransaction::create(
                 [
                     'payment_method' => $this->getCode(),
+                    'cart_uuid' => $cart['uuid'],
                     'ref_id' => $eWayResponse['TransactionID'],
-                    'comment' => '', 
-                    'customer_id' => 0, 
+                    'customer_id' => $cart['customer_id'], 
                     'amount_due' => $totalAmount,
                     'amount_authorized' => $totalAmount,
                     'amount_paid' => $totalAmount, 

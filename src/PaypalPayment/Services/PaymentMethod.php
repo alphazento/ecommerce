@@ -2,7 +2,8 @@
 
 namespace Zento\PaypalPayment\Services;
 
-use Zento\PaypalPayment\Model\PaymentCapturer;
+use Zento\PaypalPayment\Model\PaymentCapturerV1;
+use Zento\PaypalPayment\Model\PaymentCapturerV2;
 use Zento\PaypalPayment\Model\PaymentPrimer;
 use Zento\PaymentGateway\Model\PaymentTransaction;
 use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
@@ -96,24 +97,33 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
      * @return \Zento\PaymentGateway\Interfaces\CapturePaymentResult
      */
     public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
-        $returns = (new PaymentCapturer)->execute($payment_data['payment']);
+        $version = $payment_data['version'] ?? 'v1';
+        $returns = [];
+        switch($version) {
+            case 'v1' :
+                $returns = (new PaymentCapturerV1)->execute($payment_data['payment']);
+                break;
+            case 'v2' :
+                $returns = (new PaymentCapturerV2)->execute($payment_data['payment']);
+        }
 
         $result = (new \Zento\PaymentGateway\Interfaces\CapturePaymentResult(
             $this->getCode(), 
             $payment_data['payment'], 
-            true))->success($returns['success']);
+            true))->success($returns['success'] ?? false);
         $totalAmount =  0;
         if ($result->isSuccess() && ($returns['data']['transactions'] ?? false)) {
             $totalAmount = $returns['data']['transactions'][0]['amount']['total'];
         } else {
             $result->success(false);
         }
+        $cart = $payment_data['shopping_cart'];
         $result->setPaymentTransaction(PaymentTransaction::create(
             [
                 'payment_method' => $this->getCode(),
+                'cart_uuid' => $cart['uuid'],
                 'ref_id' => $returns['transaction_id'],
-                'comment' => '', 
-                'customer_id' => 0, 
+                'customer_id' => $cart['customer_id'], 
                 'amount_due' => $totalAmount,
                 'amount_authorized' => $totalAmount,
                 'amount_paid' => $totalAmount, 
