@@ -14,20 +14,25 @@ class CreatePaymentTransactionTable extends Migration
     {
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('pay_id', 32)->unique(); //payment_method + payment id hash
+            $table->string('ext_transaction_id', 255);     //3rd party payment id from method vendor
             $table->string('payment_method', 32);
-            $table->string('ref_id', 255);              //payment id from method vendor
-            $table->string('ref_id_hash', 32)->index(); //payment id hash
-            $table->boolean('success');           //payment status from method vendor
+            $table->string('status', 64);
             $table->integer('customer_id')->unsign();
-            $table->string('cart_uuid', 40)->unique();
+            $table->string('customer_email', 255)->nullable();
+            $table->integer('shipping_address_id');
+            
+            $table->string('currency', 8);
+            $table->decimal('subtotal', 15, 4)->default(0);
+            $table->decimal('shipping', 15, 4)->default(0);
+            $table->decimal('total', 15, 4)->default(0);
+
             $table->decimal('amount_due', 15, 4)->default(0);
             $table->decimal('amount_authorized', 15, 4)->default(0);
             $table->decimal('amount_paid', 15, 4)->default(0);
             $table->decimal('amount_refunded', 15, 4)->default(0);
             $table->decimal('amount_canceled', 15, 4)->default(0);
-            $table->text('raw_response');
             $table->timestamps();
-            $table->unique(['payment_method', 'ref_id_hash']);
         });
     }
   

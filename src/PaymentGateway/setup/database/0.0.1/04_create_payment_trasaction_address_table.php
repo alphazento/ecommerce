@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesAddressTable extends Migration
+class CreatePaymentTransactionAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateSalesAddressTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_addresses', function (Blueprint $table) {
+        Schema::create('payment_transaction_addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255);
             $table->string('company', 128)->nullable();
@@ -35,6 +35,6 @@ class CreateSalesAddressTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sales_addresses');
+        Schema::drop('payment_transaction_addresses');
     }
 }

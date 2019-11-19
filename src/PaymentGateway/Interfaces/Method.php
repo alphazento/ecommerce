@@ -21,7 +21,7 @@ interface Method {
     public function validate();
 
     public function authorize($payment_data);
-    public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult;
+    public function capture(array $payment_data): \Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 
     /**
      * prepare for client side

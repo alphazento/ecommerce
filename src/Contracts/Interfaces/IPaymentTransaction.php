@@ -6,16 +6,20 @@ interface IPaymentTransaction extends \Zento\Contracts\AssertAbleInterface
 {
     const PROPERTIES = [
         'payment_method',
-        'payment_status',
-        'ref_id',
-        'ref_id_hash',
+        'status',
+        'pay_id',
+        'ext_transaction_id',
         'customer_id',
+        'customer_email',
+        'shipping_address_id',
+        'currency',
+        'subtotal', 
+        'shipping', 
+        'total',
         'amount_due',
         'amount_authorized',
         'amount_paid',
         'amount_refunded',
-        'amount_canceled',
-        'success',
-        'raw_response'
+        'amount_canceled'
     ];
 }

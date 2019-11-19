@@ -8,6 +8,7 @@ use Closure;
 use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 use Zento\PaymentGateway\Model\PaymentTransaction;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\ROModel\ROShoppingCart;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     public function getCode() {
@@ -104,35 +105,13 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
      * @param array $payment_data
      * @return \Zento\PaymentGateway\Interfaces\CapturePaymentResult
      */
-    public function capture(array $payment_data):\Zento\PaymentGateway\Interfaces\CapturePaymentResult {
+    public function capture(array $payment_data): \Zento\PaymentGateway\Interfaces\CapturePaymentResult {
         list($success, $eWayResponse, $messages) = $this->getAccesscodeRepo()->checkAccessCode($payment_data['AccessCode']);
-        $result = (new CapturePaymentResult($this->getCode(), $payment_data['AccessCode'], true))
-            ->setMessages($messages)
-            ->success($success);
-        
-        if ($result->isSuccess()) {
-            $cart = $payment_data['shopping_cart'];
-            $totalAmount = $eWayResponse['TotalAmount']/100;
-            $transaction = PaymentTransaction::create(
-                [
-                    'payment_method' => $this->getCode(),
-                    'cart_uuid' => $cart['uuid'],
-                    'ref_id' => $eWayResponse['TransactionID'],
-                    'customer_id' => $cart['customer_id'], 
-                    'amount_due' => $totalAmount,
-                    'amount_authorized' => $totalAmount,
-                    'amount_paid' => $totalAmount, 
-                    'amount_refunded' => 0,
-                    'amount_canceled' => 0,
-                    'success' => $result->isSuccess(),
-                    'raw_response' => json_encode($payment_data)
-                ]);
-            $result->setPaymentTransaction($transaction);
-        }
-        return $result;
-    }
-
-    protected function logTransaction(CapturePaymentResult $paymentResult) {
+        $extTransactionId = $success ? $eWayResponse['TransactionID'] : 0;
+        $totalAmount = $success ? $eWayResponse['TotalAmount']/100 : 0;
+        return (new CapturePaymentResult($this->getCode(), $extTransactionId, $totalAmount, $payment_data['AccessCode']))
+            ->success($success)
+            ->setMessages($messages);
     }
 
     public function prepareForClientSide($clientType = 'web') {

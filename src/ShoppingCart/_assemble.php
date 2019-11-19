@@ -7,7 +7,7 @@ return [
             "\\Zento\\ShoppingCart\\Providers\\Entry"
         ],
         "listeners"=> [
-            "Zento\\Checkout\\Event\\OrderCreated"=> [
+            "Zento\\Sales\\Event\\OrderCreated"=> [
                 "20"=> "\\Zento\\ShoppingCart\\Event\\Listener\\OrderCreated"
             ],
             "Zento\\Customer\\Event\\PassportTokenIssued"=> [

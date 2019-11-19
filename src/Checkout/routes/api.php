@@ -9,10 +9,5 @@ Route::group(
             '/guest-customer',
             ['as' => 'ajax.checkout.put.guest-customer', 'uses' => 'ApiController@setGuestDetails']
         );
-
-        Route::post(
-            '/orders',
-            ['as' => 'checkout.post.draftorder', 'uses' => 'ApiController@draftOrder']
-        );
     }
 );

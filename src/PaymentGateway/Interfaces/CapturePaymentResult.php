@@ -14,10 +14,11 @@ class CapturePaymentResult
    *
    * @param boolean $canDraftOrderAfterCapture
    */
-  public function __construct($method_name, $payment_req_data, $canDraftOrderAfterCapture) {
+  public function __construct($method_name, $ext_transaction_id, $amount, $payment_req_data) {
     $this->data['method_name'] = $method_name;
     $this->data['payment_req_data'] = $payment_req_data;
-    $this->data['can_create_order'] = $canDraftOrderAfterCapture;
+    $this->data['ext_transaction_id'] = $ext_transaction_id;
+    $this->data['amount'] = $amount;
   }
 
   /**
@@ -31,27 +32,9 @@ class CapturePaymentResult
     return $this;
   }
 
-  public function setPaymentRawData($data) {
-    $this->data['payment_raw_data'] = $data;
-    return $this;
-  }
-
-  public function getPaymentRawData() {
-    return $this->data['payment_raw_data'];
-  }
-
   public function setPaymentTransaction(PaymentTransaction $transaction) {
-    $this->payment_transaction = $transaction;
-    #\zento_assert($this->payment_transaction);
+    $this->data['payment_transaction'] = $transaction;
     return $this;
-  }
-
-  public function getPaymentTransaction() {
-    return $this->payment_transaction;
-  }
-
-  public function getPaymentName() {
-    return $this->data['method_name'];
   }
 
   public function setMessages($messages) {
@@ -59,8 +42,8 @@ class CapturePaymentResult
     return $this;
   }
 
-  public function getMessages() {
-    return $this->data['messages'];
+  public function getData($key) {
+    return $this->data[$key] ?? null;
   }
 
   public function isSuccess() {
@@ -68,10 +51,6 @@ class CapturePaymentResult
   }
 
   public function toArray() {
-    return array_merge($this->data, ['payment_transaction' => $this->payment_transaction ? $this->payment_transaction->toArray() : null]);
-  }
-
-  public function canDraftOrderAfterCapture() {
-    return $this->data['success'] && $this->data['can_create_order'];
+    return $this->data;
   }
 }

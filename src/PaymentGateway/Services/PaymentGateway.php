@@ -8,6 +8,7 @@ use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\ROModel\ROShoppingCart;
 use Zento\Kernel\Facades\InnerApiClient;
 use Zento\PaymentGateway\Event\BeforeCapturePayment;
+use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class PaymentGateway {
     protected $app;
@@ -129,6 +130,16 @@ class PaymentGateway {
                 if ($result->isSuccess())
                 {
                     $paymentResult = $method->capture($params);
+                    if ($paymentResult->isSuccess()) {
+                        $transaction = PaymentTransaction::recordTransaction(
+                            $methodName, 
+                            $shoppingCart, 
+                            $paymentResult->getData('ext_transaction_id'), 
+                            $paymentResult->getData('amount'), 
+                            $paymentResult->getData('amount')
+                        );
+                        $paymentResult->setPaymentTransaction($transaction);
+                    }
                     return [$paymentResult->isSuccess(), $paymentResult->toArray()];
                 } else {
                     return [false, $result->getData()];

@@ -35,9 +35,8 @@ export default {
         shopping_cart: cartData,
         payment: response
       }).then(response => {
-        axios.post('/api/v1/checkout/orders', {
-          shopping_cart: cartData,
-          payment_transaction: response.data.data.payment_transaction
+        axios.post('/api/v1/sales/orders', {
+          pay_id: response.data.data.payment_transaction.pay_id
         }).then(response => {
           console.log('order completed', response);
         })

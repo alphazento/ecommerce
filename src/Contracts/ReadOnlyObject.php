@@ -3,12 +3,14 @@
 namespace Zento\Contracts;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use \Illuminate\Database\Eloquent\JsonEncodingException;
 
-class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable
+class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable, IteratorAggregate
 {
     protected $attrs;
 
@@ -41,6 +43,10 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable
             }
         }
         return $attrs;
+    }
+
+    public function getIterator() {
+        return new ArrayIterator($this->attrs);
     }
 
     public function getAttributes() {

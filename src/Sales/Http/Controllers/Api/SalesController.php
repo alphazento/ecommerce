@@ -2,6 +2,7 @@
 
 namespace Zento\Sales\Http\Controllers\Api;
 
+use Auth;
 use Route;
 use Request;
 use Response;
@@ -11,18 +12,23 @@ use ShoppingCartService;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Zento\Sales\Event\DraftOrder as DraftOrderEvent;
+use Zento\Sales\Event\OrderCreated as OrderCreatedEvent;
 use Zento\Sales\Providers\Facades\SalesService;
 
 class SalesController extends \App\Http\Controllers\Controller
 {
     public function createOrder() {
-      if ($shopping_cart = ShoppingCartService::cart(Request::get('cart_guid'))) {
-        if ($order = SalesService::placeOrder($shopping_cart, null)) {
-          return ['status'=> 201, 'data' => $order];
-        } else {
-          return ['status'=> 420, 'data' => 'error'];
-        }
+      $pay_id = Request::get('pay_id');
+      $note = Request::get('note', '');
+      $guest_checkout = Request::get('guest_checkout', Auth::user()->is_guest);
+      $client_ip = Request::get('client_ip') ?? Request::ip();
+
+      $eventResult = (new DraftOrderEvent($pay_id, $note, $guest_checkout, $client_ip))->fireUntil();
+      if ($eventResult->isSuccess()) {
+        dd($eventResult);
+          (new OrderCreatedEvent($eventResult->getData('order')))->fire();
       }
-      return ['status'=> 404, 'error' => 'cart not found.'];
+      return $eventResult;
     }
 }
