@@ -26,7 +26,6 @@ class SalesController extends \App\Http\Controllers\Controller
 
       $eventResult = (new DraftOrderEvent($pay_id, $note, $guest_checkout, $client_ip))->fireUntil();
       if ($eventResult->isSuccess()) {
-        dd($eventResult);
           (new OrderCreatedEvent($eventResult->getData('order')))->fire();
       }
       return $eventResult;
