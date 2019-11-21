@@ -1,4 +1,5 @@
 export default {
+  "spinner-layer": "components/SpinnerLayer.vue",
   "theme-toolbar": "components/ThemeToolbar.vue",
   "theme-footer": "components/ThemeFooter.vue",
   "image-card": "components/ImageCard.vue",

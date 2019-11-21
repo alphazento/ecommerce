@@ -12,11 +12,12 @@ use ShoppingCartService;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zento\Sales\Event\DraftOrder as DraftOrderEvent;
-use Zento\Sales\Event\OrderCreated as OrderCreatedEvent;
+use Zento\Sales\Event\DraftOrderEvent;
+use Zento\Sales\Event\OrderCreatedEvent;
 use Zento\Sales\Providers\Facades\SalesService;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class SalesController extends \App\Http\Controllers\Controller
+class SalesController extends ApiBaseController
 {
     public function createOrder() {
       $pay_id = Request::get('pay_id');
@@ -28,6 +29,6 @@ class SalesController extends \App\Http\Controllers\Controller
       if ($eventResult->isSuccess()) {
           (new OrderCreatedEvent($eventResult->getData('order')))->fire();
       }
-      return $eventResult;
+      return $this->response($eventResult->toArray());
     }
 }

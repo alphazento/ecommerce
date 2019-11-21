@@ -200,22 +200,24 @@ class CatalogSearchService
             $this->applyOrderBy($builder, $criteria['sort_by']);
         }
         
-        $statusCode = 200;
+        $success = true;
+        $code = 200;
         $paginator = $builder->paginate($per_page);
 
         if ($paginator->lastPage() < $page && $paginator->total() > 0) {
-            $statusCode = 302;
+            $code = 302;
             $paginator = $builder->paginate($per_page, ['*'], 'page', $paginator->lastPage());
         }
         
         if ($paginator->total() == 0) {
-            return ['status' => 404];
+            $success = false;
+            $code = 404;
+            $data = [];
+        } else {
+            $data = LengthAwarePaginator::fromPaginator($paginator, 
+                ['aggregate' => $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []]);
         }
-
-        $data = LengthAwarePaginator::fromPaginator($paginator, 
-            ['aggregate' => $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []]);
-        // $data->setExtraData('aggregate', $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []);
-        return ['status' => $statusCode, 'data' =>  $data];
+        return compact('success', 'code', 'data');
     }
 
     protected function applyFilter($criteria, $withAggregate = true) {

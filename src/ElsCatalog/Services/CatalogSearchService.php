@@ -131,20 +131,24 @@ class CatalogSearchService extends \Zento\CatalogSearch\Services\CatalogSearchSe
             // $this->applyOrderBy($builder, $criteria['sort_by']);
         }
         $this->aggregate($builder, $criteria);
-        $statusCode = 200;
+
+        $success = true;
+        $code = 200;
+        $data = null;
         $paginator = $builder->paginate($per_page);
 
         if ($paginator->lastPage() < $page && $paginator->total() > 0) {
-            $statusCode = 302;
+            $code = 302;
             $paginator = $builder->paginate($per_page, ['*'], 'page', $paginator->lastPage());
         }
         
         if ($paginator->total() == 0) {
-            return ['status' => 404];
+            $code = 404;
+            $data = [];
+        } else {
+            $data = $paginator->toArray();
         }
-
-        // $data = LengthAwarePaginator::fromPaginator($paginator);
-        return ['status' => $statusCode, 'data' =>  $paginator];
+        return compact('success', 'code', 'data');
     }
 
     protected function applyFilter($criteria, $withAggregate = true) {

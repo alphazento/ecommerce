@@ -3,9 +3,9 @@
 namespace Zento\PaypalPayment\Http\Controllers;
 
 use Response;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ApiController extends Controller
+class ApiController extends ApiBaseController
 {
     public function __construct() {
         $this->mode = config('paymentgateway.paypalexpress.mode');

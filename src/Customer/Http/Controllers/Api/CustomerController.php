@@ -11,8 +11,9 @@ use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Customer\Model\ORM\Customer;
 use Zento\Customer\Providers\Facades\CustomerService;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class CustomerController extends \App\Http\Controllers\Controller
+class CustomerController extends ApiBaseController
 {
     protected function isMe() {
       return Route::input('customer_id') === 'me';
@@ -25,9 +26,9 @@ class CustomerController extends \App\Http\Controllers\Controller
     public function getCustomer() {
       return $this->tapAcl(function() {
         if ($customer = $this->_retrieveCustomer()){
-          return ['status'=>200, 'data'=> $customer];
+          return $this->withData($customer);
         } else {
-          return ['status'=>404, 'data'=> null];
+          return $this->error(404);
         }
       });
     }
@@ -36,12 +37,12 @@ class CustomerController extends \App\Http\Controllers\Controller
       return $this->tapAcl(function() {
         if ($customer = $this->_retrieveCustomer()){
           if (CustomerService::activate($customer)) {
-              return ['status'=>200];
+              return $this->success();
           } else {
-              return ['status'=>400];
+            return $this->error(400);
           }
         } else {
-          return ['status'=>404, 'data'=> null];
+          return $this->error(404);
         }
       });
     }
@@ -50,12 +51,12 @@ class CustomerController extends \App\Http\Controllers\Controller
       return $this->tapAcl(function() {
         if ($customer = $this->_retrieveCustomer()){
           if (CustomerService::deactivate($customer)) {
-              return ['status'=>200];
+            return $this->success();
           } else {
-              return ['status'=>400];
+            return $this->error(400);
           }
         } else {
-          return ['status'=>404, 'data'=> null];
+          return $this->error(404);
         }
       });
     }
@@ -64,9 +65,9 @@ class CustomerController extends \App\Http\Controllers\Controller
       Request::validate(['old_password'=>"string|max:8", 'new_password'=>"string|max:8"]);
 
       if (CustomerService::changePassword(Auth::user(), Request::get('old_password'), Request::get('new_password'))) {
-          return ['status'=>200];
+          return $this->success();
       } else {
-          return ['status'=>400];
+          return $this->error(400);
       }
     }
 
@@ -75,12 +76,12 @@ class CustomerController extends \App\Http\Controllers\Controller
         Request::validate(['password'=>"string|max:8"]);
         if ($customer = Customer::find(Route::input('customer_id'))) {
           if (CustomerService::setPassword(Auth::user(), Request::get('password'))) {
-              return ['status'=>200];
+            return $this->success();
           } else {
-              return ['status'=>400];
+            return $this->error(400);
           }
         } else {
-          return ['status'=>404, 'data'=> null];
+          return $this->error(404);
         }
       });
     }
@@ -101,19 +102,19 @@ class CustomerController extends \App\Http\Controllers\Controller
 
         if ($user = $this->_retrieveCustomer()) {
           if ($address = CustomerService::addAddress($user, Request::all())) {
-              return ['status'=>201, 'data'=>$address];
+            return $this->success(201)->withData($address);
           }
         }
-        return ['status'=>400];
+        return $this->error();
       });
     }
 
     public function getAddresses() {
       return $this->tapAcl(function() {
           if ($collection = CustomerService::getCustomerAddresses($this->isMe() ? Auth::user()->id : Route::input('customer_id'))) {
-              return ['status'=>200, 'data'=> $collection];
+            return $this->withData($collection);
           } else {
-              return ['status'=>200, 'data'=> []];
+            return $this->success(200, 'no address found.');
           }
       });
     }
@@ -121,9 +122,9 @@ class CustomerController extends \App\Http\Controllers\Controller
     public function getAddress() {
       return $this->tapAcl(function() {
         if ($address = CustomerService::getCustomerAddress($this->isMe() ? Auth::user()->id : Route::input('customer_id'), Route::input('address_id'))) {
-          return ['status'=>200, 'data'=> $address];
+          return $this->withData($address);
         } else {
-          return ['status'=>200, 'data'=> null];
+          return $this->success(200, 'no address found.');
         }
       });
     }
@@ -131,9 +132,9 @@ class CustomerController extends \App\Http\Controllers\Controller
     public function setDefaultBillingAddress() {
       return $this->tapAcl(function() {
         if (CustomerService::setDefaultBillingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
-          return ['status'=>200, 'data'=> null];
+          return $this->success();
         } else {
-          return ['status'=>400, 'data'=> 'Fail to set default billing address'];
+          return $this->error(400, 'Fail to set default billing address');
         }
       });
     }
@@ -141,9 +142,9 @@ class CustomerController extends \App\Http\Controllers\Controller
     public function setDefaultShippingAddress() {
       return $this->tapAcl(function() {
         if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
-            return ['status'=>200, 'data'=> null];
+          return $this->success();
         } else {
-            return ['status'=>400, 'data'=> 'Fail to set default billing address'];
+          return $this->error(400, 'Fail to set default billing address');
         }
       });
     }
@@ -152,7 +153,7 @@ class CustomerController extends \App\Http\Controllers\Controller
       if (Auth::user()->crossUserAcl($this->isMe())) {
           return \call_user_func($callbak);
       } else {
-          return ['status'=>400, 'data'=> ['error'=>'ACL limit']];
+          return $this->error(400, 'ACL limit');
       }
     }
 }

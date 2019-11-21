@@ -7,6 +7,7 @@
 
 @section('pagecontent')
     <h1 class="index_h1">Checkout</h1>
+    <spinner-layer></spinner-layer>
     <checkout-main-card :cart="cart"></checkout-main-card>
 @endsection
 

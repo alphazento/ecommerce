@@ -7,9 +7,9 @@ use Request;
 use Config;
 use Zento\Backend\Providers\Facades\AdminService;
 use Zento\Kernel\Facades\PackageManager;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ConfigurationController extends Controller
+class ConfigurationController extends ApiBaseController
 {
     public function getMenus() {
         $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
@@ -20,7 +20,7 @@ class ConfigurationController extends Controller
                 (new $className)->registerMenus();
             }
         }
-        return ['status'=>200, 'data' => AdminService::getMeus()];
+        return $this->withData(AdminService::getMeus());
     }
 
     public function getConfigGroups() {
@@ -33,7 +33,7 @@ class ConfigurationController extends Controller
                 $key = (new $className)->registerGroups(Route::input('l0'), Route::input('l1'));
             }
         }
-        return ['status'=>200, 'data' => AdminService::getDetailGroup($key)];
+        return $this->withData(AdminService::getDetailGroup($key));
     }
 
     public function getGroupValues() {
@@ -52,13 +52,14 @@ class ConfigurationController extends Controller
                 }
             }
         }
-        return ['status'=>200, 'data' => $values];
+        return $this->withData($values);
+
     }
 
     public function setConfigValue() {
         $key = Route::input('key');
         $value = Request::get('value');
         Config::save($key, $value);
-        return ['status' => 200, 'data' => [$key => $value]];
+        return $this->with($key, $value);
     }
 }

@@ -4,22 +4,21 @@ namespace Zento\PaymentGateway\Http\Controllers;
 
 use Route;
 use Request;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
 use Zento\Contracts\ROModel\ROShoppingCart;
 
-class ApiController extends Controller {
+class ApiController extends ApiBaseController {
     use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
 
     public function estimate() {
+        $client = Route::input('client');
+        $client = 'reactjs';
         // return $this->tapCart(function($cart) {
             $quote = 0;
             $user = 0;
             $shippingAddress = 0;
-            return [
-                "status" => 200,
-                "data" => PaymentGateway::estimate($quote, $user, $shippingAddress, 'reactjs')
-            ];
+            return $this->withData(PaymentGateway::estimate($quote, $user, $shippingAddress, $client));
         // }
     }
 
@@ -31,7 +30,8 @@ class ApiController extends Controller {
     public function prepare() {
         list($ret, $data) = PaymentGateway::preparePaymentData(Route::input('method'),
             new ROShoppingCart(Request::get('shopping_cart')));
-        return ['status' => $ret ? 200 : 420, 'data' => $data];
+        $ret ? $this->success() : $this->error(400);
+        return $this->withData($data);
     }
 
     /**
@@ -42,6 +42,7 @@ class ApiController extends Controller {
      */
     public function capture() {
         list($ret, $data) = PaymentGateway::capturePayment(Route::input('method'), Request::all());
-        return ['status' => $ret ? 201 : 420, 'data' => $data];
+        $ret ? $this->success() : $this->error(400);
+        return $this->withData($data);
     }
 }

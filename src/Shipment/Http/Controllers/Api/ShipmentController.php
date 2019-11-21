@@ -9,10 +9,13 @@ use Registry;
 use ShoppingCartService;
 
 use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
+use Zento\Shipment\Providers\Facades\ShipmentService;
+
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ShipmentController extends \App\Http\Controllers\Controller
+class ShipmentController extends ApiBaseController
 {
     use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
 
@@ -21,12 +24,12 @@ class ShipmentController extends \App\Http\Controllers\Controller
             if ($params = Request::get('shipping_address')) {
                 $address = new ShoppingCartAddress($params);
                 zento_assert($address);
-                return ['status' => 200, 'data' => \Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null)];
+                return $this->withData(ShipmentService::estimate($cart, $address, null, null));
             } else {
                 if ($address = $cart->shipping_address) {
-                    return['status' => 200, 'data' =>\Zento\Shipment\Providers\Facades\ShipmentService::estimate($cart, $address, null, null)];
+                    return $this->withData(ShipmentService::estimate($cart, $address, null, null));
                 } else {
-                    return ['status'=> 420, 'error' => 'Address is empty.'];
+                    return $this->error(420, 'Address is empty.');
                 }
             }
         });

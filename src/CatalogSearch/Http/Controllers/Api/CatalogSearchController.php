@@ -7,8 +7,9 @@ use Route;
 use Request;
 use Registry;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class CatalogSearchController extends \App\Http\Controllers\Controller
+class CatalogSearchController extends ApiBaseController
 {
     public function search() {
         return $this->_search();
@@ -37,6 +38,6 @@ class CatalogSearchController extends \App\Http\Controllers\Controller
         if (!isset($params['visibility'])) {
             $params['visibility'] = $visibility;
         }
-        return CatalogSearchService::search($params, $per_page, $page, $withAggreate);
+        $this->response(CatalogSearchService::search($params, $per_page, $page, $withAggreate));
     }
 }

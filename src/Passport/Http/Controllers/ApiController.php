@@ -6,11 +6,13 @@ use Auth;
 use Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
-
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
+use Zento\Kernel\Http\Controllers\TraitApiResponse
 
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
+    use TraitApiResponse;
+
     protected $isRegistering = false;
 
     public function apiHttpOptions(ServerRequestInterface $request) {
@@ -26,8 +28,11 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
             }
         }
         $response = parent::issueToken($request);
-        return ['status'=>$response->getStatusCode(),
-            'data'=>json_decode($response->getContent(), true)];
+        return $this->response([
+                'code'=>$response->getStatusCode(),
+                'data'=>json_decode($response->getContent(), true)
+            ]
+        );
     }
 
     public function issueTokenConnectGoogle(ServerRequestInterface $request) {
@@ -44,8 +49,11 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
             }
         }
         $response = parent::issueToken($request);
-        return ['status'=>$response->getStatusCode(),
-            'data'=>json_decode($response->getContent(), true)];
+        return $this->response([
+                'code'=>$response->getStatusCode(),
+                'data'=>json_decode($response->getContent(), true)
+            ]
+        );
     }
 
     public function register(ServerRequestInterface $request) {
@@ -66,34 +74,26 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         if ($customer) {
             return $this->issueToken($request);
         }
-        return ['status'=>420, 'data' => 'fail to create customer'];
+        return $this->error(400, 'fail to create customer');
     }
 
     public function logout()
     {
         Auth::user()->token()->revoke();
-        return ['status'=>200, 'data' => 'Successfully logged out'];
+        return $this->success();
     }
 
     public function profile() {
-        return ['status' => 200, 'data' => Auth::user()];
+        return $this->withData(Auth::user());
     }
 
     public function guestToken() {
         //if has session
         if ($user = GuestTokenMiddleware::prepareGuestForApi(Request::instance())) {
-            return [
-                'status'=> 200,
-                'data'=> [
-                    'access_token' => encrypt(json_encode($user->toArray())),
-                    'token_type' => 'Guest'
-                ]
-            ];
+            return $this->with('access_token', encrypt(json_encode($user->toArray())))
+                ->with('token_type', 'Guest');
         } else {
-            return [
-                'status'=> 401,
-                'data'=> []
-            ];
+            return $this->error(401);
         }
     }
 }

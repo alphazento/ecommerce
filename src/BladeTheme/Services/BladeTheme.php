@@ -94,7 +94,7 @@ class BladeTheme {
                 "no-cache, max-age=0, must-revalidate, no-store");
     }
 
-    public function requestInnerApi($method, $url, $data = [], $headers = []) {
+    public function requestInnerApi($method, $url, $data = [], $headers = []) : \Zento\Kernel\Http\ApiResponse {
         $originRequest = Request::instance();
         app()->instance('middleware.disable', true);
 
@@ -108,10 +108,9 @@ class BladeTheme {
 
         app()->instance('request', $request);
         ShareBucket::put(\Zento\Passport\Http\Middleware\GuestToken::ALLOW_GUEST_API, true);
-        $resp = Route::dispatch($request);
-        $respData = $resp->getOriginalContent();
+        $resp = Route::dispatch($request)->getOriginalContent();
         app()->instance('request', $originRequest);
-        return [$respData['status'] < 400, $respData['data'] ?? null , $respData];
+        return $resp->getApiResponse();
     }
 
     public function addGlobalViewData(array $data) {

@@ -10,8 +10,9 @@ use Illuminate\Support\Collection;
 use Zento\Contracts\ROModel\ROPaymentTransaction;
 use Zento\Contracts\ROModel\ROShoppingCart;
 use Zento\Checkout\Providers\Facades\CheckoutService;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ApiController extends \App\Http\Controllers\Controller
+class ApiController extends ApiBaseController
 {
     /**
      * only for guest user
@@ -32,6 +33,6 @@ class ApiController extends \App\Http\Controllers\Controller
             $user->id = $id;
         }
         $user->save();
-        return ['status' => 200, 'data' => Auth::user()];
+        return $this->withData(Auth::user());
     }
 }

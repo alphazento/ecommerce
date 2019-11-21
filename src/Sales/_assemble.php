@@ -8,8 +8,8 @@ return [
         ],
         "listeners"=> [
             "Zento\\ShoppingCart\\Event\\ShoppingCartUpdated"=> ["\\Zento\\Sales\\Event\\Listener\\ShoppingCartUpdated"],
-            "Zento\\Sales\\Event\\DraftOrder"=> [
-                "20"=> "\\Zento\\Sales\\Event\\Listener\\DraftOrder"
+            "Zento\\Sales\\Event\\DraftOrderEvent"=> [
+                "20"=> "\\Zento\\Sales\\Event\\Listener\\DraftOrderListener"
             ]
         ]
     ]

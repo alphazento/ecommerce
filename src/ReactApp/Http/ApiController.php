@@ -7,8 +7,9 @@ use Request;
 use ProductService;
 use Zento\RouteAndRewriter\Facades\RouteAndRewriterService;
 // use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ApiController extends \App\Http\Controllers\Controller
+class ApiController extends ApiBaseController
 {
     protected $recursive_level = 0;
 
@@ -25,7 +26,7 @@ class ApiController extends \App\Http\Controllers\Controller
             'constants' => []
         ];
 
-        return ['status' => 200, 'data' => $data];
+        return $this->withData($data);
     }
 
     public function cmsHome() {
@@ -101,7 +102,7 @@ class ApiController extends \App\Http\Controllers\Controller
             ];
           }
 
-          return ['status' => 200, 'data' => $data];
+        return $this->withData($data);
     }
 
     // protected function getProductSwatches() {
@@ -136,14 +137,11 @@ class ApiController extends \App\Http\Controllers\Controller
         });
         if ($url = $request->get('url')) {
             if ($rule = $this->recursiveFindRewriteRule($url)) {
-                return [
-                    'status'=>200, 
-                    'data'=>$rule
-                ];
+                return $this->withData($rule);
             }
         }
         
-        return ['status'=>404, 'data'=>null];
+        return $this->error(404);
     }
 
     /**

@@ -14,6 +14,12 @@ export default new Vuex.Store({
         },
         cart: {
             items: []
+        },
+        spinnerOverlay: {
+            absolute: false,
+            opacity: 0.76,
+            overlay: false,
+            text: ""
         }
     },
     getters: {
@@ -28,6 +34,9 @@ export default new Vuex.Store({
         },
         setUserInfo(state, userInfo) {
             state.userInfo = userInfo
+        },
+        controlSpinnerLayer(state, newValues) {
+            Object.assign(state.spinnerOverlay, newValues);
         }
     },
     actions: {
@@ -40,7 +49,9 @@ export default new Vuex.Store({
         loadCart({
             commit
         }) {
+            this.dispatch('showSpinner', "Loading shopping cart")
             axios.get('/api/v1/cart').then(response => {
+                this.dispatch('hideSpinner')
                 if (response.data && response.data.status === 200) {
                     commit('setCart', response.data.data)
                 }
@@ -94,10 +105,11 @@ export default new Vuex.Store({
         }, item) {
             var url = `/api/v1/cart/items/${item.id}/quantity/${item.quantity}`;
             return new Promise((resolve, reject) => {
+                this.dispatch('showSpinner', "Updating shopping cart")
                 axios.patch(url).then(response => {
-                    console.log('setCart', response.data)
                     commit('setCart', response.data.data)
                     resolve(response.data);
+                    this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
                 });
@@ -108,12 +120,31 @@ export default new Vuex.Store({
         }, item) {
             var url = `/api/v1/cart/items/${item.id}`;
             return new Promise((resolve, reject) => {
+                this.dispatch('showSpinner', "Deleing shopping cart item")
                 axios.delete(url).then(response => {
                     commit('setCart', response.data.data)
                     resolve(response.data);
+                    this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
                 });
+            });
+        },
+
+        showSpinner({
+            commit
+        }, text) {
+            commit('controlSpinnerLayer', {
+                overlay: true,
+                text: text
+            });
+        },
+
+        hideSpinner({
+            commit
+        }) {
+            commit('controlSpinnerLayer', {
+                overlay: false,
             });
         }
     }

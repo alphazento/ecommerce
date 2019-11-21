@@ -12,7 +12,7 @@ use Zento\Sales\Model\ORM\SalesShipment;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
 use Zento\Sales\Providers\Facades\SalesService;
 
-class DraftOrder extends \Zento\Kernel\Booster\Events\BaseListener
+class DraftOrderListener extends \Zento\Kernel\Booster\Events\BaseListener
 {
     protected function run($event) {
         $order = SalesService::placeOrder($event->pay_id, 

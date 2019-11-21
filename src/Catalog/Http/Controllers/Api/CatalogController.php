@@ -9,7 +9,7 @@ use Route;
 use Request;
 use Registry;
 use View;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\Catalog\Model\DB\CartridgeSeries;
 use Zento\Catalog\Model\Search\LegacySearch as Adapter;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
@@ -18,11 +18,11 @@ use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
 use Zento\Catalog\Model\DB\CartridgeSeries\Description;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CatalogController extends Controller
+class CatalogController extends ApiBaseController
 {
     public function categoriesTree() {
         $all = Request::get('all', false);
-        return ['status'=>200, 'data'=> CategoryService::tree(!$all)];
+        return $this->withData(CategoryService::tree(!$all));
     }
 
     public function categories() {
@@ -32,7 +32,7 @@ class CatalogController extends Controller
         foreach($ids as $id) {
             $categories[] = CategoryService::getCategoryById($id);
         }
-        return ['status'=>200, 'data'=> $categories];
+        return $this->withData($categories);
     }
 
     /**
@@ -45,8 +45,7 @@ class CatalogController extends Controller
         $id = Route::input('id');
         $category = CategoryService::getCategoryById($id);
         \zento_assert($category);
-
-        return ['status'=>200, 'data'=> $category];
+        return $this->withData($category);
     }
 
     public function setCategoryField() {
@@ -56,27 +55,22 @@ class CatalogController extends Controller
                 $value = Request::get('value');
                 $category->{$field} = $value;
                 $category->save();
-                return ['status' => 200, 'data' => [$field => $value]];
+                return $this->with($field, $value);
             }
         }
-        return ['status' => 420, 'data' => [$field => $value]];
+        return $this->error(420)->with($field, $value);
     }
 
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);
-        return [
-            'status'=>200, 
-            'data'=>[
-                'category' => $category, 
-                'products' => $category->products()->paginate(Request::get('per_page', 9))
-            ]
-        ];
+        return $this->with('category', $category)
+                    ->with('products', $category->products()->paginate(Request::get('per_page', 9)));
     }
 
     public function product() {
         $product = ProductService::getProductById(Route::input('id'));
-        return ['status'=>200, 'data'=> $product];
+        return $this->withData($product);
     }
 
     public function newProductSection() {
@@ -90,6 +84,6 @@ class CatalogController extends Controller
         foreach($categories as $category) {
             $collection[] = ['name' => $category->name, 'products' => $category->products()->limit(6)->get()];
         }
-        return ['status'=>200, 'data'=> $collection];
+        return $this->withData($collection);
     }
 }

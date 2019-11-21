@@ -15,19 +15,21 @@ use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ShoppingCartController extends \App\Http\Controllers\Controller
+class ShoppingCartController extends ApiBaseController
 {
     use TraitShoppingCartHelper;
     public function getCart() {
         return $this->tapCart(function($cart) {
-            return ['status'=>200, 'data' => $cart];
+            return $this->withData($cart);
         });
     }
 
     public function createCart() {
         $cart = ShoppingCartService::createCart();
-        return ['status'=> ($cart ? 201 : 420), 'data' => $cart];
+        $cart ? $this->success(201) : $this->error();
+        return $this->withData($cart);
     }
 
     public function addItem(Request $request) {
@@ -37,9 +39,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
                 $request->get('quantity', 1),
                 $request->get('url'),
                 $request->get('options', []))) {
-                return ['status'=> 201, 'data' => $cart];
+                return $this->withData($cart);
             } else {
-                return ['status'=> 420, 'error' => 'fail to add item to cart'];
+                $this->error(400, 'fail to add item to cart');
             }
         }, true);
     }
@@ -47,9 +49,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function updateItemQuantity() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::updateItemQuantity($cart, Route::input('item_id'), Route::input('quantity'))) {
-                return ['status'=> 200, 'data' => $cart];
+                return $this->success(200)->withData($cart);
             } else {
-                return ['status'=> 420, 'data' => ['Can not update quantity for item ' . Route::input('item_id')]];
+                $this->error(400, 'Can not update quantity for item ' . Route::input('item_id'));
             }
         }, true);
     }
@@ -57,9 +59,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function deleteItem() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::deleteItem($cart, Route::input('item_id'))) {
-                return ['status'=> 200, 'data' => $cart];
+                return $this->withData($cart);
             } else {
-                return ['status'=> 420, 'error' => 'fail to delete item ' . Route::input('item_id')];
+                $this->error(400, 'fail to delete item');
             }
         });
     }
@@ -71,9 +73,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
     public function putCoupon() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::addCoupon($cart, Route::input('coupon'))) {
-                return ['status'=> 200, 'data' => $cart];
+                return $this->withData($cart);
             } else {
-                return ['status'=> 420, 'data' => "Coupon is not valid."];
+                $this->error(400, 'Coupon is not valid."');
             }
         });
     }
@@ -90,7 +92,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         return $this->tapCart(function($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
             ShoppingCartService::setBillingAddress($cart, $address, $request->get('ship_to_billingaddesss'));
-            return ['status'=> 200, 'data' => null];
+            return $this->withData($cart);
         });
     }
 
@@ -98,7 +100,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         return $this->tapCart(function($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
             ShoppingCartService::setShippingAddress($cart, $address);
-            return ['status'=> 200, 'data' => $cart];
+            return $this->withData($cart);
         });
     }
 
@@ -124,9 +126,9 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
                 $cart->customer_id = Route::input('customer_id');
                 $cart->mode = 1;
                 $cart->save();
-                return ['status' => 200];
+                return $this->withData($cart);
             } else {
-                return ['status' => 420, 'error' => 'the cart is not guest mode'];
+                return $this->error();
             }
         });
     }
@@ -135,7 +137,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         return $this->tapCart(function($cart) use ($request) {
             $cart->email = $request->get('email');
             $cart->save();
-            return ['status' => 200];
+            return $this->withData($cart);
         });
     }
 }

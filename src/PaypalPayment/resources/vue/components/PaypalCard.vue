@@ -1,7 +1,7 @@
 <template>
   <PayPal
     :env="configs.mode"
-    :amount="cart.grand_total"
+    :amount="amount"
     :currency="cart.currency"
     :client="configs.credentials"
     :button-style="configs.style"
@@ -29,6 +29,7 @@ export default {
     authorized(response) {
     },
     completed(response) {
+      this.$store.dispatch('showSpinner', "Placing order...");
       const cartData = this.reducedCartData();
       axios.post('/api/v1/payment/capture/paypalexpress', {
         version: 'v2',
@@ -39,6 +40,7 @@ export default {
           pay_id: response.data.data.payment_transaction.pay_id
         }).then(response => {
           console.log('order completed', response);
+          this.$store.dispatch('showSpinner', "Order placed");
         })
       })
     },
@@ -72,6 +74,9 @@ export default {
   computed: {
     cart() {
       return this.$store.state.cart;
+    },
+    amount() {
+      return '' + this.$store.state.cart.grand_total
     }
   },
   components: {

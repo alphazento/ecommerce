@@ -15,10 +15,10 @@ class CatalogController extends Controller
     public function categoryProducts() {
         if ($category_id = Route::input('id')) {
             $pageData = [];
-            list($succeed, $pageData, $rawData) = BladeTheme::requestInnerApi('GET', 
-            $this->genApiUrl(sprintf('categories/%s/products?%s', $category_id, Request::getQueryString()))
+            $resp = BladeTheme::requestInnerApi('GET', 
+                $this->genApiUrl(sprintf('categories/%s/products?%s', $category_id, Request::getQueryString()))
             );
-            if ($succeed) {
+            if ($resp->success) {
                 return BladeTheme::view('page.productlist', compact('category_id', 'pageData'));
             }
         }
@@ -27,10 +27,11 @@ class CatalogController extends Controller
 
     public function product() {
         if ($productId = Route::input('id')) {
-            list($succeed, $product, $rawData) = BladeTheme::requestInnerApi('GET', 
+            $resp = BladeTheme::requestInnerApi('GET', 
                 $this->genApiUrl(sprintf('products/%s', $productId))
             );
-            if ($succeed) {
+            if ($resp->success) {
+                $product = $resp->data;
                 $categories = [];
                 if ($category_ids = Route::input('category_ids')) {
                     if ($categories = $this->fetchCategories()) {
@@ -51,17 +52,17 @@ class CatalogController extends Controller
 
     protected function fetchAllCategories() {
         if (!$this->allCategories) {
-            list($succeed, $categories, $rawData) = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
-            $this->allCategories = $succeed ? $categories : null;
+            $resp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
+            $this->allCategories = $resp->success ? $resp->data : null;
         }
         return $this->allCategories;
     }
 
     protected function fetchCategories($category_ids) {
-        list($succeed, $categories, $rawData) = BladeTheme::requestInnerApi('GET', 
+        $resp = BladeTheme::requestInnerApi('GET', 
             $this->genApiUrl(sprintf('categories/%s', $category_ids)));
         if ($succeed) {
-            return $categories;
+            return $resp->data;
         }
     }
 }

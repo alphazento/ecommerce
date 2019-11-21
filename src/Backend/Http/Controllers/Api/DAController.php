@@ -4,16 +4,16 @@ namespace Zento\Backend\Http\Controllers\Api;
 
 use Route;
 use Request;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 
-class DAController extends Controller
+class DAController extends ApiBaseController
 {
     public function getAttributes() {
         $model = Route::input('model');
-        return ['status'=>200, 'data' => DynamicAttribute::where('parent_table', $model)->get()];
+        return $this->withData(DynamicAttribute::where('parent_table', $model)->get());
     }
 
     public function updateAttribute() {
@@ -24,6 +24,6 @@ class DAController extends Controller
             $model->default_value = '';
             $model->save();
         }
-        return ['status'=>200, 'data' => Request::get('attributes')];
+        return $this->withData(Request::get('attributes'));
     }
 }

@@ -11,6 +11,7 @@
         ['img'=> '/zento_vuedesktoptheme/image/banner2.jpg', 'title' => "Image 2"]
     ];
     ?>
+    <spinner-layer></spinner-layer>
     <section id="banner">
         <!-- This comp. can have a modal included. -->
         <image-carsousel 

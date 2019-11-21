@@ -4,11 +4,11 @@ namespace Zento\Backend\Http\Controllers\Api;
 
 use Route;
 use Request;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\Catalog\Providers\Facades\ProductService;
 use Zento\Catalog\Providers\Facades\CategoryService;
 
-class ModelController extends Controller
+class ModelController extends ApiBaseController
 {
     public function updateModel() {
         $id = Route::input('id');
@@ -29,8 +29,8 @@ class ModelController extends Controller
             }
             $model->exists = true;
             $model->push();
-            return ['status'=>200, 'data' => $attrs];
+            return $this->withData($attrs);
         }
-        return ['status'=>404, 'data' => 'Not found'];
+        return $this->error(404);
     }
 }

@@ -5,7 +5,7 @@ namespace Zento\Acl\Http\Controllers;
 use Route;
 use Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\Acl\Model\Auth\Customer;
 use Zento\Acl\Model\Auth\Administrator;
 use Zento\Acl\Model\ORM\AclUserGroup;
@@ -16,7 +16,7 @@ use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
 use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
 use Zento\Acl\Consts;
 
-class AclController extends Controller
+class AclController extends ApiBaseController
 {
     /**
      * Get all admin users including inactived users
@@ -28,7 +28,7 @@ class AclController extends Controller
      */
     public function users() {
         $model = $this->getUserModel();
-        return ['status' => 200, 'data' => $model::all()];
+        return $this->withData($model::all());
     }
 
     protected function getUserModel() {
@@ -86,31 +86,31 @@ class AclController extends Controller
      */
     public function getUser() {
         $model = $this->getUserModel();
-        return ['status' => 200, 'data' => $model::all()];
+        return $this->withData($model::all());
     }
 
     public function getUserPermissions() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return ['status' => 200, 'data' => $user->permissions()];
+            return $this->withData($user->permissions());
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function getUserWhitePermissions() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return ['status' => 200, 'data' => $user->permissionwhitelist];
+            return $this->withData($user->permissionwhitelist);
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function getUserBlackPermissions() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return ['status' => 200, 'data' => $user->permissionblacklist];
+            return $this->withData($user->permissionblacklist);
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function addUserWhitePermission() {
@@ -124,12 +124,11 @@ class AclController extends Controller
                     AclUserPermissionWhiteList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
                 AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->delete();
-                return ['status'=> 201];
+                return $this->success(201);
             }
-
-            return ['status' => 200];
+            return $this->success();
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function addUserBlackPermission() {
@@ -143,12 +142,11 @@ class AclController extends Controller
                     AclUserPermissionBlackList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
                 AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
-                return ['status'=> 201];
+                return $this->success(201);
             }
-
-            return ['status' => 200];
+            return $this->success();
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function removeUserWhitePermission() {
@@ -158,9 +156,9 @@ class AclController extends Controller
                 $pids = explode(',', $pid);
                 AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
-            return ['status' => 200];
+            return $this->success();
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
 
@@ -171,18 +169,17 @@ class AclController extends Controller
                 $pids = explode(',', $pid);
                 AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
-
-            return ['status' => 200];
+            return $this->success();
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     public function getGroupsByUser() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return ['status' => 200, 'data' => $user->groups];
+            return $this->withData($user->groups);
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     /**
@@ -194,14 +191,14 @@ class AclController extends Controller
      * ]}
      */
     public function groups() {
-        return ['status' => 200, 'data' => AclUserGroup::whereIn('scope', $this->getScopes())->get()];
+        return $this->withData(AclUserGroup::whereIn('scope', $this->getScopes())->get());
     }
 
     public function getGroupPermissions() {
         if ($group = AclUserGroup::find(Route::input('id'))) {
-            return ['status' => 200, 'data' => $group->permissions];
+            return $this->withData($group->permissions);
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     /**
@@ -219,9 +216,9 @@ class AclController extends Controller
                     $data[] = $middle->{$type};
                 }
             }
-            return ['status' => 200, 'data' => $data];
+            return $this->withData($data);
         }
-        return ['status'=>404];
+        return $this->error(404);
     }
 
     /**
@@ -241,12 +238,12 @@ class AclController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return ['status' => 400, 'data' => json_encode($validator->errors())];
+            return $this->error(400, json_encode($validator->errors());
         }
 
         $password = Request::get('password', '');
         if ($password != Request::get('password', '')) {
-            return ['status' => 400, 'data' => 'password and confirm password not match.'];
+            return $this->error(400, 'password and confirm password not match.');
         }
 
         $model = $this->getUserModel();
@@ -258,10 +255,10 @@ class AclController extends Controller
                 'password' => 'required|max:16|min:8'
             ]);
             if ($validator->fails()) {
-                return ['status' => 400, 'data' => json_encode($validator->errors())];
+                return $this->error(400, json_encode($validator->errors()));
             }
             if ($model::where('email', $data['email'])->exists()) {
-                return ['status'=>'400', 'data' => $data['email'] . ' has exists'];
+                return $this->error(400, $data['email'] . ' has exists');
             }
             $user = new $model($data);
         }
@@ -271,7 +268,7 @@ class AclController extends Controller
         }
 
         $user->save();
-        return ['status'=>'200', 'data' => $user];
+        return $this->withData($user);
     }
 
     /**
@@ -289,9 +286,9 @@ class AclController extends Controller
         $model = $this->getUserModel();
         if ($user = $model::find($id)) {
             $user->delete();
-            return ['status'=>200, 'data' => ['id' => $id]];
+            return $this->with('id', $id);
         }
-        return ['status'=>400];
+        return $this->error();
     }
 
     public function updateUser() {
@@ -311,9 +308,9 @@ class AclController extends Controller
             }
             $user->save();
             $params['id'] = $id;
-            return ['status'=>200, 'data' => $params];
+            return $this->withData($params);
         }
-        return ['status'=>400, $params];
+        return $this->error()->withData($pa)
     }
 
     public function addUsersToGroup() {
@@ -332,12 +329,12 @@ class AclController extends Controller
                         'user_id'=>$id, 
                         'group_id' => $group->id]);
                 }
-                return ['status'=> 201];
+                return $this->success(201);
             }
         } else {
             $error = 'Group not found';
         }
-        return ['status' => 400, 'data' => $error];
+        return $this->error(400, $error);
     }
 
     public function removeUserFromGroup() {
@@ -345,17 +342,17 @@ class AclController extends Controller
             if ($user_id = Route::input('user_id')) {
                 $user_ids = explode(',', $user_id);
                 AclGroupUserList::where('scope', $this->getScope())->whereIn('user_id', $user_ids)->delete();
-                return ['status' => 200, 'data' => Route::input('user_id')];
+                return $this->with('user_id', Route::input('user_id'));
             }
         }
-        return ['status' => 400];
+        return $this->error();
     }
 
     public function addGroup() {
         if ($name = Request::get('name', false)) {
             $scope = $this->getScope();
             if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->first()) {
-                return ['status'=>'400', 'data' => sprintf('Group[%s] already exists.', $name)];
+                return $this->error(400, sprintf('Group[%s] already exists.', $name));
             }
             $group = new AclUserGroup([
                 'scope' => $scope, 
@@ -364,9 +361,9 @@ class AclController extends Controller
                 'active' => Request::get('active', 1)
                 ]);
             $group->save();
-            return ['status'=>200, 'data' => $group];
+            return $this->withData($group);
         } else {
-            return ['status'=>400, 'data' => 'parameters not valid'];
+            return $this->error(400, 'parameters not valid');
         }
     }
 
@@ -376,17 +373,17 @@ class AclController extends Controller
             if ($group = AclUserGroup::find($id)) {
                 $name = Request::get('name', $group->name);
                 if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->where('id', '!=', $id)->first()) {
-                    return ['status'=>400, 'data' => sprintf('Group[%s] has been taken by other group.', $name)];
+                    return $this->error(400, sprintf('Group[%s] has been taken by other group.', $name));
                 }
                 $group->name = $name;
                 $group->description =  Request::get('description', $group->description);
                 $group->active =  Request::get('active', $group->active);
                 $group->save();
-                return ['status'=>200, 'data' => $group];
+                return $this->withData($group);
             }
-            return ['status'=>400, 'data' => sprintf('Group[%s] not exists.', $id)];
+            return $this->error(400, sprintf('Group[%s] not exists.', $id));
         } else {
-            return ['status'=>400, 'data' => 'parameters not valid'];
+            return $this->error(400, 'parameters not valid');
         }
     }
 
@@ -401,16 +398,16 @@ class AclController extends Controller
                         'scope' => $this->getScope(),
                         'user_id'=>$user->id, 'group_id' => $gid]);
                 }
-                return ['status'=> 201];
+                return $this->success(201);
             }
         } else {
             $error = 'User not found';
         }
-        return ['status' => 400, 'data' => $error];
+        return $this->error(400, $error);
     }
 
     public function getPermissions() {
-        return ['status' => 200, 'data' => AclPermissionItem::where('active', 1)->get()];
+        return $this->withData(AclPermissionItem::where('active', 1)->get());
     }
 
     public function addGroupPermissions() {
@@ -426,10 +423,10 @@ class AclController extends Controller
                         'item_id'=>$id, 
                         'group_id' => $group->id]);
                 }
-                return ['status'=> 201];
+                return $this->success(201);
             }
         }
-        return ['status' => 400];
+        return $this->error();
     }
 
     public function removeGroupPermission() {
@@ -437,9 +434,9 @@ class AclController extends Controller
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
                 AclGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->delete();
-                return ['status'=> 200];
+                return $this->success();
             }
         }
-        return ['status' => 400];
+        return $this->error();
     }
 }
