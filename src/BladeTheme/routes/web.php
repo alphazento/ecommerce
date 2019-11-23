@@ -123,3 +123,16 @@ Route::group(
         ]);
     }
 );
+
+Route::group(
+    [
+        'prefix' => '/ajax/checkout',
+        'namespace' => '\Zento\Checkout\Http\Controllers',
+        'middleware' => ['web'],
+    ], function () {
+        Route::put(
+            '/guest/details',
+            ['as' => 'ajax.checkout.put.guest', 'uses' => 'ApiController@putGuestDetails']
+        );
+    }
+);

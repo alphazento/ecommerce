@@ -3,7 +3,7 @@ Route::group(
     [
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['cors', 'guesttoken', 'auth:api'],
+        'middleware' => ['cors', 'auth:api'],
         'as' => "api:user:"
     ], function () {
     Route::get(
@@ -34,7 +34,7 @@ Route::group(
     Route::get(
         '/{customer_id}/addresses', 
         ['as' => 'customer.get.addresses', 'uses' => 'CustomerController@getAddresses']
-    )->unshiftMiddleware('guesttoken');
+    );
 
     Route::get(
         '/{customer_id}/address/{address_id}', 

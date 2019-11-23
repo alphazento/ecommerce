@@ -6,8 +6,8 @@ Route::group(
         'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
         Route::put(
-            '/guest-customer',
-            ['as' => 'ajax.checkout.put.guest-customer', 'uses' => 'ApiController@setGuestDetails']
+            '/guest/details',
+            ['as' => 'api.checkout.put.guest-details', 'uses' => 'ApiController@putGuestDetails']
         );
     }
 );

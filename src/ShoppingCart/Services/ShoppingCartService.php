@@ -307,4 +307,11 @@ class ShoppingCartService
         $cart->load('items.product');
         return (new ShoppingCartUpdated($cart))->fireUntil();
     }
+
+    public function updateCustomerDetails(IShoppingCart $cart, $customer) {
+        $cart->email = $customer->email;
+        $cart->customer_id = $customer->is_guest ? 0 : $customer->id;
+        $cart->save();
+        return $cart;
+    }
 }

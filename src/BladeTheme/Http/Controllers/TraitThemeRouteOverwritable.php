@@ -17,16 +17,17 @@ trait TraitThemeRouteOverwritable
             $pthis = app(self::$OverwriteBy);
         }
         BladeTheme::breadcrumb('/', 'Home');
-        return $pthis->prepareApiGuestToken($method)->{$method}($parameters);
+        $pthis->prepareApiGuestToken(Request::user());
+        return $pthis->{$method}($parameters);
     }
 
     protected function genApiUrl($path) {
         return sprintf('/api/v1/%s', $path);
     }
 
-    protected function prepareApiGuestToken($method) {
+    protected function prepareApiGuestToken($user) {
         if (env('API_GUEST_TOKEN_ENABLED')) {
-            $apiGuestToken = sprintf('Guest %s', encrypt(json_encode(Request::user()->toArray())));
+            $apiGuestToken = sprintf('Guest %s', encrypt(json_encode($user->toArray())));
             BladeTheme::addGlobalViewData(compact('apiGuestToken'));
         }
         return $this;
