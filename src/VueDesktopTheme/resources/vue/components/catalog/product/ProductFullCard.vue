@@ -43,7 +43,7 @@
 </template>
 
 <script>
-var mixin = require("../mixin/catalogpollyfill");
+var mixin = require("../../../mixin/catalogpollyfill");
 export default {
   mixins: [mixin.default],
   props: {

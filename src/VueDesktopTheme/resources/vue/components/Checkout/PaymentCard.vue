@@ -5,11 +5,14 @@
         <v-expansion-panel v-for="(item,i) in consts['paymentmethods']" :key="i">
           <v-expansion-panel-header text-left>
             <span>
-              <v-img :width="item.image.width" :height="item.image.height" contain :src="item.image.src"></v-img>
+              <v-img
+                :width="item.image.width"
+                :height="item.image.height"
+                contain
+                :src="item.image.src"
+              ></v-img>
             </span>
-            <span>
-              {{item.title}}
-            </span>
+            <span>{{item.title}}</span>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <component :is="item.component" v-bind="item"></component>
@@ -46,21 +49,7 @@ export default {
       this.$emit("childMessage", this.step);
     },
     estimatePayment() {
-      axios.get(this.apiUrl + "?page=" + page).then(response => {
-        this.pagiData = response.data.data.products;
-      });
-
-      return HttpClient.withMessage("Estimating Payment...")
-        .post("/payment/estimate", {
-          cart: ShoppingCartAgent.getReducedCartData(),
-          shipping_address: address
-        })
-        .then(resp => {
-          if (resp.status === 200) {
-            this.paymentMethods.apply(resp.data);
-            this.estimatingIndicator().value(false);
-          }
-        });
+      axios.get(this.apiUrl).then(response => {});
     }
   },
   computed: {

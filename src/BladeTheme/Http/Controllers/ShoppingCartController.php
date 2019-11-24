@@ -23,16 +23,13 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     public function index() {
         $protocal = Route::input('protocal', 'web');
-        $resp = $this->getCart(true);
-        if ($protocal === 'web') {
+        if ($resp = $this->getCart(true)) {
             $cart = $resp->data;
-            return BladeTheme::breadcrumb(route('web.get.cart'), 'Shopping Cart')
-                ->view('page.shoppingcart', compact('cart'));
         } else {
-            if ($protocal === 'ajax') {
-                return $resp;
-            }
+            $cart = null;
         }
+        return BladeTheme::breadcrumb(route('web.get.cart'), 'Shopping Cart')
+            ->view('page.shoppingcart', compact('cart'));
     }
 
     public function addItem() {

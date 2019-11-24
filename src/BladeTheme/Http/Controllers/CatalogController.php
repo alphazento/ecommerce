@@ -6,6 +6,7 @@ use Route;
 use Request;
 use BladeTheme;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class CatalogController extends Controller
 {
@@ -14,11 +15,11 @@ class CatalogController extends Controller
 
     public function categoryProducts() {
         if ($category_id = Route::input('id')) {
-            $pageData = [];
             $resp = BladeTheme::requestInnerApi('GET', 
                 $this->genApiUrl(sprintf('categories/%s/products?%s', $category_id, Request::getQueryString()))
             );
             if ($resp->success) {
+                $pageData = $resp->data;
                 return BladeTheme::view('page.productlist', compact('category_id', 'pageData'));
             }
         }
@@ -63,6 +64,18 @@ class CatalogController extends Controller
             $this->genApiUrl(sprintf('categories/%s', $category_ids)));
         if ($succeed) {
             return $resp->data;
+        }
+    }
+
+    public function search() {
+        $request = Request::instance();
+        $query = Str::after($request->getRequestUri(), $request->path());
+        $resp = BladeTheme::requestInnerApi('GET', 
+            $this->genApiUrl(sprintf('catalog/search%s', $query))
+        );
+        if ($resp->success) {
+            $pagination = $resp->data->toArray();
+            return BladeTheme::view('page.searchresult', compact('pagination'));
         }
     }
 }

@@ -238,7 +238,7 @@ class AclController extends ApiBaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->error(400, json_encode($validator->errors());
+            return $this->error(400, json_encode($validator->errors()));
         }
 
         $password = Request::get('password', '');
@@ -310,7 +310,7 @@ class AclController extends ApiBaseController
             $params['id'] = $id;
             return $this->withData($params);
         }
-        return $this->error()->withData($pa)
+        return $this->error()->withData($pa);
     }
 
     public function addUsersToGroup() {

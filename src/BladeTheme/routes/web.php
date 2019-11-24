@@ -54,6 +54,10 @@ Route::group(
             'products/{id}/categories/{category_ids}', 
             ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
         );
+        Route::get(
+            'search', 
+            ['as' =>'web.get.search', 'uses' => 'CatalogController@search']
+        );
     });
 
 Route::group(

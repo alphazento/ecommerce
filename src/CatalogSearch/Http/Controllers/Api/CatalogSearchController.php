@@ -38,6 +38,13 @@ class CatalogSearchController extends ApiBaseController
         if (!isset($params['visibility'])) {
             $params['visibility'] = $visibility;
         }
-        $this->response(CatalogSearchService::search($params, $per_page, $page, $withAggreate));
+        $result = CatalogSearchService::search($params, $per_page, $page, $withAggreate);
+        if ($result['success']) {
+
+        }
+        $result['success'] ? $this->success($result['code']) : $this->error($result['code']);
+        return $this->withData(
+            $result['data']
+        );
     }
 }

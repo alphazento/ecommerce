@@ -20,6 +20,16 @@ export default new Vuex.Store({
             opacity: 0.76,
             overlay: false,
             text: ""
+        },
+        searchResult: {
+            aggregate: {},
+            items: [],
+            current_page: 1,
+            from: 1,
+            last_page: 1,
+            per_page: 15,
+            to: 1,
+            total: 1
         }
     },
     getters: {
@@ -37,6 +47,9 @@ export default new Vuex.Store({
         },
         controlSpinnerLayer(state, newValues) {
             Object.assign(state.spinnerOverlay, newValues);
+        },
+        setSearchResult(state, newValues) {
+            Object.assign(state.searchResult, newValues);
         }
     },
     actions: {
@@ -46,13 +59,19 @@ export default new Vuex.Store({
             commit('setConsts', consts)
         },
 
+        assignSearchResult({
+            commit
+        }, data) {
+            commit('setSearchResult', data)
+        },
+
         loadCart({
             commit
         }) {
             this.dispatch('showSpinner', "Loading shopping cart")
             axios.get('/api/v1/cart').then(response => {
                 this.dispatch('hideSpinner')
-                if (response.data && response.data.status === 200) {
+                if (response.data && response.data.success) {
                     commit('setCart', response.data.data)
                 }
             });

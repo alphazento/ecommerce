@@ -199,6 +199,7 @@ class CatalogSearchService
         if (!empty($criteria['sort_by'])) {
             $this->applyOrderBy($builder, $criteria['sort_by']);
         }
+
         
         $success = true;
         $code = 200;
@@ -217,6 +218,7 @@ class CatalogSearchService
             $data = LengthAwarePaginator::fromPaginator($paginator, 
                 ['aggregate' => $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []]);
         }
+
         return compact('success', 'code', 'data');
     }
 
@@ -277,7 +279,6 @@ class CatalogSearchService
         if ($priceFilter) {
             $this->filterPrice($builder, $priceFilter);
         }
-
         return [$builder, $aggregateQuery];
     }
 
@@ -312,7 +313,8 @@ class CatalogSearchService
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
         $ret = $agg->map(function ($item) {
-            return ['id' => $item['category_id'], 'amount' => $item['amount']];
+            $category = Category::find($item['category_id']);
+            return ['id' => $item['category_id'], 'name' => ($category->name ?? ''), 'amount' => $item['amount']];
           }
         );
         // $criteriaCategory = isset($criteria['category']) ? $criteria['category']:[];

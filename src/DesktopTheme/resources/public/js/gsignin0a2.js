@@ -12,7 +12,7 @@ define(["jQuery", "loadingNotification"], function ($, modallayer) {
                 data: profile,
                 dataType: 'json',
                 success: function (data) {
-                    if (data.status === 200) {
+                    if (data.success) {
                         if (data.url) {
                             window.location = data.url;
                         }

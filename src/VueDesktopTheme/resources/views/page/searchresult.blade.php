@@ -4,7 +4,7 @@
 @endpush
 
 @section('pagecontent')
-<search-result-card :pagination="pagination" >
+<search-result-card>
   <template>
     <category-filter-card></category-filter-card>
   </template>
@@ -19,12 +19,10 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   data: {
-    pagination: @json($pageData['products'])
+    pagination: @json($pagination)
   },
-  methods: {
-    closeFilter() {
-      console.log('closeFilter')
-    }
+  created() {
+    this.$store.dispatch('assignSearchResult', this.pagination)
   }
 });
 </script>

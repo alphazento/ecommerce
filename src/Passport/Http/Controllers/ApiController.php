@@ -7,7 +7,7 @@ use Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
-use Zento\Kernel\Http\Controllers\TraitApiResponse
+use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {

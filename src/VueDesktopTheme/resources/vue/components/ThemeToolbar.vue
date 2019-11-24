@@ -27,7 +27,7 @@
               <v-icon color="grey">mdi-cart</v-icon>
             </v-btn>
             <template v-slot:badge v-if="cart">
-              <span>{{cart.items.length}}</span>
+              <span>{{cart.items_quantity}}</span>
             </template>
           </v-badge>
         </template>
