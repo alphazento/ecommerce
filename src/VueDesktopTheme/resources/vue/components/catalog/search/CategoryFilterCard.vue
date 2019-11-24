@@ -6,7 +6,7 @@
           <span>{{item.label}}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <price-filter-bullet v-if="i==='price'"></price-filter-bullet>
+          <price-filter-bullet v-if="i==='price'" :range="item.items"></price-filter-bullet>
           <switchitem-filter-bullet :items="item.items" v-if="i!=='price'"></switchitem-filter-bullet>
         </v-expansion-panel-content>
       </v-expansion-panel>
