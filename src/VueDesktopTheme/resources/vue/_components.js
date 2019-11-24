@@ -19,6 +19,7 @@ export default {
     "checkout-cart-card": "components/Checkout/CartCard.vue",
     "checkout-main-card": "components/Checkout/MainCard.vue",
     "search-result-card": "components/catalog/search/SearchResultCard.vue",
+    "search-result-page": "components/catalog/search/SearchResultRoutePage.vue",
     "category-filter-card": "components/catalog/search/CategoryFilterCard.vue",
     "price-filter-bullet": "components/catalog/search/PriceFilter.vue",
     "switchitem-filter-bullet": "components/catalog/search/SwitchItemFilter.vue",

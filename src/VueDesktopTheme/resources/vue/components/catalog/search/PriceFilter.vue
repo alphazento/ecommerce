@@ -1,30 +1,21 @@
 <template>
   <v-list>
     <v-list-item>
-      <v-list-item-content>
-        <v-range-slider v-model="vrange" :max="max" :min="min" hide-details class="align-center">
-          <template v-slot:prepend>
-            <v-text-field
-              v-model="vrange[0]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-            ></v-text-field>
-          </template>
-          <template v-slot:append>
-            <v-text-field
-              v-model="vrange[1]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-            ></v-text-field>
-          </template>
-        </v-range-slider>
-      </v-list-item-content>
+      <v-range-slider
+        v-model="vrange"
+        :max="max"
+        :min="min"
+        thumb-label="always"
+        hide-details
+        class="align-center"
+      >
+        <template v-slot:prepend>
+          <v-btn text style="width: 40px">{{min}}</v-btn>
+        </template>
+        <template v-slot:append>
+          <v-btn text style="width: 40px">{{max}}</v-btn>
+        </template>
+      </v-range-slider>
     </v-list-item>
   </v-list>
 </template>

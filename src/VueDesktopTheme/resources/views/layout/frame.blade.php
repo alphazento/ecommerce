@@ -19,7 +19,10 @@
         </v-content>
     </v-app>
 </div>
-<script src=@asset("zento_vuedesktoptheme/js/app.js") type="text/javascript"></script>
+<?php 
+$appjs = $appjs ?? 'app.js';
+?>
+<script src=@asset("zento_vuedesktoptheme/js/" . $appjs) type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 @stack('tail')
 </body>
