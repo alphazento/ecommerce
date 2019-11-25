@@ -6,10 +6,17 @@ export default {
             }
             return '#';
         },
+        // getProductImageUrl: function (product, relativePath) {
+        //     if (product) {
+        //         relativePath = relativePath || '/zento_vuedesktoptheme/image/product'
+        //         return `${relativePath}/${product.name}.png`;
+        //     }
+        //     return 'not-found.png';
+        // }
         getProductImageUrl: function (product, relativePath) {
             if (product) {
-                relativePath = relativePath || '/zento_vuedesktoptheme/image/product'
-                return `${relativePath}/${product.name}.png`;
+                relativePath = relativePath || '/images/catalog/product'
+                return `${relativePath}/${product.image}`;
             }
             return 'not-found.png';
         }

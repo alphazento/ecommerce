@@ -1,13 +1,12 @@
 <template>
   <v-card>
     <v-expansion-panels accordion multiple>
-      <v-expansion-panel v-for="(item,i) in pagination.aggregate" :key="i">
+      <v-expansion-panel v-for="(item,key) in pagination.aggregate" :key="key">
         <v-expansion-panel-header text-left>
           <span>{{item.label}}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <price-filter-bullet v-if="i==='price'" :range="item.items"></price-filter-bullet>
-          <switchitem-filter-bullet :items="item.items" v-if="i!=='price'"></switchitem-filter-bullet>
+          <component :is="filterBullet(key)" v-bind="item"></component>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -29,6 +28,20 @@ export default {
     pagination() {
       return this.$store.state.searchResult;
     }
+  },
+  methods: {
+    filterBullet(name) {
+      switch(name) {
+        case "price":
+          return "price-filter-bullet";
+        case "category":
+          return "category-filter-bullet";
+          break;
+        default:
+          return "switch-filter-bullet";
+          break;
+      }
+    },
   }
 };
 </script>

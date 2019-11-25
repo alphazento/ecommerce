@@ -31,7 +31,7 @@
         </v-container>
       </v-flex>
       <v-flex md8 xs12>
-        <product-list :pageable="true" :pagination="pagination"></product-list>
+        <product-grid :pagination="pagination" :flex="'md4 xs6'"></product-grid>
       </v-flex>
     </v-layout>
   </v-container>

@@ -1,7 +1,7 @@
 @extends('layout.frame', ['nav_page' => 'home'])
 
 @push('head')
-    <title>BaicyTek Home page</title>
+    <title>Home page</title>
 @endpush
 
 @section('pagecontent')
@@ -23,8 +23,8 @@
         </image-gallery>
     </section>
     <section id="product_index">
-        <h1 class="index_h1">HOT PRODUCT</h1>
-        <product-list :pagination="pagination"></product-list>
+        <h1 class="index_h1">HOT PRODUCTS</h1>
+        <product-grid :pagination="pagination" :gerneral-mode="true"></product-grid>
         <a href="/products" class="b_more">MORE</a>
     </section>
 @endsection

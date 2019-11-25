@@ -14,8 +14,24 @@ export default {
   props: {
     items: {
       type: Array
+    },
+    query: {
+      type: String
     }
   },
-  computed: {}
+  data() {
+    return {
+      switchs: {},
+    }
+  },
+  created() {
+    console.log('tony route', this.$route)
+    this.items.forEach(element => console.log(element));
+  },
+  watch: { 
+      items: function(newVal, oldVal) { // watch it
+        console.log('switch filter items change', newVal);
+      }
+    }
 };
 </script>

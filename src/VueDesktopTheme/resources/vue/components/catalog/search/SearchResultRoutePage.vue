@@ -1,7 +1,7 @@
 <template>
     <search-result-card>
         <template>
-            <category-filter-card></category-filter-card>
+            <filters-card></filters-card>
         </template>
     </search-result-card>
 </template>

@@ -1,15 +1,14 @@
 @extends('layout.frame', ['nav_page' => 'products', 'appjs' => 'routeapp.js'])
 @push('head')
-    <title>BaicyTek Home page</title>
+    <title>Search Page</title>
 @endpush
 
 @section('pagecontent')
 <router-link :to="{ name:'search',query: { queryId: 1 }}" >
      router-link跳转Query
 </router-link>
-
-<router-view>
-</router-view>
+  <router-view>
+  </router-view>
 <!-- 
 <search-result-card>
   <template>

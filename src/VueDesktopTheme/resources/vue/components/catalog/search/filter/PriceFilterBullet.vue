@@ -2,7 +2,7 @@
   <v-list>
     <v-list-item>
       <v-range-slider
-        v-model="vrange"
+        v-model="range"
         :max="max"
         :min="min"
         thumb-label="always"
@@ -23,16 +23,19 @@
 <script>
 export default {
   props: {
-    range: {
+    items: {
+      type: Array
+    },
+    applied: {
       type: Array
     }
   },
   data() {
     return {
-      min: this.range[0],
-      max: this.range[1],
+      min: this.items[0],
+      max: this.items[1],
       slider: 100,
-      vrange: this.range
+      range: this.items
     };
   },
   computed: {}

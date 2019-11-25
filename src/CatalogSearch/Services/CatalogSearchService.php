@@ -283,16 +283,20 @@ class CatalogSearchService
     }
 
     protected function aggregate($builder, &$criteria) {
+        $priceItems = $this->aggregatePrice($builder, $criteria);
+        list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
         $aggregation = [
             'price' => [
                 'is_dynattr' => false,
                 'label' => 'Price',
-                'items' => $this->aggregatePrice($builder, $criteria), 
+                'applied' => [],
+                'items' => $priceItems
             ],
             'category' => [
                 'is_dynattr' => false,
                 'label' => 'Category',
-                'items' => $this->aggregateCategory($builder, $criteria)
+                'applied' => $cateFilters,
+                'items' => $categoryItems
             ]
         ];
         $this->aggregateDynamicAttributes($builder, $aggregation);
@@ -304,18 +308,26 @@ class CatalogSearchService
      */
     protected function aggregateCategory($builder, &$criteria) {
         //category aggregate
+        $searchInCategoryIds = array_merge($criteria['category'] ?? [], $criteria['sub_category'] ?? []);
         $query = clone $builder;
         $product_table = $builder->getModel()->getTable();
         if (!isset($this->joined_tables[$this->categoryProductTable])) {
             $query->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
         }
-        $query->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
+        $query->whereNotIn($this->categoryProductTable . '.category_id', $searchInCategoryIds)
+            ->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
-        $ret = $agg->map(function ($item) {
+        $aggregates = $agg->map(function ($item) {
             $category = Category::find($item['category_id']);
-            return ['id' => $item['category_id'], 'name' => ($category->name ?? ''), 'amount' => $item['amount']];
+            return ['id' => $item['category_id'], 'label' => ($category->name ?? ''), 'amount' => $item['amount']];
           }
+        );
+
+        $filters = array_map(function ($id) {
+            $category = Category::find($id);
+            return ['id' => $id, 'label' => ($category->name ?? '')];
+          }, $searchInCategoryIds
         );
         // $criteriaCategory = isset($criteria['category']) ? $criteria['category']:[];
         // if (count($criteriaCategory) >0) {
@@ -323,7 +335,7 @@ class CatalogSearchService
         //         return !in_array($item['id'], $criteriaCategory);
         //     });
         // }
-        return $ret;
+        return [$filters, $aggregates];
     }
 
     protected function getSearchLayerDynAttributes() {
@@ -383,11 +395,14 @@ class CatalogSearchService
                       });
                 }
             }
-            $aggregation[$attr_name] =[
-                'is_dynattr' => true,
-                'label' => $da['label'],
-                'items' => $items
-            ];
+            if (count($items)) {
+                $aggregation[$attr_name] =[
+                    'is_dynattr' => true,
+                    'label' => $da['label'],
+                    'items' => $items
+                ];
+            }
+            
         }
     }
 

@@ -11,7 +11,7 @@ use Zento\Catalog\Model\ORM\Category;
 class GeneralController extends \Zento\BladeTheme\Http\Controllers\GeneralController
 {
     public function home() {
-        $items = Product::limit(9)->get();
+        $items = Product::limit(8)->get();
         $pagination = new \Zento\Kernel\Booster\Pagination\LengthAwarePaginator($items, 1, 1, 1);
         $view = parent::home();
         $view->with('pagination', $pagination);
