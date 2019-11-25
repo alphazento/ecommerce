@@ -1,63 +1,81 @@
 <template>
-  <v-list>
-    <v-list-item>
-      <v-chip 
-        class="ma-2"
-        close
-        color="teal"
-        text-color="white"
-        v-for="(item, i) in applied" :key="i"
-      >
-        {{item.label}}
-      </v-chip>
-    </v-list-item>
+    <v-list>
+        <v-list-item>
+            <v-chip
+                class="ma-2"
+                close
+                color="teal"
+                text-color="white"
+                v-for="(item, i) in applied"
+                :key="i"
+                @click="removeFilter(item)"
+            >
+                {{ item.label }}
+            </v-chip>
+        </v-list-item>
 
-    <v-list-item v-for="(item, i) in items" :key="i">
-      <v-list-item-action>
-        <v-switch v-on:change="swithItem(item)" color="purple"></v-switch>
-      </v-list-item-action>
-      <v-list-item-title>{{item.label}}({{item.amount}})</v-list-item-title>
-    </v-list-item>
-  </v-list>
+        <v-list-item v-for="(item, i) in items" :key="i">
+            <v-list-item-action>
+                <v-switch
+                    v-on:change="addFilter(item)"
+                    color="purple"
+                ></v-switch>
+            </v-list-item-action>
+            <v-list-item-title
+                >{{ item.label }}({{ item.amount }})</v-list-item-title
+            >
+        </v-list-item>
+    </v-list>
 </template>
 
 <script>
 export default {
-  props: {
-    items: {
-      type: Array
+    props: {
+        items: {
+            type: Array
+        },
+        applied: {
+            type: Array
+        }
     },
-    applied: {
-      type: Array
-    }
-  },
-  data() {
-    return {
-      switched: {},
-      applied_ids: []
-    }
-  },
-  created() {
-    this.applied_ids = this.mapAppliedIds();
-  },
-  methods: {
-    swithItem(item) {
-      this.applied_ids.push(item.id);
-      this.$router.push({query: { "category[]": [9, 10] }})
+    data() {
+        return {
+            switched: {},
+            applied_ids: []
+        };
     },
-    mapAppliedIds() {
-      return this.applied.map(item => {
-        return Number(item.id);
-      });
-    }
-  },
-  watch: {
-    items(newVal, oldVal) { // watch it
-      console.log('switch filter items change', newVal);
+    created() {
+        this.applied_ids = this.mapAppliedIds();
     },
-    applied(newVal, oldVal) { // watch it
-      this.applied_ids = this.mapAppliedIds();
+    methods: {
+        addFilter(item) {
+            this.applied_ids.push(item.id);
+            this.$router.push({ query: { "category[]": this.applied_ids } });
+        },
+        removeFilter(item) {
+            var index = this.applied_ids.indexOf(Number(item.id));
+            if (index > -1) {
+                this.applied_ids.splice(index, 1);
+                this.$router.push({
+                    query: { "category[]": this.applied_ids }
+                });
+            }
+        },
+        mapAppliedIds() {
+            return this.applied.map(item => {
+                return Number(item.id);
+            });
+        }
+    },
+    watch: {
+        items(newVal, oldVal) {
+            // watch it
+            console.log("switch filter items change", newVal);
+        },
+        applied(newVal, oldVal) {
+            // watch it
+            this.applied_ids = this.mapAppliedIds();
+        }
     }
-  }
 };
 </script>
