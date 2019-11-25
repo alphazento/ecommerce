@@ -4,9 +4,11 @@
 @endpush
 
 @section('pagecontent')
+<!-- 
 <router-link :to="{ name:'search',query: { queryId: 1 }}" >
      router-link跳转Query
-</router-link>
+</router-link> -->
+  <spinner-layer></spinner-layer>
   <router-view>
   </router-view>
 <!-- 

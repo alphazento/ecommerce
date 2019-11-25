@@ -49,7 +49,7 @@ export default new Vuex.Store({
             Object.assign(state.spinnerOverlay, newValues);
         },
         setSearchResult(state, newValues) {
-            Object.assign(state.searchResult, newValues);
+            state.searchResult = newValues;
         }
     },
     actions: {

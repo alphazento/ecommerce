@@ -9,6 +9,7 @@
                 v-for="(item, i) in applied"
                 :key="i"
                 @click="removeFilter(item)"
+                @click:close="removeFilter(item)"
             >
                 {{ item.label }}
             </v-chip>
@@ -68,10 +69,10 @@ export default {
         }
     },
     watch: {
-        items(newVal, oldVal) {
-            // watch it
-            console.log("switch filter items change", newVal);
-        },
+        // items(newVal, oldVal) {
+        //     // watch it
+        //     console.log("switch filter items change", newVal);
+        // },
         applied(newVal, oldVal) {
             // watch it
             this.applied_ids = this.mapAppliedIds();

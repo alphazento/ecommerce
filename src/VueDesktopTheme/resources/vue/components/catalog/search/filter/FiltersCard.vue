@@ -51,7 +51,14 @@ export default {
     },
     watch: {
         $route() {
-            console.log("changed", this.$route);
+            let url =
+                "/api/v1/catalog/search" +
+                this.$route.fullPath.substr(this.$route.path.length);
+            this.$store.dispatch("showSpinner", "Updating...");
+            axios.get(url).then(response => {
+                this.$store.dispatch("assignSearchResult", response.data.data);
+                this.$store.dispatch("hideSpinner");
+            });
         }
     }
 };
