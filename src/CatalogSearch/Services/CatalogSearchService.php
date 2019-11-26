@@ -287,19 +287,21 @@ class CatalogSearchService
         list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
         $aggregation = [
             'price' => [
+                'filter' => 'price',
                 'is_dynattr' => false,
                 'label' => 'Price',
                 'applied' => [],
                 'items' => $priceItems
             ],
             'category' => [
+                'filter' => 'category',
                 'is_dynattr' => false,
                 'label' => 'Category',
                 'applied' => $cateFilters,
                 'items' => $categoryItems
             ]
         ];
-        $this->aggregateDynamicAttributes($builder, $aggregation);
+        $this->aggregateDynamicAttributes($builder, $aggregation, $criteria);
         return $aggregation;
     }
 
@@ -361,7 +363,7 @@ class CatalogSearchService
     /**
      * brand, price, category, country, new selection ... 
      */
-    protected function aggregateDynamicAttributes($builder, &$aggregation) {
+    protected function aggregateDynamicAttributes($builder, &$aggregation, &$criteria) {
         $aggraegatableDAs = $this->getSearchLayerDynAttributes();
 
         $product_table = $builder->getModel()->getTable();
@@ -396,10 +398,13 @@ class CatalogSearchService
                 }
             }
             if (count($items)) {
+                $applied = $criteria[$attr_name] ?? [];
                 $aggregation[$attr_name] =[
+                    'filter' => $attr_name,
                     'is_dynattr' => true,
                     'label' => $da['label'],
-                    'items' => $items
+                    'items' => $items,
+                    'applied' => $applied
                 ];
             }
             

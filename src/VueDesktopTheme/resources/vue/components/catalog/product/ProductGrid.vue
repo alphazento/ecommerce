@@ -40,6 +40,7 @@ export default {
             switch (product.type_id) {
                 case "simple":
                 case "downloadable":
+                default:
                     return "simple-product-card";
                     break;
             }

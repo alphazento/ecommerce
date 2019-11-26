@@ -1,6 +1,6 @@
 <template>
     <v-list>
-        <v-list-item v-if="applied.length > 0">
+        <v-list-item>
             <v-chip
                 class="ma-2"
                 close
@@ -30,20 +30,35 @@
 </template>
 
 <script>
-import DynamicAttributeFilterBullet from './DynamicAttributeFilterBullet'
-
 export default {
-    extends: DynamicAttributeFilterBullet,
+    props: {
+        items: {
+            type: Array
+        },
+        applied: {
+            type: Array
+        }
+    },
+    data() {
+      return {
+        applied_ids: []
+      };
+    },
+    created() {
+        this.applied_ids = this.mapAppliedIds();
+    },
     methods: {
         addFilter(item) {
             this.applied_ids.push(item.id);
-            this.$emit('filterChange', { filter: this.searchKey, data: this.applied_ids });
+            this.$router.push({ query: { "category[]": this.applied_ids } });
         },
         removeFilter(item) {
             var index = this.applied_ids.indexOf(Number(item.id));
             if (index > -1) {
                 this.applied_ids.splice(index, 1);
-                this.$emit('filterChange', { filter: this.searchKey, data: this.applied_ids });
+                this.$router.push({
+                    query: { "category[]": this.applied_ids }
+                });
             }
         },
         mapAppliedIds() {
@@ -53,10 +68,14 @@ export default {
         }
     },
     watch: {
-      applied(newVal, oldVal) {
-          // watch it
-          this.applied_ids = this.mapAppliedIds();
-      }
+        // items(newVal, oldVal) {
+        //     // watch it
+        //     console.log("switch filter items change", newVal);
+        // },
+        applied(newVal, oldVal) {
+            // watch it
+            this.applied_ids = this.mapAppliedIds();
+        }
     }
 };
 </script>

@@ -23,7 +23,7 @@ export default {
     "search-result-page": "components/catalog/search/SearchResultRoutePage.vue",
     "filters-card": "components/catalog/search/filter/FiltersCard.vue",
     "price-filter-bullet": "components/catalog/search/filter/PriceFilterBullet.vue",
-    "switch-filter-bullet": "components/catalog/search/filter/SwitchFilterBullet.vue",
+    "dynamic-attribute-filter-bullet": "components/catalog/search/filter/DynamicAttributeFilterBullet.vue",
     "category-filter-bullet": "components/catalog/search/filter/CategoryFilterBullet.vue",
     // "paypal-card": "components/Checkout/PaymentMethod/PaypalCard.vue"
 }
