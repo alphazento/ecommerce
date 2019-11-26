@@ -13,6 +13,10 @@ Route::group(
             '/catalog/search', 
             ['as' => 'catalog.search', 'uses' => 'CatalogSearchController@search']
         );
+        Route::get(
+            '/catalog/category/{id}', 
+            ['as' => 'catalog.category.search', 'uses' => 'CatalogSearchController@search']
+        );
 });
 
 //admin

@@ -193,7 +193,7 @@ class CatalogSearchService
         "sort_by":"price,asc"
         }
      */
-    public function search($criteria, $per_page, $page, $withAggregate = true) {
+    public function search($underCategorId, $criteria, $per_page, $page, $withAggregate = true) {
         list($builder, $aggregateQuery) = $this->applyFilter($criteria, $withAggregate);
 
         if (!empty($criteria['sort_by'])) {
@@ -225,7 +225,7 @@ class CatalogSearchService
     protected function applyFilter($criteria, $withAggregate = true) {
         $model = new Product;
         $product_table = $model->getTable();
-        $builder = $model->newQuery()->select([$product_table . '.*']);
+        $builder = $model->newQuery()->select([$product_table . '.id']);
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
@@ -234,6 +234,7 @@ class CatalogSearchService
                 call_user_func_array($callback, [$builder]);
             }
         }
+        $builder->distinct();
 
         $searchLayerDynamicAttrs = $this->getSearchLayerDynAttributes();
         $dynAttrs = [];
@@ -375,24 +376,30 @@ class CatalogSearchService
             if (!isset($this->joined_tables[$table])) {
                 $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
             }
-            $query->select([DB::raw($table . '.value as ' . $attr_name), DB::raw('count(*) as amount')]);
-            $agg = $query->groupBy($attr_name)->get();
+            $query->select([DB::raw($table . '.value as ' . $attr_name), $product_table . '.id']);
+            $agg = $builder->getConnection()
+                ->table( DB::raw("({$query->toSql()}) as sub") )
+                ->mergeBindings($query->getQuery())
+                ->select([$attr_name, DB::raw('count(*) as amount')])
+                ->groupBy($attr_name)
+                ->get();
+
             $items = [];
             if (count($agg) >0) {
                 if ($da['with_value_map']) {
                     $attrDesc = DanamicAttributeFactory::getAttributeDesc($table);
                     $items = $agg->map(function ($row) use ($attr_name, $attrDesc) {
                         return [
-                            'id' => $row[$attr_name], 
-                            'value' => $attrDesc['options'][$row[$attr_name]], 
-                            'amount' => $row['amount']
+                            'id' => $row->{$attr_name}, 
+                            'value' => $attrDesc['options'][$row->{$attr_name}], 
+                            'amount' => $row->amount
                         ];
                       });
                 } else {
                     $items = $agg->map(function ($row) use ($attr_name) {
                         return [
-                            'value' => $row[$attr_name], 
-                            'amount' => $row['amount']
+                            'value' => $row->{$attr_name}, 
+                            'amount' => $row->amount
                         ];
                       });
                 }
@@ -421,13 +428,15 @@ class CatalogSearchService
         $table = (new ProductPrice)->getTable();
         $product_table = $query->getModel()->getTable();
         $query->leftJoin($table, $product_table . '.id', '=', $table . '.product_id');
+        $columnName = $table . '.price';
+        $query->addSelect($columnName);
 
         $minQuery = clone $query;
-        $min = $minQuery->orderBy('price')->first();
+        $min = $minQuery->orderBy($columnName)->first();
         $minValue = $min ? floor($min->price) : 0;
 
         $maxQuery = clone $query;
-        $max = $maxQuery->orderBy('price','desc')->first();
+        $max = $maxQuery->orderBy($columnName, 'desc')->first();
         $maxValue = $max ? ceil($max->price) : 999999;
 
         // $range = $max - $min;

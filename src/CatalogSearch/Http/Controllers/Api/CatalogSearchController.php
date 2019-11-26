@@ -25,6 +25,8 @@ class CatalogSearchController extends ApiBaseController
         $per_page = 15;
         $page = 1;
 
+        $underCategorId = Route::input('id');
+
         if (isset($params['per_page'])) {
             $per_page = $params['per_page'];
             unset($params['per_page']);
@@ -38,7 +40,7 @@ class CatalogSearchController extends ApiBaseController
         if (!isset($params['visibility'])) {
             $params['visibility'] = $visibility;
         }
-        $result = CatalogSearchService::search($params, $per_page, $page, $withAggreate);
+        $result = CatalogSearchService::search($underCategorId, $params, $per_page, $page, $withAggreate);
         if ($result['success']) {
 
         }
