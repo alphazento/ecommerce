@@ -8,6 +8,7 @@
         thumb-label="always"
         hide-details
         class="align-center"
+        v-on:change="priceChange"
       >
         <template v-slot:prepend>
           <v-btn text style="width: 40px">{{min}}</v-btn>
@@ -38,6 +39,10 @@ export default {
       range: this.items
     };
   },
-  computed: {}
+  methods: {
+    priceChange() {
+      this.$emit('filterChange', { filter: 'price[]', data: this.range });
+    }
+  }
 };
 </script>

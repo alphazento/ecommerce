@@ -154,22 +154,22 @@ class CatalogSearchService
      * filter price by input price range
      *
      * @param [type] $builder
-     * @param array $conditions  [['>=' => 10, '<=' => 20], ['>='=>30, '<=' => 40]]
+     * @param array $conditions  [10, 20]
      * @return void
      */
-    protected function filterPrice($builder, array $conditionGroups) {
-        if (count($conditionGroups) > 0) {
+    protected function filterPrice($builder, array $conditions) {
+        if (count($conditions) > 0) {
             $table = (new ProductPrice)->getTable();
             $this->joined_tables[$table] = true;
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-            $builder->where(function($query) use($conditionGroups, $table){
-                foreach($conditionGroups as $group) {
-                    $query->orWhere(function($subQuery) use ($group, $table) {
-                        foreach($group as $cond => $value) {
-                            $subQuery->where($table . '.price', $cond, $value);
-                        }
-                    });
+            $builder->where(function($query) use($conditions, $table) {
+                sort($conditions);
+                if ($conditions[0] ?? false) {
+                    $query->where($table . '.price', '>=', $conditions[0]);
+                }
+                if ($conditions[0] ?? false) {
+                    $query->where($table . '.price', '<=', $conditions[1]);
                 }
             });
         }

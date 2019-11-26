@@ -18,8 +18,9 @@
         <v-list-item v-for="(item, i) in items" :key="i">
             <v-list-item-action>
                 <v-switch
-                    v-on:change="addFilter(item)"
-                    color="purple"
+                  v-model="item.switch" 
+                  v-on:change="addFilter(item)"
+                  color="purple"
                 ></v-switch>
             </v-list-item-action>
             <v-list-item-title
