@@ -10,7 +10,7 @@
         <v-container>
           <v-layout class="row">
             <v-flex md8 xs8>
-              <h1>Category Name Here</h1>
+              <h1>Search Result for: "{{searchResult.criteria.text}}"</h1>
             </v-flex>
             <v-flex md4 class="d-none d-md-block">
               <sort-control></sort-control>
@@ -33,7 +33,7 @@
             </v-flex>
           </v-layout>
         </v-container>
-        <product-grid :pagination="pagination" :flex="'md4 xs6'"></product-grid>
+        <product-grid :dataset="searchResult" :flex="'md4 xs6'"></product-grid>
         <a-pagination></a-pagination>
       </v-flex>
     </v-layout>
@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    pagination() {
+    searchResult() {
       return this.$store.state.searchResult;
     }
   }

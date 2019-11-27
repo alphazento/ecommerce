@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-layout row>
             <v-flex
-                v-for="(item, index) in pagination.data"
+                v-for="(item, index) in dataset.data"
                 :key="index"
                 :class="layout_flex"
             >
@@ -19,7 +19,7 @@
 export default {
     name: "imageslider",
     props: {
-        pagination: {
+        dataset: {
             type: Object
         },
         gerneralMode: {
