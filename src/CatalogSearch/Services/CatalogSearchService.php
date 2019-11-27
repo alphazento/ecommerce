@@ -179,16 +179,7 @@ class CatalogSearchService
      * {
         "criteria" : {
             "category": [4],
-            "price": [
-                {
-                    ">=":12,
-                    "<=":13.5
-                },
-                {
-                    ">=":14,
-                    "<=":15
-                }
-            ]
+            "price": [0, 100]
         },
         "sort_by":"price,asc"
         }
