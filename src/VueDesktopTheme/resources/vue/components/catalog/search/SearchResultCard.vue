@@ -24,7 +24,7 @@
                 </template>
                 <v-system-bar dark color="red lighten-2" height="35">
                   <v-spacer></v-spacer>
-                  <v-btn text @click="filter = false">
+                  <v-btn text @click="mobile_filter_panel = false">
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
                 </v-system-bar>

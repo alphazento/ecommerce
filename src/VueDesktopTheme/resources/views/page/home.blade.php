@@ -24,7 +24,7 @@
     </section>
     <section id="product_index">
         <h1 class="index_h1">HOT PRODUCTS</h1>
-        <product-grid :pagination="pagination" :gerneral-mode="true"></product-grid>
+        <product-grid :dataset="pagination" :gerneral-mode="true"></product-grid>
         <a href="/products" class="b_more">MORE</a>
     </section>
 @endsection

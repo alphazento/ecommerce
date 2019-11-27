@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-layout class="row">
-            <v-flex md6>
+            <v-flex md5>
                 <v-select
                     class="limit-width"
                     :items="sorts"
@@ -11,7 +11,7 @@
                 >
                 </v-select>
             </v-flex>
-            <v-flex md6>
+            <v-flex md2>
                 <v-select
                     class="limit-width"
                     :items="pages"
@@ -21,12 +21,14 @@
                 >
                 </v-select>
             </v-flex>
+            <v-flex md5 text-right class="v-middle" >
+                items {{ pagination.from }}-{{pagination.to}} of {{pagination.total}}
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -42,6 +44,11 @@ export default {
             ]
         };
     },
+    computed: {
+        pagination() {
+            return this.$store.state.searchResult;
+        }
+    },
     watch: {
         per_page: function(val, oldVal) {
             this.$store.dispatch('updatePagination', {per_page:val});
@@ -52,3 +59,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.v-middle {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+</style>
