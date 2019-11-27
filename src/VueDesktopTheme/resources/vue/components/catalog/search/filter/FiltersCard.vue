@@ -2,7 +2,7 @@
     <v-card>
         <v-expansion-panels accordion multiple>
             <v-expansion-panel
-                v-for="(item, key) in pagination.aggregate"
+                v-for="(item, key) in searchResult.aggregate"
                 :key="key"
             >
                 <v-expansion-panel-header text-left>
@@ -32,8 +32,11 @@ export default {
       this.routeQuery = Object.assign({}, this.$route.query);
     },
     computed: {
-        pagination() {
+        searchResult() {
             return this.$store.state.searchResult;
+        },
+        pagination() {
+          return this.$store.state.pagination;
         }
     },
     methods: {
@@ -52,6 +55,14 @@ export default {
       filterChange(e) {
         this.routeQuery[e.filter] = e.data;
         this.$router.push({ query: this.routeQuery });
+      },
+      diffKeyInPagination(val1, val2) {
+        var keys = Object.keys(val1);
+        for(var key of keys) {
+          if (val1[key] !== val2[key]) {
+            return key;
+          }
+        }
       }
     },
     watch: {
@@ -65,7 +76,13 @@ export default {
               this.$store.dispatch("assignSearchResult", response.data.data);
               this.$store.dispatch("hideSpinner");
           });
-      }
+      },
+      pagination(val, oldVal) {
+        var filterName = this.diffKeyInPagination(val, oldVal);
+        if (filterName) {
+          this.filterChange({filter: filterName, data: val[filterName]});
+        }
+      } 
     }
 };
 </script>

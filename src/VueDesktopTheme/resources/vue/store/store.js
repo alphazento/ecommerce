@@ -30,6 +30,12 @@ export default new Vuex.Store({
             per_page: 15,
             to: 1,
             total: 1
+        },
+        //only use for pagination component
+        pagination: {
+            page: 1,
+            sort_by: 'position,desc',
+            per_page: 30
         }
     },
     getters: {
@@ -50,6 +56,12 @@ export default new Vuex.Store({
         },
         setSearchResult(state, newValues) {
             state.searchResult = newValues;
+            state.pagination.page = Number(newValues.current_page);
+            state.pagination.per_page = Number(newValues.per_page);
+        },
+        updatePagination(state, pagination) {
+            var val = Object.assign({}, state.pagination, pagination);
+            state.pagination = val;
         }
     },
     actions: {
@@ -165,6 +177,12 @@ export default new Vuex.Store({
             commit('controlSpinnerLayer', {
                 overlay: false,
             });
+        },
+
+        updatePagination({
+            commit
+        }, pagination) {
+            commit('updatePagination', pagination);
         }
     }
 })

@@ -450,6 +450,7 @@ class CatalogSearchService
     protected function applyOrderBy($builder, $order_by) {
         list($order_by_field, $dir) = explode(',', $order_by);
         if (isset($this->sort_bys[$order_by_field])) {
+            $builder->addSelect($order_by_field);
             $callback = $this->sort_bys[$order_by_field];
             if (is_callable($callback)) {
                 call_user_func_array($callback, [$builder, $order_by_field, $dir]);

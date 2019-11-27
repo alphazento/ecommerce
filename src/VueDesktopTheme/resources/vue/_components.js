@@ -25,5 +25,7 @@ export default {
     "price-filter-bullet": "components/catalog/search/filter/PriceFilterBullet.vue",
     "dynamic-attribute-filter-bullet": "components/catalog/search/filter/DynamicAttributeFilterBullet.vue",
     "category-filter-bullet": "components/catalog/search/filter/CategoryFilterBullet.vue",
+    "a-pagination": "components/catalog/search/filter/Pagination.vue",
+    "sort-control": "components/catalog/search/filter/SortControl.vue",
     // "paypal-card": "components/Checkout/PaymentMethod/PaypalCard.vue"
 }
