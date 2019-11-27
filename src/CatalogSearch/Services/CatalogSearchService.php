@@ -199,7 +199,6 @@ class CatalogSearchService
         if (!empty($criteria['sort_by'])) {
             $this->applyOrderBy($builder, $criteria['sort_by']);
         }
-
         
         $success = true;
         $code = 200;
@@ -213,10 +212,13 @@ class CatalogSearchService
         if ($paginator->total() == 0) {
             $success = false;
             $code = 404;
-            $data = [];
+            $data = compact('criteria');
         } else {
-            $data = LengthAwarePaginator::fromPaginator($paginator, 
-                ['aggregate' => $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : []]);
+            $aggregate = $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : [];
+            $data = LengthAwarePaginator::fromPaginator(
+                    $paginator, 
+                    compact('aggregate', 'criteria')
+                );
         }
 
         return compact('success', 'code', 'data');

@@ -47,19 +47,11 @@ export default {
       mobile_filter_panel: false,
     };
   },
-  created() {
-    this.page = this.pagination.current_page;
-  },
   computed: {
     pagination() {
       return this.$store.state.searchResult;
     }
-  },
-  methods: {
-      changePage() {
-          console.log('pagination ', this.page);
-      }
-  } 
+  }
 };
 </script>
 <style scoped>

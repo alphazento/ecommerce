@@ -41,9 +41,6 @@ class CatalogSearchController extends ApiBaseController
             $params['visibility'] = $visibility;
         }
         $result = CatalogSearchService::search($underCategorId, $params, $per_page, $page, $withAggreate);
-        if ($result['success']) {
-
-        }
         $result['success'] ? $this->success($result['code']) : $this->error($result['code']);
         return $this->withData(
             $result['data']

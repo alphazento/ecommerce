@@ -73,8 +73,14 @@ export default {
               this.$route.fullPath.substr(this.$route.path.length);
           this.$store.dispatch("showSpinner", "Updating...");
           axios.get(url).then(response => {
+            this.$store.dispatch("hideSpinner");
+            if (response.data.success) {              
               this.$store.dispatch("assignSearchResult", response.data.data);
-              this.$store.dispatch("hideSpinner");
+            } else {
+              var result = Object.assign({}, this.searchResult);
+              result.data = [];
+              this.$store.dispatch("assignSearchResult", result);
+            }
           });
       },
       pagination(val, oldVal) {
