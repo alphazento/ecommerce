@@ -6,9 +6,9 @@
       </a>
       <v-card-title class="title">
         <v-container>
-          <p class="mt-4 text-left">{{ product.name }}</p>
+          <p class="mt-4 text-left">{{ product.desc.name }}</p>
           <p class="ma-0 subheading body-1 font-weight-bold text-left">
-            ${{ product.price }}
+            ${{ product.prices.price }}
           </p>
         </v-container>
       </v-card-title>

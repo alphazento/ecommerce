@@ -9,11 +9,6 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 class CustomerAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Interfaces\IAddress
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
-    public static function getPreloadRelations() {
-        return [
-        ];
-    }
-
     protected $fillable = [
         'customer_id',
         'name',

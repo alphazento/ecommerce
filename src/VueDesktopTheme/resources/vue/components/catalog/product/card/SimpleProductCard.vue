@@ -14,9 +14,9 @@
             
         <v-card-title>
           <div class="mx-5">
-            <span class="title blue--text">{{product.name}}</span><br>
+            <span class="title blue--text">{{product.desc.name}}</span><br>
             <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
-            <span class="title"> ${{product.price}}</span> &nbsp <del class=""> ${{product.rrp}}</del>
+            <span class="title"> ${{product.prices.price}}</span> &nbsp <del class=""> ${{product.prices.rrp}}</del>
           </div>
         </v-card-title>
         <v-card-actions>

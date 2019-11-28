@@ -218,7 +218,8 @@ class CatalogSearchService
     protected function applyFilter($criteria, $withAggregate = true) {
         $model = new Product;
         $product_table = $model->getTable();
-        $builder = $model->newQuery()->select([$product_table . '.id']);
+        //select must include type_id for mutiple product type
+        $builder = $model->newQuery()->select([$product_table . '.id', $product_table . '.type_id']);
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
@@ -277,6 +278,7 @@ class CatalogSearchService
     }
 
     protected function aggregate($builder, &$criteria) {
+        $builder->thinMode();
         $priceItems = $this->aggregatePrice($builder, $criteria);
         list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
         $aggregation = [
@@ -296,6 +298,7 @@ class CatalogSearchService
             ]
         ];
         $this->aggregateDynamicAttributes($builder, $aggregation, $criteria);
+        $builder->richMode();
         return $aggregation;
     }
 
@@ -314,9 +317,12 @@ class CatalogSearchService
             ->select([$this->categoryProductTable . '.category_id', DB::raw('count(*) as amount')]);
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
-        $aggregates = $agg->map(function ($item) {
-            $category = Category::find($item['category_id']);
-            return ['id' => $item['category_id'], 'label' => ($category->name ?? ''), 'amount' => $item['amount']];
+        $items = $agg->keyBy('category_id');
+        $categories = Category::whereIn('id', $items->keys()->toArray())->get();
+
+        $aggregates = $categories->map(function ($category) use($items) {
+            $item = $items[$category->id];
+            return ['id' => $category->id, 'label' => ($category->name ?? ''), 'amount' => $item['amount']];
           }
         );
 

@@ -8,19 +8,13 @@ use Zento\Contracts\Interfaces\Catalog\ICategory;
 class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
  
-    public static function getPreloadRelations() {
-        return [
-            'category_description' =>[
-                'description', 'name', 'meta_title', 'meta_description', 'meta_keyword'
-            ],
-            'children',
-            'withcount' => ['products']
-        ];
-    }
+    public $_richData_ = [
+        'desc',
+        'children'
+    ];
 
-    public function category_description() {
+    public function desc() {
         return $this->hasOne(CategoryDescription::class, 'category_id');
     }
 
@@ -65,5 +59,13 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function scopeActive($query, $activeOnly = true)
     {
         return $query->whereIn('is_active', $activeOnly ? [1]:[0,1]);
+    }
+
+    public function getNameAttribute() {
+        return $this->desc->name ?? '';
+    }
+
+    public function getDescriptionAttribute() {
+        return $this->desc->description ?? '';
     }
 }

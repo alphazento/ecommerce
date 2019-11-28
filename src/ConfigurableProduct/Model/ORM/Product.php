@@ -14,14 +14,12 @@ class Product extends \Zento\Catalog\Model\ORM\Product
         return $this->hasManyThrough(Product::class, ConfigurableProduct::class, 'parent_id', 'id', 'id', 'product_id');
     }
 
-    public static function getPreloadRelations() {
-        return array_merge(
-            \Zento\Catalog\Model\ORM\Product::getPreloadRelations(),
-            [
-                'configurables'
-            ]);
-        return $relations;
-    }
+    public $_richData_ = [
+        'desc',
+        'prices',
+        'special_price',
+        'configurables'
+    ];
 
     protected function lazyLoadRelation() {
         $this->load('configurables');

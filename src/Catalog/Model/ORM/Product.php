@@ -8,13 +8,18 @@ use Zento\Contracts\Interfaces\Catalog\IProduct;
 class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     private static $typeMap = [
         'simple' => '\Zento\Catalog\Model\ORM\Product',
         'grouped' => '\Zento\Catalog\Model\ORM\Product',
         'bundle' => '\Zento\Catalog\Model\ORM\Product',
         'downloadable' => '\Zento\Catalog\Model\ORM\Product',
+    ];
+
+    public $_richData_ = [
+        'desc',
+        'prices',
+        'special_price'
     ];
 
     public static function registerType($type_id, $class) {
@@ -25,38 +30,21 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         return $this;    
     }
 
-    public function getPrice() {
-        return $this->price;
-    }
     
     public function shippable() {
         return true;
     }
    
-    public function product_description() {
+    public function desc() {
         return $this->hasOne(ProductDescription::class, 'product_id');
     }
 
-    public function product_price() {
+    public function prices() {
         return $this->hasOne(ProductPrice::class, 'product_id');
     }
 
-    public function product_special_price() {
+    public function special_price() {
         return $this->hasOne(ProductSpecialPrice::class, 'product_id');
-    }
-
-    public static function getPreloadRelations() {
-        return [
-            'product_description' => [
-                'name', 'description', 'meta_title', 'meta_description', 'meta_keyword'
-            ],
-            'product_price' => [
-                'rrp', 'cost', 'price',
-            ],
-            'product_special_price' => [
-                'special_price', 'special_from', 'special_to'
-            ]
-        ];
     }
 
     /**
@@ -76,7 +64,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
         $model->fireModelEvent('retrieved', false);
 
-        $model->lazyLoadRelation();
+        // $model->lazyLoadRelation();
         
         return $model;
     }
@@ -90,7 +78,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         } elseif (is_object($attributes) && property_exists($attributes, 'type_id')) {
             $type_id = $attributes->type_id;
         }
-        
+
         if ($type_id) {
             if (isset(self::$typeMap[$type_id])) {
                 $class = self::$typeMap[$type_id];
@@ -116,5 +104,21 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public function categories() {
         return $this->hasManyThrough(Category::class, CategoryProduct::class, 'product_id', 'id', 'id', 'category_id')
             ->orderBy('level');
+    }
+
+    public function getNameAttribute() {
+        return $this->desc->name ?? '';
+    }
+
+    public function getDescriptionAttribute() {
+        return $this->desc->description ?? '';
+    }
+
+    public function getPriceAttribute() {
+        return $this->prices->price ?? 0;
+    }
+
+    public function getPrice() {
+        return $this->prices->price ?? 0;
     }
 }

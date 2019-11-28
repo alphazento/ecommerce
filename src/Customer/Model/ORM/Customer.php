@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 class Customer extends \Zento\Passport\Model\User
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     protected $fillable = [
         'group_id',
@@ -19,12 +18,10 @@ class Customer extends \Zento\Passport\Model\User
         'is_guest'
     ];
 
-    public static function getPreloadRelations() {
-        return [
-            'default_billing_address',
-            'default_shipping_address',
-        ];
-    }
+    public $_richData_ = [
+        'default_billing_address',
+        'default_shipping_address'
+    ];
 
     public function default_billing_address() {
         return $this->hasOne(CustomerAddress::class, 'id', 'default_billing_address_id');

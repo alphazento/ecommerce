@@ -31,18 +31,6 @@ if (!function_exists('zento_assert')) {
                 if (count($diffs) > 0 && method_exists($obj, 'getRelations')) {
                     $diffs = array_diff($diffs, array_keys($obj->getRelations()));
                 }
-                
-                if (count($diffs) > 0 && method_exists($obj, 'getPreloadRelations')) {
-                    $extraProperties = array_values(array_filter($obj->getPreloadRelations(), function($v, $k) {
-                        return is_array($v);
-                    }, ARRAY_FILTER_USE_BOTH));
-                    foreach($extraProperties as $sets) {
-                        $diffs = array_diff($diffs, $sets);
-                        if (count($diffs) == 0) {
-                            break;
-                        }
-                    }
-                }
             } else {
                 $diffs = $PROPERTIES;
             }

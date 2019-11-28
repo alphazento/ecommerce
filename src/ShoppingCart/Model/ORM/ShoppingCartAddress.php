@@ -8,11 +8,6 @@ use Zento\Catalog\Model\HasManyInAggregatedField;
 
 class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Interfaces\IAddress
 {
-    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
-    public static function getPreloadRelations() {
-        return [
-        ];
-    }
     protected $fillable = [
         'customer_id',
         'name',  

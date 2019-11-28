@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 class SalesOrder extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
-    use \Zento\Kernel\Booster\Database\Eloquent\DA\TraitRealationMutatorHelper;
 
     protected $fillable = [
         'order_number',
@@ -31,18 +30,12 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
         'order_currency_code',
         'base_to_order_currency_rate'
     ];
-
-    public static function getPreloadRelations() {
-        return [
-            'payment',
-            // 'shipment',
-            'status',
-            'status_history',
-            // 'withcount' => ['items']
-        ];
-    }
-
-    // protected $fillable = self::PROPERTIES;
+    
+    public $_richData_ = [
+        'payment',
+        'status',
+        'status_history',
+    ];
 
     public function payment() {
         return $this->hasOne(SalesOrderPayment::class, 'order_id');

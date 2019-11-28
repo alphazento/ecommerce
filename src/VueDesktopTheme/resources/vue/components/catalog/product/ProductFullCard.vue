@@ -5,13 +5,13 @@
         <v-img :src="getProductImageUrl(product)"></v-img>
       </v-flex>
       <v-flex md7 xs12>
-        <h1 class="display-2 text-uppercase">{{product.sku}}</h1>
-        <product-detail :description="product.description" :flex="'md9 xs12'"></product-detail>
+        <h1 class="display-2 text-uppercase">{{product.desc.name}}</h1>
+        <product-detail :description="product.desc.description" :flex="'md9 xs12'"></product-detail>
         <v-content>
           <v-layout row>
             <v-flex md1 xs1></v-flex>
             <v-flex md6 xs6>
-              <div class="display-1" style="color:#F44336;">${{product.price}}</div>
+              <div class="display-1" style="color:#F44336;">${{product.prices.price}}</div>
             </v-flex>
           </v-layout>
           <v-form :action="`/shoppingcart/add_product/${product.id}`" method="POST">
