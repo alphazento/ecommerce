@@ -1,6 +1,11 @@
 <template>
     <v-hover v-slot:default="{ hover }">
-        <v-card class="mx-auto">
+        <v-card
+            outlined
+            class="mx-auto"
+            :elevation="hover ? 12 : 2"
+            :dark="hover"
+        >
             <a :href="getProductUrl(product)">
                 <v-img
                     :src="getProductImageUrl(product)"
