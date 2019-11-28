@@ -2,10 +2,11 @@
 
 namespace Zento\ConfigurableProduct\Model\ORM;
 
-use Illuminate\Support\Collection;
+use Zento\Catalog\Model\ORM\Product as SimpleProduct;
 use Zento\Catalog\Providers\Facades\ProductService;
+use Illuminate\Support\Collection;
 
-class Product extends \Zento\Catalog\Model\ORM\Product
+class Product extends SimpleProduct
 {
     /**
      * all configurable products
@@ -13,13 +14,6 @@ class Product extends \Zento\Catalog\Model\ORM\Product
     public function configurables() {
         return $this->hasManyThrough(Product::class, ConfigurableProduct::class, 'parent_id', 'id', 'id', 'product_id');
     }
-
-    public $_richData_ = [
-        'desc',
-        'prices',
-        'special_price',
-        'configurables'
-    ];
 
     protected function lazyLoadRelation() {
         $this->load('configurables');
@@ -47,5 +41,25 @@ class Product extends \Zento\Catalog\Model\ORM\Product
             }
         }
         return ProductService::getProductById($id);
+    }
+
+    public static function massAssignRelation($products) {
+        $reduced = array_filter($products, function($product) {
+            return $product->type_id === 'configurable';
+        });
+        $ids = array_map(function($product) {
+            return $product->id;
+        }, $reduced);
+
+        if (count($ids) > 0) {
+            // foreach($collection as $)
+            $name = 'configurables';
+            $relation = (new static)->configurables();
+            $relation->orWhereIn('parent_id', $ids);
+            $relation->match(
+                $relation->initRelation($reduced, $name),
+                $relation->getEager(), $name
+            );
+        }
     }
 }

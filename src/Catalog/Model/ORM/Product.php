@@ -2,8 +2,9 @@
 
 namespace Zento\Catalog\Model\ORM;
 
-use Illuminate\Support\Collection;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Macroable;
 
 class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
@@ -29,7 +30,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public function getRealProductForShoppingCart($options = null) {
         return $this;    
     }
-
     
     public function shippable() {
         return true;

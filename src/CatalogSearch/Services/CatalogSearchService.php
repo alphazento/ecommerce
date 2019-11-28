@@ -6,6 +6,7 @@ use DB;
 use Store;
 use Cache;
 use ShareBucket;
+use Closure;
 use Illuminate\Pagination\Paginator;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Product;
@@ -28,6 +29,8 @@ class CatalogSearchService
      * @var array
      */
     protected $default_filters = [];
+
+    protected $postSearchHandlers = [];
 
     /**
      * the filters which match with criteria params
@@ -52,16 +55,24 @@ class CatalogSearchService
         $this->categoryProductTable = (new CategoryProduct)->getTable();
     }
 
-    public function registerCriteriaFilter($name, $callback) {
+    public function registerCriteriaFilter(string $name, Closure $callback) {
         $this->criteria_filters[$name] = $callback;
+        return $this;
     }
 
-    public function registerDefaultFilterLayer($callback) {
+    public function registerDefaultFilterLayer(Closure $callback) {
         $this->default_filters[] = $callback;
+        return $this;
     }
 
-    public function registerSortBy($name, $callback) {
+    public function registerSortBy(string $name,Closure $callback) {
         $this->sort_bys[$name] = $callback;
+        return $this;
+    }
+
+    public function registerPostSearchHandler(Closure $callback) {
+        $this->postSearchHandlers[] = $callback;
+        return $this;
     }
 
     protected function applyOrderByEavField($builder, $dyn_field, $direction) {
@@ -206,6 +217,9 @@ class CatalogSearchService
             $data = compact('criteria');
         } else {
             $aggregate = $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : [];
+            foreach($this->postSearchHandlers as $handler) {
+                $handler($paginator->items());
+            }
             $data = LengthAwarePaginator::fromPaginator(
                     $paginator, 
                     compact('aggregate', 'criteria')
