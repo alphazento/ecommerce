@@ -5,6 +5,7 @@ window.Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         consts: {},
+        swatches: {},
         userInfo: {
             id: 0,
             group_id: 0,
@@ -45,6 +46,9 @@ export default new Vuex.Store({
         setConsts(state, consts) {
             state.consts = consts;
         },
+        setSwatches(state, swatches) {
+            state.swatches = swatches;
+        },
         setCart(state, cart) {
             state.cart = cart;
         },
@@ -69,6 +73,12 @@ export default new Vuex.Store({
             commit
         }, consts) {
             commit('setConsts', consts)
+        },
+
+        setSwatches({
+            commit
+        }, swatches) {
+            commit('setSwatches', swatches)
         },
 
         assignSearchResult({

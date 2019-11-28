@@ -5,6 +5,7 @@ namespace Zento\BladeTheme\Http\Controllers;
 use Route;
 use Request;
 use BladeTheme;
+use ProductService;
 use App\Http\Controllers\Controller;
 
 trait TraitThemeRouteOverwritable
@@ -18,6 +19,9 @@ trait TraitThemeRouteOverwritable
         }
         BladeTheme::breadcrumb('/', 'Home');
         $pthis->prepareApiGuestToken(Request::user());
+        $swatches = ProductService::getProductSwatches();
+        BladeTheme::addGlobalViewData(compact('swatches'));
+
         return $pthis->{$method}($parameters);
     }
 

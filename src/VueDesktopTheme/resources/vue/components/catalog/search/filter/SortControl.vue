@@ -21,8 +21,9 @@
                 >
                 </v-select>
             </v-flex>
-            <v-flex md5 text-right class="v-middle" >
-                items {{ pagination.from }}-{{pagination.to}} of {{pagination.total}}
+            <v-flex md5 text-right class="v-middle">
+                items {{ pagination.from }}-{{ pagination.to }} of
+                {{ pagination.total }}
             </v-flex>
         </v-layout>
     </v-container>
@@ -34,13 +35,13 @@ export default {
         return {
             per_page: this.$store.state.searchResult.per_page,
             pages: [15, 30, 60],
-            sort_by: 'position,asc',
+            sort_by: "position,asc",
             sorts: [
-                {value:"position,asc", text: "Default"},
-                {value:"price,asc", text: "Price-Lowest First"},
-                {value:"price,desc", text: "Price-Highest First"},
-                {value:"name,asc", text: "Product Name A-Z"},
-                {value:"name,desc", text: "Product Name Z-A"},
+                { value: "position,asc", text: "Default" },
+                { value: "price,asc", text: "Price-Lowest First" },
+                { value: "price,desc", text: "Price-Highest First" },
+                { value: "name,asc", text: "Product Name A-Z" },
+                { value: "name,desc", text: "Product Name Z-A" }
             ]
         };
     },
@@ -51,10 +52,10 @@ export default {
     },
     watch: {
         per_page: function(val, oldVal) {
-            this.$store.dispatch('updatePagination', {per_page:val});
+            this.$store.dispatch("updatePagination", { per_page: val });
         },
         sort_by: function(val, oldVal) {
-            this.$store.dispatch('updatePagination', {sort_by:val});
+            this.$store.dispatch("updatePagination", { sort_by: val });
         }
     }
 };
@@ -62,7 +63,7 @@ export default {
 
 <style scoped>
 .v-middle {
-  margin-top: auto;
-  margin-bottom: auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 </style>

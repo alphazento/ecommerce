@@ -34,10 +34,12 @@ const app = new Vue({
   vuetify: new Vuetify(),
   router: router,
   data: {
-    pagination: @json($pagination)
+    pagination: @json($pagination),
+    swatches: @json($swatches)
   },
   created() {
     this.$store.dispatch('assignSearchResult', this.pagination)
+    this.$store.dispatch('setSwatches', this.swatches)
   }
 });
 </script>

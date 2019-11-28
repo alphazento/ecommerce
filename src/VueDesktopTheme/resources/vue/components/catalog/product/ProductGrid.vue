@@ -35,13 +35,17 @@ export default {
     methods: {
         productCard(product) {
             if (this.gerneralMode) {
-                return "general-product-card";
+                return "mini-general-product-card";
             }
             switch (product.type_id) {
                 case "simple":
                 case "downloadable":
+                    return "mini-simple-product-card";
+                    break;
+                case "configurable":
+                    return "mini-variation-product-card";
                 default:
-                    return "simple-product-card";
+                    return "mini-simple-product-card";
                     break;
             }
         }

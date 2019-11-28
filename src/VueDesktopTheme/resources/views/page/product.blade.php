@@ -17,7 +17,8 @@
         vuetify: new Vuetify(),
         data: {
             product: @json($product->toArray()),
-            detailTabs: @json($jsonFields)
+            detailTabs: @json($jsonFields),
+            swatches: @json($swatches)
         },
     });
     </script>

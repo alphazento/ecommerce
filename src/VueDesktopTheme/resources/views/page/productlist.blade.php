@@ -19,7 +19,8 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   data: {
-    pagination: @json($pageData['products'])
+    pagination: @json($pageData['products']),
+    swatches: @json($swatches)
   },
   methods: {
     closeFilter() {
