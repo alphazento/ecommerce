@@ -5,12 +5,18 @@ export default {
     "image-card": "components/ImageCard.vue",
     "image-carsousel": "components/ImageCarousel.vue",
     "image-gallery": "components/ImageGallery.vue",
+    "product-color-swatch-card": "components/catalog/product/swatch/Color.vue",
+    "product-size-swatch-card": "components/catalog/product/swatch/Size.vue",
+    "product-swatches-card": "components/catalog/product/swatch/ProductSwatches.vue",
+
     "mini-simple-product-card": "components/catalog/product/minicard/Simple.vue",
     "mini-general-product-card": "components/catalog/product/minicard/General.vue",
     "mini-variation-product-card": "components/catalog/product/minicard/Variation.vue",
     "full-simple-product-card": "components/catalog/product/fullcard/Simple.vue",
     "full-variation-product-card": "components/catalog/product/fullcard/Variation.vue",
+
     "product-detail": "components/catalog/product/ProductDetail.vue",
+
     "product-grid": "components/catalog/product/ProductGrid.vue",
     "qty-select": "components/QtySelect.vue",
     "shopping-cart-card": "components/ShoppingCartCard.vue",

@@ -3,8 +3,7 @@
         <v-card
             outlined
             class="mx-auto"
-            :elevation="hover ? 12 : 2"
-            :dark="hover"
+            :color="hover ? '#EEEEEE' : '#FFFFFF' "
         >
             <a :href="getProductUrl(product)">
                 <v-img
@@ -22,7 +21,7 @@
 
             <v-card-title>
                 <div class="mx-5">
-                    <p class="title blue--text">{{ product.name }}</p>
+                    <p class="title blue--text">{{ product.desc.name }}</p>
                     <br />
                     <v-rating
                         readonly
@@ -32,24 +31,29 @@
                         color="orange"
                         v-model="rating"
                     ></v-rating>
-                    <span class="title"> ${{ product.price }}</span> &nbsp
-                    <del class=""> ${{ product.rrp }}</del>
+                    <span class="title"> ${{ product.prices.price }}</span> &nbsp
+                    <del class=""> ${{ product.prices.rrp }}</del>
                 </div>
             </v-card-title>
-            <v-card-actions>
-                <v-chip-group
+            <v-card-actions class="text-center">
+                <product-swatches-card :product="product"></product-swatches-card>
+                <!-- <v-chip-group
                     v-model="selection"
                     active-class="deep-purple accent-4 white--text"
                     column
                 >
-                    <v-chip>5:30PM</v-chip>
+                    <v-chip>
+                        <v-avatar left>
+                            <v-icon>mdi-checkbox-marked-circle</v-icon>
+                        </v-avatar>Gren
+                    </v-chip>
 
                     <v-chip>7:30PM</v-chip>
 
                     <v-chip>8:00PM</v-chip>
 
                     <v-chip>9:00PM</v-chip>
-                </v-chip-group>
+                </v-chip-group> -->
             </v-card-actions>
             <!-- <v-card-actions>
           <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>
