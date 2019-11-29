@@ -1,6 +1,8 @@
 <template>
     <v-container>
-        <component v-for="(swatch, name) in swatches" :key=name
+        <component
+            v-for="(swatch, name) in swatches"
+            :key="name"
             :is="swatchCard(name)"
             v-bind="swatch"
             @swatchSelected="swatchSelected"
@@ -11,18 +13,20 @@
 <script>
 export default {
     props: {
-      product: {
-          type: Object
-      }
+        product: {
+            type: Object
+        }
     },
-    
+
     data() {
         return {
             swatches: {},
-            products: {}
-        }
+            products: {},
+            availables: []
+        };
     },
     created() {
+        this.availables = this.product.configurables;
         this.initSwatches();
     },
     computed: {
@@ -33,31 +37,53 @@ export default {
     methods: {
         initSwatches() {
             let keys = Object.keys(this.swatchConsts);
-            if (keys.length > 0 && this.product.configurables) {
+            if (keys.length > 0 && this.availables) {
                 keys.forEach(swatch => {
-                    this.swatches[swatch] = {type: swatch, items:[], current: null};
+                    this.swatches[swatch] = {
+                        type: swatch,
+                        items: [],
+                        current: null
+                    };
                     this.products[swatch] = [];
                     this.product.configurables.forEach(product => {
                         this.products[swatch].push(product);
-                        if (!this.swatches[swatch].items.includes(product[swatch])) {
+                        if (
+                            !this.swatches[swatch].items.includes(
+                                product[swatch]
+                            )
+                        ) {
                             this.swatches[swatch].items.push(product[swatch]);
                         }
-                    })
-                })
+                    });
+                });
             }
         },
         swatchCard(name) {
-            switch(name) {
-                case 'color':
-                    return 'product-color-swatch-card';
+            switch (name) {
+                case "color":
+                    return "product-color-swatch-card";
                     break;
-                case 'size':
-                    return 'product-color-swatch-card';
+                case "size":
+                    return "product-color-swatch-card";
                     break;
             }
         },
+        reduceResouces() {
+            var reduced = this.product.configurables;
+            Object.keys(this.swatchConsts).forEach(key => {
+                var swatch = this.swatches[key];
+                if (swatch.current && swatch.current !== undefined) {
+                    reduced = reduced.filter(product => {
+                        return product[swatch.type] === swatch.current;
+                    });
+                }
+            });
+            this.availables = reduced;
+            console.log("filters result ", this.availables);
+        },
         swatchSelected(item) {
-            console.log('swatchSelected', item)
+            this.swatches[item.swatch].current = item.value;
+            this.reduceResouces();
         }
     }
 };
