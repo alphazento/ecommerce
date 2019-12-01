@@ -1,23 +1,47 @@
 <template>
     <v-hover v-slot:default="{ hover }">
         <v-card
+            light
             outlined
             class="mx-auto"
-            :color="hover ? '#EEEEEE' : '#FFFFFF' "
+            :color="hover ? '#EEEEEE' : '#FFFFFF'"
         >
-            <a :href="getProductUrl(product)">
-                <v-img
-                    :src="getProductImageUrl(product)"
-                    height="280px"
-                    contain
-                >
-                    <v-container fill-height fluid>
-                        <v-layout fill-height>
-                            <v-flex xs12 align-end flexbox> </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-img>
-            </a>
+            <v-carousel
+                :show-arrows="true"
+                :hide-delimiters="true"
+                :hide-delimiter-background="true"
+                cycle
+            >
+                <a :href="getProductUrl(product)">
+                    <v-carousel-item
+                        v-for="(item, index) in variationElements.images"
+                        :key="index"
+                        reverse-transition="fade-transition"
+                        transition="fade-transition"
+                    >
+                        <v-sheet height="100%" tile>
+                            <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                            >
+                                <v-img
+                                    :src="getProductImageUrl(item)"
+                                    height="280px"
+                                    contain
+                                >
+                                    <v-container fill-height fluid>
+                                        <v-layout fill-height>
+                                            <v-flex xs12 align-end flexbox>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-img>
+                            </v-row>
+                        </v-sheet>
+                    </v-carousel-item>
+                </a>
+            </v-carousel>
 
             <v-card-title>
                 <div class="mx-5">
@@ -31,12 +55,16 @@
                         color="orange"
                         v-model="rating"
                     ></v-rating>
-                    <span class="title"> ${{ product.prices.price }}</span> &nbsp
+                    <span class="title"> ${{ product.prices.price }}</span>
+                    &nbsp
                     <del class=""> ${{ product.prices.rrp }}</del>
                 </div>
             </v-card-title>
             <v-card-actions class="text-center">
-                <product-swatches-card :product="product"></product-swatches-card>
+                <product-swatches-card
+                    :product="product"
+                    @productElementsUpdated="productElementsUpdated"
+                ></product-swatches-card>
                 <!-- <v-chip-group
                     v-model="selection"
                     active-class="deep-purple accent-4 white--text"
@@ -75,8 +103,21 @@ export default {
         return {
             rating: 3,
             color: "grey lighten-2",
-            selection: 1
+            selection: 1,
+            variationElements: {
+                images: [],
+                priceRange: [
+                    this.product.prices.price,
+                    this.product.prices.price
+                ]
+            }
         };
+    },
+    methods: {
+        productElementsUpdated(elements) {
+            console.log("elements", elements);
+            this.variationElements = elements;
+        }
     }
 };
 </script>

@@ -22,12 +22,15 @@ export default {
         return {
             swatches: {},
             products: {},
-            availables: []
+            availables: [],
+            priceRange: [],
+            images: []
         };
     },
     created() {
         this.availables = this.product.configurables;
         this.initSwatches();
+        this.calc();
     },
     computed: {
         swatchConsts() {
@@ -78,12 +81,44 @@ export default {
                     });
                 }
             });
+            // reduced.sort((a, b) => (a.prices.price > b.prices.price ? 1 : -1));
             this.availables = reduced;
-            console.log("filters result ", this.availables);
+        },
+        calc() {
+            var images = this.availables.map(v => {
+                return v.media_gallery;
+            });
+            images = images.reduce((accumulator, currentValue) => {
+                return accumulator.concat(currentValue);
+            }, []);
+
+            images = images.filter((value, index, self) => {
+                return self.indexOf(value) === index;
+            });
+
+            this.images = images.map(jsontext => {
+                var item = JSON.parse(jsontext);
+                item.image = item.value;
+                return item;
+            });
+
+            this.availables.sort((a, b) =>
+                a.prices.price > b.prices.price ? 1 : -1
+            );
+            this.priceRange = [
+                this.availables[0].prices.price,
+                this.availables[this.availables.length - 1].prices.price
+            ];
+
+            this.$emit("productElementsUpdated", {
+                images: this.images,
+                priceRange: this.priceRange
+            });
         },
         swatchSelected(item) {
             this.swatches[item.swatch].current = item.value;
             this.reduceResouces();
+            this.calc();
         }
     }
 };
