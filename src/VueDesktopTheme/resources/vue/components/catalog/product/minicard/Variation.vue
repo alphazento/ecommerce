@@ -7,10 +7,10 @@
             :color="hover ? '#EEEEEE' : '#FFFFFF'"
         >
             <v-carousel
-                :show-arrows="true"
+                :show-arrows-on-hover="true"
                 :hide-delimiters="true"
                 :hide-delimiter-background="true"
-                cycle
+                height="280px"
             >
                 <a :href="getProductUrl(product)">
                     <v-carousel-item
@@ -19,11 +19,12 @@
                         reverse-transition="fade-transition"
                         transition="fade-transition"
                     >
-                        <v-sheet height="100%" tile>
+                        <v-sheet height="100%" tile light>
                             <v-row
                                 class="fill-height"
                                 align="center"
                                 justify="center"
+                                height="280px"
                             >
                                 <v-img
                                     :src="getProductImageUrl(item)"
@@ -65,23 +66,6 @@
                     :product="product"
                     @productElementsUpdated="productElementsUpdated"
                 ></product-swatches-card>
-                <!-- <v-chip-group
-                    v-model="selection"
-                    active-class="deep-purple accent-4 white--text"
-                    column
-                >
-                    <v-chip>
-                        <v-avatar left>
-                            <v-icon>mdi-checkbox-marked-circle</v-icon>
-                        </v-avatar>Gren
-                    </v-chip>
-
-                    <v-chip>7:30PM</v-chip>
-
-                    <v-chip>8:00PM</v-chip>
-
-                    <v-chip>9:00PM</v-chip>
-                </v-chip-group> -->
             </v-card-actions>
             <!-- <v-card-actions>
           <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>
@@ -103,7 +87,6 @@ export default {
         return {
             rating: 3,
             color: "grey lighten-2",
-            selection: 1,
             variationElements: {
                 images: [],
                 priceRange: [

@@ -15,7 +15,8 @@ export default {
     "full-simple-product-card": "components/catalog/product/fullcard/Simple.vue",
     "full-variation-product-card": "components/catalog/product/fullcard/Variation.vue",
 
-    "product-detail": "components/catalog/product/ProductDetail.vue",
+    "product-tab": "components/catalog/product/tab/Tab.vue",
+    "product-tabs": "components/catalog/product/tab/Tabs.vue",
 
     "product-grid": "components/catalog/product/ProductGrid.vue",
     "qty-select": "components/QtySelect.vue",

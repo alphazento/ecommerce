@@ -5,7 +5,12 @@
 @endpush
 
 @section('pagecontent')
-    <product-full-card :product="product" :tabs="detailTabs"></product-full-card>
+<v-container fluid>
+    <component 
+    :is="productCard"
+    v-bind="{ product: product }"></component>
+   <product-tabs :tabs="detailTabs" :product="product"></product-tabs>
+</v-container>
 @endsection
 
 @push('tail')
@@ -18,8 +23,19 @@
         data: {
             product: @json($product->toArray()),
             detailTabs: @json($jsonFields),
-            swatches: @json($swatches)
+            swatches: @json($swatches),
+            productCard: 'full-simple-product-card'
         },
+        created() {
+            switch(this.product.type_id) {
+                case 'simple':
+                    this.productCard = 'full-simple-product-card';
+                    break;
+                case 'configuable':
+                    this.productCard = 'full-variation-product-card';
+                    break;
+            }
+        }
     });
     </script>
 @endpush
