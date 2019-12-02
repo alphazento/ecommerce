@@ -31,8 +31,7 @@
       }
     },
     created() {
-      this.items = JSON.parse(this.description);
-      console.log('items', this.items);
+      // this.items = JSON.parse(this.description);
     }
   }
 </script>

@@ -31,7 +31,7 @@
                 case 'simple':
                     this.productCard = 'full-simple-product-card';
                     break;
-                case 'configuable':
+                case 'configurable':
                     this.productCard = 'full-variation-product-card';
                     break;
             }

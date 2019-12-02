@@ -1,6 +1,6 @@
 <template>
     <v-hover v-slot:default="{ hover }">
-        <v-card class="mx-auto" :color="hover ? rgba(255, 0, 0, 0.5) : rgba(255, 0, 0, 1) ">
+        <v-card class="mx-auto">
             <a :href="getProductUrl(product)">
                 <v-img
                     :src="getProductImageUrl(product)"

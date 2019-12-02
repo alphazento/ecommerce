@@ -41,10 +41,10 @@
             <h1 class="display-2 text-uppercase">
                 {{ product.desc.name }}
             </h1>
-            <product-detail
+            <product-tab
                 :description="product.desc.description"
                 :flex="'md9 xs12'"
-            ></product-detail>
+            ></product-tab>
             <v-content>
                 <v-layout row>
                     <product-swatches-card
@@ -117,7 +117,6 @@ export default {
     },
     methods: {
         productElementsUpdated(elements) {
-            console.log("elements", elements);
             this.variationElements = elements;
         }
     }
