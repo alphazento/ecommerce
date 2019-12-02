@@ -105,10 +105,12 @@ export default {
             this.availables.sort((a, b) =>
                 a.prices.price > b.prices.price ? 1 : -1
             );
-            this.priceRange = [
-                this.availables[0].prices.price,
-                this.availables[this.availables.length - 1].prices.price
-            ];
+            let priceFrom = this.availables[0].prices.price;
+            let priceTo = this.availables[this.availables.length - 1].prices.price;
+            this.priceRange = [ priceFrom ];
+            if (priceTo > priceFrom) {
+                this.priceRange.push(priceTo);
+            }
 
             this.$emit("productElementsUpdated", {
                 images: this.images,

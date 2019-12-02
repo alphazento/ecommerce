@@ -4,34 +4,41 @@ namespace Zento\Catalog\Services;
 
 use DB;
 use Store;
+use Closure;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServiceInterface
 {
+    protected $lazyRelationHandlers = [];
+
+    public function registerLazyRelationHandler(Closure $callback) {
+        $this->lazyRelationHandlers[] = $callback;
+        return $this;
+    }
+
     public function getProductById($id) {
-        $product = Product::find($id);
-        $product->assignExtraRelation([$product]);
-        return $product;
+        return $this->singleProductExtraRelation(Product::find($id));
     }
 
     public function getProductBySku($sku) {
-        return Product::where('sku', $sku)->first();
+        return $this->singleProductExtraRelation(Product::where('sku', $sku)->first());
+
     }
 
     public function getProductsByIds(array $ids) {
         if (empty($ids)) {
             return null;
         }
-        return Product::whereIn('id', $ids)->get();
+        return $this->massProductExtraRelation(Product::whereIn('id', $ids)->get());
     }
 
     public function getProductsBySkus(array $skus) {
         if (empty($skus)) {
             return null;
         }
-        return Product::whereIn('sku', $skus)->get();
+        return $this->massProductExtraRelation(Product::whereIn('sku', $skus)->get());
     }
 
     public function getLatestProducts($limit) {
@@ -43,7 +50,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
     }
 
     public function getBestSellerProducts($limit) {
-        return Product::offset(0)->take($limit)->get();
+        return $this->massProductExtraRelation(Product::offset(0)->take($limit)->get());
     }
 
     public function __call($method, $args) {
@@ -72,5 +79,21 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
             ->where('enabled', 1)
             ->pluck('attribute_name')
             ->toArray();
+    }
+
+    protected function singleProductExtraRelation($product) {
+        if ($product) {
+            $product->assignExtraRelation([$product]);
+        }
+        return $product;
+    }
+
+    protected function massProductExtraRelation($products) {
+        if ($products) {
+            foreach($this->lazyRelationHandlers as $handler) {
+                $handler($products);
+            }
+        }
+        return $products;
     }
 }

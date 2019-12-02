@@ -1,11 +1,10 @@
 <template>
     <v-layout row>
         <v-flex md5 xs12>
-            <v-carousel
-                :show-arrows-on-hover="true"
-                :hide-delimiters="true"
+            <v-carousel cycle
+                :show-arrows="true"  
+                height="500px"
                 :hide-delimiter-background="true"
-                height="280px"
             >
                 <v-carousel-item
                     v-for="(item, index) in variationElements.images"
@@ -13,51 +12,54 @@
                     reverse-transition="fade-transition"
                     transition="fade-transition"
                 >
-                    <v-sheet height="100%" tile light>
-                        <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                            height="280px"
+                <v-sheet height="100%" tile>
+                    <v-row class="fill-height" align="center" justify="center">
+                        <v-img
+                            :src="getProductImageUrl(item)"
+                            contain
                         >
-                            <v-img
-                                :src="getProductImageUrl(item)"
-                                height="280px"
-                                contain
-                            >
-                                <v-container fill-height fluid>
-                                    <v-layout fill-height>
-                                        <v-flex xs12 align-end flexbox>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-img>
-                        </v-row>
-                    </v-sheet>
+                            <v-container fill-height fluid>
+                                <v-layout fill-height>
+                                    <v-flex xs12 align-end flexbox>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-img>
+                    </v-row>
+                </v-sheet>
                 </v-carousel-item>
             </v-carousel>
         </v-flex>
         <v-flex md7 xs12>
-            <h1 class="display-2 text-uppercase">
-                {{ product.desc.name }}
-            </h1>
-            <product-tab
-                :description="product.desc.description"
-                :flex="'md9 xs12'"
-            ></product-tab>
-            <v-content>
+            <v-container>
                 <v-layout row>
-                    <product-swatches-card
-                        :product="product"
-                        @productElementsUpdated="productElementsUpdated"
-                    ></product-swatches-card>
+                    <v-flex md1 xs1></v-flex>
+                    <v-flex md10 xs10>
+                        <h1 class="display-2 text-uppercase">
+                            {{ product.desc.name }}
+                        </h1>
+                        <br/>
+                        <p v-html="product.desc.description "></p>
+                    </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex md1 xs1></v-flex>
-                    <v-flex md6 xs6>
-                        <div class="display-1" style="color:#F44336;">
-                            ${{ product.prices.price }}
-                        </div>
+                    <v-flex md10 xs10>
+                        <product-swatches-card
+                            :product="product"
+                            @productElementsUpdated="productElementsUpdated"
+                        ></product-swatches-card>
+                    </v-flex>
+                </v-layout>
+                <v-layout row>
+                    <v-flex md1 xs1></v-flex>
+                    <v-flex md10 xs10>
+                        <span class="display-1" style="color:#F44336;">
+                            ${{ variationElements.priceRange[0] }}
+                        </span>
+                        <span class="display-1" style="color:#F44336;" v-if="variationElements.priceRange.length > 1">
+                            to ${{ variationElements.priceRange[0] }}
+                        </span>
                     </v-flex>
                 </v-layout>
                 <v-form
@@ -84,7 +86,7 @@
                         </v-flex>
                     </v-layout>
                 </v-form>
-            </v-content>
+            </v-container>
         </v-flex>
     </v-layout>
 </template>
@@ -109,7 +111,6 @@ export default {
             variationElements: {
                 images: [],
                 priceRange: [
-                    this.product.prices.price,
                     this.product.prices.price
                 ]
             }

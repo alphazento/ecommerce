@@ -27,6 +27,8 @@
             productCard: 'full-simple-product-card'
         },
         created() {
+            console.log('product', this.product);
+            this.$store.dispatch('setSwatches', this.swatches)
             switch(this.product.type_id) {
                 case 'simple':
                     this.productCard = 'full-simple-product-card';
