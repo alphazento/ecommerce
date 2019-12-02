@@ -11,7 +11,9 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServiceInterface
 {
     public function getProductById($id) {
-        return Product::find($id);
+        $product = Product::find($id);
+        $product->assignExtraRelation([$product]);
+        return $product;
     }
 
     public function getProductBySku($sku) {

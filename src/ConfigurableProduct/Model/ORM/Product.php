@@ -43,7 +43,7 @@ class Product extends SimpleProduct
         return ProductService::getProductById($id);
     }
 
-    public static function massAssignRelation($products) {
+    public static function assignExtraRelation($products) {
         $reduced = array_filter($products, function($product) {
             return $product->type_id === 'configurable';
         });

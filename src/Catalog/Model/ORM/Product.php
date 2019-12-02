@@ -64,8 +64,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
         $model->fireModelEvent('retrieved', false);
 
-        // $model->lazyLoadRelation();
-        
         return $model;
     }
 
@@ -120,5 +118,8 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
     public function getPrice() {
         return $this->prices->price ?? 0;
+    }
+
+    public static function assignExtraRelation($products) {
     }
 }

@@ -11,12 +11,7 @@ class Entry extends \Illuminate\Support\ServiceProvider
     public function boot() {
         SimpleProduct::registerType('configurable', ConfigurableProduct::class);
         CatalogSearchService::registerPostSearchHandler(function($items) {
-            // foreach($items as $item) {
-
-            //     $item->setRelation('configurables', new \Zento\Catalog\Model\ORM\Product());
-            // }
-
-            ConfigurableProduct::massAssignRelation($items);
+            ConfigurableProduct::assignExtraRelation($items);
         });
     }
 }
