@@ -67,7 +67,7 @@ export default {
                     return "product-color-swatch-card";
                     break;
                 case "size":
-                    return "product-color-swatch-card";
+                    return "product-size-swatch-card";
                     break;
             }
         },
