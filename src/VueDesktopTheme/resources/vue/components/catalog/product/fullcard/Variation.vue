@@ -32,40 +32,41 @@
         </v-flex>
         <v-flex md7 xs12>
             <v-container>
-                <v-layout row>
-                    <v-flex md1 xs1></v-flex>
-                    <v-flex md10 xs10>
-                        <h1 class="display-2 text-uppercase">
-                            {{ product.desc.name }}
-                        </h1>
-                        <br/>
-                        <p v-html="product.desc.description "></p>
-                    </v-flex>
-                </v-layout>
-                <v-layout row>
-                    <v-flex md1 xs1></v-flex>
-                    <v-flex md10 xs10>
-                        <product-swatches-card
-                            :product="product"
-                            @productElementsUpdated="productElementsUpdated"
-                        ></product-swatches-card>
-                    </v-flex>
-                </v-layout>
-                <v-layout row>
-                    <v-flex md1 xs1></v-flex>
-                    <v-flex md10 xs10>
-                        <span class="display-1" style="color:#F44336;">
-                            ${{ variationElements.priceRange[0] }}
-                        </span>
-                        <span class="display-1" style="color:#F44336;" v-if="variationElements.priceRange.length > 1">
-                            to ${{ variationElements.priceRange[0] }}
-                        </span>
-                    </v-flex>
-                </v-layout>
-                <v-form
+                 <v-form
                     :action="`/shoppingcart/add_product/${product.id}`"
                     method="POST"
                 >
+                    <v-layout row>
+                        <v-flex md1 xs1></v-flex>
+                        <v-flex md10 xs10>
+                            <h1 class="display-2 text-uppercase">
+                                {{ product.desc.name }}
+                            </h1>
+                            <br/>
+                            <p v-html="product.desc.description "></p>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex md1 xs1></v-flex>
+                        <v-flex md10 xs10>
+                            <product-swatches-card
+                                :product="product"
+                                @productElementsUpdated="productElementsUpdated"
+                            ></product-swatches-card>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex md1 xs1></v-flex>
+                        <v-flex md10 xs10>
+                            <span class="display-1" style="color:#F44336;">
+                                ${{ variationElements.priceRange[0] }}
+                            </span>
+                            <span class="display-1" style="color:#F44336;" v-if="variationElements.priceRange.length > 1">
+                                to ${{ variationElements.priceRange[0] }}
+                            </span>
+                        </v-flex>
+                    </v-layout>
+                
                     <v-layout row>
                         <v-flex md1 xs1></v-flex>
                         <v-flex md6 xs6>
@@ -74,7 +75,7 @@
                                 v-model="selectedQty"
                             ></qty-select>
                         </v-flex>
-                        <input type="hidden" name="qty" v-model="selectedQty" />
+                        <input type="hidden" name="quantify" v-model="selectedQty" />
                         <v-flex md5 xs5>
                             <v-btn
                                 depressed

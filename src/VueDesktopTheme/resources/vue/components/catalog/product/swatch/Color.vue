@@ -12,6 +12,7 @@
                 {{color}}
             </div>
         </v-chip>
+        <input type="hidden" name="options[color]" v-model="items[selection]" />
     </v-chip-group>
 </template>
 

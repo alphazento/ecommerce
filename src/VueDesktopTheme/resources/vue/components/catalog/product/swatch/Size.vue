@@ -6,6 +6,7 @@
             </v-avatar>
             {{ size }}
         </v-chip>
+        <input type="hidden" name="options[size]" v-model="items[selection]" />
     </v-chip-group>
 </template>
 

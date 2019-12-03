@@ -170,7 +170,7 @@ class ShoppingCartService
         return null;
     }
 
-    public function addProductById(IShoppingCart $cart, $product_id, $quantity, $url, array $options =[]) {
+    public function addProductById(IShoppingCart $cart, $product_id, $actual_product_id, $quantity, $url, array $options =[]) {
         // zento_assert($cart);
         if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
             $item->quantity += $quantity;
