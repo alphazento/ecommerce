@@ -114,7 +114,8 @@ export default {
 
             this.$emit("productElementsUpdated", {
                 images: this.images,
-                priceRange: this.priceRange
+                priceRange: this.priceRange,
+                candidates: this.availables
             });
         },
         swatchSelected(item) {

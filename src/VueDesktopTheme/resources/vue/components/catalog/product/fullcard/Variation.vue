@@ -81,6 +81,7 @@
                                 large
                                 class="btn__addtocart"
                                 type="submit"
+                                :disabled="variationElements.candidates.length != 1"
                                 >Add to Cart</v-btn
                             >
                         </v-flex>
@@ -112,7 +113,8 @@ export default {
                 images: [],
                 priceRange: [
                     this.product.prices.price
-                ]
+                ],
+                candidates: []
             }
         };
     },
