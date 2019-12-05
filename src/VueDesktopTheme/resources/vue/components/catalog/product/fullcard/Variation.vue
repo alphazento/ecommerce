@@ -36,6 +36,7 @@
                     :action="`/shoppingcart/add_product/${product.id}`"
                     method="POST"
                 >
+                    <input type="hidden" name="options[actual_pid]" v-model="actual_pid"/>
                     <v-layout row>
                         <v-flex md1 xs1></v-flex>
                         <v-flex md10 xs10>
@@ -115,13 +116,19 @@ export default {
                 priceRange: [
                     this.product.prices.price
                 ],
-                candidates: []
-            }
+                candidates: [],
+            },
+            actual_pid: 0
         };
     },
     methods: {
         productElementsUpdated(elements) {
             this.variationElements = elements;
+            if (this.variationElements.candidates.length > 0) {
+                this.actual_pid = this.variationElements.candidates[0].id;
+            } else {
+                this.actual_pid = 0;
+            }
         }
     }
 };

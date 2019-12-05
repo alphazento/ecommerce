@@ -7,15 +7,19 @@ use Store;
 use Auth;
 use Request;
 
+use Illuminate\Support\Str;
+
+use Zento\Catalog\Model\ORM\Product as BaseProduct;
+
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCartItem;
+
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
+use Zento\ShoppingCart\Model\ORM\ShoppingCartItem;
 
 use Zento\ShoppingCart\Event\ShoppingCartUpdated;
 use Zento\ShoppingCart\Event\PreAddProduct;
-use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
-use Zento\Contracts\Interfaces\Catalog\IShoppingCartItem;
-
-use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ShoppingCartService
@@ -170,71 +174,21 @@ class ShoppingCartService
         return null;
     }
 
-    public function addProductById(IShoppingCart $cart, $product_id, $actual_product_id, $quantity, $url, array $options =[]) {
-        // zento_assert($cart);
-        if ($item = $this->findExistItemByProductOption($cart, $product_id, $options)) {
-            $item->quantity += $quantity;
-            $item->row_price = $item->unit_price * $item->quantity;
-            $item->save();
+    public function addProduct(IShoppingCart $cart, $product_id, $quantity, array $options =[]) {
+        if ($product = BaseProduct::thinMode()->find($product_id)) {
+            $cartItem = $product->findExistCartItem($cart, $options);
+            if (!$cartItem) {
+                $itemData = $product->prepareToCartItem($options);
+                $itemData['cart_id'] = $cart->id;
+                $cartItem = new ShoppingCartItem($itemData);
+            }
+            $cartItem->quantity += $quantity;
+            $cartItem->row_price = $cartItem->custom_price * $cartItem->quantity;
+            $cartItem->save();
+
             if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
-                return $item;
+                return $cartItem;
             }
-        } elseif ($product = \Zento\Catalog\Model\ORM\Product::find($product_id)) {
-            return $this->addProductAsNewItem($cart, $product, $quantity, $url, $options);
-        }
-    }
-
-    public function addProduct(IShoppingCart $cart, IProduct $product, $quantity, $url, array $options =[]) {
-        // zento_assert($cart);
-        // zento_assert($product);
-        if ($item = $this->findExistItemByProductOption($cart, $product->id, $options)) {
-            $newQuantity = $item->quantity + $quantity;
-            $ret = (new PreAddProduct($product, $options, $newQuantity))->fireUntil();
-            if (!$ret->isSuccess()) {
-                return false;
-            }
-            $item->quantity = $newQuantity;
-            $item->row_price = $item->unit_price * $item->quantity;
-            $item->save();
-            if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
-                return $item;
-            }
-        } else {
-            return $this->addProductAsNewItem($cart, $product, $quantity, $url, $options);
-        }
-    }
-
-    protected function addProductAsNewItem(
-        IShoppingCart $cart, 
-        IProduct $product, 
-        $quantity, $url, array $options =[]) {
-        // zento_assert($cart);
-        // zento_assert($product);
-        $ret = (new PreAddProduct($product, $options, $quantity))->fireUntil();
-        if (!$ret->isSuccess()) {
-            return false;
-        }
-
-        $realProduct = $product->getRealProductForShoppingCart($options);
-        $price = $realProduct->getPrice();
-        $item = new \Zento\ShoppingCart\Model\ORM\ShoppingCartItem([
-            'cart_id' => $cart->id,
-            'name' => $realProduct->name,
-            'product_id' => $product->id,
-            'sku' => $product->sku,
-            'product_hash' => md5(json_encode($product->toArray())),
-            'price' => (string)$price,
-            'custom_price' => (string)$price,
-            'quantity' => $quantity,
-            'shippable' => $product->shippable(),
-            'taxable' => true,
-            'unit_price' => $price,
-            'row_price' => $price * $quantity,
-            'options' => json_encode($options)
-        ]);
-        $item->save();
-        if ($this->ShoppingCartUpdated($cart)->isSuccess()) {
-            return $item;
         }
     }
 

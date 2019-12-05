@@ -17,7 +17,6 @@ class CreateShoppingCartItemTable extends Migration
             $table->integer('cart_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->string('sku', 255);
-            $table->string('product_hash', 32);
             $table->string('name', 255);
             $table->decimal('price', 8, 2);
             $table->decimal('custom_price', 8, 2);

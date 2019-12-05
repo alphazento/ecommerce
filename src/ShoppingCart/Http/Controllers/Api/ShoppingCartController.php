@@ -34,12 +34,11 @@ class ShoppingCartController extends ApiBaseController
 
     public function addItem(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
-            if ($item = ShoppingCartService::addProductById($cart, 
-                $request->get('product_id'), 
-                $request->get('actual_product_id'),
+            if ($item = ShoppingCartService::addProduct($cart, 
+                $request->get('product_id'),
                 $request->get('quantity', 1),
-                $request->get('url'),
-                $request->get('options', []))) {
+                $request->get('options', []))) 
+            {
                 return $this->withData($cart);
             } else {
                 $this->error(400, 'fail to add item to cart');

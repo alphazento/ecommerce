@@ -5,6 +5,7 @@ namespace Zento\Catalog\Model\ORM;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
 class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
@@ -25,10 +26,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
     public static function registerType($type_id, $class) {
         self::$typeMap[$type_id] = $class;
-    }
-
-    public function getRealProductForShoppingCart($options = null) {
-        return $this;    
     }
     
     public function shippable() {
@@ -76,7 +73,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         } elseif (is_object($attributes) && property_exists($attributes, 'type_id')) {
             $type_id = $attributes->type_id;
         }
-
         if ($type_id) {
             if (isset(self::$typeMap[$type_id])) {
                 $class = self::$typeMap[$type_id];
@@ -121,5 +117,48 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     }
 
     public static function assignExtraRelation($products) {
+    }
+
+    /**
+     * check if shopping cart has same item exists
+     *
+     * @param IShoppingCart $cart
+     * @param array $options
+     * @return boolean
+     */
+    public function findExistCartItem(IShoppingCart $cart, array &$options) {
+        foreach($cart->items ?? [] as $item) {
+            if ($item->product_id === $this->id) {
+                return $item;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * prepare to item
+     *
+     * @param array $options
+     * @return void
+     */
+    public function prepareToCartItem(array &$options) {
+        $price = (string)$this->prices->price;
+        return [
+            'price' => $price,
+            'name' => $this->name,
+            'product_id' => $this->id,
+            'sku' => $this->sku,
+            'custom_price' => $price,
+            'quantity' => 0,
+            'shippable' => $this->shippable(),
+            'taxable' => true,
+            'unit_price' => $price,
+            'row_price' => 0,
+            'options' => json_encode($options)
+        ];
+    }
+
+    public function actualProductsInCart(array $options, $toArray = false) {
+        return null;
     }
 }

@@ -10,7 +10,6 @@ interface IShoppingCartItem  extends \Zento\Contracts\AssertAbleInterface
         'name', 
         'product_id', 
         'sku', 
-        'product_hash',
         'price',
         'custom_price',
         'quantity', 

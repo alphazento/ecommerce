@@ -38,4 +38,30 @@ interface IProduct extends \Zento\Contracts\AssertAbleInterface
         'special_from',
         'special_to'
     ];
+
+
+    /**
+     * check if shopping cart has same item exists
+     *
+     * @param IShoppingCart $cart
+     * @param array $options
+     * @return boolean
+     */
+    public function findExistCartItem(IShoppingCart $cart, array &$options);
+
+    /**
+     * prepare to item
+     *
+     * @param array $options
+     * @return void
+     */
+    public function prepareToCartItem(array &$options);
+
+    /**
+     * get actual products from options
+     *
+     * @param array $options shopping cart item options
+     * @return void
+     */
+    public function actualProductsInCart(array $options, $toArray = false);
 }

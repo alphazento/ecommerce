@@ -14,4 +14,17 @@ class ShoppingCartItem extends \Illuminate\Database\Eloquent\Model
     public function product() {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
+
+    public function getOptionsAttribute() {
+        $text = $this->attributes['options'] ?? '{}';
+        return json_decode($text, true);
+    }
+
+    public function toArray() {
+        $data = parent::toArray();
+        if ($this->product) {
+            $data['actuals'] = $this->product->actualProductsInCart($this->options, true);
+        }
+        return $data;
+    }
 }
