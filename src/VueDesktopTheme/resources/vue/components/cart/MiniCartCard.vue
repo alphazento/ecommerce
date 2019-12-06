@@ -8,7 +8,10 @@
           <v-img :src="getProductImageUrl(item.product)"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="headline mb-1">{{ item.name }} * {{item.quantity}}</v-list-item-title>
+          <v-list-item-title class="headline mb-1">
+            {{ item.name }} * {{item.quantity}}
+            <cart-item-options-variation :product="item.product" :options="item.options"></cart-item-options-variation>
+          </v-list-item-title>
           <v-list-item-subtitle>${{item.row_price}}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -28,7 +31,7 @@
 </template>
 
 <script>
-var mixin = require("../mixin/catalogpollyfill");
+var mixin = require("../../mixin/catalogpollyfill");
 export default {
   mixins: [mixin.default],
   props: {

@@ -10,12 +10,13 @@ use Illuminate\Support\Collection;
 class Product extends SimpleProduct
 {
     const REQUIRE_OPTION_KEY = 'actual_pid';  //actual product id
+    const TYPE_ID = "configurable";
 
     /**
      * all configurable products
      */
     public function configurables() {
-        return $this->hasManyThrough(Product::class, ConfigurableProduct::class, 'parent_id', 'id', 'id', 'product_id');
+        return $this->hasManyThrough(Product::class, ConfigurableProductMapping::class, 'parent_id', 'id', 'id', 'product_id');
     }
 
     protected function lazyLoadRelation() {
@@ -23,13 +24,14 @@ class Product extends SimpleProduct
     }
 
     public static function assignExtraRelation($products) {
-        $reduced = array_filter($products, function($product) {
-            return $product->type_id === 'configurable';
-        });
-        $ids = array_map(function($product) {
-            return $product->id;
-        }, $reduced);
+        // $reduced = array_filter($products, function($product) {
+        //     return $product->type_id === self::TYPE_ID;
+        // });
+        // $ids = array_map(function($product) {
+        //     return $product->id;
+        // }, $reduced);
 
+        list($reduced, $ids) = parent::assignExtraRelation($products);
         if (count($ids) > 0) {
             // foreach($collection as $)
             $name = 'configurables';
@@ -37,7 +39,8 @@ class Product extends SimpleProduct
             $relation->orWhereIn('parent_id', $ids);
             $relation->match(
                 $relation->initRelation($reduced, $name),
-                $relation->getEager(), $name
+                $relation->getEager(), 
+                $name
             );
         }
     }
@@ -75,7 +78,7 @@ class Product extends SimpleProduct
         $this->checkOptions($options);
         $actual_pid = $options[self::REQUIRE_OPTION_KEY];
         // if ($actualProduct = SimpleProduct::find($actual_pid)) {
-        if ($actualProduct = ConfigurableProduct::where('parent_id', $this->id)
+        if ($actualProduct = ConfigurableProductMapping::where('parent_id', $this->id)
                 ->where('product_id', $actual_pid)
                 ->first()) {
             $itemData = $actualProduct->product->prepareToCartItem($options);

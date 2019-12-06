@@ -75,7 +75,9 @@ class CatalogController extends Controller
         );
         if ($resp->success) {
             $pagination = $resp->data->toArray();
-            return BladeTheme::view('page.searchresult', compact('pagination'));
+        } else {
+            $pagination = $resp->data;
         }
+        return BladeTheme::view('page.searchresult', compact('pagination'));
     }
 }

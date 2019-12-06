@@ -11,7 +11,9 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
-    private static $typeMap = [
+    const TYPE_ID = "simple";
+
+    protected static $typeMapping = [
         'simple' => '\Zento\Catalog\Model\ORM\Product',
         'grouped' => '\Zento\Catalog\Model\ORM\Product',
         'bundle' => '\Zento\Catalog\Model\ORM\Product',
@@ -25,7 +27,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     ];
 
     public static function registerType($type_id, $class) {
-        self::$typeMap[$type_id] = $class;
+        self::$typeMapping[$type_id] = $class;
     }
     
     public function shippable() {
@@ -74,8 +76,8 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
             $type_id = $attributes->type_id;
         }
         if ($type_id) {
-            if (isset(self::$typeMap[$type_id])) {
-                $class = self::$typeMap[$type_id];
+            if (isset(self::$typeMapping[$type_id])) {
+                $class = self::$typeMapping[$type_id];
                 return new $class([], true);
             }
         } else {
@@ -117,6 +119,13 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     }
 
     public static function assignExtraRelation($products) {
+        $reduced = array_filter($products, function($product) {
+            return $product->type_id === static::TYPE_ID;
+        });
+        $ids = array_map(function($product) {
+            return $product->id;
+        }, $reduced);
+        return [$reduced, $ids];
     }
 
     /**

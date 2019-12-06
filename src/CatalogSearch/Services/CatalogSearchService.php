@@ -249,6 +249,7 @@ class CatalogSearchService
         foreach($searchLayerDynamicAttrs as $da) {
             $dynAttrs[] = $da['attribute_name'];
         }
+
         foreach($criteria as $name => $filter) {
             if ($name == 'sort_by') { continue; }
             if ($name == 'price') { 
@@ -274,9 +275,9 @@ class CatalogSearchService
                         $builder->whereIn($name, $values);
                     } else {
                         if (is_array($filter)) {
-                            $builder->whereIn($name, $values);
+                            $builder->whereIn($name, $filter);
                         } else {
-                            $builder->where($name, 'like', $filter);
+                            $builder->whereIn($name, [$filter]);
                         }
                     }
                 }
@@ -288,6 +289,7 @@ class CatalogSearchService
         if ($priceFilter) {
             $this->filterPrice($builder, $priceFilter);
         }
+
         return [$builder, $aggregateQuery];
     }
 

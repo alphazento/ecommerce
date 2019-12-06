@@ -64,4 +64,9 @@ interface IProduct extends \Zento\Contracts\AssertAbleInterface
      * @return void
      */
     public function actualProductsInCart(array $options, $toArray = false);
+
+    /**
+     * for other type products will need to lazy load extra relation
+     */
+    public static function assignExtraRelation($products);
 }

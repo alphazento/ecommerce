@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConfigurableProductTable extends Migration
+class CreateConfigurableProductMappingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateConfigurableProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('configurable_products', function (Blueprint $table) {
+        Schema::create('configurable_product_mappings', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product_id')->unsigned();
             $table->integer('parent_id')->unsigned();
@@ -34,6 +34,6 @@ class CreateConfigurableProductTable extends Migration
      */
     public function down()
     {
-        Schema::drop('configurable_products');
+        Schema::drop('configurable_product_mappings');
     }
 }

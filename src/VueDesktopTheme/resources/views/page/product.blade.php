@@ -34,7 +34,10 @@
                     this.productCard = 'full-simple-product-card';
                     break;
                 case 'configurable':
-                    this.productCard = 'full-variation-product-card';
+                    this.productCard = 'full-configurable-product-card';
+                    break;
+                case 'downloadable':
+                    this.productCard = 'full-downloadable-product-card';
                     break;
             }
         }

@@ -1,16 +1,18 @@
 <template>
     <v-layout row>
         <v-flex md5 xs12>
-            <v-img :src="getProductImageUrl(product)"></v-img>
+            <v-img max-width="400px" :src="getProductImageUrl(product)"></v-img>
         </v-flex>
         <v-flex md7 xs12>
             <h1 class="display-2 text-uppercase">
                 {{ product.desc.name }}
             </h1>
-            <product-tab
+            <br/>
+            <p v-html="product.desc.description"/>
+            <!-- <product-tab
                 :description="product.desc.description"
                 :flex="'md9 xs12'"
-            ></product-tab>
+            ></product-tab> -->
             <v-content>
                 <v-layout row>
                     <v-flex md1 xs1></v-flex>
@@ -26,7 +28,7 @@
                 >
                     <v-layout row>
                         <v-flex md1 xs1></v-flex>
-                        <v-flex md6 xs6>
+                        <v-flex md6 xs6 v-if="canShowQutity">
                             <qty-select
                                 :max="20"
                                 v-model="selectedQty"
@@ -59,11 +61,15 @@ export default {
         },
         tabs: {
             type: Object
+        },
+        showQutity: {
+            type: Boolean
         }
     },
     data() {
         return {
             selectedQty: 1,
+            canShowQutity: this.showQutity ? true : false,
             qtys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             model: "tab-physic"
         };

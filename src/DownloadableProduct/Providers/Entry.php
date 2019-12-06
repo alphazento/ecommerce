@@ -1,19 +1,19 @@
 <?php
 
-namespace Zento\ConfigurableProduct\Providers;
+namespace Zento\DownloadableProduct\Providers;
 
 use ProductService;
 use CatalogSearchService;
 
-use Zento\ConfigurableProduct\Model\ORM\Product as ConfigurableProduct;
+use Zento\DownloadableProduct\Model\ORM\Product as DownloadableProduct;
 
 class Entry extends \Illuminate\Support\ServiceProvider
 {
     public function boot() {
-        ConfigurableProduct::registerType(ConfigurableProduct::TYPE_ID, ConfigurableProduct::class);
+        DownloadableProduct::registerType(DownloadableProduct::TYPE_ID, DownloadableProduct::class);
         $callback = function($items) {
-            if (ConfigurableProduct::isRichMode()) {
-                ConfigurableProduct::assignExtraRelation($items);
+            if (DownloadableProduct::isRichMode()) {
+                DownloadableProduct::assignExtraRelation($items);
             }
         };
         ProductService::registerLazyRelationHandler($callback);

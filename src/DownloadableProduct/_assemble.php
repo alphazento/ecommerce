@@ -1,10 +1,10 @@
 <?php
 return [
-    "Zento_ConfigurableProduct"=> [
+    "Zento_DownloadableProduct"=> [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\ConfigurableProduct\\Providers\\Entry"
+            "\\Zento\\DownloadableProduct\\Providers\\Entry"
         ],
         "depends"=>[
             "Zento_Catalog",
