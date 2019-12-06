@@ -18,6 +18,7 @@ export default {
     "mini-cart-item-simple": "components/catalog/product/cartitem/MiniSimple.vue",
     "full-cart-item-simple": "components/catalog/product/cartitem/FullSimple.vue",
     "mini-cart-item-configurable": "components/catalog/product/cartitem/Configurable.vue",
+    "full-cart-item-configurable": "components/catalog/product/cartitem/Configurable.vue",
 
     "product-tab": "components/catalog/product/tab/Tab.vue",
     "product-tabs": "components/catalog/product/tab/Tabs.vue",
