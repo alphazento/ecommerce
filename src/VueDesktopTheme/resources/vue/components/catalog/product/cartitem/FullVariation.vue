@@ -1,18 +1,34 @@
 <template>
-  <full-cart-item-simple :item="item">
-    <template>
-      <div>
-        <div v-for="(option, i) of reduced" :key=i>
-          <span><strong>{{option.name}}:</strong>{{option.value}}</span>
-        </div>
-    </div>
-    </template>
-  </full-cart-item-simple>
+    <full-cart-item-simple
+        :item="item"
+        :product-image="product_image"
+        @quantityChange="quantityChange"
+    >
+        <template>
+            <div>
+                <div v-for="(option, i) of reduced" :key="i">
+                    <span>
+                        <strong class="text-uppercase"
+                            >{{ option.name }}:
+                        </strong>
+                        {{ option.value }}
+                    </span>
+                </div>
+            </div>
+        </template>
+    </full-cart-item-simple>
 </template>
 
 <script>
-import MiniVariation from "./MiniVariation"
+var mixin = require("./variation_mix");
+import MiniVariation from "./MiniVariation";
 export default {
-  extends: MiniVariation,
+    extends: MiniVariation,
+    mixins: [mixin.default],
+    methods: {
+        quantityChange() {
+            this.$emit("quantityChange", this.item);
+        }
+    }
 };
 </script>

@@ -60,4 +60,9 @@ class Product extends SimpleProduct
         }
         return false;
     }
+
+    public function actualProductsInCart(array $options, $toArray = false) {
+        $this->assignExtraRelation([$this]);
+        return null;
+    }
 }

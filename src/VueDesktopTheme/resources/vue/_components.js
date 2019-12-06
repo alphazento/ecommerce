@@ -17,8 +17,9 @@ export default {
     "full-downloadable-product-card": "components/catalog/product/fullcard/Downloadable.vue",
     "mini-cart-item-simple": "components/catalog/product/cartitem/MiniSimple.vue",
     "full-cart-item-simple": "components/catalog/product/cartitem/FullSimple.vue",
-    "mini-cart-item-configurable": "components/catalog/product/cartitem/Configurable.vue",
-    "full-cart-item-configurable": "components/catalog/product/cartitem/Configurable.vue",
+    "mini-cart-item-configurable": "components/catalog/product/cartitem/MiniVariation.vue",
+    "full-cart-item-configurable": "components/catalog/product/cartitem/FullVariation.vue",
+    "full-cart-item-downloadable": "components/catalog/product/cartitem/FullDownloadable.vue",
 
     "product-tab": "components/catalog/product/tab/Tab.vue",
     "product-tabs": "components/catalog/product/tab/Tabs.vue",

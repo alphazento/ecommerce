@@ -17,7 +17,11 @@
           :href="`#tab-${idx}`"
         >
           <v-flex md12 xs12>
-            <full-cart-item-simple :item="item"></full-cart-item-simple>
+            <component
+              :is="cartItemComponent(item)"
+              v-bind="{ item: item }"
+              @quantityChange="updateCartItemQty"
+            ></component>
             <v-layout>
               <v-flex md10 xs10></v-flex>
               <v-flex md2 xs2 text-center>
@@ -36,15 +40,15 @@
         </v-layout>
         <v-layout>
           <v-flex md6 xs6>Cart Subtotal:</v-flex>
-          <v-flex md6 xs6>${{cart.subtotal}}</v-flex>
+          <v-flex md6 xs6>${{ cart.subtotal }}</v-flex>
         </v-layout>
         <v-layout>
           <v-flex md6 xs6>Shipping &amp; Handling:</v-flex>
-          <v-flex md6 xs6>${{cart.shipping_fee}}</v-flex>
+          <v-flex md6 xs6>${{ cart.shipping_fee }}</v-flex>
         </v-layout>
         <v-layout>
           <v-flex md6 xs6>Order Total:</v-flex>
-          <v-flex md6 xs6>${{cart.total}}</v-flex>
+          <v-flex md6 xs6>${{ cart.total }}</v-flex>
         </v-layout>
         <v-layout>
           <v-flex md12 xs12>
@@ -57,9 +61,12 @@
     <v-layout class="row" v-if="!cart || cart.items.length == 0">
       <v-flex md12 text-center>
         <div class="empty-shopping-cart">
-            <p class="title">Shopping Cart is Empty</p>
-            <p>You have no items in your shopping cart.</p>
-            <p>Click <a href="/">here</a> to continue shopping</p>
+          <p class="title">Shopping Cart is Empty</p>
+          <p>You have no items in your shopping cart.</p>
+          <p>
+            Click
+            <a href="/">here</a> to continue shopping
+          </p>
         </div>
       </v-flex>
     </v-layout>
@@ -77,6 +84,19 @@ export default {
     }
   },
   methods: {
+    cartItemComponent(item) {
+      switch (item.product.type_id) {
+        case "configurable":
+          return "full-cart-item-configurable";
+          break;
+        case "downloadable":
+          return "full-cart-item-downloadable";
+          break;
+        case "simple":
+          return "full-cart-item-simple";
+          break;
+      }
+    },
     updateCartItemQty(item) {
       this.$store.dispatch("updateCartItemQty", item).then(response => {
         console.log("updateCartItemQty ", response);
