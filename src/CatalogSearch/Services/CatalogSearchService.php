@@ -147,7 +147,8 @@ class CatalogSearchService
                 $this->joined_tables[$this->categoryProductTable] = true;
                 $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
             }
-            $ids = CategoryService::getCategoryIdsWithChildrenByIds($category_ids);
+            // $ids = CategoryService::getCategoryIdsWithChildrenByIds($category_ids);
+            $ids = $category_ids;
             $builder->whereIn($this->categoryProductTable . '.category_id', $ids);
         }
     }
@@ -204,13 +205,13 @@ class CatalogSearchService
         
         $success = true;
         $code = 200;
-        $paginator = $builder->paginate($per_page);
+        $paginator = $builder->distinctPaginate('products.id', $per_page);
+        // $paginator = $builder->paginate($per_page);
 
         if ($paginator->lastPage() < $page && $paginator->total() > 0) {
             $code = 302;
             $paginator = $builder->paginate($per_page, ['*'], 'page', $paginator->lastPage());
         }
-        
         if ($paginator->total() == 0) {
             $success = false;
             $code = 404;
