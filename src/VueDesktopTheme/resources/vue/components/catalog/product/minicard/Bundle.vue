@@ -10,51 +10,30 @@
           </v-container>
         </v-img>
       </a>
-
       <v-card-title>
-        <div class="mx-5">
+        <div>
           <p class="title blue--text">{{ product.desc.name }}</p>
+          <!-- <p class="ma-0 subheading body-1 font-weight-bold text-left"></p> -->
           <br />
           <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
-          <span class="title">${{ product.prices.price }}</span>
+          <span class="title">$</span>
           &nbsp
-          <del class>${{ product.prices.rrp }}</del>
+          <del class>$</del>
         </div>
       </v-card-title>
-      <!-- <v-card-actions>
-          <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>
-      </v-card-actions>-->
     </v-card>
   </v-hover>
 </template>
 
 <script>
-var mixin = require("../../../../mixin/catalogpollyfill");
+import SimpleCard from "./Simple";
 export default {
-  mixins: [mixin.default],
+  extends: SimpleCard,
   props: {
     product: {
       type: Object
     }
-  },
-  data() {
-    return {
-      rating: 3,
-      color: "grey lighten-2"
-    };
   }
 };
 </script>
 
-<style scoped>
-.add-cart-btn {
-  color: #fff;
-  background-color: #600bd2 !important;
-}
-.wishlist-icon {
-  color: red !important;
-}
-.title {
-  height: 35px;
-}
-</style>

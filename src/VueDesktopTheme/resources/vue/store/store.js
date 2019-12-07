@@ -24,6 +24,9 @@ export default new Vuex.Store({
         },
         searchResult: {
             aggregate: {},
+            criteria: {
+                text: ""
+            },
             items: [],
             current_page: 1,
             from: 1,

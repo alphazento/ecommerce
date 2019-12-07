@@ -10,8 +10,10 @@ export default {
     "product-swatches-card": "components/catalog/product/swatch/ProductSwatches.vue",
 
     "mini-simple-product-card": "components/catalog/product/minicard/Simple.vue",
-    "mini-general-product-card": "components/catalog/product/minicard/General.vue",
     "mini-variation-product-card": "components/catalog/product/minicard/Variation.vue",
+    "mini-bundle-product-card": "components/catalog/product/minicard/Bundle.vue",
+    "mini-grouped-product-card": "components/catalog/product/minicard/Grouped.vue",
+
     "full-simple-product-card": "components/catalog/product/fullcard/Simple.vue",
     "full-configurable-product-card": "components/catalog/product/fullcard/Configurable.vue",
     "full-downloadable-product-card": "components/catalog/product/fullcard/Downloadable.vue",

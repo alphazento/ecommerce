@@ -7,16 +7,19 @@
       <v-img :src="logo" :max-height="60" :contain="true"></v-img>
       <v-spacer></v-spacer>
 
+      <!--remove solo-inverted, 
+        append-icon="mdi-magnify"
+      attr from v-text-field-->
       <v-text-field
         v-if="searcher"
-        append-icon="mdi-magnify"
+        v-model="searchText"
         flat
         hide-details
-        solo-inverted
         style="max-width: 300px;"
         placeholder="Search..."
+        @keyup.native="onEnterKey"
       />
-      <v-btn icon v-if="!searcher" @click.stop="searcher = !searcher">
+      <v-btn icon @click.stop="btnSearchClick">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
@@ -85,6 +88,7 @@ export default {
   },
   data() {
     return {
+      searchText: this.$store.state.searchResult.criteria.text,
       drawer: false,
       searcher: false,
       items: [
@@ -98,6 +102,25 @@ export default {
       e.stopPropagation();
       if (item.to || !item.href) return;
       this.$vuetify.goTo(item.href);
+    },
+
+    canSearch() {
+      this.searchText = this.searchText.trim();
+      return this.searchText.length > 2;
+    },
+
+    onEnterKey(e) {
+      if (e.isTrusted && e.code === "Enter" && this.canSearch()) {
+        window.location.href =
+          "/search?text=" + encodeURIComponent(this.searchText);
+      }
+    },
+    btnSearchClick() {
+      if (this.searcher && this.canSearch()) {
+        window.location.href =
+          "/search?text=" + encodeURIComponent(this.searchText);
+      }
+      this.searcher = !this.searcher;
     }
   },
   computed: {
