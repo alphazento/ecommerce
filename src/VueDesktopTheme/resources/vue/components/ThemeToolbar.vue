@@ -6,10 +6,6 @@
       <v-spacer></v-spacer>
       <v-img :src="logo" :max-height="60" :contain="true"></v-img>
       <v-spacer></v-spacer>
-
-      <!--remove solo-inverted, 
-        append-icon="mdi-magnify"
-      attr from v-text-field-->
       <v-text-field
         v-if="searcher"
         v-model="searchText"
@@ -18,8 +14,9 @@
         style="max-width: 300px;"
         placeholder="Search..."
         @keyup.native="onEnterKey"
+        class="d-none d-md-block"
       />
-      <v-btn icon @click.stop="btnSearchClick">
+      <v-btn icon @click.stop="btnSearchClick" class="d-none d-md-block">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
@@ -37,7 +34,26 @@
         <mini-cart-card :cart="cart"></mini-cart-card>
       </v-menu>
     </v-app-bar>
-
+    <v-container>
+      <v-layout class="d-md-none">
+        <v-flex xs10>
+          <v-text-field
+            v-model="searchText"
+            flat
+            hide-details
+            solo
+            outlined
+            placeholder="Search..."
+            @keyup.native="onEnterKey"
+          />
+        </v-flex>
+        <v-flex xs2>
+          <v-btn depressed style="height:98%" color="primary" @click.stop="btnSearchClick">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list dense nav>
         <v-list-item>
