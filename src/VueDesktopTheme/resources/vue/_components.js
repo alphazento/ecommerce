@@ -1,7 +1,9 @@
 export default {
     "spinner-layer": "components/SpinnerLayer.vue",
-    "theme-toolbar": "components/ThemeToolbar.vue",
-    "theme-footer": "components/ThemeFooter.vue",
+    "theme-toolbar": "components/layout/ThemeToolbar.vue",
+    "theme-footer": "components/layout/ThemeFooter.vue",
+    "category-menu": "components/layout/CategoryMenu.vue",
+
     "image-card": "components/images/ImageCard.vue",
     "image-carsousel": "components/images/ImageCarousel.vue",
     "image-gallery": "components/images/ImageGallery.vue",

@@ -1,4 +1,5 @@
 {{-- <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs> --}}
+{{-- for seo reason, breadcrumb not using vuetify component, instead of this blade template --}}
 <nav aria-label="breadcrumb">
     <ol class="v-breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
         @php
