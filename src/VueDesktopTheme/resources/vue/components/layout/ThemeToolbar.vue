@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <v-app-bar hide-on-scroll> -->
-    <v-app-bar app >
+    <v-app-bar app>
       <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- logo -->
       <v-img :src="logo" :max-height="45" :contain="true"></v-img>
@@ -84,7 +84,7 @@
     </v-navigation-drawer>
 
     <!-- mobile search bar -->
-    <v-container class="d-md-none">
+    <v-container class="d-md-none mobile-special-container">
       <v-layout>
         <slot name="category_menus"></slot>
       </v-layout>
@@ -142,10 +142,13 @@ export default {
       ]
     };
   },
-  
+
   methods: {
     overlayClick(e) {
-      if ("v-overlay__content" === e.srcElement.className || "v-overlay__scrim" === e.srcElement.className) {
+      if (
+        "v-overlay__content" === e.srcElement.className ||
+        "v-overlay__scrim" === e.srcElement.className
+      ) {
         this.category_menu_active = false;
       }
     },
@@ -180,7 +183,7 @@ export default {
         this.category_menu_active = true;
         this.category_menu_changed = true;
       }
-      console.log('nav item tab change', this.category_menu_active)
+      console.log("nav item tab change", this.category_menu_active);
     },
     onNavmenuClick() {
       if (!this.category_menu_changed) {
@@ -190,7 +193,7 @@ export default {
         this.category_menu_active = !this.category_menu_active;
       }
       this.category_menu_changed = false;
-      console.log('nav item tab onNavmenuClick', this.category_menu_active)
+      console.log("nav item tab onNavmenuClick", this.category_menu_active);
     }
   },
   computed: {
@@ -207,11 +210,14 @@ export default {
 </script>
 
 <style lang="scss">
- @import "./navigator.scss";
+@import "./navigator.scss";
 .v-badge-pos-adjust {
   .v-badge__badge {
     right: -1px !important;
     top: 0 !important;
   }
+}
+.mobile-special-container {
+  margin-top: -30px !important;
 }
 </style>
