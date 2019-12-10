@@ -17,9 +17,7 @@
                         @endif
                     </template>
                     <template v-slot:category_menus="slotProps">
-                        <v-tabs-items v-model="slotProps.tab">
-                            @include('widget.category-list')
-                        </v-tabs-items>
+                        @include('widget.category-menu')
                     </template>
                 </theme-toolbar>
                 @yield('pagecontent')

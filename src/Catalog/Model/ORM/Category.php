@@ -68,4 +68,8 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function getDescriptionAttribute() {
         return $this->desc->description ?? '';
     }
+
+    public function getUrlAttribute() {
+        return sprintf('/%s.html', $this->url_key);
+    }
 }
