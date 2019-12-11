@@ -49,10 +49,8 @@ export default {
                 return "price-filter-bullet";
             case "category":
                 return "category-filter-bullet";
-                break;
             default:
                 return "dynamic-attribute-filter-bullet";
-                break;
           }
       },
       filterChange(e) {

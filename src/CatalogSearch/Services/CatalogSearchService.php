@@ -31,6 +31,8 @@ class CatalogSearchService
     protected $default_filters = [];
 
     protected $postSearchHandlers = [];
+    
+    protected $under_categorId = 0;
 
     /**
      * the filters which match with criteria params
@@ -199,6 +201,7 @@ class CatalogSearchService
      */
     public function search($under_categorId, $criteria, $per_page, $page, $withAggregate = true) {
         if ($under_categorId) {
+            $this->under_categorId = $under_categorId;
             $criteria['under_categorId'] = CategoryService::getCategoryIdsWithChildrenByIds([$under_categorId]);
         }
         list($builder, $aggregateQuery) = $this->applyFilter($criteria, $withAggregate);
@@ -301,7 +304,6 @@ class CatalogSearchService
     protected function aggregate($builder, &$criteria) {
         $builder->thinMode();
         $priceItems = $this->aggregatePrice($builder, $criteria);
-        list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
         $aggregation = [
             'price' => [
                 'filter' => 'price',
@@ -309,15 +311,18 @@ class CatalogSearchService
                 'label' => 'Price',
                 'applied' => [],
                 'items' => $priceItems
-            ],
-            'category' => [
+            ]
+        ];
+        list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
+        if (count($cateFilters) || $categoryItems->count()) {
+            $aggregation['category'] = [
                 'filter' => 'category',
                 'is_dynattr' => false,
                 'label' => 'Category',
                 'applied' => $cateFilters,
                 'items' => $categoryItems
-            ]
-        ];
+            ];
+        }
         $this->aggregateDynamicAttributes($builder, $aggregation, $criteria);
         $builder->richMode();
         return $aggregation;
@@ -339,13 +344,14 @@ class CatalogSearchService
         $agg = $query->groupBy($this->categoryProductTable . '.category_id')->get();
 
         $items = $agg->keyBy('category_id');
-        $categories = Category::whereIn('id', $items->keys()->toArray())->get();
+        $categories = Category::whereIn('id', $items->keys()->toArray())
+            ->where('id', '!=', $this->under_categorId)
+            ->get();
 
         $aggregates = $categories->map(function ($category) use($items) {
             $item = $items[$category->id];
             return ['id' => $category->id, 'label' => ($category->name ?? ''), 'amount' => $item['amount']];
-          }
-        );
+        });
 
         $filters = array_map(function ($id) {
             $category = Category::find($id);
