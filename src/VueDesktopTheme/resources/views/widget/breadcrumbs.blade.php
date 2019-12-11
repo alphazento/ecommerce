@@ -8,7 +8,7 @@
         @endphp
         @foreach($tree as $key=>$node)
             <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a class="v-breadcrumbs__item {{ $lastOne == $key ? 'v-breadcrumbs__item--disabled' : '' }}" itemprop="item" href="{{ $node['url'] }}">
+                <a class="v-breadcrumbs__item" itemprop="item" href="{{ $node['url'] }}">
                     <span itemprop="name">{{ $node['title'] }}</span>
                 </a>
                 @if( $key < $lastOne)

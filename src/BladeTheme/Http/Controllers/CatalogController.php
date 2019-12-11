@@ -35,6 +35,7 @@ class CatalogController extends Controller
                         BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($parent), $parent->name);
                     }
                 } 
+                BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($category), $category->name);
                 return BladeTheme::view('page.searchresult', compact('pagination', 'path', 'page_data'));
             }
         }

@@ -39,6 +39,7 @@
   }
 @endphp
 <ul class="category-menu-nav">
+  <li class="dropdown"><a href="/" class="menu-item">Home</a></li>
   @php
   foreach($category_tree as $category) {
     if ($category->include_in_menu) {
