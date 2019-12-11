@@ -38,8 +38,12 @@ export default new Vuex.Store({
         //only use for pagination component
         pagination: {
             page: 1,
-            sort_by: 'position,desc',
+            sort_by: "position,desc",
             per_page: 30
+        },
+        pageData: {
+            catalog_search_uri: "",
+            title: ""
         }
     },
     getters: {
@@ -65,6 +69,9 @@ export default new Vuex.Store({
             state.searchResult = newValues;
             state.pagination.page = Number(newValues.current_page);
             state.pagination.per_page = Number(newValues.per_page);
+        },
+        setPageData(state, values) {
+            state.pageData = values;
         },
         updatePagination(state, pagination) {
             var val = Object.assign({}, state.pagination, pagination);
@@ -159,6 +166,7 @@ export default new Vuex.Store({
                 });
             });
         },
+
         deleteCartItem({
             commit
         }, item) {
@@ -196,6 +204,12 @@ export default new Vuex.Store({
             commit
         }, pagination) {
             commit('updatePagination', pagination);
+        },
+
+        setPageData({
+            commit
+        }, values) {
+            commit('setPageData', values);
         }
     }
 })

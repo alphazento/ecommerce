@@ -24,5 +24,6 @@ class Provider extends ServiceProvider
         });
 
         PackageManager::class_alias('\Zento\BladeTheme\Facades\BladeTheme', 'BladeTheme');
+        \Illuminate\Routing\Router::mixin(new \Zento\BladeTheme\Http\Mixins\Router);
     }
 }

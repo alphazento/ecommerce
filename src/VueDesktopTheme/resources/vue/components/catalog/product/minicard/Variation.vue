@@ -98,7 +98,6 @@ export default {
     },
     methods: {
         productElementsUpdated(elements) {
-            console.log("elements", elements);
             this.variationElements = elements;
         }
     }

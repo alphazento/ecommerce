@@ -38,6 +38,7 @@ class CatalogSearchService
      * @var array
      */
     protected $criteria_filters = [
+        'under_categorId' => 'filterCategory',
         'category' => 'filterCategory',
         'sub_categories' => 'filterCategory',
         'price' => 'filterPrice',
@@ -196,7 +197,10 @@ class CatalogSearchService
         "sort_by":"price,asc"
         }
      */
-    public function search($underCategorId, $criteria, $per_page, $page, $withAggregate = true) {
+    public function search($under_categorId, $criteria, $per_page, $page, $withAggregate = true) {
+        if ($under_categorId) {
+            $criteria['under_categorId'] = CategoryService::getCategoryIdsWithChildrenByIds([$under_categorId]);
+        }
         list($builder, $aggregateQuery) = $this->applyFilter($criteria, $withAggregate);
 
         if (!empty($criteria['sort_by'])) {

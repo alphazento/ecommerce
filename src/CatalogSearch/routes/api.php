@@ -5,16 +5,12 @@ Route::group(
         'namespace' => '\Zento\CatalogSearch\Http\Controllers\Api',
         'middleware' => ['cors', 'guesttoken', 'auth:api']
     ], function () {
-        Route::post(
-            '/catalog/search', 
-            ['as' => 'catalog.search', 'uses' => 'CatalogSearchController@search']
-        );
         Route::get(
             '/catalog/search', 
             ['as' => 'catalog.search', 'uses' => 'CatalogSearchController@search']
         );
         Route::get(
-            '/catalog/category/{id}', 
+            '/catalog/categories/{id}', 
             ['as' => 'catalog.category.search', 'uses' => 'CatalogSearchController@search']
         );
 });
@@ -29,9 +25,5 @@ Route::group(
         Route::get(
             '/catalog/search', 
             ['as' => 'admin.get.products', 'uses' => 'CatalogSearchController@adminSearch']
-        );
-        Route::post(
-            '/catalog/search', 
-            ['as' => 'admin.post.products', 'uses' => 'CatalogSearchController@adminSearch']
         );
 });

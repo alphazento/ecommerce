@@ -159,7 +159,7 @@ export default {
     },
 
     canSearch() {
-      this.searchText = this.searchText.trim();
+      this.searchText = this.searchText ? this.searchText.trim() : '';
       return this.searchText.length > 2;
     },
 

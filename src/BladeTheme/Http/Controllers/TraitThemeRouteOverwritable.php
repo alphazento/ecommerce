@@ -22,9 +22,10 @@ trait TraitThemeRouteOverwritable
         $swatches = ProductService::getProductSwatches();
         BladeTheme::addGlobalViewData(compact('swatches'));
 
-        $resp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
-        BladeTheme::addGlobalViewData(['category_tree' => $resp->data]);
-        return $pthis->{$method}($parameters);
+        $apiResp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
+        BladeTheme::addGlobalViewData(['category_tree' => $apiResp->data]);
+        $response = $pthis->{$method}($parameters);
+        return $response;
     }
 
     protected function genApiUrl($path) {

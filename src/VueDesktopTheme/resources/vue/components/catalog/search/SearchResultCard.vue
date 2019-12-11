@@ -11,10 +11,10 @@
                     <v-layout class="row">
                         <v-flex md6 xs8>
                             <h1>
-                                Search Result for: "{{
-                                    searchResult.criteria.text
-                                }}"
+                                {{pageData.title}}
                             </h1>
+                            <div v-html="pageData.description">
+                            </div>
                         </v-flex>
                         <v-flex md6 class="d-none d-md-block">
                             <sort-control></sort-control>
@@ -74,6 +74,9 @@ export default {
     computed: {
         searchResult() {
             return this.$store.state.searchResult;
+        },
+        pageData() {
+            return this.$store.state.pageData;
         }
     }
 };

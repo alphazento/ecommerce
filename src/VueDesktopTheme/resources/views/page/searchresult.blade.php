@@ -1,22 +1,12 @@
 @extends('layout.frame', ['nav_page' => 'products', 'appjs' => 'routeapp.js'])
 @push('head')
-    <title>Search Page</title>
+    <title>{{$page_data['title']}}</title>
 @endpush
 
 @section('pagecontent')
-<!-- 
-<router-link :to="{ name:'search',query: { queryId: 1 }}" >
-     router-link跳转Query
-</router-link> -->
   <spinner-layer></spinner-layer>
   <router-view>
   </router-view>
-<!-- 
-<search-result-card>
-  <template>
-    <category-filter-card></category-filter-card>
-  </template>
-</search-result-card> -->
 @endsection
 
 @push('tail')
@@ -25,7 +15,7 @@ const store = window.vStore.default;
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { name:"search", path: '/search', component: SearchResultRoutePage }
+        { name:"search", path: "/{{ $path }}", component: SearchResultRoutePage }
     ]
 });
 const app = new Vue({
@@ -35,11 +25,13 @@ const app = new Vue({
   router: router,
   data: {
     pagination: @json($pagination),
-    swatches: @json($swatches)
+    swatches: @json($swatches),
+    pageData: @json($page_data)
   },
   created() {
-    this.$store.dispatch('assignSearchResult', this.pagination)
-    this.$store.dispatch('setSwatches', this.swatches)
+    this.$store.dispatch('assignSearchResult', this.pagination);
+    this.$store.dispatch('setSwatches', this.swatches);
+    this.$store.dispatch('setPageData', this.pageData);
   }
 });
 </script>

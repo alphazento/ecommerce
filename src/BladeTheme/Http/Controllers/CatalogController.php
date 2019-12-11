@@ -15,12 +15,27 @@ class CatalogController extends Controller
 
     public function categoryProducts() {
         if ($category_id = Route::input('id')) {
-            $resp = BladeTheme::requestInnerApi('GET', 
-                $this->genApiUrl(sprintf('categories/%s/products?%s', $category_id, Request::getQueryString()))
-            );
-            if ($resp->success) {
-                $pageData = $resp->data;
-                return BladeTheme::view('page.productlist', compact('category_id', 'pageData'));
+            if ($category = \Zento\Catalog\Model\ORM\Category::thinMode()->find($category_id)) {
+                $request = Request::instance();
+                $path =  $request->path();
+                $query = Str::after($request->getRequestUri(), $request->path());
+                $catalog_search_uri = $this->genApiUrl(sprintf('catalog/categories/%s', $category_id));
+                $resp = BladeTheme::requestInnerApi('GET', 
+                    sprintf('%s/%s', $catalog_search_uri, $query)
+                );
+                $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
+
+                $page_data = ['type' => 'category', 
+                    'title' => $category->name, 
+                    'description' => $category->description,
+                    'catalog_search_uri' => $catalog_search_uri];
+
+                foreach($category->parents as $parent) {
+                    if ($parent->id > 2) {
+                        BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($parent), $parent->name);
+                    }
+                } 
+                return BladeTheme::view('page.searchresult', compact('pagination', 'path', 'page_data'));
             }
         }
         return view('page.404');
@@ -31,6 +46,7 @@ class CatalogController extends Controller
             $resp = BladeTheme::requestInnerApi('GET', 
                 $this->genApiUrl(sprintf('products/%s', $productId))
             );
+
             if ($resp->success) {
                 $product = $resp->data;
                 $categories = [];
@@ -70,14 +86,17 @@ class CatalogController extends Controller
     public function search() {
         $request = Request::instance();
         $query = Str::after($request->getRequestUri(), $request->path());
+        $path = $request->path();
         $resp = BladeTheme::requestInnerApi('GET', 
             $this->genApiUrl(sprintf('catalog/search%s', $query))
         );
-        if ($resp->success) {
-            $pagination = $resp->data->toArray();
-        } else {
-            $pagination = $resp->data;
-        }
-        return BladeTheme::view('page.searchresult', compact('pagination'));
+        $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
+        $page_data = [
+            'type' => 'search', 
+            'catalog_search_uri' => "/api/v1/catalog/search",
+            'title' => sprintf('Search Result for: "%s"', $pagination['criteria']['text'] ?? ''),
+            'description' => '',
+        ];
+        return BladeTheme::view('page.searchresult', compact('pagination', 'path', 'page_data'));
     }
 }

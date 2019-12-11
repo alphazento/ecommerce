@@ -4,7 +4,9 @@
       <v-list-item-action>
         <v-switch v-model="item.switch" color="purple" v-on:change="changeFilter(item)"></v-switch>
       </v-list-item-action>
-      <v-list-item-title>{{item.value}}({{item.amount}})</v-list-item-title>
+      <v-list-item-title>
+        <span v-html="item.value"></span>({{item.amount}})
+      </v-list-item-title>
     </v-list-item>
   </v-list>
 </template>

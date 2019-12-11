@@ -37,6 +37,9 @@ export default {
         },
         pagination() {
           return this.$store.state.pagination;
+        },
+        pageData() {
+          return this.$store.state.pageData;
         }
     },
     methods: {
@@ -68,8 +71,7 @@ export default {
     watch: {
       $route() {
           this.routeQuery = Object.assign({}, this.$route.query);
-          let url =
-              "/api/v1/catalog/search" +
+          let url = this.pageData.catalog_search_uri + 
               this.$route.fullPath.substr(this.$route.path.length);
           this.$store.dispatch("showSpinner", "Updating...");
           axios.get(url).then(response => {

@@ -35,6 +35,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function parents() {
         $instance = $this->newRelatedInstance(Category::class);
         return (new HasManyInAggregatedField($instance->newQuery(), $this, $instance->getTable() . '.id',  'path'))
+            ->with('desc')
             ->orderBy('level')
             ->whereInAggregatedField(function($field) {
                 $data = explode('/', $field);
