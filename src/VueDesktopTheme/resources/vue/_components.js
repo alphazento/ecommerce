@@ -1,5 +1,6 @@
 export default {
     "spinner-layer": "components/SpinnerLayer.vue",
+    "theme-manager": "components/layout/ThemeManager.vue",
     "theme-toolbar": "components/layout/ThemeToolbar.vue",
     "theme-footer": "components/layout/ThemeFooter.vue",
     "category-menu": "components/layout/CategoryMenu.vue",

@@ -21,9 +21,6 @@
           <del class>${{ product.prices.rrp }}</del>
         </div>
       </v-card-title>
-      <!-- <v-card-actions>
-          <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>
-      </v-card-actions>-->
     </v-card>
   </v-hover>
 </template>
@@ -46,15 +43,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.add-cart-btn {
-  color: #fff;
-  background-color: #600bd2 !important;
-}
-.wishlist-icon {
-  color: red !important;
-}
-.title {
-  height: 35px;
-}
-</style>

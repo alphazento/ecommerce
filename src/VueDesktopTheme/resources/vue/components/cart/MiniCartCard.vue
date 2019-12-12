@@ -41,26 +41,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.limit-height {
-  max-height: 300px;
-  overflow-y: scroll;
-}
-.title {
-  background: #cdd4fc none repeat scroll 0 0;
-  font: bold 14px/20px "Open Sans", Arial, Helvetica, sans-serif;
-  padding: 9px 10px 11px;
-  text-align: center;
-  text-transform: uppercase;
-}
-.v-middle {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.cart-row {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1 1 auto;
-}
-</style>

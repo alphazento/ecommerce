@@ -133,11 +133,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.btn__addtocart {
-    color: #fff;
-    background-color: #600bd2 !important;
-    margin: 5px 5px;
-}
-</style>

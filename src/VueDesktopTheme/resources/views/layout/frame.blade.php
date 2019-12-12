@@ -7,6 +7,7 @@
 <body>
 <div id="app" >
     <v-app>
+        <theme-manager></theme-manager>
         <v-content>
             <v-container>
                 <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'" 

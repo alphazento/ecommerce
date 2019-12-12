@@ -108,10 +108,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.v-middle {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-</style>

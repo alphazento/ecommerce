@@ -33,13 +33,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.btn__view {
-    color: #fff;
-    background-color: #600bd2 !important;
-}
-.wishlist-icon {
-    color: red !important;
-}
-</style>
