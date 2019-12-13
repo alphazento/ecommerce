@@ -17,19 +17,16 @@ trait TraitThemeRouteOverwritable
         if (self::$OverwriteBy) {
             $pthis = app(self::$OverwriteBy);
         }
-        BladeTheme::breadcrumb('/', 'Home');
+        $bladeTheme = BladeTheme::breadcrumb('/', 'Home');
         $pthis->prepareApiGuestToken(Request::user());
+        
         $swatches = ProductService::getProductSwatches();
-        BladeTheme::addGlobalViewData(compact('swatches'));
+        $bladeTheme->addGlobalViewData(compact('swatches'));
 
-        $apiResp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
-        BladeTheme::addGlobalViewData(['category_tree' => $apiResp->data]);
+        $bladeTheme->preRouteCallAction($pthis);
+
         $response = $pthis->{$method}($parameters);
         return $response;
-    }
-
-    protected function genApiUrl($path) {
-        return sprintf('/api/v1/%s', $path);
     }
 
     protected function prepareApiGuestToken($user) {
@@ -41,7 +38,7 @@ trait TraitThemeRouteOverwritable
     }
 
     protected function getCart($fullResp = false) {
-        $resp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('cart'));
+        $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('cart'));
         if ($resp->success) {
             return $fullResp ? $resp : $resp->data;
         }

@@ -19,7 +19,7 @@ class CatalogController extends Controller
                 $request = Request::instance();
                 $path =  $request->path();
                 $query = Str::after($request->getRequestUri(), $request->path());
-                $catalog_search_uri = $this->genApiUrl(sprintf('catalog/categories/%s', $category_id));
+                $catalog_search_uri = BladeTheme::apiUrl(sprintf('catalog/categories/%s', $category_id));
                 $resp = BladeTheme::requestInnerApi('GET', 
                     sprintf('%s/%s', $catalog_search_uri, $query)
                 );
@@ -45,7 +45,7 @@ class CatalogController extends Controller
     public function product() {
         if ($productId = Route::input('id')) {
             $resp = BladeTheme::requestInnerApi('GET', 
-                $this->genApiUrl(sprintf('products/%s', $productId))
+                BladeTheme::apiUrl(sprintf('products/%s', $productId))
             );
 
             if ($resp->success) {
@@ -70,7 +70,7 @@ class CatalogController extends Controller
 
     protected function fetchAllCategories() {
         if (!$this->allCategories) {
-            $resp = BladeTheme::requestInnerApi('GET', $this->genApiUrl('categories/tree'));
+            $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('categories/tree'));
             $this->allCategories = $resp->success ? $resp->data : null;
         }
         return $this->allCategories;
@@ -78,7 +78,7 @@ class CatalogController extends Controller
 
     protected function fetchCategories($category_ids) {
         $resp = BladeTheme::requestInnerApi('GET', 
-            $this->genApiUrl(sprintf('categories/%s', $category_ids)));
+            BladeTheme::apiUrl(sprintf('categories/%s', $category_ids)));
         if ($succeed) {
             return $resp->data;
         }
@@ -89,7 +89,7 @@ class CatalogController extends Controller
         $query = Str::after($request->getRequestUri(), $request->path());
         $path = $request->path();
         $resp = BladeTheme::requestInnerApi('GET', 
-            $this->genApiUrl(sprintf('catalog/search%s', $query))
+            BladeTheme::apiUrl(sprintf('catalog/search%s', $query))
         );
         $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
         $page_data = [

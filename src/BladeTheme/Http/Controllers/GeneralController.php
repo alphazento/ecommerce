@@ -8,7 +8,7 @@ use BladeTheme;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\Category;
 
-class GeneralController
+class GeneralController  extends \App\Http\Controllers\Controller
 {
     use TraitThemeRouteOverwritable;
 

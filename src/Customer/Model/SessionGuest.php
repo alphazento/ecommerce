@@ -19,4 +19,8 @@ class SessionGuest extends ORM\Customer {
     public function getIdAttribute() {
         return $this->attributes['id'] ?? null;
     }
+
+    public function guest() {
+        return true;
+    }
 }

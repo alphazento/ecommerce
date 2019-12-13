@@ -28,12 +28,18 @@ class BladeTheme {
 
     protected $globalViewData = [];
 
+    protected $preRouteCallActions = [];
+
     public function __construct() {
         $this->viewCollection = new ViewCollection();
     }
 
     public function __toString() {
         return json_encode($this->breadcrumbData, JSON_PRETTY_PRINT);
+    }
+
+    public function apiUrl($path) {
+        return sprintf('/api/v1/%s', $path);
     }
 
     public function removeView($viewName) {
@@ -129,5 +135,26 @@ class BladeTheme {
 
     public function getGlobalViewData($key) {
         return $this->globalViewData[$key] ?? null;
+    }
+
+    /**
+     * call before theme route action is called.
+     *
+     * @param \Illuminate\Routing\Controller $controller
+     * @return void
+     */
+    public function preRouteCallAction(\Illuminate\Routing\Controller  $controller) {
+        foreach($this->preRouteCallActions as $callback) {
+            $callback($this, $controller);
+        }
+    }
+
+    /**
+     * @param \Closure|null $callback
+     * @return void
+     */
+    public function registerPreRouteCallAction(\Closure $callback) {
+        $this->preRouteCallActions[] = $callback;
+        return $this;
     }
 }

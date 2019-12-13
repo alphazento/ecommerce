@@ -74,4 +74,8 @@ class User extends Authenticatable
     public function acl($request) {
         (new \Zento\Passport\Passport)->callPostAuthcateHooks($this, $request);
     }
+
+    public function guest() {
+        return $this->guest;
+    }
 }

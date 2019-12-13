@@ -1,0 +1,20 @@
+{
+    "name": "alphazento/zento_vuetheme",
+    "description": "Zento ecommerce vuetheme package",
+    "keywords": ["laravel", "zento", "ecommerce", "theme"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
+    "require": {
+        "php": ">=7.0",
+        "alphazento/zento": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {},
+        "files": []
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

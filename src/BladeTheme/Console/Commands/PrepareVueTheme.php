@@ -32,7 +32,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
     protected $mergedPackages = [];
 
     public function handle() {
-        $this->themeName = 'Zento_VueDesktopTheme';
+        $this->themeName = 'Zento_VueTheme';
         $this->mergeVueComponentPackageConfig();
         $this->mergeThemePackageConfig($this->themeName);
         $this->genWebpackMixJs();

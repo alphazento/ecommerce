@@ -14,7 +14,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
     protected function createCart() {
         $resp = BladeTheme::requestInnerApi('POST', 
-            $this->genApiUrl('cart'));
+            BladeTheme::apiUrl('cart'));
         if ($resp->success) {
             return $resp->data;
         }
@@ -45,7 +45,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         $options = Request::get('options', []);
         $url = Request::get('url', 'https://alphazento.local.test/xl-518.html');
         $resp = BladeTheme::requestInnerApi('POST', 
-            $this->genApiUrl('cart/items'),
+            BladeTheme::apiUrl('cart/items'),
             compact('product_id', 'quantity', 'options', 'url')
         );
         
@@ -68,7 +68,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         
         if ($cart = $this->getCart()) {
             $resp = BladeTheme::requestInnerApi('DELETE', 
-                $this->genApiUrl(sprintf('cart/items/%s', $item_id))
+                BladeTheme::apiUrl(sprintf('cart/items/%s', $item_id))
             );
 
             if ($protocal === 'web') {
