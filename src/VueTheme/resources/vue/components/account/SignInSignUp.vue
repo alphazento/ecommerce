@@ -110,6 +110,12 @@
                         :rules="[rules.clear, rules.required, rules.email]"
                     />
                 </v-form>
+                <div v-if="mode === 'reset-passwd-success'">
+                    <p class="title">
+                        We have e-mailed your password reset link! Please follow
+                        the instruction from the email to reset password.
+                    </p>
+                </div>
             </v-card-text>
 
             <v-card-actions>
@@ -125,7 +131,7 @@
                             >
                         </v-flex>
                     </v-layout>
-                    <v-layout>
+                    <v-layout v-if="mode !== 'reset-passwd-success'">
                         <v-flex md12>
                             <a
                                 v-if="mode === 'signin'"
@@ -226,15 +232,14 @@ export default {
             this.$store.dispatch("showSpinner", "Requesting...");
             axios
                 .post("/password/email", {
-                    email: this.email,
-                    password: this.password
+                    email: this.email
                 })
                 .then(response => {
+                    this.$store.dispatch("hideSpinner");
                     if (response.data.success) {
-                        window.location.reload();
+                        this.mode = "reset-passwd-success";
                     } else {
                         this.errorMessage = response.data.message;
-                        this.$store.dispatch("hideSpinner");
                     }
                 });
         },
@@ -255,6 +260,9 @@ export default {
                         this.resetPasswd();
                     }
                     break;
+                case "reset-passwd-success":
+                    this.mode = "signin";
+                    break;
             }
         },
         title() {
@@ -264,6 +272,7 @@ export default {
                 case "signup":
                     return "Sign Up";
                 case "reset-passwd":
+                case "reset-passwd-success":
                     return "Reset Password";
             }
             return "";
@@ -276,6 +285,8 @@ export default {
                     return "Register";
                 case "reset-passwd":
                     return "Reset Password";
+                case "reset-passwd-success":
+                    return "Continue to Log in";
             }
             return "";
         },

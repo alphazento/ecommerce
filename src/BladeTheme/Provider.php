@@ -25,6 +25,7 @@ class Provider extends ServiceProvider
 
         $this->app->bind('App\Http\Controllers\Auth\LoginController', '\Zento\BladeTheme\Http\Controllers\Auth\LoginController');
         $this->app->bind('App\Http\Controllers\Auth\RegisterController', '\Zento\BladeTheme\Http\Controllers\Auth\RegisterController');
+        $this->app->bind('App\Http\Controllers\Auth\ForgotPasswordController', '\Zento\BladeTheme\Http\Controllers\Auth\ForgotPasswordController');
 
         PackageManager::class_alias('\Zento\BladeTheme\Facades\BladeTheme', 'BladeTheme');
         \Illuminate\Routing\Router::mixin(new \Zento\BladeTheme\Http\Mixins\Router);

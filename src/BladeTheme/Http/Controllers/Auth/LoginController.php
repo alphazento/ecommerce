@@ -3,7 +3,6 @@
 namespace Zento\BladeTheme\Http\Controllers\Auth;
 
 use Zento\BladeTheme\Facades\BladeTheme;
-use Zento\BladeTheme\Http\Controllers\TraitThemeRouteOverwritable;
 use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends \App\Http\Controllers\Auth\LoginController
 {
     use TraitApiResponse;
-    use TraitThemeRouteOverwritable;
 
     /**
      * Show the application's login form.

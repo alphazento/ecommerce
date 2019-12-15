@@ -6,6 +6,7 @@ use Config;
 use Zento\VueTheme\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Zento\Kernel\Facades\ThemeManager;
+use Zento\Kernel\Facades\PackageManager;
 use Zento\Catalog\Providers\Facades\ProductService;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +18,9 @@ class Provider extends ServiceProvider
             \Zento\BladeTheme\Http\Controllers\CatalogController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\CatalogController';
             \Zento\BladeTheme\Http\Controllers\GeneralController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\GeneralController';
             \Zento\BladeTheme\Services\BladeTheme::mixin(new \Baicy\DesktopTheme\Mixins\BladeTheme);
+
+            $viewLocation = sprintf('%s/notifications', PackageManager::packageViewsPath('Zento_VueTheme'));
+            $app['view']->addNamespace('notifications', $viewLocation);
         });
     }
     

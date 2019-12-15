@@ -1,5 +1,8 @@
 import Vuex from 'vuex'
 import Axios from 'axios';
+import {
+    isString
+} from 'util';
 window.Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -9,7 +12,8 @@ export default new Vuex.Store({
             absolute: false,
             opacity: 0.76,
             overlay: false,
-            text: ""
+            text: "",
+            showBtn: false
         },
 
         swatches: {},
@@ -204,11 +208,16 @@ export default new Vuex.Store({
 
         showSpinner({
             commit
-        }, text) {
-            commit('controlSpinnerLayer', {
-                overlay: true,
-                text: text
-            });
+        }, textOrObj) {
+            if (isString(textOrObj)) {
+                commit('controlSpinnerLayer', {
+                    overlay: true,
+                    text: textOrObj,
+                    showBtn: false
+                });
+            } else {
+                commit('controlSpinnerLayer', textOrObj);
+            }
         },
 
         hideSpinner({
@@ -216,6 +225,7 @@ export default new Vuex.Store({
         }) {
             commit('controlSpinnerLayer', {
                 overlay: false,
+                showBtn: false
             });
         },
 
