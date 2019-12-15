@@ -5,9 +5,9 @@ export default {
     "theme-footer": "components/layout/ThemeFooter.vue",
     "category-menu": "components/layout/CategoryMenu.vue",
 
-    "image-card": "components/images/ImageCard.vue",
-    "image-carsousel": "components/images/ImageCarousel.vue",
-    "image-gallery": "components/images/ImageGallery.vue",
+    "image-card": "components/image/ImageCard.vue",
+    "image-carsousel": "components/image/ImageCarousel.vue",
+    "image-gallery": "components/image/ImageGallery.vue",
 
     'signin-signup': "components/account/SignInSignUp",
 

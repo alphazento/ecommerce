@@ -6,7 +6,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>
-          <a href="/login">Account</a>
+          <a href="/my-account">Account</a>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -27,8 +27,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>
-          <a href="/login" @click="slot_props.signin($event)">Sign in</a>/
-          <a href="/register" @click="slot_props.signup($event)">Sign Up</a>
+          <a href="/login" @click="slot_props.signin($event)">Account</a>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>

@@ -17,24 +17,9 @@ trait TraitThemeRouteOverwritable
         if (self::$OverwriteBy) {
             $pthis = app(self::$OverwriteBy);
         }
-        $bladeTheme = BladeTheme::breadcrumb('/', 'Home');
-        $pthis->prepareApiGuestToken(Request::user());
-        
-        $swatches = ProductService::getProductSwatches();
-        $bladeTheme->addGlobalViewData(compact('swatches'));
 
-        $bladeTheme->preRouteCallAction($pthis);
-
-        $response = $pthis->{$method}($parameters);
+        $response = $pthis->{$method}(...$parameters);
         return $response;
-    }
-
-    protected function prepareApiGuestToken($user) {
-        if (env('API_GUEST_TOKEN_ENABLED')) {
-            $apiGuestToken = sprintf('Guest %s', encrypt(json_encode($user->toArray())));
-            BladeTheme::addGlobalViewData(compact('apiGuestToken'));
-        }
-        return $this;
     }
 
     protected function getCart($fullResp = false) {

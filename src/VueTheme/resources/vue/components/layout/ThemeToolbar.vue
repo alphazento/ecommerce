@@ -1,175 +1,203 @@
 <template>
-  <div>
-    <!-- <v-app-bar hide-on-scroll> -->
-    <v-app-bar app>
-      <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!-- logo -->
-      <a href="/"><v-img :src="logo" :max-height="45" :contain="true"></v-img> </a>
-      <!-- category menus -->
-      <v-spacer></v-spacer>
+    <div>
+        <!-- <v-app-bar hide-on-scroll> -->
+        <v-app-bar app>
+            <v-app-bar-nav-icon
+                icon
+                @click.stop="drawer = !drawer"
+            ></v-app-bar-nav-icon>
+            <!-- logo -->
+            <a href="/">
+                <v-img :src="logo" :max-height="45" :contain="true"></v-img>
+            </a>
+            <!-- category menus -->
+            <v-spacer></v-spacer>
 
-      <div class="d-none d-md-block">
-        <slot name="category_menus"></slot>
-      </div>
-      <v-spacer></v-spacer>
+            <div class="d-none d-md-block">
+                <slot name="category_menus"></slot>
+            </div>
+            <v-spacer></v-spacer>
 
-      <!-- desktop search bar -->
-      <v-text-field
-        v-if="searcher"
-        v-model="searchText"
-        flat
-        hide-details
-        style="max-width: 300px;"
-        placeholder="Search..."
-        @keyup.native="onEnterKey"
-        class="d-none d-md-block"
-      />
-      <!-- search button desktop-->
-      <v-btn icon @click.stop="btnSearchClick" class="d-none d-md-block">
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <!-- mini shopping cart -->
-      <v-menu left bottom>
-        <template v-slot:activator="{ on }">
-          <v-badge color="purple" class="v-badge-pos-adjust">
-            <v-btn icon v-on="on">
-              <v-icon color="grey">mdi-cart</v-icon>
+            <!-- desktop search bar -->
+            <v-text-field
+                v-if="searcher"
+                v-model="searchText"
+                flat
+                hide-details
+                style="max-width: 300px;"
+                placeholder="Search..."
+                @keyup.native="onEnterKey"
+                class="d-none d-md-block"
+            />
+            <!-- search button desktop-->
+            <v-btn icon @click.stop="btnSearchClick" class="d-none d-md-block">
+                <v-icon>mdi-magnify</v-icon>
             </v-btn>
-            <template v-slot:badge v-if="cart">
-              <span>{{cart.items_quantity}}</span>
-            </template>
-          </v-badge>
-        </template>
-        <mini-cart-card :cart="cart"></mini-cart-card>
-      </v-menu>
-    </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary  class="fixed-position">
-      <slot name="navigation_drawer" :signin="signin" :signup="signup"></slot>
-    </v-navigation-drawer>
+            <!-- account -->
+            <v-btn icon @click.stop="signin">
+                <v-icon color="grey">mdi-account-circle</v-icon>
+            </v-btn>
 
-    <!-- mobile search bar -->
-    <v-container class="d-md-none mobile-special-container">
-      <v-layout>
-        <slot name="category_menus"></slot>
-      </v-layout>
-      <v-layout>
-        <v-flex xs10>
-          <v-text-field
-            v-model="searchText"
-            flat
-            hide-details
-            solo
-            outlined
-            placeholder="Search..."
-            @keyup.native="onEnterKey"
-          />
-        </v-flex>
-        <v-flex xs2>
-          <v-btn depressed style="height:98%" color="primary" @click.stop="btnSearchClick">
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
+            <!-- mini shopping cart -->
+            <v-menu left bottom>
+                <template v-slot:activator="{ on }">
+                    <v-badge color="purple" class="v-badge-pos-adjust">
+                        <v-btn icon v-on="on">
+                            <v-icon color="grey">mdi-cart</v-icon>
+                        </v-btn>
+                        <template v-slot:badge v-if="cart">
+                            <span>{{ cart.items_quantity }}</span>
+                        </template>
+                    </v-badge>
+                </template>
+                <mini-cart-card :cart="cart"></mini-cart-card>
+            </v-menu>
+        </v-app-bar>
 
-    <!-- breadcump slot -->
-    <slot name="breadcrumbs"></slot>
+        <v-navigation-drawer
+            v-model="drawer"
+            absolute
+            temporary
+            class="fixed-position"
+        >
+            <slot
+                name="navigation_drawer"
+                :signin="signin"
+                :signup="signup"
+            ></slot>
+        </v-navigation-drawer>
 
-    <v-dialog v-model="signinDialog"  max-width="600px">
-      <signin-signup>
-        <template>
-          <slot name="sns_login"></slot>
-        </template>
-      </signin-signup>
-    </v-dialog>
-  </div>
+        <!-- mobile search bar -->
+        <v-container class="d-md-none mobile-special-container">
+            <v-layout>
+                <slot name="category_menus"></slot>
+            </v-layout>
+            <v-layout>
+                <v-flex xs10>
+                    <v-text-field
+                        v-model="searchText"
+                        flat
+                        hide-details
+                        solo
+                        outlined
+                        placeholder="Search..."
+                        @keyup.native="onEnterKey"
+                    />
+                </v-flex>
+                <v-flex xs2>
+                    <v-btn
+                        depressed
+                        style="height:98%"
+                        color="primary"
+                        @click.stop="btnSearchClick"
+                    >
+                        <v-icon>mdi-magnify</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+        </v-container>
+
+        <!-- breadcump slot -->
+        <slot name="breadcrumbs"></slot>
+
+        <v-dialog v-model="signinDialog" persistent max-width="600px">
+            <signin-signup
+                is-dialog
+                :work-mode="accountSignMode"
+                @disgard="signinDialog = false"
+            >
+                <template>
+                    <slot name="sns_login"></slot>
+                </template>
+            </signin-signup>
+        </v-dialog>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "toolbar",
-  props: {
-    links: {
-      type: Array
+    props: {
+        links: {
+            type: Array
+        },
+        logo: {
+            type: String
+        }
     },
-    logo: {
-      type: String
-    }
-  },
-  data() {
-    return {
-      searchText: this.$store.state.searchResult.criteria.text,
-      drawer: false,
-      searcher: false,
-      signinDialog:false,
-      items: [
-        { title: "Home", icon: "dashboard" },
-        { title: "About", icon: "question_answer" }
-      ]
-    };
-  },
-
-  methods: {
-    onClick(e, item) {
-      e.stopPropagation();
-      if (item.to || !item.href) return;
-      this.$vuetify.goTo(item.href);
+    data() {
+        return {
+            searchText: this.$store.state.searchResult.criteria.text,
+            drawer: false,
+            searcher: false,
+            signinDialog: false,
+            accountSignMode: "signin"
+        };
     },
 
-    canSearch() {
-      this.searchText = this.searchText ? this.searchText.trim() : '';
-      return this.searchText.length > 2;
-    },
+    methods: {
+        onClick(e, item) {
+            e.stopPropagation();
+            if (item.to || !item.href) return;
+            this.$vuetify.goTo(item.href);
+        },
 
-    onEnterKey(e) {
-      if (e.isTrusted && e.code === "Enter" && this.canSearch()) {
-        window.location.href =
-          "/search?text=" + encodeURIComponent(this.searchText);
-      }
+        canSearch() {
+            this.searchText = this.searchText ? this.searchText.trim() : "";
+            return this.searchText.length > 2;
+        },
+
+        onEnterKey(e) {
+            if (e.isTrusted && e.code === "Enter" && this.canSearch()) {
+                window.location.href =
+                    "/search?text=" + encodeURIComponent(this.searchText);
+            }
+        },
+        btnSearchClick() {
+            if (this.searcher && this.canSearch()) {
+                window.location.href =
+                    "/search?text=" + encodeURIComponent(this.searchText);
+            }
+            this.searcher = !this.searcher;
+        },
+        signin(event) {
+            event && event.preventDefault();
+            this.signinDialog = true;
+            this.accountSignMode = "signin";
+            this.drawer = false;
+        },
+        signup(event) {
+            event && event.preventDefault();
+            this.signinDialog = true;
+            this.accountSignMode = "signup";
+            this.drawer = false;
+        }
     },
-    btnSearchClick() {
-      if (this.searcher && this.canSearch()) {
-        window.location.href =
-          "/search?text=" + encodeURIComponent(this.searchText);
-      }
-      this.searcher = !this.searcher;
+    computed: {
+        cart() {
+            return this.$store.state.cart;
+        }
     },
-    signin(event) {
-      event && event.preventDefault();
-      this.signinDialog = true;
-    },
-    signup(event) {
-      event && event.preventDefault();
-      this.signinDialog = true;
-    },
-  },
-  computed: {
-    cart() {
-      return this.$store.state.cart;
+    created() {
+        if (!this.cart || !this.cart.uuid) {
+            this.$store.dispatch("loadCart");
+        }
     }
-  },
-  created() {
-    if (!this.cart || !this.cart.uuid) {
-      this.$store.dispatch("loadCart");
-    }
-  }
 };
 </script>
 
 <style lang="scss">
 @import "./navigator.scss";
 .v-badge-pos-adjust {
-  .v-badge__badge {
-    right: -1px !important;
-    top: 0 !important;
-  }
+    .v-badge__badge {
+        right: -1px !important;
+        top: 0 !important;
+    }
 }
 .mobile-special-container {
-  margin-top: -30px !important;
+    margin-top: -30px !important;
 }
 .fixed-position {
-  position: fixed;
+    position: fixed;
 }
 </style>

@@ -16,7 +16,7 @@ class Entry extends ServiceProvider
         });
        
         $this->app->bind('\Zento\Passport\Model\PassportGuestUser', '\Zento\Customer\Model\ApiGuestUser');
-
+       
         PackageManager::class_alias('\Zento\Customer\Providers\Facades\CustomerService', 'CustomerService');
     }
 }

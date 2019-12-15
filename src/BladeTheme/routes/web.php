@@ -9,13 +9,19 @@ Route::group(
     ], function () {
     Route::get(
         '/', 
-        ['as' =>'web.get.home', 'uses' => 'GeneralController@home']
+        ['as' =>'home', 'uses' => 'GeneralController@home']
+    );
+
+    Route::get(
+        'home', 
+        ['as' =>'home', 'uses' => 'GeneralController@home']
     );
 
     Route::get(
         'about-us', 
         ['as' =>'web.get.aboutus', 'uses' => 'GeneralController@aboutUs']
     );
+    
     Route::get(
         'contact-us', 
         ['as' =>'web.get.contactus', 'uses' => 'GeneralController@contactUs']

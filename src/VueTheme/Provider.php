@@ -22,7 +22,7 @@ class Provider extends ServiceProvider
     
     public function boot() {
         if (!$this->app->runningInConsole()) {
-            BladeTheme::registerPreRouteCallAction(function($bladeTheme, $controller) {
+            BladeTheme::registerPreRouteCallAction(function($bladeTheme) {
                 // prepare cateogry tree for category menus
                 $apiResp = $bladeTheme->requestInnerApi('GET', $bladeTheme->apiUrl('categories/tree'));
 

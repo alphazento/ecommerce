@@ -14,6 +14,9 @@ return [
         "middlewaregroup"=> [
             
         ],
+        "middlewares"=> [
+            'guest' => '\Zento\Customer\Http\Middleware\RedirectIfAuthenticated'
+        ],
         "depends"=> [
             "Zento_Passport"
         ],

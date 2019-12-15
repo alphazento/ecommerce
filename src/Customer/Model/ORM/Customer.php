@@ -56,4 +56,8 @@ class Customer extends \Zento\Passport\Model\User
         }
         return [$dummy, $password];
     }
+
+    public function guest() {
+        return $this->is_guest;
+    }
 }

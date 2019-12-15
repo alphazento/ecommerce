@@ -76,6 +76,6 @@ class User extends Authenticatable
     }
 
     public function guest() {
-        return $this->guest;
+        return false;
     }
 }

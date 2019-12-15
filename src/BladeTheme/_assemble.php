@@ -26,7 +26,8 @@ return [
                     \Zento\Kernel\Booster\Middleware\VerifyCsrfToken::class,
                     \Illuminate\Routing\Middleware\SubstituteBindings::class,
                     \Zento\Kernel\ThemeManager\Middleware\ThemeByBrowser::class, 
-                    \Zento\Customer\Http\Middleware\AuthGuestUser::class
+                    \Zento\Customer\Http\Middleware\AuthGuestUser::class,
+                    \Zento\BladeTheme\Http\Middleware\WebDataPrepare::class
                 ]
               ],
         ],

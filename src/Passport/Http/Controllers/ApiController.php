@@ -4,6 +4,7 @@ namespace Zento\Passport\Http\Controllers;
 
 use Auth;
 use Request;
+use ShareBucket;
 use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
@@ -60,15 +61,15 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
 
-        // Request::validate([
-        //     'name' => 'required|string|max:255',
-        //     'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
-        //     'password' => 'required|string|min:6'
-        // ]);
+        Request::validate([
+            'name' => 'required|string|max:128',
+            'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
+            'password' => 'required|string|min:8'
+        ]);
      
         $customerAttrs = Request::all();
         $customerAttrs['password'] = bcrypt($customerAttrs['password']);
-        $customerAttrs['store_id'] = 0;
+        $customerAttrs['store_id'] = ShareBucket::get('store_id', 0);
         $customerAttrs['email'] = $customerAttrs['username'];
         $customer = $userModel::create($customerAttrs);
         if ($customer) {

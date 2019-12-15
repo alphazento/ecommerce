@@ -88,7 +88,7 @@ class BladeTheme {
         if ($data) {
             $this->addGlobalViewData($data);
         }
-        count($this->globalViewData) &&  View::share($this->globalViewData);
+        count($this->globalViewData) && View::share($this->globalViewData);
         return view($view, $this->globalViewData);
     }
 
@@ -137,16 +137,21 @@ class BladeTheme {
         return $this->globalViewData[$key] ?? null;
     }
 
+    public function shareViewData() {
+        View::share($this->globalViewData);
+        return $this;
+    }
+
     /**
      * call before theme route action is called.
      *
-     * @param \Illuminate\Routing\Controller $controller
      * @return void
      */
-    public function preRouteCallAction(\Illuminate\Routing\Controller  $controller) {
+    public function preRouteCallAction() {
         foreach($this->preRouteCallActions as $callback) {
-            $callback($this, $controller);
+            $callback($this);
         }
+        return $this;
     }
 
     /**
