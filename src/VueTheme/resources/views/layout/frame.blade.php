@@ -19,10 +19,11 @@
                     <template v-slot:category_menus>
                         @include('widget.category-menu')
                     </template>
-                    <template v-slot:navigation_drawer="slot_props">
-                        @include('widget.navigation-drawer')
+                    <template v-slot:navigation_drawer>
+                        @reserve('navigation-drawer')
                     </template>
                     <template v-slot:sns_login>
+                        @reserve('sns_login')
                     </template>
                 </theme-toolbar>
                 @yield('pagecontent')

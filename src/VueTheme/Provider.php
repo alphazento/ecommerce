@@ -2,6 +2,7 @@
 
 namespace Zento\VueTheme;
 
+use Auth;
 use Config;
 use Zento\VueTheme\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
@@ -57,6 +58,7 @@ class Provider extends ServiceProvider
                 $logo = Config::get(Consts::LOGO_CONFIG_KEY);
                 $bladeTheme->addGlobalViewData(
                     [
+                        'user' => Auth::user(),
                         'category_tree' => $apiResp->data,
                         'themeData' => compact('footer', 'logo')
                     ]

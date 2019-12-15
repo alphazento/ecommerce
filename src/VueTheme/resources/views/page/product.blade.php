@@ -21,6 +21,7 @@
         store,
         vuetify: new Vuetify(),
         data: {
+            user: @json($user),
             product: @json($product->toArray()),
             detailTabs: @json($jsonFields),
             swatches: @json($swatches),
@@ -28,7 +29,8 @@
         },
         created() {
             console.log('product', this.product);
-            this.$store.dispatch('setSwatches', this.swatches)
+            this.$store.dispatch('setUser', this.user);
+            this.$store.dispatch('setSwatches', this.swatches);
             switch(this.product.type_id) {
                 case 'simple':
                     this.productCard = 'full-simple-product-card';

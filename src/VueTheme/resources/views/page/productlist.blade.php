@@ -19,6 +19,7 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   data: {
+    user: @json($user),
     pagination: @json($pageData['products']),
     swatches: @json($swatches)
   },
@@ -26,6 +27,9 @@ const app = new Vue({
     closeFilter() {
       console.log('closeFilter')
     }
+  },
+  created() {
+      this.$store.dispatch('setUser', this.user);
   }
 });
 </script>

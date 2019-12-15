@@ -26,7 +26,7 @@
         created() {
             this.$store.dispatch('initConsts', { paymentmethods: this.paymentmethods });
             this.$store.dispatch('updateCart', this.cart);
-            this.$store.dispatch('initUserInfo', this.user);
+            this.$store.dispatch('setUser', this.user);
         }
     });
     </script>

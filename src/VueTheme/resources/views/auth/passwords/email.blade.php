@@ -8,7 +8,9 @@
 <v-container fluid>
     <signin-signup work-mode="reset-passwd">
         <template>
-            <slot name="sns_login"></slot>
+            <slot name="sns_login">
+                @reserve('sns_login')
+            </slot>
         </template>
     </signin-signup>
 </v-container>

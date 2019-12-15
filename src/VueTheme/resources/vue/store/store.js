@@ -25,7 +25,7 @@ export default new Vuex.Store({
             logo: ''
         },
 
-        userInfo: {
+        user: {
             id: 0,
             group_id: 0,
             is_guest: 1,
@@ -76,8 +76,8 @@ export default new Vuex.Store({
         setCart(state, cart) {
             state.cart = cart;
         },
-        setUserInfo(state, userInfo) {
-            state.userInfo = userInfo
+        setUser(state, user) {
+            state.user = user
         },
         controlSpinnerLayer(state, newValues) {
             Object.assign(state.spinnerOverlay, newValues);
@@ -138,19 +138,19 @@ export default new Vuex.Store({
             commit('setCart', cart)
         },
 
-        initUserInfo({
+        setUser({
             commit
-        }, userInfo) {
-            commit('setUserInfo', userInfo)
+        }, user) {
+            commit('setUser', user)
         },
 
-        setUserInfo({
+        postGuestUser({
             commit
-        }, userInfo) {
+        }, user) {
             var url = '/ajax/checkout/guest/details';
             return new Promise((resolve, reject) => {
-                axios.put(url, userInfo).then(response => {
-                    commit('setUserInfo', response.data.data)
+                axios.put(url, user).then(response => {
+                    commit('setUser', response.data.data)
                     resolve(response);
                 }, error => {
                     reject(error);

@@ -18,9 +18,9 @@ trait TraitThemeRouteOverwritable
             $pthis = app(self::$OverwriteBy);
         }
 
-        $response = $pthis->{$method}(...$parameters);
-        return $response;
+        return call_user_func_array([$pthis, $method], $parameters);
     }
+
 
     protected function getCart($fullResp = false) {
         $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('cart'));

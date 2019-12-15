@@ -3,7 +3,7 @@ export default {
     "theme-manager": "components/layout/ThemeManager.vue",
     "theme-toolbar": "components/layout/ThemeToolbar.vue",
     "theme-footer": "components/layout/ThemeFooter.vue",
-    "category-menu": "components/layout/CategoryMenu.vue",
+    "navigation-drawer": "components/layout/NavigationDrawer.vue",
 
     "image-card": "components/image/ImageCard.vue",
     "image-carsousel": "components/image/ImageCarousel.vue",

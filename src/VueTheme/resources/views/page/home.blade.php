@@ -37,9 +37,13 @@
         store,
         vuetify: new Vuetify(),
         data: {
+            user: @json($user),
             images: @json($images),
             pagination: @json($pagination)
         },
+        created() {
+            this.$store.dispatch('setUser', this.user);
+        }
     });
     </script>
 @endpush

@@ -35,12 +35,34 @@
             </v-btn>
 
             <!-- account -->
-            <v-btn icon @click.stop="signin">
+            <v-btn icon @click.stop="signin" v-if="!!user.is_guest">
                 <v-icon color="grey">mdi-account-circle</v-icon>
             </v-btn>
 
             <!-- mini shopping cart -->
-            <v-menu left bottom>
+            <v-menu bottom v-if="!user.is_guest">
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on">
+                        <v-icon color="purple">mdi-account</v-icon>
+                    </v-btn>
+                </template>
+                <v-card class="mx-auto" max-width="344" max-height="400">
+                    <v-card-text>{{ user.name }} </v-card-text>
+                    <v-card-actions>
+                        <v-btn
+                            color="blue-grey"
+                            class="ma-2 white--text"
+                            href="/logout"
+                            @click="logout"
+                        >
+                            Log out
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-menu>
+
+            <!-- mini shopping cart -->
+            <v-menu right>
                 <template v-slot:activator="{ on }">
                     <v-badge color="purple" class="v-badge-pos-adjust">
                         <v-btn icon v-on="on">
@@ -61,11 +83,11 @@
             temporary
             class="fixed-position"
         >
-            <slot
-                name="navigation_drawer"
-                :signin="signin"
-                :signup="signup"
-            ></slot>
+            <navigation-drawer @signin="signin">
+                <template>
+                    <slot name="navigation_drawer"></slot>
+                </template>
+            </navigation-drawer>
         </v-navigation-drawer>
 
         <!-- mobile search bar -->
@@ -104,8 +126,8 @@
         <v-dialog v-model="signinDialog" persistent max-width="600px">
             <signin-signup
                 is-dialog
-                :work-mode="accountSignMode"
                 @disgard="signinDialog = false"
+                work-mode="signin"
             >
                 <template>
                     <slot name="sns_login"></slot>
@@ -130,8 +152,7 @@ export default {
             searchText: this.$store.state.searchResult.criteria.text,
             drawer: false,
             searcher: false,
-            signinDialog: false,
-            accountSignMode: "signin"
+            signinDialog: false
         };
     },
 
@@ -163,19 +184,18 @@ export default {
         signin(event) {
             event && event.preventDefault();
             this.signinDialog = true;
-            this.accountSignMode = "signin";
             this.drawer = false;
         },
-        signup(event) {
+        logout(event) {
             event && event.preventDefault();
-            this.signinDialog = true;
-            this.accountSignMode = "signup";
-            this.drawer = false;
         }
     },
     computed: {
         cart() {
             return this.$store.state.cart;
+        },
+        user() {
+            return this.$store.state.user;
         }
     },
     created() {
