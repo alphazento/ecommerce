@@ -21,10 +21,10 @@
         data: {
           user: @json($user),
           cart: @json($cart),
-          paymentmethods: @json($paymentmethods)
+          consts: @json($consts)
         },
         created() {
-            this.$store.dispatch('initConsts', { paymentmethods: this.paymentmethods });
+            this.$store.dispatch('setConsts', this.consts);
             this.$store.dispatch('updateCart', this.cart);
             this.$store.dispatch('setUser', this.user);
         }

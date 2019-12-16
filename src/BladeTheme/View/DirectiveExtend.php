@@ -24,6 +24,10 @@ class DirectiveExtend {
             $bladeComplier->directive('replace', function ($key) {
                 return sprintf('<?php BladeTheme::replaceView(%s); ?>', $key);
             });
+
+            $bladeComplier->directive('stub', function ($expression) {
+                return "<?php BladeTheme::processStubs($expression); ?>";
+            });
         }
         return $this;
     }

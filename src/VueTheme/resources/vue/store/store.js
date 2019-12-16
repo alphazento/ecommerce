@@ -96,7 +96,7 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        initConsts({
+        setConsts({
             commit
         }, consts) {
             commit('setConsts', consts)

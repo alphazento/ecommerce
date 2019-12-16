@@ -84,37 +84,46 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->mergedPackages['packageName'] = true;
         if ($file = PackageManager::packagePath($packageName, ['resources', 'vue'])) {
             if (file_exists($file)) {
-                $aliasValue =  substr(PackageManager::packagePath($packageName, ['resources', 'vue']), strlen(base_path()) + 1);
+                $aliasValue = substr($file, strlen(base_path()) + 1);
                 $this->aliases[$packageName] = $aliasValue;
-            }
 
-            if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_.js'])) {
-                if (file_exists($file)) {
-                    $content = file_get_contents($file);
-                    $aliasName = '@' . $packageName;
-                    $this->mix[$packageName] = str_replace($aliasName, $aliasValue, $content);
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_.js'])) {
+                    if (file_exists($file)) {
+                        $content = file_get_contents($file);
+                        $aliasName = '@' . $packageName;
+                        $this->mix[$packageName] = str_replace($aliasName, $aliasValue, $content);
+                    }
+                } 
+
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_depress.json'])) {
+                    if (file_exists($file)) {
+                        $this->mixDepress = array_merge($this->mixDepress, json_decode(file_get_contents($file), true));
+                    }
                 }
-            } 
-        }
 
-        
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.json'])) {
+                    if (file_exists($file)) {
+                        $this->componentJsonFiles[$packageName] = $file;
+                        $this->components[$packageName] = json_decode(file_get_contents($file), true);
+                    }
+                }
 
-        if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_depress.json'])) {
-            if (file_exists($file)) {
-                $this->mixDepress = array_merge($this->mixDepress, json_decode(file_get_contents($file), true));
-             }
-        }
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.js'])) {
+                    if (file_exists($file)) {
+                        $this->componentJsonFiles[$packageName] = $file;
+                    }
+                }
 
-        if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.json'])) {
-            if (file_exists($file)) {
-                $this->componentJsonFiles[$packageName] = $file;
-                $this->components[$packageName] = json_decode(file_get_contents($file), true);
-            }
-        }
-
-        if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.js'])) {
-            if (file_exists($file)) {
-                $this->componentJsonFiles[$packageName] = $file;
+                //install npm package
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_npm.package.json'])) {
+                    if (file_exists($file)) {
+                        $exNpmPackages = json_decode(file_get_contents($file), true);
+                        foreach($exNpmPackages as $npmPackage) {
+                            $this->info(sprintf("install [%s] depends npm package %s", $packageName, $npmPackage));
+                            exec(sprintf('cd %s && npm i %s',base_path(), $npmPackage));
+                        }
+                    }
+                }
             }
         }
     }

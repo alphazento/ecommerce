@@ -1,7 +1,7 @@
 <?php
-$facebookEnabled = Store::getConfig(\Inkstation\Socialite\Model\Constants::SOCIALITE_PROVIDER_ENABLED . 'facebook');
-$googleEnabled = Store::getConfig(\Inkstation\Socialite\Model\Constants::SOCIALITE_PROVIDER_ENABLED . 'google');
-$allowGoogleSwitchAccount = $googleEnabled ? Store::getConfig(\Inkstation\Socialite\Model\Constants::ALLOW_SWITCH_GOOGLE_ACCOUNT) : false;
+$facebookEnabled = Store::getConfig(\Zento\SnsConnect\Model\Constants::SOCIALITE_PROVIDER_ENABLED . 'facebook');
+$googleEnabled = Store::getConfig(\Zento\SnsConnect\Model\Constants::SOCIALITE_PROVIDER_ENABLED . 'google');
+$allowGoogleSwitchAccount = $googleEnabled ? Store::getConfig(\Zento\SnsConnect\Model\Constants::ALLOW_SWITCH_GOOGLE_ACCOUNT) : false;
 $allowGoogleSwitchAccount = $allowGoogleSwitchAccount ? 1 : 0;
 if ($ref = Registry::get('login-connect-ref', 0)) {
     return;
@@ -13,7 +13,7 @@ if ($googleEnabled) {
     $jsCode = sprintf('requirejs(["gsignin"], function(gsignin) {
             setGlobalConfigKeyValue("google--signin",{enabled:true,client_id:"%s",callback_url:"%s",can_switch_account: %s,csrf_token: "%s"});
             gsignin.load();});',
-        Store::getConfig(\Inkstation\Socialite\Model\Constants::SOCIALITE_CLIENT_ID . 'google'),
+        Store::getConfig(\Zento\SnsConnect\Model\Constants::SOCIALITE_CLIENT_ID . 'google'),
         route('social-login-callback', ['provider'=>'google']),
         $allowGoogleSwitchAccount ? 1 : 0,
         csrf_token());

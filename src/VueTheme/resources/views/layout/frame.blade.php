@@ -20,10 +20,10 @@
                         @include('widget.category-menu')
                     </template>
                     <template v-slot:navigation_drawer>
-                        @reserve('navigation-drawer')
+                        @stub('navigation-drawer')
                     </template>
                     <template v-slot:sns_login>
-                        @reserve('sns_login')
+                        @stub('sns_login')
                     </template>
                 </theme-toolbar>
                 @yield('pagecontent')

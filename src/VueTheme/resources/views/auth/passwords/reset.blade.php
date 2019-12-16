@@ -9,7 +9,7 @@
     <signin-signup work-mode="reset-passwd">
         <template>
             <slot name="sns_login">
-            @reserve('sns_login')
+                @stub('sns_login')
             </slot>
         </template>
     </signin-signup>

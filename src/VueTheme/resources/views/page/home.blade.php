@@ -39,9 +39,11 @@
         data: {
             user: @json($user),
             images: @json($images),
-            pagination: @json($pagination)
+            pagination: @json($pagination),
+            consts: @json($consts)
         },
         created() {
+            this.$store.dispatch('setConsts', this.consts);
             this.$store.dispatch('setUser', this.user);
         }
     });

@@ -149,9 +149,7 @@
                     </v-layout>
                 </v-container>
             </v-card-actions>
-            <v-container>
-                <slot></slot>
-            </v-container>
+            <slot></slot>
         </v-container>
     </v-card>
 </template>
