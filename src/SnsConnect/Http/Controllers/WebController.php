@@ -26,7 +26,11 @@ class WebController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function handleCallback() {
+
+        return view('hellosns.redirect');
+        
         $request = Request::instance();
+        dd($request->all());
         if (!Store::getConfig(Constants::SOCIALITE_PROVIDER_ENABLED . $provider)) {
             return redirect()->back();
         }

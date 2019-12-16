@@ -23,8 +23,8 @@ export default {
             configs[item.service] = item.client_id;
         });
         hello.init(configs, {
-            redirect_uri: "/login/hellojs/callback",
-            response_type: "code"
+            redirect_uri: "/login/hellojs/callback"
+            // response_type: "code"
         });
     },
     computed: {
