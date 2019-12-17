@@ -1,31 +1,51 @@
 <?php
 
-namespace Zento\SnsConnect\Http\Controllers;
+namespace Zento\HelloSns\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
 use Auth;
-use Quote;
-use Route;
-use Request;
-use Session;
 use Socialite;
-use Store;
-use Config;
-use Validator;
-use Zento\SnsConnect\Model\Constants;
+use Illuminate\Http\Request;
+use Zento\HelloSns\Facades\HelloSnsService;
 
 class WebController extends Controller
 {
-    const FACEBOOK = 1;
-    const GOOGLE = 2;
-    const ERR_FORMATER = '%s login error. Please try again later. Or alternatively, login/register using your email address';
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function handleCallback(Request $request) {
+        if ($request->input('code')) {
+            if ($state = HelloSnsService::hasValidState($request)) {
+                $network = HelloSnsService::getNetwork($state);
+                if ($user = Socialite::driver($network)->stateless()->user()) {
+
+                    $params = [
+                        'access_token' => $user->token,
+                        'data_access_expiration_time' => time() + $user->expiresIn,
+                        'expires_in' => $user->expiresIn,
+                        'state' => $request->input('state')
+                    ];
+                    $url = sprintf('%s?#%s', route('hellosns.callback'), http_build_query($params));
+                    return redirect($url);
+                }
+            }
+        } else {
+            return view('hellosns.redirect');
+        }
+    }
+
     /**
      * Redirect the user to the GitHub authentication page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleCallback() {
+    public function handleCallback1() {
+        dd(1);
+        $user = Socialite::driver('facebook')->user();
+        dd($user->toArray());
 
         return view('hellosns.redirect');
         
@@ -198,7 +218,7 @@ class WebController extends Controller
     }
 
     protected function verifyGoogleToken($token, $userid) {
-        $client = new \Google_Client(['client_id' => Store::getConfig(\Zento\SnsConnect\Model\Constants::SOCIALITE_CLIENT_ID . 'google')]);  // Specify the CLIENT_ID of the app that accesses the backend
+        $client = new \Google_Client(['client_id' => Store::getConfig(\Zento\HelloSns\Model\Constants::SOCIALITE_CLIENT_ID . 'google')]);  // Specify the CLIENT_ID of the app that accesses the backend
         $payload = $client->verifyIdToken($token);
         if ($payload) {
           return $userid == $payload['sub'];

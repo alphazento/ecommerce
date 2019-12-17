@@ -13,6 +13,7 @@ This page is used for authentication as well as POST using the Iframe+form+hash 
 <head>
 	<title>Hello, redirecting...</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+	<link href="/zento_hellosns/css/hellosns.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -24,6 +25,6 @@ This page is used for authentication as well as POST using the Iframe+form+hash 
 			document.getElementsByTagName('h2')[0].innerHTML="Redirecting, please wait";
 		}
 	</script>
-	<script src="/zento_snsconnect/js/hello.all.js"></script>
+	<script src="/zento_hellosns/js/hello.all.js"></script>
 </body>
 </html>

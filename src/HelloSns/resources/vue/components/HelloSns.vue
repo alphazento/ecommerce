@@ -1,7 +1,7 @@
 <template>
     <v-container text-center class="sns__container">
         <v-btn
-            v-for="(item, i) in configs"
+            v-for="(item, i) in services"
             :key="i"
             @click="login(item.service)"
             :color="item.color"
@@ -18,25 +18,25 @@ import hello from "hellojs";
 
 export default {
     mounted() {
-        let configs = {};
-        this.configs.forEach(item => {
-            configs[item.service] = item.client_id;
+        let services = {};
+        this.services.forEach(item => {
+            services[item.service] = item.client_id;
         });
-        hello.init(configs, {
-            redirect_uri: "/login/hellojs/callback"
-            // response_type: "code"
-        });
+        hello.init(services, this.options);
     },
     computed: {
-        configs() {
-            let configs = this.$store.state.consts.hellosns;
-            if (configs === undefined) {
-                configs = {};
+        services() {
+            let services = this.$store.state.consts.hellosns.services;
+            if (services === undefined) {
+                services = {};
             }
 
-            return configs.filter(item => {
+            return services.filter(item => {
                 return item.active;
             });
+        },
+        options() {
+            return this.$store.state.consts.hellosns.options;
         }
     },
     methods: {

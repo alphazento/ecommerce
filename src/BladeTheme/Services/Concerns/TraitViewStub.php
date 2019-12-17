@@ -6,6 +6,7 @@ trait TraitViewStub {
 
     public function appendStubProcessor(\Closure $callback) {
         $this->stubProcessors[] = $callback;
+        return $this;
     }
 
     public function processStubs($name) {
