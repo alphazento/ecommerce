@@ -4,6 +4,7 @@ namespace Zento\HelloSns\Services;
 
 use Auth;
 use Request;
+use Validator;
 use Zento\HelloSns\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Illuminate\Support\Str;
@@ -102,5 +103,22 @@ class HelloSnsService
 
     public function getNetwork(&$state) {
         return $state['network'] ?? false;
+    }
+
+    public function connectSnsUser($user, $network) {
+        $localUser = Auth::getProvider()->retrieveByEmail($user->email);
+        if (empty($localUser)) {
+            $localUser = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => 'fronsns'
+            ]);
+        } else {
+            // $localUser->sns = 1;
+        }
+        $localUser->save();
+        if (!empty($localUser) && !empty($localUser->id)) {
+            Auth::login($localUser);
+        }
     }
 }

@@ -37,6 +37,8 @@ class WebController extends Controller
         }
     }
 
+
+
     /**
      * Redirect the user to the GitHub authentication page.
      *
