@@ -45,4 +45,8 @@ class BladeTheme {
         
         return $resp->getApiResponse();
     }
+
+    public function getApiGuestToken($user) {
+        return sprintf('Guest %s', encrypt(json_encode($user->toArray())));
+    }
 }

@@ -4,7 +4,6 @@ namespace Zento\Passport\Http\Controllers;
 
 use Auth;
 use Request;
-use ShareBucket;
 use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
@@ -36,10 +35,6 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         );
     }
 
-    public function issueTokenConnectGoogle(ServerRequestInterface $request) {
-        return (new GoogleOAuthConnect)->googleOauthConnectPassport($request, $this);
-    }
-
     public function refreshToken(ServerRequestInterface $request)
     {
         $parsedBody = $request->getParsedBody();
@@ -56,20 +51,21 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
             ]
         );
     }
-
+    
     public function register(ServerRequestInterface $request) {
         $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
 
-        Request::validate([
+        //must use app('request') for innerapi request
+        $appRequest = app('request');
+        $appRequest->validate([
             'name' => 'required|string|max:128',
             'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
             'password' => 'required|string|min:8'
         ]);
      
-        $customerAttrs = Request::all();
+        $customerAttrs = $appRequest->all();
         $customerAttrs['password'] = bcrypt($customerAttrs['password']);
-        $customerAttrs['store_id'] = ShareBucket::get('store_id', 0);
         $customerAttrs['email'] = $customerAttrs['username'];
         $customer = $userModel::create($customerAttrs);
         if ($customer) {

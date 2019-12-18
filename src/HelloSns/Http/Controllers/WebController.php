@@ -21,7 +21,6 @@ class WebController extends Controller
             if ($state = HelloSnsService::hasValidState($request)) {
                 $network = HelloSnsService::getNetwork($state);
                 if ($user = Socialite::driver($network)->stateless()->user()) {
-
                     $params = [
                         'access_token' => $user->token,
                         'data_access_expiration_time' => time() + $user->expiresIn,
@@ -37,6 +36,10 @@ class WebController extends Controller
         }
     }
 
+
+    public function snsAccountConnect(Request $request) {
+        
+    }
 
 
     /**

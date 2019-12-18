@@ -18,11 +18,6 @@
             '/token', 
             ['as' => 'oauth.token', 'uses' => 'ApiController@issueToken']
         );
- 
-        Route::post(
-            '/token/google', 
-            ['as' => 'oauth.token.google', 'uses' => 'ApiController@issueTokenConnectGoogle']
-        );
 
         Route::post(
             '/refresh', 

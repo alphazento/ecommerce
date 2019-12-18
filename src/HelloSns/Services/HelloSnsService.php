@@ -5,6 +5,7 @@ namespace Zento\HelloSns\Services;
 use Auth;
 use Request;
 use Validator;
+use Config;
 use Zento\HelloSns\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Illuminate\Support\Str;
@@ -105,20 +106,40 @@ class HelloSnsService
         return $state['network'] ?? false;
     }
 
-    public function connectSnsUser($user, $network) {
-        $localUser = Auth::getProvider()->retrieveByEmail($user->email);
+    public function connectSessionUser($user, $network) {
+        $model = Config::get('auth.providers.users.model');
+        $localUser = (new $model)->findForPassport($user->email);
         if (empty($localUser)) {
-            $localUser = User::create([
-                'name' => $user->name,
-                'email' => $user->email,
-                'password' => 'fronsns'
-            ]);
-        } else {
-            // $localUser->sns = 1;
+            $attrs = $appRequest->all();
+            $attrs['password'] = bcrypt($attrs['password']);
+            $attrs['email'] = $attrs['username'];
+            $localUser = $model::create($attrs);
         }
-        $localUser->save();
         if (!empty($localUser) && !empty($localUser->id)) {
             Auth::login($localUser);
+        }
+        return $this->with('user', $localUser)->with('apiGuestToken', BladeTheme::getApiGuestToken($localUser))
+    }
+
+    public function connectApiUser($user, $network) {
+        $model = Config::get('auth.providers.users.model');
+        $localUser = (new $model)->findForPassport($user->email);
+        if (empty($localUser)) {
+            return BladeTheme::requestInnerApi('POST', BladeTheme::apiUrl('oauth2/register'), 
+                [
+                    'name' => $user->name,
+                    'username' => $user->email,
+                    'password' => Str::random(16)
+                ]);
+        } else {
+            // $localUser->sns = 1;
+            $password = 'do_not_check';
+            $localUser->password = bcrypt($password);
+            return BladeTheme::requestInnerApi('POST', BladeTheme::apiUrl('oauth2/token'), [
+                'name' => $user->name,
+                'username' => $user->email,
+                'password' => $password
+            ]);
         }
     }
 }

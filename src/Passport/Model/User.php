@@ -2,6 +2,7 @@
 
 namespace Zento\Passport\Model;
 
+use ShareBucket;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -47,9 +48,15 @@ class User extends Authenticatable
     }
 
     public function findForPassport($username) {
-        return $this->where('email', $username)->first();
+        $key = sprintf('user_%s', md5($username));
+        if ($user = ShareBucket::get($key)) {
+            return $user;
+        }
+        $user = $this->where('email', $username)->first();
+        ShareBucket::put($key, $user);
+        return $user;
     }
-    
+
     public function randomPassword() {
         return Str::random(16);
     }

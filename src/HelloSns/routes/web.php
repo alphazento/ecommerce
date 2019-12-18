@@ -1,14 +1,12 @@
 <?php
-
 Route::group(
     [
-        'prefix' => '/',
+        'prefix' => '/hellosns',
         'namespace' => '\Zento\HelloSns\Http\Controllers',
         'middleware' => ['web']
     ], function () {
-        Route::get(
-            '/hellosns/callback', 
-            ['as' => 'hellosns.callback', 'uses' => 'WebController@handleCallback']
+        Route::post(
+            '/connect', 
+            ['as' => 'web.hellosns.connect', 'uses' => 'HelloSnsController@sessionAccountConnect']
         );
-    }
-);
+});
