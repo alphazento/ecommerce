@@ -32,7 +32,7 @@ class WebDataPrepare
 
     protected function prepareApiGuestToken($user) {
         if (env('API_GUEST_TOKEN_ENABLED')) {
-            $apiGuestToken = BladeTheme::getApiGuestToken();
+            $apiGuestToken = BladeTheme::getApiGuestToken($user);
             BladeTheme::addGlobalViewData(compact('apiGuestToken'));
             return $apiGuestToken;
         }

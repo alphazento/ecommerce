@@ -27,12 +27,10 @@ class HelloSnsService
                 return;
             }
 
-            $response_type = config(Consts::HELLOSNS_RESPONSE_TYPE, 'code');
-            $redirect_uri = route('hellosns.callback');
+            $response_type = config(Consts::HELLOSNS_RESPONSE_TYPE, 'token');
+            $redirect_uri = url('/zento_hellosns/redirect.html');
             $options = compact('redirect_uri', 'response_type');
-            if ($response_type === 'code') {
-                $options['state'] = $this->storeState();
-            }
+            $options['state'] = $this->storeState();
 
             // prepare cateogry tree for category menus
             $bladeTheme->addGlobalViewData(
@@ -118,7 +116,7 @@ class HelloSnsService
         if (!empty($localUser) && !empty($localUser->id)) {
             Auth::login($localUser);
         }
-        return $this->with('user', $localUser)->with('apiGuestToken', BladeTheme::getApiGuestToken($localUser))
+        return $this->with('user', $localUser)->with('apiGuestToken', BladeTheme::getApiGuestToken($localUser));
     }
 
     public function connectApiUser($user, $network) {
