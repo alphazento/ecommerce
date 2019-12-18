@@ -44,9 +44,9 @@ export default {
             let provider = hello(network);
             provider.login().then(
                 response => {
-                    console.log('l1', response);
-                    axios.post('/api/v1/hellosns/connect', response).then(resp => {
-                        console.log('l1', resp);
+                    console.log("l1", response);
+                    axios.post("/hellosns/connect", response).then(resp => {
+                        console.log("l2", resp);
                     });
                 },
                 e => {
