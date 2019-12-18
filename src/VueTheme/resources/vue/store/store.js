@@ -208,16 +208,22 @@ export default new Vuex.Store({
 
         showSpinner({
             commit
-        }, textOrObj) {
-            if (isString(textOrObj)) {
-                commit('controlSpinnerLayer', {
-                    overlay: true,
-                    text: textOrObj,
-                    showBtn: false
-                });
-            } else {
-                commit('controlSpinnerLayer', textOrObj);
-            }
+        }, text) {
+            commit('controlSpinnerLayer', {
+                overlay: true,
+                text: text,
+                showBtn: false
+            });
+        },
+
+        keepSpinner({
+            commit
+        }, text) {
+            commit('controlSpinnerLayer', {
+                overlay: true,
+                text: text,
+                showBtn: true
+            });
         },
 
         hideSpinner({

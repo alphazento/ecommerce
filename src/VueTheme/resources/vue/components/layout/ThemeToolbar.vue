@@ -126,7 +126,7 @@
         <v-dialog v-model="signinDialog" persistent max-width="600px">
             <signin-signup
                 is-dialog
-                @disgard="signinDialog = false"
+                @disgard="closeDialog"
                 work-mode="signin"
             >
                 <template>
@@ -161,6 +161,10 @@ export default {
             e.stopPropagation();
             if (item.to || !item.href) return;
             this.$vuetify.goTo(item.href);
+        },
+
+        closeDialog() {
+            this.signinDialog = false;
         },
 
         canSearch() {

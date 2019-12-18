@@ -20,6 +20,7 @@ class WebDataPrepare
     {
         if (!$request->ajax()) {
             $bladeTheme = BladeTheme::breadcrumb('/', 'Home');
+            BladeTheme::addGlobalViewData(['consts' => []]);
             $this->prepareApiGuestToken($request->user());
             $swatches = ProductService::getProductSwatches();
             $bladeTheme->addGlobalViewData(compact('swatches'))

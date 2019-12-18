@@ -3,6 +3,11 @@
 namespace Zento\HelloSns;
 
 class Consts {
-    const HELLOSNS_RESPONSE_TYPE = 'hellosns.response_type';
-    const HELLOSNS_SERVICES = 'hellosns.services';
+    const SERVICES = 'hellosns.services';
+    const RESPONSE_TYPE = 'hellosns.%s.response_type';
+    const ALLOW_SERVICES = 'hellosns.%s.allow_services';
+    const CHECK_STATE = 'hellosns.%s.check_state';
+
+    //only allow 
+    const ALLOW_CREATE_ACCOUNT = 'hellosns.%s.allow_create_account';
 }

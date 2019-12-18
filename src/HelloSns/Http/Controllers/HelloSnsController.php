@@ -19,7 +19,12 @@ class HelloSnsController extends ApiBaseController
                         if ($grantTyep === 'token') {
                             return HelloSnsService::connectApiUser($user, $network);
                         } else {
-                            return HelloSnsService::connectSessionUser($user, $network);
+                            list($success, $data) = HelloSnsService::connectSessionUser($user, $network);
+                            if ($success) {
+                                return $this->withData($data);
+                            } else {
+                                return $this->error(422, $data);
+                            }
                         }
                     }
                 }
@@ -33,6 +38,10 @@ class HelloSnsController extends ApiBaseController
     }
 
     public function sessionAccountConnect(Request $request) {
-        return $this->accountConnect($request, 'session');
+        if ($state = HelloSnsService::hasValidState($request)) {
+            return$this->accountConnect($request, 'session');
+        } else {
+            return $this->error('State is not match.');
+        }
     }
 }

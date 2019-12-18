@@ -9,7 +9,6 @@ use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 
-use Zento\Acl\Model\Auth\UserProvider;
 use Zento\Passport\Passport;
 use Zento\Acl\Providers\Facades\Acl;
 use Zento\Acl\AclException;

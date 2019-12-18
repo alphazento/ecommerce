@@ -6,6 +6,7 @@ use Auth;
 use Request;
 use Validator;
 use Config;
+use ShareBucket;
 use Zento\HelloSns\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Illuminate\Support\Str;
@@ -15,6 +16,23 @@ class HelloSnsService
     const STATE = 'hello_state';
     protected $state;
 
+    protected $zento_portal;
+
+    public function __construct() {
+        $this->zento_portal = ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL, 'front');
+    }
+
+    protected function getConfigKey($format) {
+        return sprintf($format, $this->zento_portal);
+    }
+
+    protected function isGuest() {
+        if ($user = Auth::user()) {
+            return $user->guest();
+        }
+        return true;
+    }
+
     public function prepareServices() {
         BladeTheme::appendStubProcessor(function($stub) {
             if ($stub === 'sns_login') {
@@ -22,52 +40,51 @@ class HelloSnsService
             }
         })->registerPreRouteCallAction(function($bladeTheme) {
             //if already login, not use to provide
-            $user = Auth::user();
-            if (!$user || !$user->guest()) {
-                return;
-            }
+            if ($this->isGuest()) {
+                $response_type = Config::get($this->getConfigKey(Consts::RESPONSE_TYPE), 'token');
+                $redirect_uri = url('/zento_hellosns/redirect.html');
+                $options = compact('redirect_uri', 'response_type');
+                if (Config::get($this->getConfigKey(Consts::CHECK_STATE))) {
+                    $options['state'] = $this->storeState();
+                }
 
-            $response_type = config(Consts::HELLOSNS_RESPONSE_TYPE, 'token');
-            $redirect_uri = url('/zento_hellosns/redirect.html');
-            $options = compact('redirect_uri', 'response_type');
-            $options['state'] = $this->storeState();
-
-            // prepare cateogry tree for category menus
-            $bladeTheme->addGlobalViewData(
-                [
-                    'consts' => [
-                        'hellosns' => [
-                            'services' => [
-                                [
-                                    'service' => 'facebook',
-                                    'client_id' => '158217231362602',
-                                    'color' => '#5168A4',
-                                    'icon' => 'mdi-facebook',
-                                    'title' => 'Continue With Facebook',
-                                    'active' => true
+                // prepare cateogry tree for category menus
+                $bladeTheme->addGlobalViewData(
+                    [
+                        'consts' => [
+                            'hellosns' => [
+                                'services' => [
+                                    [
+                                        'service' => 'facebook',
+                                        'client_id' => '158217231362602',
+                                        'color' => '#5168A4',
+                                        'icon' => 'mdi-facebook',
+                                        'title' => 'Continue With Facebook',
+                                        'active' => true
+                                    ],
+                                    [
+                                        'service' => 'linkedin',
+                                        'client_id' => '158217231362602',
+                                        'color' => '#278CAE',
+                                        'icon' => 'mdi-linkedin',
+                                        'title' => 'Continue With Linkedin',
+                                        'active' => true
+                                    ],
+                                    [
+                                        'service' => 'google',
+                                        'client_id' => '158217231362602',
+                                        'color' => '#278CAE',
+                                        'icon' => 'mdi-google',
+                                        'title' => 'Continue With Google',
+                                        'active' => false
+                                    ]
                                 ],
-                                [
-                                    'service' => 'linkedin',
-                                    'client_id' => '158217231362602',
-                                    'color' => '#278CAE',
-                                    'icon' => 'mdi-linkedin',
-                                    'title' => 'Continue With Linkedin',
-                                    'active' => true
-                                ],
-                                [
-                                    'service' => 'google',
-                                    'client_id' => '158217231362602',
-                                    'color' => '#278CAE',
-                                    'icon' => 'mdi-google',
-                                    'title' => 'Continue With Google',
-                                    'active' => false
-                                ]
-                            ],
-                            'options' => $options
+                                'options' => $options
+                            ]
                         ]
                     ]
-                ]
-            );
+                );
+            }
         });
         return $this;
     }
@@ -91,8 +108,13 @@ class HelloSnsService
      */
     public function hasValidState($request)
     {
+        if (!Config::get($this->getConfigKey(Consts::CHECK_STATE))) {
+            return true;
+        }
+
+        $stateDataKey = Config::get($this->getConfigKey(Consts::RESPONSE_TYPE), 'token') === 'token' ? 'authResponse' : 'state';
         $state = $request->session()->pull(self::STATE);
-        $stateArray = json_decode($request->input('state', '{}'), true);
+        $stateArray = json_decode($request->input($stateDataKey, '{}'), true);
         $inputState = $stateArray['state'] ?? false;
         if (strlen($state) > 0 && $inputState === $state) {
             return $stateArray;
@@ -100,23 +122,33 @@ class HelloSnsService
         return false;
     }
 
-    public function getNetwork(&$state) {
-        return $state['network'] ?? false;
-    }
-
     public function connectSessionUser($user, $network) {
-        $model = Config::get('auth.providers.users.model');
-        $localUser = (new $model)->findForPassport($user->email);
-        if (empty($localUser)) {
-            $attrs = $appRequest->all();
-            $attrs['password'] = bcrypt($attrs['password']);
-            $attrs['email'] = $attrs['username'];
-            $localUser = $model::create($attrs);
+        if ($this->isGuest()) {
+            $model = Config::get('auth.providers.users.model');
+            $localUser = (new $model)->findForPassport($user->email);
+            if (empty($localUser)) {
+                $attrs = $appRequest->all();
+                $attrs['password'] = bcrypt($attrs['password']);
+                $attrs['email'] = $attrs['username'];
+                $localUser = $model::create($attrs);
+            }
+            if (!empty($localUser) && !empty($localUser->id)) {
+                Auth::login($localUser);
+            }
+            return [
+                true, 
+                [
+                    'user' => $localUser,
+                    'apiGuestToken' => BladeTheme::getApiGuestToken($localUser)
+                ]
+            ];
+        } else {
+            if ($user->email === Auth::user()->email) {
+                return [true, ['user' => Auth::user()]];
+            } else {
+                return [false, 'Another user has logged in. Please logout exist user first and log in with your account again.'];
+            }
         }
-        if (!empty($localUser) && !empty($localUser->id)) {
-            Auth::login($localUser);
-        }
-        return $this->with('user', $localUser)->with('apiGuestToken', BladeTheme::getApiGuestToken($localUser));
     }
 
     public function connectApiUser($user, $network) {

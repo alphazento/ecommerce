@@ -25,18 +25,13 @@ class Backend
     public function handle($request, Closure $next)
     {
         Passport::setPassportUserModel(\Zento\Acl\Model\Auth\Administrator::class);
-        ShareBucket::put('app_portal', 'admin');
+        ShareBucket::put(\Zento\Kernel\Consts::ZENTO_PORTAL, 'admin');
         //change default setting as admin setting
-        if (Request::segment(1) == config('backend_url_prefix')) {
-            if (config(self::BACKEND_IP_RESTRICT)
-             && $this->checkIp($request)) {
-                return response(sprintf('IP %s is not allowed to access backedn.', $request->ip()), 401);
-            }
 
-            // change auth setting for normal request
-            Config::set('session.cookie', Config::get('session.cookie') . '_backend');
+        if (config(self::BACKEND_IP_RESTRICT)
+            && $this->checkIp($request)) {
+            return response(sprintf('IP %s is not allowed to access admin.', $request->ip()), 401);
         }
-        
         return $next($request);
     }
 

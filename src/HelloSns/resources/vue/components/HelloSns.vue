@@ -44,13 +44,21 @@ export default {
             let provider = hello(network);
             provider.login().then(
                 response => {
-                    console.log("l1", response);
+                    this.$store.dispatch("showSpinner", "Authorization connecting ...");
                     axios.post("/hellosns/connect", response).then(resp => {
-                        console.log("l2", resp);
+                        if (resp.data.success) {
+                            this.$store.dispatch('setUser', resp.data.data.user);
+                            // axios.defaults.headers.common['Authorization'] = resp.data.data.apiGuestToken;
+                            this.$store.dispatch("showSpinner", "Welcome, " + resp.data.data.user.name);
+                            window.location.reload();
+                        } else {
+                            this.$store.dispatch("keepSpinner", resp.data.message);
+                        }
                     });
                 },
                 e => {
                     console.error(e);
+                    // this.$store.dispatch("keepSpinner", );
                 }
             );
         }
