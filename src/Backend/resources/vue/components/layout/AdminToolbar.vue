@@ -2,9 +2,17 @@
     <div>
         <!-- <v-app-bar hide-on-scroll> -->
         <v-app-bar app>
+            <v-app-bar-nav-icon
+                icon
+                @click.stop="drawer = !drawer"
+            ></v-app-bar-nav-icon>
             <!-- logo -->
-            <a href="/">
-                <v-img :src="logo" :max-height="45" :contain="true"></v-img>
+            <a href="/admin">
+                <v-img
+                    src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Alphago_logo_Reversed.svg"
+                    :max-height="45"
+                    :contain="true"
+                ></v-img>
             </a>
             <!-- category menus -->
             <v-spacer></v-spacer>
@@ -19,24 +27,70 @@
             v-model="drawer"
             absolute
             :mini-variant.sync="mini"
-            permanent
+            :permanent="drawer"
             class="fixed-position"
         >
-         <v-list-item>
-            <v-list-item-avatar>
-                <v-btn icon>
-                    <v-icon>mdi-dashboard</v-icon>
+            <v-list-item>
+                <v-list-item-avatar>
+                    <v-btn icon>
+                        <v-icon large color="blue darken-2"
+                            >mdi-view-dashboard</v-icon
+                        >
+                    </v-btn>
+                </v-list-item-avatar>
+                <v-list-item-title>Dashboard</v-list-item-title>
+                <v-btn icon @click.stop="mini = !mini">
+                    <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
-            </v-list-item-avatar>
-            <v-list-item-title>Dashboard</v-list-item-title>
-            <v-btn
-                icon
-                @click.stop="mini = !mini"
-            >
-                <v-icon>mdi-chevron-left</v-icon>
-            </v-btn>
-        </v-list-item>
+            </v-list-item>
+            <v-expansion-panels accordion multiple>
+                <v-expansion-panel>
+                    <v-expansion-panel-header
+                        text-left
+                        class="assign-drawer-item"
+                    >
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-btn icon>
+                                    <v-icon large color="blue darken-2"
+                                        >mdi-store</v-icon
+                                    >
+                                </v-btn>
+                            </v-list-item-avatar>
+                            <v-list-item-title>Store</v-list-item-title>
+                        </v-list-item>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-list-item>
+                            <a href="/admin/configs">Configuration</a>
+                        </v-list-item>
+                        <v-list-item>
+                            <a href="/admin/da">Dynamic Attributes</a>
+                        </v-list-item>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
 
+                <v-expansion-panel>
+                    <v-expansion-panel-header
+                        text-left
+                        class="assign-drawer-item"
+                    >
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-btn icon>
+                                    <v-icon large color="blue darken-2"
+                                        >mdi-warehouse</v-icon
+                                    >
+                                </v-btn>
+                            </v-list-item-avatar>
+                            <v-list-item-title>Catalog</v-list-item-title>
+                        </v-list-item>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        content
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+            </v-expansion-panels>
         </v-navigation-drawer>
 
         <!-- breadcump slot -->
@@ -53,14 +107,14 @@ export default {
     data() {
         return {
             drawer: true,
-            mini: false,
+            mini: false
         };
     },
 
     methods: {
         onClick(e, item) {
             // this.$vuetify.goTo(item.href);
-        },
+        }
     },
     computed: {
         user() {
@@ -70,3 +124,15 @@ export default {
 };
 </script>
 
+<style>
+.v-navigation-drawer--mini-variant
+    > .v-navigation-drawer__content
+    > .v-expansion-panels
+    > .v-expansion-panel
+    > .v-expansion-panel-content {
+    display: none !important;
+}
+.assign-drawer-item {
+    padding-left: 0 !important;
+}
+</style>
