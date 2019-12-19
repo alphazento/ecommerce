@@ -1,0 +1,1 @@
+mix.js('@Zento_Backend/app.js', 'public/zento_backend/js');

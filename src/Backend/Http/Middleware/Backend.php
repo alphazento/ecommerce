@@ -9,6 +9,7 @@ use Config;
 use ShareBucket;
 use Zento\Passport\Passport;
 use Zento\Passport\NotUsingPassportException;
+use Zento\Kernel\Facades\ThemeManager;
 
 class Backend
 {
@@ -24,9 +25,10 @@ class Backend
      */
     public function handle($request, Closure $next)
     {
+        //change default setting as admin setting
         Passport::setPassportUserModel(\Zento\Acl\Model\Auth\Administrator::class);
         ShareBucket::put(\Zento\Kernel\Consts::ZENTO_PORTAL, 'admin');
-        //change default setting as admin setting
+        ThemeManager::setTheme('Zento_Backend');
 
         if (config(self::BACKEND_IP_RESTRICT)
             && $this->checkIp($request)) {
