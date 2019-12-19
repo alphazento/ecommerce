@@ -52,6 +52,7 @@ class Entry extends \Illuminate\Support\ServiceProvider
                 $user->acl($request);
             }
             if (!$user) {
+                //add a guest api token and generate a guest user
                 $user = GuestTokenMiddleware::prepareGuestForApi($request);
                 // $user->acl($request);
             }

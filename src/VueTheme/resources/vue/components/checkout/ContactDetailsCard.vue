@@ -1,6 +1,8 @@
 <template>
     <v-form ref="checkout_user_form" v-model="valid" lazy-validation>
         <v-card color="lighten-1" class="mb-12" flat>
+            <v-card-text>
+
             <v-text-field
                 v-model="user.email"
                 :rules="emailRules"
@@ -14,11 +16,16 @@
                 label="Full Name"
                 required
             ></v-text-field>
+            </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" :disabled="!valid" @click="childMessage">
+                Continue
+            </v-btn>
+          </v-card-actions>
+          <slot></slot>
         </v-card>
         <v-card></v-card>
-        <v-btn color="primary" :disabled="!valid" @click="childMessage"
-            >Continue</v-btn
-        >
+        
     </v-form>
 </template>
 

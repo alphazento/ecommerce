@@ -36,7 +36,9 @@ class HelloSnsService
     public function prepareServices() {
         BladeTheme::appendStubProcessor(function($stub) {
             if ($stub === 'sns_login') {
-                echo '<hello-sns></hello-sns>';
+                if ($this->isGuest()) {
+                    echo '<hello-sns></hello-sns>';
+                }
             }
         })->registerPreRouteCallAction(function($bladeTheme) {
             //if already login, not use to provide

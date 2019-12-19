@@ -24,7 +24,7 @@ class GuestToken
     }
 
     /**
-     *
+     * prepare a guest api user and api guest token if need
      * @param \Illuminate\Foundation\Auth\User  $user
      * @return void
      */

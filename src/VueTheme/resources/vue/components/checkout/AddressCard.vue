@@ -39,8 +39,7 @@
               label="Company Name(Optional)"
               @change="addressChanged"
             ></v-text-field>
-          </v-flex>
-
+          </v-flex>          
         </v-layout>
       </v-container>
     </v-card>

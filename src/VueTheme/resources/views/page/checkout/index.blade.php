@@ -8,7 +8,16 @@
 @section('pagecontent')
     <h1 class="index_h1">Checkout</h1>
     <spinner-layer></spinner-layer>
-    <checkout-main-card :cart="cart"></checkout-main-card>
+    @if($user->guest()) 
+    <checkout-guest-card :cart="cart">
+        <template v-slot:sns_login>
+            @stub('sns_login')
+        </template>
+    </checkout-guest-card>
+    @else
+    <checkout-authed-card :cart="cart">
+    </checkout-authed-card>
+    @endif
 @endsection
 
 @push('tail')

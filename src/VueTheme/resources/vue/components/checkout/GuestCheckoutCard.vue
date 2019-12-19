@@ -9,33 +9,37 @@
             </v-flex>
 
             <v-flex md8 xs12>
-                <v-stepper v-model="e6" vertical>
+                <v-stepper v-model="step" vertical>
                     <v-stepper-step
-                        :complete="e6 > 1"
+                        :complete="step > 1"
                         step="1"
                         class="step-header-container"
                     >
                         <v-layout class="step-header">
                             <v-flex md8>Contact Details</v-flex>
-                            <v-flex v-if="e6 > 1" md4 class="text-right">
-                                <a @click="e6 = 1">Edit</a>
+                            <v-flex v-if="step > 1" md4 class="text-right">
+                                <a @click="step = 1">Edit</a>
                             </v-flex>
                         </v-layout>
                         <small>Email, Name</small>
                     </v-stepper-step>
                     <v-stepper-content :step="1">
                         <checkout-contact-card
-                            :complete="e6 > 1"
+                            :complete="step > 1"
                             :step="1"
                             v-on:childMessage="getChildMessage"
-                        ></checkout-contact-card>
+                        >
+                            <template>
+                                <slot name="sns_login"></slot>
+                            </template>
+                        </checkout-contact-card>
                     </v-stepper-content>
 
-                    <v-stepper-step :complete="e6 > 2" step="2">
+                    <v-stepper-step :complete="step > 2" step="2">
                         <v-layout class="step-header">
                             <v-flex md8>Delivery Address</v-flex>
-                            <v-flex v-if="e6 > 2" md4 class="text-right">
-                                <a @click="e6 = 2">Edit</a>
+                            <v-flex v-if="step > 2" md4 class="text-right">
+                                <a @click="step = 2">Edit</a>
                             </v-flex>
                         </v-layout>
                     </v-stepper-step>
@@ -43,18 +47,19 @@
                         <checkout-address-card
                             :fullname="fullname"
                             :address="cart.shipping_address"
-                            :complete="e6 > 2"
+                            :complete="step > 2"
                             :step="2"
                             v-on:childMessage="getChildMessage"
-                        ></checkout-address-card>
+                        >
+                        </checkout-address-card>
                     </v-stepper-content>
 
-                    <v-stepper-step :complete="e6 > 3" step="3"
+                    <v-stepper-step :complete="step > 3" step="3"
                         >Payment Options</v-stepper-step
                     >
                     <v-stepper-content step="3">
                         <checkout-payment-card
-                            :complete="e6 > 3"
+                            :complete="step > 3"
                             :step="3"
                             v-on:childMessage="getChildMessage"
                         ></checkout-payment-card>
@@ -84,7 +89,7 @@ export default {
         return {
             fullname: "",
             valid: false,
-            e6: 1,
+            step: 1,
             nameRules: [
                 v => !!v || "Name is required",
                 v =>
@@ -111,7 +116,7 @@ export default {
             if (step == 1) {
                 this.fullname = this.$store.state.user.name;
             }
-            this.e6 = step + 1;
+            this.step = step + 1;
         }
     }
 };

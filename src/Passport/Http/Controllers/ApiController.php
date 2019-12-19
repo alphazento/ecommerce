@@ -84,8 +84,12 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         return $this->withData(Auth::user());
     }
 
+    /**
+     * generate a guest token
+     *
+     * @return void
+     */
     public function guestToken() {
-        //if has session
         if ($user = GuestTokenMiddleware::prepareGuestForApi(Request::instance())) {
             return $this->with('access_token', encrypt(json_encode($user->toArray())))
                 ->with('token_type', 'Guest');
