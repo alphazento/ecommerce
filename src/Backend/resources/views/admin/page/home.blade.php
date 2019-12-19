@@ -8,11 +8,8 @@
 @push('admin.tail')
 <script>
 const store = window.vStore.default;
-const router = new VueRouter({
-    mode: 'history',
-    routes: [
-    ]
-});
+const router = window.router;
+
 const app = new Vue({
   el: '#app',
   store,

@@ -1,31 +1,8 @@
 <template>
     <div>
-        <!-- <v-app-bar hide-on-scroll> -->
-        <v-app-bar app>
-            <v-app-bar-nav-icon
-                icon
-                @click.stop="drawer = !drawer"
-            ></v-app-bar-nav-icon>
-            <!-- logo -->
-            <a href="/admin">
-                <v-img
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Alphago_logo_Reversed.svg"
-                    :max-height="45"
-                    :contain="true"
-                ></v-img>
-            </a>
-            <!-- category menus -->
-            <v-spacer></v-spacer>
-
-            <!-- account -->
-            <v-btn icon @click.stop="signin" v-if="!!user.is_guest">
-                <v-icon color="grey">mdi-account-circle</v-icon>
-            </v-btn>
-        </v-app-bar>
-
         <v-navigation-drawer
             v-model="drawer"
-            absolute
+            app
             :mini-variant.sync="mini"
             :permanent="drawer"
             class="fixed-position"
@@ -94,6 +71,29 @@
         </v-navigation-drawer>
 
         <!-- breadcump slot -->
+
+        <!-- <v-app-bar hide-on-scroll> -->
+        <v-app-bar app>
+            <v-app-bar-nav-icon
+                icon
+                @click.stop="drawer = !drawer"
+            ></v-app-bar-nav-icon>
+            <!-- logo -->
+            <a href="/admin">
+                <v-img
+                    src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Alphago_logo_Reversed.svg"
+                    :max-height="45"
+                    :contain="true"
+                ></v-img>
+            </a>
+            <!-- category menus -->
+            <v-spacer></v-spacer>
+
+            <!-- account -->
+            <v-btn icon @click.stop="signin" v-if="!!user.is_guest">
+                <v-icon color="grey">mdi-account-circle</v-icon>
+            </v-btn>
+        </v-app-bar>
     </div>
 </template>
 

@@ -10,4 +10,14 @@ import VueRouter from 'vue-router';
 window.VueRouter = VueRouter;
 window.vStore = require('./store/store.js');
 window.Vue.use(VueRouter);
+
+import StoreConfigurationPage from "./pages/store_configuration/RoutePage"
+window.router = new VueRouter({
+    mode: 'history',
+    routes: [{
+        name: "store.configuration",
+        path: "/admin/configuration",
+        component: StoreConfigurationPage
+    }]
+});
 require('./._app.dev');

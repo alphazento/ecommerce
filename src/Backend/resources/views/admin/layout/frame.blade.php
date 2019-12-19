@@ -8,15 +8,13 @@
 <div id="app" >
     <v-app>
         <v-content>
-            <v-container>
-                <admin-toolbar>
-                    <template v-slot:sns_login>
-                        @stub('sns_login')
-                    </template>
-                </admin-toolbar>
-                @yield('pagecontent')
-                {{-- <admin-footer></admin-footer> --}}
-            </v-container>
+            <admin-toolbar>
+                <template v-slot:sns_login>
+                    @stub('sns_login')
+                </template>
+            </admin-toolbar>
+            @yield('pagecontent')
+            {{-- <admin-footer></admin-footer> --}}
         </v-content>
     </v-app>
 </div>
