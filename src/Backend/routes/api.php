@@ -16,10 +16,10 @@ Route::group(
             ['as' => 'admin.configs.groups', 'uses' => 'ConfigurationController@getConfigGroups']
         );
 
-        Route::get(
-            '/configs/values/{l0}/{l1}', 
-            ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getGroupValues']
-        );
+        // Route::get(
+        //     '/configs/values/{l0}/{l1}', 
+        //     ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getGroupValues']
+        // );
 
         Route::post(
             '/configs/{key}', 

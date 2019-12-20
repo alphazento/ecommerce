@@ -24,36 +24,43 @@ class ConfigurationController extends ApiBaseController
     }
 
     public function getConfigGroups() {
-        $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
         $key = '';
-        foreach($enabledPackageConfigs ?? [] as $packageConfig) {
-            $namespace = (PackageManager::getNameSpace($packageConfig->name));
-            $className = sprintf('\\%s\\Config\\Admin', $namespace);
-            if (class_exists($className)) {
-                $key = (new $className)->registerGroups(Route::input('l0'), Route::input('l1'));
-            }
-        }
-        return $this->withData(AdminService::getDetailGroup($key));
-    }
-
-    public function getGroupValues() {
-        $groups = $this->getConfigGroups();
-        $values = [];
-
-        foreach($groups['data']??[] as $name => $group) {
-            foreach($group['items'] ?? [] as $item) {
-                $accessor = $item['accessor'];
-                $values[$accessor] = config($accessor);
-            }
-            foreach($group['subgroups'] ?? [] as $subgroups) {
-                foreach($subgroups['items'] ?? [] as $item) {
-                    $accessor = $item['accessor'];
-                    $values[$accessor] = config($accessor);
+        if ($enabledPackageConfigs = PackageManager::loadPackagesConfigs()) {
+            foreach($enabledPackageConfigs as $packageConfig) {
+                $namespace = (PackageManager::getNameSpace($packageConfig['name']));
+                $className = sprintf('\\%s\\Config\\Admin', $namespace);
+                if (class_exists($className)) {
+                    $key = (new $className)->registerGroups(Route::input('l0'), Route::input('l1'));
                 }
             }
         }
-        return $this->withData($values);
+        if ($groups = AdminService::getDetailGroup($key)) {
+            return $this->getGroupValues($groups);
+        } else {
+            return $this->error(404, 'group not found.');
+        }
+    }
 
+    protected function getGroupValues(&$groups) {
+        foreach($groups as $name => &$group) {
+            if ($group['items'] ?? false) {
+                foreach($group['items'] as &$item) {
+                    if ($accessor = $item['accessor']) {
+                        $item['value'] = config($accessor);
+                    }
+                }
+            }
+            if ($group['subgroups'] ?? false) {
+                foreach($group['subgroups'] as &$subgroups) {
+                    foreach($subgroups['items'] ?? [] as &$item) {
+                        if ($accessor = $item['accessor']) {
+                            $item['value'] = config($accessor);
+                        }
+                    }
+                }
+            }
+        }
+        return $this->withData($groups);
     }
 
     public function setConfigValue() {

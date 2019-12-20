@@ -19,7 +19,7 @@ class HelloSnsService
     protected $zento_portal;
 
     public function __construct() {
-        $this->zento_portal = ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL, 'front');
+        $this->zento_portal = ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL, 'frontend');
     }
 
     protected function getConfigKey($format) {

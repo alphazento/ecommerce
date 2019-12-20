@@ -7,6 +7,7 @@
 <body>
 <div id="app" >
     <v-app>
+        <spinner-layer></spinner-layer>
         <v-content>
             <admin-toolbar>
                 <template v-slot:sns_login>

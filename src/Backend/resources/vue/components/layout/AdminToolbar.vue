@@ -3,6 +3,7 @@
         <v-navigation-drawer
             v-model="drawer"
             app
+            dark
             :mini-variant.sync="mini"
             :permanent="drawer"
             class="fixed-position"
@@ -39,10 +40,10 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-list-item>
-                            <a href="/admin/configs">Configuration</a>
+                             <router-link to="/admin/configuration">Configuration</router-link>
                         </v-list-item>
                         <v-list-item>
-                            <a href="/admin/da">Dynamic Attributes</a>
+                             <router-link to="/admin/dynamic-attributes">Configuration</router-link>
                         </v-list-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>

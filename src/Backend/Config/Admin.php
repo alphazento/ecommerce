@@ -9,7 +9,6 @@ class Admin extends AbstractAdminConfig {
     public function registerMenus() {
         AdminService::registerRootLevelMenuNode('Website', 'Website');
         AdminService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminService::registerRootLevelMenuNode('Theme', 'Theme');
         AdminService::registerRootLevelMenuNode('Checkout', 'Checkout');
         AdminService::registerL1MenuNode('Website', 'Web', 'Web');
         AdminService::registerL1MenuNode('Website', 'Admin', 'Admin');
@@ -24,12 +23,12 @@ class Admin extends AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Enabled',
-                        'type' => 'Switch',
+                        'ui' => 'config-text-item',
                         'accessor' => 'admin.ip_restrict.eanbled'
                     ],
                     [
                         'title' => 'Admin URL',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'admin.admin_url'
                     ],
                 ]
@@ -42,12 +41,12 @@ class Admin extends AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Base URL',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'website.web.base_url'
                     ],
                     [
                         'title' => 'Test Item',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'website.web.test.eanbled'
                     ],
                 ]
@@ -58,7 +57,7 @@ class Admin extends AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Enabled',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'website.web.url_rewrite.eanbled'
                     ]
                 ]
@@ -71,12 +70,12 @@ class Admin extends AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Name',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'attribute_name'
                     ],
                     [
                         'title' => 'Type',
-                        'type' => 'SelectBox',
+                        'ui' => 'config-options-item',
                         'accessor' => 'attribute_type',
                         'editable' => true,
                         'options' => [
@@ -92,25 +91,25 @@ class Admin extends AbstractAdminConfig {
                     ],
                     [
                         'title' => 'Front Label',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'label',
                         'editable' => true
                     ],
                     [
                         'title' => 'Admin Label',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'admin_label',
                         'editable' => true
                     ],
                     [
                         'title' => 'Admin Group',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'admin_group',
                         'editable' => true
                     ],
                     [
                         'title' => 'Admin Component',
-                        'type' => 'SelectBox',
+                        'ui' => 'config-options-item',
                         'accessor' => 'admin_component',
                         'editable' => true,
                         'options' => [
@@ -142,44 +141,44 @@ class Admin extends AbstractAdminConfig {
                     ],
                     [
                         'title' => 'Default Value',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'accessor' => 'default_value',
                         'editable' => true
                     ],
                     [
                         'title' => 'Enabled',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'enabled',
                         'editable' => true
                     ],
                     [
                         'title' => 'Single',
                         'accessor' => 'single',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'title' => 'Swatch',
                         'accessor' => 'swatch_type',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'title' => 'Value Map',
                         'accessor' => 'with_value_map',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'title' => 'Is Search Layer',
                         'accessor' => 'is_search_layer',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'title' => 'Search Layer Sort',
                         'accessor' => 'search_layer_sort',
-                        'type' => 'Text',
+                        'ui' => 'config-text-item',
                         'editable' => true
                     ],
                 ]

@@ -17,17 +17,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Enabled In Frontend',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'paymentgateway.paypalexpress.frontend.enabled'
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'paymentgateway.paypalexpress.admin.enabled'
                     ],
                     [
                         'title' => 'Mode',
-                        'type' => 'SelectBox',
+                        'ui' => 'config-options-item',
                         'options' => [
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
@@ -41,17 +41,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Sandbox ClientID',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.sandbox.client_id'
                     ],
                     [
                         'title' => 'Sandbox Secret',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.sandbox.secret'
                     ],
                     [
                         'title' => 'Sandbox OAuth2 Token Entry',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.sandbox.oauth2_token_url'
                     ]
                 ]
@@ -61,17 +61,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Production ClientID',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.production.client_id'
                     ],
                     [
                         'title' => 'Production Secret',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.production.secret'
                     ],
                     [
                         'title' => 'Production OAuth2 Token Entry',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.paypalexpress.production.oauth2_token_url'
                     ],
                 ]

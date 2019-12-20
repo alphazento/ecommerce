@@ -8,6 +8,7 @@ return [
             "\\Zento\\HelloSns\\Provider"
         ],
         "depends"=> [
+            'Zento_Backend',
             'Zento_BladeTheme'
         ]
     ]

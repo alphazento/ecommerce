@@ -5,6 +5,11 @@ namespace Zento\Passport\Mixins;
 use Illuminate\Support\Str;
 
 class RequestGuestToken {
+    /**
+     * add mixin
+     *
+     * @return void
+     */
     public function guestToken() {
        return function()
        {

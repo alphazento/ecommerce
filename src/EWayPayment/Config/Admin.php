@@ -17,17 +17,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => [
                     [
                         'title' => 'Enabled In Frontend',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'paymentgateway.eway.frontend.enabled'
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
-                        'type' => 'Switch',
+                        'ui' => 'config-boolean-item',
                         'accessor' => 'paymentgateway.eway.admin.enabled'
                     ],
                     [
                         'title' => 'Mode',
-                        'type' => 'SelectBox',
+                        'ui' => 'config-options-item',
                         'options' => [
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
@@ -36,22 +36,22 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     ],
                     [
                         'title' => 'Sandbox ClientID',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.eway.sandbox.client_id'
                     ],
                     [
                         'title' => 'Sandbox Secret',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.eway.sandbox.secret'
                     ],
                     [
                         'title' => 'Production ClientID',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.eway.production.client_id'
                     ],
                     [
                         'title' => 'Production Secret',
-                        'type' => 'LongText',
+                        'ui' => 'config-longtext-item',
                         'accessor' => 'paymentgateway.eway.production.secret'
                     ]
                 ]

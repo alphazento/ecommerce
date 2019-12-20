@@ -8,6 +8,8 @@ window.Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         consts: {},
+        cachedData: {},
+
         spinnerOverlay: {
             absolute: false,
             opacity: 0.76,
@@ -32,9 +34,11 @@ export default new Vuex.Store({
             email: "",
             name: ""
         },
+
         cart: {
             items: []
         },
+
         searchResult: {
             aggregate: {},
             criteria: {
@@ -93,6 +97,9 @@ export default new Vuex.Store({
         updatePagination(state, pagination) {
             var val = Object.assign({}, state.pagination, pagination);
             state.pagination = val;
+        },
+        cacheData(state, kvPair) {
+            Object.assign(state.cachedData, state.cachedData, kvPair);
         }
     },
     actions: {
@@ -156,7 +163,6 @@ export default new Vuex.Store({
                     reject(error);
                 });
             });
-
         },
 
         setShippingAddress({
@@ -245,6 +251,12 @@ export default new Vuex.Store({
             commit
         }, values) {
             commit('setPageData', values);
+        },
+
+        cacheData({
+            commit
+        }, values) {
+            commit('cacheData', values);
         }
     }
 })

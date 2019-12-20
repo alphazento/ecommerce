@@ -7,8 +7,12 @@ Route::group(
         'as' => 'admin:system:'
     ], function() {
         Route::get(
-            '/{all}', 
+            '/', 
             ['as' => 'admin.home', 'uses' => 'SupportController@index']
+        );
+        Route::get(
+            '/{all}', 
+            ['as' => 'admin', 'uses' => 'SupportController@index']
         )->where('all', '.*');
     }
 );

@@ -2,6 +2,7 @@
 
 namespace Zento\Passport\Providers;
 
+use ShareBucket;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
 
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,9 @@ class Entry extends \Illuminate\Support\ServiceProvider
                 $user->acl($request);
             }
             if (!$user) {
+                if (env('APP_ENV') === 'local' && env('IGNORE_AUTH_API')) {
+                    ShareBucket::put(GuestTokenMiddleware::ALLOW_GUEST_API, true);
+                }
                 //add a guest api token and generate a guest user
                 $user = GuestTokenMiddleware::prepareGuestForApi($request);
                 // $user->acl($request);

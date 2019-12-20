@@ -4,7 +4,7 @@
     :items="qtys"
     label="Quantity"
     required
-    v-model="_value"
+    v-model="innerValue"
     v-on:change="handleUpdate()"
   ></v-select>
 </template>
@@ -25,21 +25,21 @@ export default {
   data() {
     return {
       qtys: [],
-      _value: 1
+      innerValue: 1
     };
   },
   created() {
     var min = this.min || this._min;
-    this._value = this.value || this.min;
-    var max = this.max > this._value ? this.max : this._value;
+    this.innerValue = this.value || this.min;
+    var max = this.max > this.innerValue ? this.max : this.innerValue;
     for (var i = 1; i <= max; i++) {
       this.qtys.push(i);
     }
   },
   methods: {
     handleUpdate() {
-      this.$emit("input", this._value);
-      this.$emit("change", this._value);
+      this.$emit("input", this.innerValue);
+      this.$emit("change", this.innerValue);
     }
   }
 };

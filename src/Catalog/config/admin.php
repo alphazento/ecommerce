@@ -13,12 +13,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         $groups['catalog/category'] = function($groupTag) {
             $items[] = [
                 'title' => 'Category Name',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'name'
             ];
             $items[] = [
                 'title' => 'Enable Category',
-                'type' => 'Switch',
+                'ui' => 'config-boolean-item',
                 'accessor' => 'is_active'
             ];
 
@@ -32,7 +32,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 if (empty($item->admin_group)) {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,
                         'options'  => $this->mapOptions($item->options)
                     ];
@@ -43,7 +43,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     }
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,
                         'options'  => $this->mapOptions($item->options)
                     ];
@@ -68,7 +68,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //     'items' => [
             //         [
             //             'title' => 'Url Key',
-            //             'type' => 'LongText',
+            //             'ui' => 'config-longtext-item',
             //             'accessor' => 'url_key'
             //         ]
             //     ]
@@ -78,18 +78,18 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         $groups['catalog/product'] = function($groupTag) {
             $items[] = [
                 'title' => 'Name',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'name'
             ];
             $items[] = [
                 'title' => 'Enable Product',
-                'type' => 'Switch',
+                'ui' => 'config-boolean-item',
                 'accessor' => 'is_active'
             ];
 
             $items[] = [
                 'title' => 'Visibility',
-                'type' => 'SelectBox',
+                'ui' => 'config-options-item',
                 'accessor' => 'visibility',
                 'options' => [
                     ['label' => 'Not Visible Individually', 'value' => 1],
@@ -101,62 +101,62 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             $items[] = [
                 'title' => 'Description',
-                'type' => 'LongText',
+                'ui' => 'config-longtext-item',
                 'accessor' => 'description',
             ];
             
             $itemsGroups = ['Price' => [], 'Search Engine Optimization'=>[]];
             $itemsGroups['Price'][] = [
                 'title' => 'Price',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'price',
             ];
 
             $itemsGroups['Price'][] = [
                 'title' => 'RRP',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'rrp',
             ];
 
             $itemsGroups['Price'][] = [
                 'title' => 'Cost',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'cost',
             ];
 
             $itemsGroups['Price'][] = [
                 'title' => 'Special Price',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'special_price',
             ];
 
             $itemsGroups['Price'][] = [
                 'title' => 'Special From',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'special_from',
             ];
 
             $itemsGroups['Price'][] = [
                 'title' => 'Special To',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'special_to',
             ];
 
             $itemsGroups['Search Engine Optimization'][] = [
                 'title' => 'Meta Description',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'meta_description',
             ];
 
             $itemsGroups['Search Engine Optimization'][] = [
                 'title' => 'Meta Title',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'meta_description',
             ];
 
             $itemsGroups['Search Engine Optimization'][] = [
                 'title' => 'Meta Keyword',
-                'type' => 'Text',
+                'ui' => 'config-text-item',
                 'accessor' => 'meta_keyword',
             ];
 
@@ -171,7 +171,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 if (empty($item->admin_group)) {
                     $items[] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,
                         'options'  => $this->mapOptions($item->options)
                     ];
@@ -182,7 +182,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     }
                     $itemsGroups[$group][] = [
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'type' => empty($item->admin_component) ? 'Text' : $item->admin_component,
+                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,
                         'options'  => $this->mapOptions($item->options)
                     ];
