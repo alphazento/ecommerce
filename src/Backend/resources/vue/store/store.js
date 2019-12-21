@@ -9,6 +9,7 @@ export default new Vuex.Store({
     state: {
         consts: {},
         cachedData: {},
+        breadcrumbs: [],
 
         spinnerOverlay: {
             absolute: false,
@@ -100,7 +101,20 @@ export default new Vuex.Store({
         },
         cacheData(state, kvPair) {
             Object.assign(state.cachedData, state.cachedData, kvPair);
-        }
+        },
+        clearBreadcrumbs(state, anything) {
+            state.breadcrumbs = [{
+                text: 'Dashboard',
+                href: '/admin/dashboard',
+            }];
+        },
+        addBreadcrumbItem(state, item) {
+            state.breadcrumbs.push(item);
+        },
+        replaceBreadcrumbLastItem(state, item) {
+            state.breadcrumbs.pop();
+            state.breadcrumbs.push(item);
+        },
     },
     actions: {
         setConsts({
@@ -257,6 +271,21 @@ export default new Vuex.Store({
             commit
         }, values) {
             commit('cacheData', values);
-        }
+        },
+        clearBreadcrumbs({
+            commit
+        }, values) {
+            commit('clearBreadcrumbs', null);
+        },
+        addBreadcrumbItem({
+            commit
+        }, item) {
+            commit('addBreadcrumbItem', item);
+        },
+        replaceBreadcrumbLastItem({
+            commit
+        }, item) {
+            commit('replaceBreadcrumbLastItem', item);
+        },
     }
 })

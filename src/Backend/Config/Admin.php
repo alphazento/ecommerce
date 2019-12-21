@@ -69,14 +69,14 @@ class Admin extends AbstractAdminConfig {
                 'title' => 'Table Definition',
                 'items' => [
                     [
-                        'title' => 'Name',
+                        'text' => 'Name',
                         'ui' => 'config-text-item',
-                        'accessor' => 'attribute_name'
+                        'value' => 'attribute_name'
                     ],
                     [
-                        'title' => 'Type',
+                        'text' => 'Type',
                         'ui' => 'config-options-item',
-                        'accessor' => 'attribute_type',
+                        'value' => 'attribute_type',
                         'editable' => true,
                         'options' => [
                             [
@@ -90,27 +90,27 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'title' => 'Front Label',
+                        'text' => 'Front Label',
                         'ui' => 'config-text-item',
-                        'accessor' => 'label',
+                        'value' => 'label',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Admin Label',
+                        'text' => 'Admin Label',
                         'ui' => 'config-text-item',
-                        'accessor' => 'admin_label',
+                        'value' => 'admin_label',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Admin Group',
+                        'text' => 'Admin Group',
                         'ui' => 'config-text-item',
-                        'accessor' => 'admin_group',
+                        'value' => 'admin_group',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Admin Component',
+                        'text' => 'Admin Component',
                         'ui' => 'config-options-item',
-                        'accessor' => 'admin_component',
+                        'value' => 'admin_component',
                         'editable' => true,
                         'options' => [
                             [
@@ -140,44 +140,44 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'title' => 'Default Value',
+                        'text' => 'Default Value',
                         'ui' => 'config-text-item',
-                        'accessor' => 'default_value',
+                        'value' => 'default_value',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
-                        'accessor' => 'enabled',
+                        'value' => 'enabled',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Single',
-                        'accessor' => 'single',
-                        'ui' => 'config-boolean-item',
-                        'editable' => true
-                    ],
-                    [
-                        'title' => 'Swatch',
-                        'accessor' => 'swatch_type',
+                        'text' => 'Single',
+                        'value' => 'single',
                         'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Value Map',
-                        'accessor' => 'with_value_map',
+                        'text' => 'Swatch',
+                        'value' => 'swatch_type',
                         'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Is Search Layer',
-                        'accessor' => 'is_search_layer',
+                        'text' => 'Value Map',
+                        'value' => 'with_value_map',
                         'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
-                        'title' => 'Search Layer Sort',
-                        'accessor' => 'search_layer_sort',
+                        'text' => 'Is Search Layer',
+                        'value' => 'is_search_layer',
+                        'ui' => 'config-boolean-item',
+                        'editable' => true
+                    ],
+                    [
+                        'text' => 'Search Layer Sort',
+                        'value' => 'search_layer_sort',
                         'ui' => 'config-text-item',
                         'editable' => true
                     ],

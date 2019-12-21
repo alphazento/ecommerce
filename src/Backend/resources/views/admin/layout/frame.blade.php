@@ -14,6 +14,7 @@
                     @stub('sns_login')
                 </template>
             </admin-toolbar>
+            <z-breadcrumbs divider=">"></z-breadcrumbs>
             @yield('pagecontent')
             {{-- <admin-footer></admin-footer> --}}
         </v-content>

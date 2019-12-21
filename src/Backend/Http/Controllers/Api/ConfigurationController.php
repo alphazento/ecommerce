@@ -45,7 +45,7 @@ class ConfigurationController extends ApiBaseController
         foreach($groups as $name => &$group) {
             if ($group['items'] ?? false) {
                 foreach($group['items'] as &$item) {
-                    if ($accessor = $item['accessor']) {
+                    if ($accessor = $item['accessor'] ?? false) {
                         $item['value'] = config($accessor);
                     }
                 }
@@ -53,7 +53,7 @@ class ConfigurationController extends ApiBaseController
             if ($group['subgroups'] ?? false) {
                 foreach($group['subgroups'] as &$subgroups) {
                     foreach($subgroups['items'] ?? [] as &$item) {
-                        if ($accessor = $item['accessor']) {
+                        if ($accessor = $item['accessor'] ?? false) {
                             $item['value'] = config($accessor);
                         }
                     }

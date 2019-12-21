@@ -40,10 +40,14 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-list-item>
-                             <router-link to="/admin/configuration">Configuration</router-link>
+                            <router-link to="/admin/store-configurations"
+                                >Configuration</router-link
+                            >
                         </v-list-item>
                         <v-list-item>
-                             <router-link to="/admin/dynamic-attributes">Configuration</router-link>
+                            <router-link to="/admin/store-dynamic-attributes"
+                                >Dynamic Attributes</router-link
+                            >
                         </v-list-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -66,6 +70,31 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         content
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                    <v-expansion-panel-header
+                        text-left
+                        class="assign-drawer-item"
+                    >
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <v-btn icon>
+                                    <v-icon large color="blue darken-2"
+                                        >mdi-warehouse</v-icon
+                                    >
+                                </v-btn>
+                            </v-list-item-avatar>
+                            <v-list-item-title>Sales</v-list-item-title>
+                        </v-list-item>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-list-item>
+                            <router-link to="/admin/sales_orders"
+                                >Orders</router-link
+                            >
+                        </v-list-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
