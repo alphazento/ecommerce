@@ -7,13 +7,14 @@
 </template>
 
 <script>
-import BaseText from "./Text"
+import BaseLabel from "./Label";
 export default {
-     props: {
-        value: {
-            type: Boolean
+    methods: {
+        getValue() {
+            this.innerValue = !!this.innerValue;
+            return this.innerValue;
         }
     },
-    extends: BaseText
+    extends: BaseLabel
 };
 </script>

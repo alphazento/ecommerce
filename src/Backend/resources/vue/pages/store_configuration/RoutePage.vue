@@ -1,7 +1,7 @@
 <template>
     <v-layout>
         <v-flex md3>
-            <v-expansion-panels accordion multiple v-if="menus">
+            <v-expansion-panels accordion v-if="menus" focusable>
                 <v-expansion-panel v-for="(item, name) in menus" :key="name">
                     <v-expansion-panel-header text-left>
                         {{ item.title }}
@@ -20,7 +20,7 @@
             </v-expansion-panels>
         </v-flex>
         <v-flex md9>
-            <v-expansion-panels accordion multiple>
+            <v-expansion-panels accordion multiple focusable>
                 <v-expansion-panel
                     v-for="(item, name) in groupData"
                     :key="name"

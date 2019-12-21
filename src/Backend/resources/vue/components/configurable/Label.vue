@@ -1,12 +1,7 @@
 <template>
-    <v-text-field
-        single-line
-        outlined
-        dense
-        v-model="innerValue"
-        @change="valueChanged"
-        >
-    </v-text-field>
+    <p class="title" @change="valueChanged">
+        {{ innerValue }}
+    </p>
 </template>
 
 <script>
@@ -22,7 +17,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: String | Number
         },
         options: {
             type: Array
@@ -31,8 +26,8 @@ export default {
     data() {
         return {
             oldVal: this.value,
-            innerValue: this.value,
-        }
+            innerValue: this.value
+        };
     },
     methods: {
         getValue() {
@@ -40,13 +35,13 @@ export default {
         },
         valueChanged() {
             if (this.innerValue != this.oldVal) {
-                this.$emit('valueChanged', {
-                accessor: this.accessor,
-                value: this.getValue()
+                this.$emit("valueChanged", {
+                    accessor: this.accessor,
+                    value: this.getValue()
                 });
             }
             this.oldVal = this.innerValue;
-       }
-    },
+        }
+    }
 };
 </script>

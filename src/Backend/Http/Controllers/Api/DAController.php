@@ -26,4 +26,13 @@ class DAController extends ApiBaseController
         }
         return $this->withData(Request::get('attributes'));
     }
+
+    public function createAttribute() {
+        $model = new DynamicAttribute();
+        $model->forceFill(Request::get('attributes'));
+        $model->default_value = '';
+        $model->save();
+
+        return $this->withData($model->toArray());
+    }
 }

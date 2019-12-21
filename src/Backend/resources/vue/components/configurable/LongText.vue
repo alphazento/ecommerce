@@ -1,5 +1,5 @@
 <template>
-     <v-textarea
+    <v-textarea
         filled
         auto-grow
         rows="2"
@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import BaseText from "./Text"
+import BaseLabel from "./Label";
 export default {
-    extends: BaseText
+    extends: BaseLabel
 };
 </script>

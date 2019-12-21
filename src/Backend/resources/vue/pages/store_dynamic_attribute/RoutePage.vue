@@ -2,14 +2,16 @@
     <v-layout>
         <v-dialog v-model="dialog" max-width="960">
             <dynamic-attribute-edit-dialogbody
+                :defines="defines"
                 :item="selectedItem"
+                :mode="dialogMode"
                 @close="closeDialog"
             >
             </dynamic-attribute-edit-dialogbody>
         </v-dialog>
 
         <v-flex md2>
-            <v-expansion-panels accordion multiple>
+            <v-expansion-panels v-model="pannel" accordion multiple mandatory>
                 <v-expansion-panel>
                     <v-expansion-panel-header text-left>
                         Dynamic Attributes
@@ -35,9 +37,12 @@
             </v-expansion-panels>
         </v-flex>
         <v-flex md10>
-            <v-card>
+            <v-card v-if="!!group">
                 <v-card-title>
-                    {{ group }} Attributes
+                    <span class="text-uppercase">{{ label }} </span>
+                    <v-btn icon color="error" @click="newAttribute">
+                        <v-icon>mdi-plus-circle</v-icon>
+                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-text-field
                         v-model="search"
@@ -94,6 +99,9 @@
                     </template>
                 </v-data-table>
             </v-card>
+            <v-container v-if="!group">
+                <span color="error">Please select Model first</span>
+            </v-container>
         </v-flex>
     </v-layout>
 </template>
@@ -109,7 +117,10 @@ export default {
             defines: [],
             data: [],
             group: "",
-            selectedItem: null
+            label: "Attributes",
+            selectedItem: null,
+            dialogMode: "new",
+            pannel: [0]
         };
     },
     created() {
@@ -148,7 +159,18 @@ export default {
         },
 
         fetchDynamicAttributes(groupName) {
-            this.group = groupName.toUpperCase();
+            this.group = groupName;
+            switch (groupName) {
+                case "categories":
+                    this.label = "Category Model";
+                    break;
+                case "products":
+                    this.label = "Product Model";
+                    break;
+                case "customers":
+                    this.label = "Customer Model";
+                    break;
+            }
             this.$store.dispatch(
                 "showSpinner",
                 "Fetching Dynamic Attributes..."
@@ -186,10 +208,19 @@ export default {
         },
 
         editAttribute(item) {
-            console.log("editAttribute", item);
             this.selectedItem = item;
+            this.dialogMode = "edit";
             this.dialog = true;
         },
+        newAttribute() {
+            this.dialogMode = "edit";
+            this.selectedItem = {
+                parent_table: this.parent_table,
+                id: 0
+            };
+            this.dialog = true;
+        },
+
         closeDialog(ignore) {
             this.dialog = false;
         }

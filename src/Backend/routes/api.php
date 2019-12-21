@@ -31,9 +31,14 @@ Route::group(
             ['as' => 'admin.da.get', 'uses' => 'DAController@getAttributes']
         );
 
+        Route::post(
+            '/dynamicattributes', 
+            ['as' => 'admin.post.da', 'uses' => 'DAController@createAttribute']
+        );
+
         Route::patch(
             '/dynamicattributes/{id}', 
-            ['as' => 'admin.put.da', 'uses' => 'DAController@updateAttribute']
+            ['as' => 'admin.patch.da', 'uses' => 'DAController@updateAttribute']
         );
 
         Route::patch('/model/{model}/{id}', 

@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import BaseText from "./Text"
+import BaseLabel from "./Label";
 export default {
-    extends: BaseText
+    extends: BaseLabel
 };
 </script>
