@@ -36,7 +36,7 @@ class Passport
         $parsedBody = $request->getParsedBody();
         $configs = [];
         if (!isset($parsedBody['client_id'])) {
-            $configs = config('passport.defaultclient');
+            $configs = config(Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT);
         }
         $email = $email ?? $parsedBody['username'];
         $email = $email ?? $parsedBody['email'];

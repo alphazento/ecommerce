@@ -5,6 +5,8 @@ namespace Zento\BladeTheme\Http\Middleware;
 use Closure;
 use ShareBucket;
 use ProductService;
+
+use Zento\BladeTheme\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 
 class WebDataPrepare
@@ -32,7 +34,7 @@ class WebDataPrepare
     }
 
     protected function prepareApiGuestToken($user) {
-        if (env('API_GUEST_TOKEN_ENABLED')) {
+        if (config(Consts::WORK_WITH_PASSPORT_GUEST_TOKEN)) {
             $apiGuestToken = BladeTheme::getApiGuestToken($user);
             BladeTheme::addGlobalViewData(compact('apiGuestToken'));
             return $apiGuestToken;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Passport\Providers;
+namespace Zento\Passport;
 
 use ShareBucket;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
@@ -14,7 +14,7 @@ use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Guards\TokenGuard;
 
-class Entry extends \Illuminate\Support\ServiceProvider
+class Provider extends \Illuminate\Support\ServiceProvider
 {
     public function register() 
     {

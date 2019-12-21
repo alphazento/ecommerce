@@ -33,7 +33,7 @@ return [
         ],
         "depends"=> [
             "Zento_Customer",
-            "Zento_Catalog"
+            "Zento_Catalog",
         ]
     ]
 ];

@@ -1,13 +1,13 @@
 <?php
 
-namespace Zento\EWayPayment\Providers;
+namespace Zento\EWayPayment;
 
 use Zento\Kernel\Facades\PackageManager;
 use Zento\PaymentGateway\Providers\Facades\PaymentGateway;
 use Illuminate\Support\ServiceProvider;
 use Zento\EWayPayment\Services\PaymentMethod;
 
-class Entry extends ServiceProvider
+class Provider extends ServiceProvider
 {
     public function register()
     {

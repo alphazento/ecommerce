@@ -2,6 +2,7 @@
 
 namespace Zento\EwayPayment\Config;
 
+use Zento\EWayPayment\Consts;
 use Zento\Backend\Providers\Facades\AdminService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
@@ -18,12 +19,17 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'title' => 'Enabled In Frontend',
                         'ui' => 'config-boolean-item',
-                        'accessor' => 'paymentgateway.eway.frontend.enabled'
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
                         'ui' => 'config-boolean-item',
-                        'accessor' => 'paymentgateway.eway.admin.enabled'
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_BACKEND
+                    ],
+                    [
+                        'title' => 'Display Title',
+                        'ui' => 'config-text-item',
+                        'accessor' => Consts::CONFIG_KEY_TITLE
                     ],
                     [
                         'title' => 'Mode',
@@ -32,27 +38,27 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
                         ],
-                        'accessor' => 'paymentgateway.eway.mode'
+                        'accessor' => Consts::PAYMENT_GATEWAY_EWAY_MODE
                     ],
                     [
                         'title' => 'Sandbox ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.sandbox.client_id'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_CLIENT_ID_BY_MODE, 'sandbox')
                     ],
                     [
                         'title' => 'Sandbox Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.sandbox.secret'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_SECRET_BY_MODE, 'sandbox')
                     ],
                     [
                         'title' => 'Production ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.production.client_id'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_CLIENT_ID_BY_MODE, 'production')
                     ],
                     [
                         'title' => 'Production Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.production.secret'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_SECRET_BY_MODE, 'production')
                     ]
                 ]
             ]);

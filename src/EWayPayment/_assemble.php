@@ -4,8 +4,11 @@ return [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\EWayPayment\\Providers\\Entry"
+            "\\Zento\\EWayPayment\\Provider"
         ],
-        "depends"=> ["Zento_PaymentGateway"]
+        "depends"=> [
+            "Zento_PaymentGateway",
+            "Zento_Backend"
+        ]
     ]
 ];

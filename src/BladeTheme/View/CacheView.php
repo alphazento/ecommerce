@@ -3,6 +3,7 @@ namespace Zento\BladeTheme\View;
 
 use Cache;
 use Carbon\Carbon;
+use Zento\BladeTheme\Consts;
 use Illuminate\Contracts\View\View;
 
 class CacheView implements View {
@@ -25,7 +26,7 @@ class CacheView implements View {
             $content = Cache::store('fullpageview')->get($this->key);
         } else {
             $content = $this->view->render();
-            Cache::store('viewcache')->put($this->key, $content, Carbon::now()->addHours(config('cache.bladeview.expire', 12)));
+            Cache::store('viewcache')->put($this->key, $content, Carbon::now()->addHours(config(Consts::CACHE_KEY_BLADE_VIEW_EXPIRE, 12)));
         }
         return $content;
     }

@@ -5,7 +5,7 @@ return [
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Passport\\Providers\\Entry"
+            "\\Zento\\Passport\\Provider"
         ],
         "middlewares"=> [
             "cors"=> "\\Zento\\Passport\\Http\\Middleware\\CORS",
@@ -13,6 +13,9 @@ return [
             "scope"=> "\\Laravel\\Passport\\Http\\Middleware\\CheckForAnyScope",
             "guesttoken"=> '\Zento\Passport\Http\Middleware\GuestToken'
         ],
-        "middlewaregroup"=> []
+        "middlewaregroup"=> [],
+        "depends"=>[
+            "Zento_Backend"
+        ]
     ]
 ];

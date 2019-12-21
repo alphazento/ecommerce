@@ -5,6 +5,9 @@ return [
         "commands"=> [],
         "providers"=> [
             "\\Zento\\PaymentGateway\\Providers\\Entry"
+        ],
+        "depends"=> [
+            "Zento_Backend"
         ]
     ]
 ];
