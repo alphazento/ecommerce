@@ -55,7 +55,7 @@ class Provider extends ServiceProvider
                 Config::set(Consts::FOOTER_CONFIG_KEY, $json);
 
                 $footer = json_decode(Config::get(Consts::FOOTER_CONFIG_KEY, '{}'), true);
-                $logo = Config::get(Consts::LOGO_CONFIG_KEY);
+                $logo = Config::get(\Zento\StoreFront\Consts::LOGO);
                 $bladeTheme->addGlobalViewData(
                     [
                         'user' => Auth::user(),

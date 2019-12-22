@@ -47,6 +47,9 @@ class ConfigurationController extends ApiBaseController
                 foreach($group['items'] as &$item) {
                     if ($accessor = $item['accessor'] ?? false) {
                         $item['value'] = config($accessor);
+                        if ($item['value'] === null && isset($item['defaultValue'])) {
+                            $item['value'] = $item['defaultValue'];
+                        }
                     }
                 }
             }
@@ -55,6 +58,9 @@ class ConfigurationController extends ApiBaseController
                     foreach($subgroups['items'] ?? [] as &$item) {
                         if ($accessor = $item['accessor'] ?? false) {
                             $item['value'] = config($accessor);
+                            if ($item['value'] === null && isset($item['defaultValue'])) {
+                                $item['value'] = $item['defaultValue'];
+                            }
                         }
                     }
                 }

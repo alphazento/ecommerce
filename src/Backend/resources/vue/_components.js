@@ -8,6 +8,8 @@ export default {
     "config-longtext-item": "components/configurable/LongText.vue",
     "config-boolean-item": "components/configurable/Switch.vue",
     "config-options-item": "components/configurable/Options.vue",
+    "config-json-item": "components/configurable/JsonEditor.vue",
+    "simple-json-item": "components/configurable/SimpleJsonEditor.vue",
 
     "dynamic-attribute-edit-dialogbody": "pages/store_dynamic_attribute/components/DAEditDialogBody.vue",
     // "admin-footer": "components/layout/ThemeFooter.vue",
