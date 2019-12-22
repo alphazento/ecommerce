@@ -25,6 +25,7 @@ class Provider extends ServiceProvider
                 $paths = ThemeManager::getViewPaths();
                 $factory = new ViewFactory($app);
                 $factory->getFinder()->setPaths($paths);
+                ThemeManager::changeViewFactory($factory);
                 (new DirectiveExtend())->inject($factory);
                 return $factory->addViewProcessor(new BladeViewEnhance());
             });
