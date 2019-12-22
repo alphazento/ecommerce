@@ -38,11 +38,13 @@
                                     <span>{{ subItem.title }}</span>
                                 </v-flex>
                                 <v-flex md6>
-                                    <component
-                                        :is="subItem.ui"
-                                        v-bind="subItem"
-                                        @valueChanged="configValueChanged"
-                                    ></component>
+                                    <div class="component-container">
+                                        <component
+                                            :is="subItem.ui"
+                                            v-bind="subItem"
+                                            @valueChanged="configValueChanged"
+                                        ></component>
+                                    </div>
                                 </v-flex>
                                 <v-flex md3>
                                     {{ subItem.description }}
@@ -160,5 +162,8 @@ export default {
 }
 .bottom-line {
     border-bottom: 1px solid grey;
+}
+.component-container {
+    padding-top: 18px;
 }
 </style>
