@@ -17,30 +17,22 @@ class Admin extends AbstractAdminConfig {
                 'title' => 'Basic Settings',
                 'items' => [
                     [
+                        'title' => 'Logo',
+                        'ui' => 'config-image-uploader-item',
+                        'accessor' => Consts::LOGO
+                    ],
+                    [
+                        'title' => 'Currency',
+                        'ui' => 'config-text-item',
+                        'accessor' => Consts::CURRENCY
+                    ],
+                    [
                         'title' => 'Assets Location',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::ASSETS_LOCATION
                     ],
-                    [
-                        'title' => 'Logo',
-                        'ui' => 'config-text-item',
-                        'accessor' => Consts::LOGO
-                    ]
                 ]
             ]);
         };
-    }
-
-    protected $themeOptions;
-    protected function themes() {
-        // 'options' => 
-        if (!$this->themeOptions) {
-            $themes = ThemeManager::availableThemes();
-            
-            $this->themeOptions = array_map(function($theme) {
-                return ['label' => $theme, 'value' => $theme];
-            }, $themes);
-        }
-        return $this->themeOptions;
     }
 }

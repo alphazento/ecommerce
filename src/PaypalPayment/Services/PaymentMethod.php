@@ -2,6 +2,8 @@
 
 namespace Zento\PaypalPayment\Services;
 
+use Zento\PaypalPayment\Consts;
+
 use Zento\PaypalPayment\Model\PaymentCapturerV1;
 use Zento\PaypalPayment\Model\PaymentCapturerV2;
 use Zento\PaypalPayment\Model\PaymentPrimer;
@@ -15,11 +17,15 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function getTitle(){
-        return config('paypalexpress.title', 'Paypal Express Checkout');
+        return config(Consts::CONFIG_KEY_TITLE, 'Paypal Express Checkout');
+    }
+
+    public function getIcon() {
+        return config(Consts::CONFIG_KEY_ICON);
     }
 
     public function canOrder() {
-        return config('paypalexpress.title');
+        return true;
     }
 
     public function canAuthorize(){
@@ -47,23 +53,23 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function canUseAtFront() {
-        return config('paypalexpress.can.useatfront');
+        return config(Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND);
     }
 
     public function canUseAtAdmin() {
-        return false;
+        return config(Consts::CONFIG_KEY_ENABLE_FOR_BACKEND);
     }
 
     public function canUseCheckout() {
-        return config('paypalexpress.can.usecheckout');
+        return true;
     }
 
     public function canEdit() {
-        return config('paypalexpress.can.edit');
+        return true;
     }
 
     public function canFetchTransactionInfo() {
-        return config('paypalexpress.can.fetchtransactioninfo');
+        return true;
     }
 
     public function canUseForCountry($country) {
@@ -126,72 +132,32 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             case 'web':
                 return $this;
                 break;
-            case 'reactjs':
-                return $this->prepareForReactjs();
-                break;
             case 'vue': 
                 return $this->prepareForVue();
                 break;
         }
     }
 
-    protected function prepareForReactjs() {
-        $url = (string)(route('api:payment:capture', ['method' => $this->getCode() ]));
-        return [
-            "name" => $this->getCode(),
-            "title" => $this->getTitle(),
-            "withCards" =>false,
-            "html" => '<img src="https://yes.edu.my/wp-content/uploads/2018/10/paypal.png" width=200 />',
-            "js" => [
-                "depends"=> [
-                    [
-                        "namespaces" => ["paypal_config"],
-                        "src" => route('paypay.config')
-                    ],
-                    [
-                        "namespaces" => ["paypal"],
-                        "src" => "https://www.paypalobjects.com/api/checkout.js"
-                    ]
-                    // [
-                    //     "namespaces" => ["eWAYUtils", "eWAY"],
-                    //     "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
-                    // ]
-                ],
-                "entry" => asset("js/paypalexpress.js?v="  . time())
-            ],
-            'params' => [
-                'capture_url' => str_replace('https:', 'http:', $url)
-            ]
-        ];
-    }
-
     protected function prepareForVue() {
         $url = (string)(route('api:payment:capture', ['method' => $this->getCode() ]));
-        $mode = config('paymentgateway.paypalexpress.mode');
-        $clientId = config(sprintf('paymentgateway.paypalexpress.%s.client_id', $mode));
+        $mode = config(Consts::PAYMENT_GATEWAY_PAYPAL_MODE);
+        $clientId = config(sprintf(Const::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, $mode));
         return [
             'name' => $this->getCode(),
             'title' => $this->getTitle(),
             'component' => 'paypal-card',
             'withCards' =>false,
             'image' => [
-                'src' => 'https://yes.edu.my/wp-content/uploads/2018/10/paypal.png',
-                'width' => '170px',
-                'height' => '60px',
+                'src' => $this->getIcon(),
             ],
             'configs' => [
                 'mode' => $mode,
-                'currency' => 'AUD',
+                'currency' => config(\Zento\StoreFront\Consts::CURRENCY),
                 'credentials' => [
                     'sandbox' => $mode === 'sandbox' ? $clientId : '',
                     'production'  => $mode === 'sandbox' ? '' : $clientId
                 ],
-                'style' => [
-                    'label' => "checkout",
-                    'size' => "responsive",
-                    'shape'=> "pill",
-                    'color'=> "gold"
-                ],
+                'style' => json_decode(config(Consts::CONFIG_KEY_BUTTON_STYLE, '{}')),
                 'params' => [
                     'capture_url' => str_replace('https:', 'http:', $url)
                 ]

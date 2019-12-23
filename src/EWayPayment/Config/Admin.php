@@ -7,12 +7,10 @@ use Zento\Backend\Providers\Facades\AdminService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerMenus() {
-        AdminService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
     }
 
     public function _registerGroups($groupTag, &$groups) {
-        $groups['Sales/PaymentGateway'] = function($groupTag) {
+        $groups['sales/paymentgateway'] = function($groupTag) {
             AdminService::registerGroup($groupTag, 'eWay',  [
                 'title' => 'eWay Transparent',
                 'items' => [

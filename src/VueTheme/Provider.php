@@ -3,7 +3,6 @@
 namespace Zento\VueTheme;
 
 use Auth;
-use Config;
 use Zento\VueTheme\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Zento\Kernel\Facades\ThemeManager;
@@ -30,8 +29,8 @@ class Provider extends ServiceProvider
             BladeTheme::registerPreRouteCallAction(function($bladeTheme) {
                 // prepare cateogry tree for category menus
                 $apiResp = $bladeTheme->requestInnerApi('GET', $bladeTheme->apiUrl('categories/tree'));
-                $footer = json_decode(Config::get(Consts::CONFIG_KEY_FOOTER_DATA, '{}'), true);
-                $logo = Config::get(\Zento\StoreFront\Consts::LOGO);
+                $footer = json_decode(config(Consts::CONFIG_KEY_FOOTER_DATA, '{}'), true);
+                $logo = config(\Zento\StoreFront\Consts::LOGO);
                 $bladeTheme->addGlobalViewData(
                     [
                         'user' => Auth::user(),

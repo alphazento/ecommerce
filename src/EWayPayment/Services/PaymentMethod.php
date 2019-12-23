@@ -119,32 +119,6 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             case 'web':
                 return $this;
                 break;
-            case 'reactjs':
-                return $this->prepareForReactjs();
-                break;
         }
-    }
-
-    protected function prepareForReactjs() {
-        return [
-            "name" => $this->getCode(),
-            "title" => $this->getTitle(),
-            "withCards" =>true,
-            // "html" => 
-            // "img" => 
-            "js" => [
-                "depends"=> [
-                        [
-                            "namespaces" => ["eWAYUtils", "eWAY"],
-                            "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
-                        ]
-                    ],
-                    "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
-            ],
-            'params' => [
-                'prepare_url' => "/payment/prepare/" . $this->getCode(),
-                'capture_url' => "/payment/capture/" . $this->getCode()
-            ]
-        ];
     }
 }

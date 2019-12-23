@@ -52,6 +52,17 @@ Route::group(
                 'uses' => '\Zento\Passport\Http\Controllers\ApiController@profile'
             ]
         );
+
+        Route::post(
+            '/upload',
+            ['as'=>'post.upload', 'uses'=>'FileUploadController@uploadFile']
+        );
+
+        Route::post(
+            '/upload/{folder}',
+            ['as'=>'post.upload.to.folder', 'uses'=>'FileUploadController@uploadFile']
+        );
+        
     }
 );
 

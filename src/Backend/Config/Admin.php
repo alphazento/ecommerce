@@ -10,6 +10,7 @@ class Admin extends AbstractAdminConfig {
         AdminService::registerRootLevelMenuNode('Website', 'Website');
         AdminService::registerRootLevelMenuNode('Sales', 'Sales');
         AdminService::registerRootLevelMenuNode('Checkout', 'Checkout');
+        AdminService::registerRootLevelMenuNode('ThirdParty', 'Third Party');
         AdminService::registerL1MenuNode('Website', 'Web', 'Web');
         AdminService::registerL1MenuNode('Website', 'Admin', 'Admin');
         AdminService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
