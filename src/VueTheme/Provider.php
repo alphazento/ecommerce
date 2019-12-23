@@ -30,31 +30,7 @@ class Provider extends ServiceProvider
             BladeTheme::registerPreRouteCallAction(function($bladeTheme) {
                 // prepare cateogry tree for category menus
                 $apiResp = $bladeTheme->requestInnerApi('GET', $bladeTheme->apiUrl('categories/tree'));
-
-                //prepare theme page footer and navigator drawer data
-                $json = '{
-                    "icons":[
-                      {"icon":"fa-facebook","link":"https://facebook.com"},
-                      {"icon":"fa-twitter","link":"https://twitter.com"},
-                      {"icon":"fa-linkedin","link":"https://linkedin.com"},
-                      {"icon":"fa-instagram","link":"https://instagram.com"}
-                    ],
-                    "links":[
-                      {"title":"Home","link":"/"},
-                      {"title":"About Us","link":"/about-us"},
-                      {"title":"Team","link":"/team"},
-                      {"title":"Services","link":"/services"},
-                      {"title":"Privacy","link":"/privacy"},
-                      {"title":"Blog","link":"/blog"},
-                      {"title":"Contact Us","link":"/contact-us"}
-                    ],
-                    "company":{"name":"Alphazento","description":"Description of Alphazento"},
-                    "copyright":2019
-                  }';
-                
-                Config::set(Consts::FOOTER_CONFIG_KEY, $json);
-
-                $footer = json_decode(Config::get(Consts::FOOTER_CONFIG_KEY, '{}'), true);
+                $footer = json_decode(Config::get(Consts::CONFIG_KEY_FOOTER_DATA, '{}'), true);
                 $logo = Config::get(\Zento\StoreFront\Consts::LOGO);
                 $bladeTheme->addGlobalViewData(
                     [

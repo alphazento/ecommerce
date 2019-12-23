@@ -109,8 +109,7 @@ export default {
         },
 
         navToGroup(group, subName) {
-            this.$router.push({ query: { group: `${group}/${subName}` } });
-            // this.fetchGroupDetails(`${group}/${subName}`);
+            this.$router.push({ query: { group: `${group}/${subName}`}}).catch(err => {});
         },
 
         fetchGroupDetails(groupName) {

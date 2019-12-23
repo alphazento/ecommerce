@@ -38,7 +38,7 @@ class Admin extends AbstractAdminConfig {
                             ],
                             "copyright" => "config-text-item"
                         ],
-                        'accessor' => Consts::FOOTER_CONFIG_KEY
+                        'accessor' => Consts::CONFIG_KEY_FOOTER_DATA
                     ]
                 ]
             ]);

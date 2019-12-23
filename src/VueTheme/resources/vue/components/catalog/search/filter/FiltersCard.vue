@@ -55,7 +55,7 @@ export default {
       },
       filterChange(e) {
         this.routeQuery[e.filter] = e.data;
-        this.$router.push({ query: this.routeQuery });
+        this.$router.push({ query: this.routeQuery }).catch(err => {});
       },
       diffKeyInPagination(val1, val2) {
         var keys = Object.keys(val1);

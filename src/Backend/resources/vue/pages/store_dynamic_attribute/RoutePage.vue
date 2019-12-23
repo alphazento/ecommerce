@@ -142,7 +142,7 @@ export default {
         },
 
         navToGroup(group) {
-            this.$router.push({ query: { group: `${group}` } });
+            this.$router.push({ query: { group: `${group}`}}).catch(err => {});
         },
 
         fetchDefines() {

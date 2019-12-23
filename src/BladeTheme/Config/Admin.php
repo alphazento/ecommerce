@@ -11,11 +11,11 @@ use Zento\Kernel\Facades\ThemeManager;
 class Admin extends AbstractAdminConfig {
     public function registerMenus() {
         AdminService::registerRootLevelMenuNode('Theme', 'Theme');
-        AdminService::registerL1MenuNode('Theme', 'BladeThemes', 'BladeThemes');
+        AdminService::registerL1MenuNode('Theme', 'Themes', 'Themes');
     }
 
     public function _registerGroups($groupTag, &$groups) {
-        $groups['theme/bladethemes'] = function($groupTag) {
+        $groups['theme/themes'] = function($groupTag) {
             AdminService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Basic Settings',
                 'items' => [
