@@ -54,15 +54,22 @@ Route::group(
         );
 
         Route::post(
-            '/upload',
+            '/upload/{visibility}',
             ['as'=>'post.upload', 'uses'=>'FileUploadController@uploadFile']
-        );
+        )->where('visibility', 'public|private');
 
         Route::post(
-            '/upload/{folder}',
+            '/upload/{visibility}/{folder}',
             ['as'=>'post.upload.to.folder', 'uses'=>'FileUploadController@uploadFile']
-        );
-        
+        )->where('visibility', 'public|private');
+
+        Route::get('/files-finder/{visibility}', 
+            ['as'=>'get.files-finder.in-folder', 'uses'=>'StorageFileFinder@findFiles']
+        )->where('visibility', 'public|private');
+
+        Route::get('/files-finder/{visibility}/{folder}', 
+            ['as'=>'get.files-finder', 'uses'=>'StorageFileFinder@findFiles']
+        )->where('visibility', 'public|private');
     }
 );
 
@@ -70,11 +77,11 @@ Route::group(
 Route::group(
     [
         'prefix' => '/api/v1/admin/oauth2',
-        'namespace' => '\Zento\Customer\Http\Controllers\Api',
+        'namespace' => '\Zento\Passport\Http\Controllers',
         'middleware' => ['backend', 'cors']
     ], function () {
     Route::post(
         '/token', 
-        ['uses' => 'PassportController@issueToken']
+        ['uses' => 'ApiController@issueToken']
     );
 });

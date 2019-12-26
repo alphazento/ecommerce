@@ -1,5 +1,6 @@
 export default {
     "spinner-layer": "components/SpinnerLayer.vue",
+    "z-file-picker": "components/FilePicker.vue",
     "admin-toolbar": "components/layout/AdminToolbar.vue",
     "z-breadcrumbs": "components/layout/Breadcrumbs.vue",
 

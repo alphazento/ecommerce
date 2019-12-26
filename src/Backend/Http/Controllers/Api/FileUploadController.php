@@ -4,32 +4,69 @@ namespace Zento\Backend\Http\Controllers\Api;
 
 use Auth;
 use Route;
-use Illuminate\Http\Request;
+use Storage;
+use Zento\StoreFront\Consts;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class FileUploadController extends ApiBaseController
 {
     public function uploadFile(Request $request) {
         if(!$request->hasFile('file0')) {   
-            return $this->result(false, 'upload file not found');
+            return $this->error(422, 'upload file not found');
         }
         $file = $request->file('file0');
         if(!$file->isValid()) {
-            return $this->result(false, 'invalid file upload');
+            return $this->error(422, 'invalid file upload');
         }
 
-        $fileName = $file->getPathname();
-        $folder = $this->checkFolder(Route::input('folder', ''));
-        $file->move($folder, $newName);
-        return $this->result(true, sprintf('%s/%s', $folder, $fileName));
+        return $this->saveFile($file, Route::input('folder', ''), Route::input('visibility'));
     }
 
-    protected function checkFolder($folder) {
-        $folder = sprintf('uploads/%s', $folder);
-        $folder = storage_path($folder);
-        if (!file_exists($folder)) {
-            mkdir($folder, 0775, true);
+    protected function saveFile($file, $folder, $visibility) {
+        $strategy = $this->getStrategy($visibility);
+        $fileName = $this->prettyName($file->getClientOriginalName());
+
+        $url = '';
+        switch($strategy) {
+            case 'local':
+                $disk = config($visibility === 'public' ? Consts::PUBLIC_FILE_UPLOAD_STORAGE : Consts::PRIVATE_FILE_UPLOAD_STORAGE);
+                $path = $file->storeAs($folder, $fileName, compact('disk', 'visibility'));
+                $url = Storage::disk($disk)->url($path);
+                break;
+            case 'cloud':
+                $disk = config(CLOUD_STORAGE);
+                $path = $file->storeAs($folder, $fileName, compact('disk', 'visibility'));
+                $url = Storage::disk($disk)->url($path);
+                break;
+            case 'both':
+                $disk = config($visibility === 'public' ? Consts::PUBLIC_FILE_UPLOAD_STORAGE : Consts::PRIVATE_FILE_UPLOAD_STORAGE);
+                $path = $file->storeAs($folder, $fileName, compact('disk', 'visibility'));
+                $url = Storage::disk($disk)->url($path);
+
+                $disk = config(CLOUD_STORAGE);
+                $path = sprintf('%s/%s', $visibility, $folder);
+                $file->storeAs($path, Str::slug($file->getClientOriginalName()), compact('disk', 'visibility'));
+                break;
         }
-        return $folder;
+                
+        if (Str::startsWith($url, env('APP_URL'))){
+            $url = Str::replaceFirst(env('APP_URL'), '', $url);
+            $url = Str::start($url, '/');
+        }
+        return $this->success(200)->withData(compact('url'));
+    }
+
+    protected function getStrategy($visibility) {
+        return config($visibility === 'public' ? Consts::PUBLIC_FILE_UPLOAD_STORE_STRATEGY : Consts::PRIVATE_FILE_UPLOAD_STORE_STRATEGY, 'local');
+    }
+
+    protected function prettyName($name) {
+        if ($ext = pathinfo($name, PATHINFO_EXTENSION)) {
+            $main = substr($name, 0, strlen($name) - strlen($ext));
+            return strtolower(sprintf('%s.%s', Str::slug($main), $ext));
+        }
+        return Str::slug($name);
     }
 }

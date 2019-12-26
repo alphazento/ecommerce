@@ -1,16 +1,23 @@
 <template>
     <v-layout>
-        <v-flex md6 v-if="!!innerValue">
+        <v-flex md1>
+            <z-file-picker
+                :folder="folder"
+                :visibility="visibility"
+                file-type="image"
+                @imageSelected="imageSelected"
+            ></z-file-picker>
+        </v-flex>
+        <v-flex md5 v-if="!!innerValue">
             <v-img :src="innerValue"></v-img>
         </v-flex>
         <v-flex md6>
             <v-file-input
-                label="Select your image file"
+                label="Select upload file"
                 filled
                 show-size
-                accept="image/png, image/jpeg, image/jpg, image/bmp, image/gif"
+                :accept="accept"
                 :rules="rules"
-                prepend-icon="mdi-camera"
                 @change="fileChanged"
             ></v-file-input>
         </v-flex>
@@ -18,26 +25,12 @@
 </template>
 
 <script>
-import BaseLabel from "./Label";
+import FileUploader from "./FileUploader";
 export default {
-    extends: BaseLabel,
-    props: {
-        maxSize: {
-            type: Number
-        }
-    },
-    
-    data() {
-        return {
-            max_size: this.maxSize === undefined ? 20 : this.maxSize,
-            rules: [
-                value => !value || value.size < (this.max_size * 1024*1024) || 'Avatar size should be less than '+ this.max_size +' MB!'
-            ],
-        }
-    },
+    extends: FileUploader,
     methods: {
-        fileChanged(file) {
-            console.log('fileChanged', file);
+        imageSelected(name) {
+            console.log("imageSelected", name);
         }
     }
 };
