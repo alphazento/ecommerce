@@ -13,7 +13,7 @@
                     <v-text-field
                         v-model="searchText"
                         hide-details
-                        style="max-width: 600px;"
+                        style="width: 600px;"
                         placeholder="Search..."
                         @keyup.native="onEnterKey"
                         class="d-none d-md-block"
@@ -21,7 +21,7 @@
                     />
                     <v-pagination
                         circle
-                        :length="3"
+                        :length="pagination.last_page"
                         v-model="page"
                         :total-visible="5"
                     ></v-pagination>
@@ -37,13 +37,18 @@
                             >
                                 <v-card flat tile class="d-flex">
                                     <v-img
-                                        :src="item.url"
+                                        :src="item.thumbnail"
                                         :lazy-src="
                                             `https://picsum.photos/10/6?image=15`
                                         "
                                         aspect-ratio="1"
-                                        class="grey lighten-2"
+                                        class="grey lighten-2 align-end"
+                                        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                                     >
+                                        <v-card-title
+                                            class="title white--text"
+                                            v-text="item.name"
+                                        ></v-card-title>
                                         <template v-slot:placeholder>
                                             <v-row
                                                 class="fill-height ma-0"
@@ -70,7 +75,6 @@
 <script>
 export default {
     props: {
-        page: Number | String,
         visibility: {
             type: String,
             default: "public"
@@ -90,6 +94,7 @@ export default {
     },
     data() {
         return {
+            page: 1,
             searchText: "",
             pagination: {
                 data: [],
@@ -98,6 +103,7 @@ export default {
                 last_page: 1,
                 total: 1,
                 per_page: 9,
+                current_page: 1,
                 local_pagination: false
             },
             api: `${this.server}/files-finder/${this.visibility}/${this.folder}`
@@ -106,6 +112,19 @@ export default {
     mounted() {
         this.loadPage(1);
     },
+    computed: {
+        items() {
+            if (this.pagination.local_pagination) {
+                let its = this.pagination.data.slice(
+                    this.pagination.from - 1,
+                    this.pagination.to
+                );
+                console.log("its", its);
+                return its;
+            }
+            return this.pagination.data;
+        }
+    },
     methods: {
         loadPage(page) {
             axios
@@ -113,19 +132,30 @@ export default {
                     `${this.api}?text=${this.searchText}&page=${page}&type=${this.fileType}`
                 )
                 .then(response => {
-                    this.items = response.data.data;
+                    this.pagination = response.data.data;
                 });
         },
         onEnterKey(e) {
             // if (e.isTrusted && e.code === "Enter" && this.canSearch()) {
             if (e.isTrusted && e.code === "Enter") {
+                // if (this.searchText.length > 2) {
                 this.loadPage(1);
+                // }
             }
         }
     },
     watch: {
         page: function(val, oldVal) {
-            this.loadPage(this.page);
+            if (this.pagination.local_pagination) {
+                this.pagination.current_page = this.page;
+                this.pagination.from += 9;
+                this.pagination.to += 9;
+                if (this.pagination.to > this.pagination.total) {
+                    this.pagination.to = $total;
+                }
+            } else {
+                this.loadPage(this.page);
+            }
         }
     }
 };

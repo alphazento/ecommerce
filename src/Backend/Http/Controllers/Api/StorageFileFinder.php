@@ -31,7 +31,7 @@ class StorageFileFinder extends ApiBaseController
                     'per_page' => 9,
                     'last_page' => $lastPage,
                     'from' => 1,
-                    'to' => 9,
+                    'to' => $total > 9 ? 9 : $total,
                     'total' => $total,
                     'local_pagination' => true
                 ];
@@ -76,11 +76,16 @@ class StorageFileFinder extends ApiBaseController
         $files = glob($pattern, GLOB_BRACE);
         $ds = [];
         $storagePath = $storage->path('');
+        $appUrl = env('APP_URL');
         foreach($files as $file) {
             $name = Str::replaceFirst($storagePath, '', $file);
+            $url = $storage->url($name);
+            $value = Str::replaceFirst($appUrl, '', $url);
             $ds[] = [
-                'url' => $storage->url($name),
-                'name' => $name
+                'url' => $url,
+                'thumbnail' => $url,
+                'name' => basename($name),
+                'value' => $value
             ];
         }
         return $ds;
