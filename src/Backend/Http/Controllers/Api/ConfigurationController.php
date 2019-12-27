@@ -5,7 +5,7 @@ namespace Zento\Backend\Http\Controllers\Api;
 use Route;
 use Request;
 use Config;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
@@ -17,10 +17,10 @@ class ConfigurationController extends ApiBaseController
             $namespace = (PackageManager::getNameSpace($name));
             $className = sprintf('\\%s\\Config\\Admin', $namespace);
             if (class_exists($className)) {
-                (new $className)->registerMenus();
+                (new $className)->registerConfigMenus();
             }
         }
-        return $this->withData(AdminService::getMeus());
+        return $this->withData(AdminConfigurationService::getMenus());
     }
 
     public function getConfigGroups() {
@@ -34,7 +34,7 @@ class ConfigurationController extends ApiBaseController
                 }
             }
         }
-        if ($groups = AdminService::getDetailGroup($key)) {
+        if ($groups = AdminConfigurationService::getDetailGroup($key)) {
             return $this->getGroupValues($groups);
         } else {
             return $this->error(404, 'group not found.');

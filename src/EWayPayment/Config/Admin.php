@@ -3,15 +3,18 @@
 namespace Zento\EwayPayment\Config;
 
 use Zento\EWayPayment\Consts;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerMenus() {
+    public function registerDashboardMenus() {
+
+    }
+    public function registerConfigMenus() {
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['sales/paymentgateway'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'eWay',  [
+            AdminConfigurationService::registerGroup($groupTag, 'eWay',  [
                 'title' => 'eWay Transparent',
                 'items' => [
                     [

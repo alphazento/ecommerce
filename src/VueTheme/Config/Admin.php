@@ -4,16 +4,19 @@ namespace Zento\VueTheme\Config;
 
 use Zento\VueTheme\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerL1MenuNode('Theme', 'VueTheme', 'VueTheme');
+    public function registerDashboardMenus() {
+
+    }
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerL1MenuNode('Theme', 'VueTheme', 'VueTheme');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['theme/vuetheme'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'settings',  [
+            AdminConfigurationService::registerGroup($groupTag, 'settings',  [
                 'title' => 'Basic Settings',
                 'items' => [
                     [

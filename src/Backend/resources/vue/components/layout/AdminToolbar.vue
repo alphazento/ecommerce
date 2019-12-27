@@ -40,14 +40,20 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-list-item>
-                            <router-link to="/admin/store-configurations"
-                                >Configuration</router-link
+                            <router-link
+                                to="/admin/store-configurations"
+                                class="white--text"
                             >
+                                Configuration
+                            </router-link>
                         </v-list-item>
                         <v-list-item>
-                            <router-link to="/admin/store-dynamic-attributes"
-                                >Dynamic Attributes</router-link
+                            <router-link
+                                to="/admin/store-dynamic-attributes"
+                                class="white--text"
                             >
+                                Dynamic Attributes
+                            </router-link>
                         </v-list-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>

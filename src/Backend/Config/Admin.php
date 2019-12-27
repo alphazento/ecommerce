@@ -2,24 +2,33 @@
 
 namespace Zento\Backend\Config;
 
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminDashboardService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerRootLevelMenuNode('Website', 'Website');
-        AdminService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminService::registerRootLevelMenuNode('Checkout', 'Checkout');
-        AdminService::registerRootLevelMenuNode('ThirdParty', 'Third Party');
-        AdminService::registerL1MenuNode('Website', 'Web', 'Web');
-        AdminService::registerL1MenuNode('Website', 'Admin', 'Admin');
-        AdminService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
-        AdminService::registerL1MenuNode('Sales', 'Email', 'Email');
+    public function registerDashboardMenus() {
+        AdminDashboardService::registerRootLevelMenuNode('Store', 'Store');
+        AdminConfigurationService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
+            'mdi-settings', '/admin/store-configurations');
+        AdminConfigurationService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
+            'mdi-settings', '/admin/store-dynamic-attributes');
+    }
+
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerRootLevelMenuNode('Website', 'Website');
+        AdminConfigurationService::registerRootLevelMenuNode('Sales', 'Sales');
+        AdminConfigurationService::registerRootLevelMenuNode('Checkout', 'Checkout');
+        AdminConfigurationService::registerRootLevelMenuNode('ThirdParty', 'Third Party');
+        AdminConfigurationService::registerL1MenuNode('Website', 'Web', 'Web');
+        AdminConfigurationService::registerL1MenuNode('Website', 'Admin', 'Admin');
+        AdminConfigurationService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
+        AdminConfigurationService::registerL1MenuNode('Sales', 'Email', 'Email');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/admin'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'ip_restrict',  [
+            AdminConfigurationService::registerGroup($groupTag, 'ip_restrict',  [
                 'title' => 'Allow IPs',
                 'items' => [
                     [
@@ -37,7 +46,7 @@ class Admin extends AbstractAdminConfig {
         };
 
         $groups['website/web'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'base',  [
+            AdminConfigurationService::registerGroup($groupTag, 'base',  [
                 'title' => 'Basic Settings',
                 'items' => [
                     [
@@ -45,15 +54,10 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-text-item',
                         'accessor' => 'website.web.base_url'
                     ],
-                    [
-                        'title' => 'Test Item',
-                        'ui' => 'config-boolean-item',
-                        'accessor' => 'website.web.test.eanbled'
-                    ],
                 ]
             ]);
 
-            AdminService::registerGroup($groupTag, 'url_rewrite',  [
+            AdminConfigurationService::registerGroup($groupTag, 'url_rewrite',  [
                 'title' => 'Allow Url Rewrite',
                 'items' => [
                     [
@@ -66,7 +70,7 @@ class Admin extends AbstractAdminConfig {
         };
 
         $groups['tables/dynamicattributes'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'table',  [
+            AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Table Definition',
                 'items' => [
                     [

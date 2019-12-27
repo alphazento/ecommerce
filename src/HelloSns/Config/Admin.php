@@ -4,16 +4,20 @@ namespace Zento\HelloSns\Config;
 
 use Zento\HelloSns\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerL1MenuNode('Website', 'HelloSns', 'HelloSns');
+    public function registerDashboardMenus() {
+
+    }
+
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerL1MenuNode('Website', 'HelloSns', 'HelloSns');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/hellosns'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'frontend',  [
+            AdminConfigurationService::registerGroup($groupTag, 'frontend',  [
                 'title' => 'Front-end Panel use Hellosns',
                 'items' => [
                     [
@@ -56,7 +60,7 @@ class Admin extends AbstractAdminConfig {
                     ],
                 ]
             ]);
-            AdminService::registerGroup($groupTag, 'backend',  [
+            AdminConfigurationService::registerGroup($groupTag, 'backend',  [
                 'title' => 'Admin Panel use Hellosns',
                 'items' => [
                     [
@@ -105,7 +109,7 @@ class Admin extends AbstractAdminConfig {
                 ]
             ]);
 
-            AdminService::registerGroup($groupTag, 'services',  [
+            AdminConfigurationService::registerGroup($groupTag, 'services',  [
                 'title' => 'Social Media Login Services',
                 'items' => [
                     [
@@ -170,6 +174,10 @@ class Admin extends AbstractAdminConfig {
                     ],
                 ]
             ]);
+        };
+
+        $groups['tables/dynamicattributes']  = function($groupTag) {
+            AdminConfigurationService::removeItemFromGroup($groupTag, 'table', 'Type');
         };
     }
 }

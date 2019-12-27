@@ -3,17 +3,20 @@
 namespace Zento\Passport\Config;
 
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Passport\Consts;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerL1MenuNode('Website', 'Passport', 'Passport');
+    public function registerDashboardMenus() {
+
+    }
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerL1MenuNode('Website', 'Passport', 'Passport');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/passport'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'client',  [
+            AdminConfigurationService::registerGroup($groupTag, 'client',  [
                 'title' => 'Default Client',
                 'items' => [
                     [

@@ -2,7 +2,7 @@
 
 namespace Zento\Backend\Providers\Facades;
 
-class AdminService extends \Illuminate\Support\Facades\Facade
+class AdminConfigurationService extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -11,6 +11,6 @@ class AdminService extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'adminsevice';
+        return 'admin_configuration_sevice';
     }
 }

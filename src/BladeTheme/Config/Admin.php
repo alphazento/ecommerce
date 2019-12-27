@@ -5,18 +5,22 @@ namespace Zento\BladeTheme\Config;
 use Zento\BladeTheme\Consts;
 use Zento\Kernel\Consts as KernelConsts;
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Facades\ThemeManager;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerRootLevelMenuNode('Theme', 'Theme');
-        AdminService::registerL1MenuNode('Theme', 'Themes', 'Themes');
+    public function registerDashboardMenus() {
+
+    }
+
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerRootLevelMenuNode('Theme', 'Theme');
+        AdminConfigurationService::registerL1MenuNode('Theme', 'Themes', 'Themes');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['theme/themes'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'basic',  [
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Basic Settings',
                 'items' => [
                     [

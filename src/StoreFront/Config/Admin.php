@@ -4,16 +4,19 @@ namespace Zento\StoreFront\Config;
 
 use Zento\StoreFront\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerL1MenuNode('Website', 'StoreFront', 'StoreFront');
+    public function registerDashboardMenus() {
+
+    }
+    public function registerConfigMenus() {
+        AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront', 'StoreFront');
     }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/storefront'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'basic',  [
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Store Basic Settings',
                 'items' => [
                     [
@@ -37,7 +40,7 @@ class Admin extends AbstractAdminConfig {
                 ]
             ]);
 
-            AdminService::registerGroup($groupTag, 'disks',  [
+            AdminConfigurationService::registerGroup($groupTag, 'disks',  [
                 'title' => 'Storage',
                 'items' => [
                     [
@@ -61,7 +64,7 @@ class Admin extends AbstractAdminConfig {
                 ]
             ]);
 
-            AdminService::registerGroup($groupTag, 'fileupload',  [
+            AdminConfigurationService::registerGroup($groupTag, 'fileupload',  [
                 'title' => 'File Upload',
                 'items' => [
                     [

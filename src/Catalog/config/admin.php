@@ -2,11 +2,14 @@
 
 namespace Zento\Catalog\Config;
 
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerMenus() {
+    public function registerDashboardMenus() {
+
+    }
+    public function registerConfigMenus() {
     }
 
     protected function _registerGroups($groupTag, &$groups) {
@@ -50,12 +53,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 }
             }
             
-            AdminService::registerGroup($groupTag, 'category',  [
+            AdminConfigurationService::registerGroup($groupTag, 'category',  [
                 'title' => 'Category Settings',
                 'items' => $items
             ]);
             foreach($itemsGroups as $group => $items) {
-                AdminService::registerSubgroupToGroup($groupTag, 
+                AdminConfigurationService::registerSubgroupToGroup($groupTag, 
                     'category', 
                     md5($group), 
                     [
@@ -63,7 +66,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                         'items' => $items
                     ]);
             }
-            // AdminService::registerSubgroupToGroup($groupTag, 'category', 'seo', [
+            // AdminConfigurationService::registerSubgroupToGroup($groupTag, 'category', 'seo', [
             //     'title' => 'Search Engine Optimization ',
             //     'items' => [
             //         [
@@ -189,13 +192,13 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 }
             }
             
-            AdminService::registerGroup($groupTag, 'product',  [
+            AdminConfigurationService::registerGroup($groupTag, 'product',  [
                 'title' => 'Product Settings',
                 'items' => $items
             ]);
 
             foreach($itemsGroups as $group => $items) {
-                AdminService::registerSubgroupToGroup($groupTag, 
+                AdminConfigurationService::registerSubgroupToGroup($groupTag, 
                     'product', 
                     md5($group), 
                     [
