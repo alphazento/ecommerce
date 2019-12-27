@@ -109,7 +109,9 @@ export default {
         },
 
         navToGroup(group, subName) {
-            this.$router.push({ query: { group: `${group}/${subName}`}}).catch(err => {});
+            this.$router
+                .push({ query: { group: `${group}/${subName}` } })
+                .catch(err => {});
         },
 
         fetchGroupDetails(groupName) {
@@ -133,7 +135,8 @@ export default {
             this.$store.dispatch("showSpinner", "Updating...");
             axios
                 .post(`/api/v1/admin/configs/${item.accessor}`, {
-                    value: item.value
+                    value: item.value,
+                    is_json: item.is_json
                 })
                 .then(response => {
                     this.$store.dispatch("hideSpinner");

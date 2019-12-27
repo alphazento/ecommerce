@@ -1,9 +1,12 @@
 <template>
-    <simple-json-item :components="components" :level="1" 
-        @addArrayItem="addArrayItem" 
+    <simple-json-item
+        :components="components"
+        :level="1"
+        @addArrayItem="addArrayItem"
         @removeArrayItem="removeArrayItem"
         @jsonItemChanged="jsonItemChanged"
-    > </simple-json-item>
+    >
+    </simple-json-item>
 </template>
 
 <script>
@@ -25,6 +28,7 @@ export default {
         };
     },
     mounted() {
+        this.is_json = true;
         this.json = this.convertValueToJson(this.value, this.schema);
         this.components = this.convertToComponentArray(this.json, this.schema);
     },
@@ -86,24 +90,30 @@ export default {
         addArrayItem(name) {
             let schemas = JSON.parse(JSON.stringify(this.schema[name]));
             this.json[name].push(schemas[0]);
-            this.components = this.convertToComponentArray(this.json, this.schema);
+            this.components = this.convertToComponentArray(
+                this.json,
+                this.schema
+            );
         },
         removeArrayItem(item) {
             this.json[item.name].splice(item.i, 1);
-            this.components = this.convertToComponentArray(this.json, this.schema);
+            this.components[item.name].splice(item.i, 1);
         },
         jsonItemChanged(item) {
             if (item.key === undefined) {
                 if (item.arrayIdx === undefined) {
                     Object.assign(this.json, item.meta);
                 } else {
-                    Object.assign(this.json[item.arrayIdx], item.meta); 
+                    Object.assign(this.json[item.arrayIdx], item.meta);
                 }
             } else {
                 if (item.arrayIdx === undefined) {
                     Object.assign(this.json[item.key], item.meta);
                 } else {
-                    Object.assign(this.json[item.key][item.arrayIdx], item.meta);
+                    Object.assign(
+                        this.json[item.key][item.arrayIdx],
+                        item.meta
+                    );
                 }
             }
             this.innerValue = JSON.stringify(this.json);
@@ -113,7 +123,10 @@ export default {
     watch: {
         value() {
             this.json = this.convertValueToJson(this.value, this.schema);
-            this.components = this.convertToComponentArray(this.json, this.schema);
+            this.components = this.convertToComponentArray(
+                this.json,
+                this.schema
+            );
         }
     }
 };

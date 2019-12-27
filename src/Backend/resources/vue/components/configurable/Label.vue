@@ -26,7 +26,8 @@ export default {
     data() {
         return {
             oldVal: this.value,
-            innerValue: this.value
+            innerValue: this.value,
+            is_json: false
         };
     },
     methods: {
@@ -37,10 +38,16 @@ export default {
             if (this.innerValue != this.oldVal) {
                 this.$emit("valueChanged", {
                     accessor: this.accessor,
-                    value: this.getValue()
+                    value: this.getValue(),
+                    is_json: this.is_json
                 });
             }
             this.oldVal = this.innerValue;
+        }
+    },
+    watch: {
+        value(oV, nV) {
+            this.innerValue = nV;
         }
     }
 };

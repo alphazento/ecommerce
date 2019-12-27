@@ -72,6 +72,9 @@ class ConfigurationController extends ApiBaseController
     public function setConfigValue() {
         $key = Route::input('key');
         $value = Request::get('value');
+        if (Request::get('is_json', false)) {
+            $value = json_decode($value, true);
+        }
         Config::save($key, $value);
         return $this->with($key, $value);
     }

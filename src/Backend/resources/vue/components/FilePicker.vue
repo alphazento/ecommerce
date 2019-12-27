@@ -1,8 +1,8 @@
 <template>
     <v-container>
-        <v-menu :close-on-content-click="false" offset-y>
-            <template v-slot:activator="{ on }">
-                <v-btn icon dark v-on="on">
+        <v-menu :close-on-content-click="false" offset-y v-model="show">
+            <template v-slot:activator="{ on, value }">
+                <v-btn icon dark v-on="on" @click="onLibClick(value)">
                     <v-icon large color="deep-purple">
                         mdi-image-multiple
                     </v-icon>
@@ -28,22 +28,26 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container fluid>
-                        <v-row>
-                            <v-col
+                        <v-layout>
+                            <v-flex
                                 v-for="(item, i) of items"
                                 :key="i"
                                 class="d-flex child-flex"
-                                cols="4"
+                                md4
                             >
-                                <v-card flat tile class="d-flex">
+                                <v-card
+                                    flat
+                                    tile
+                                    class="d-flex card-hover"
+                                    @click="selectFile(item)"
+                                >
                                     <v-img
                                         :src="item.thumbnail"
                                         :lazy-src="
-                                            `https://picsum.photos/10/6?image=15`
+                                            'https://picsum.photos/10/6?image=15'
                                         "
                                         aspect-ratio="1"
-                                        class="grey lighten-2 align-end"
-                                        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                                        class="grey lighten-2 align-end "
                                     >
                                         <v-card-title
                                             class="title white--text"
@@ -63,8 +67,8 @@
                                         </template>
                                     </v-img>
                                 </v-card>
-                            </v-col>
-                        </v-row>
+                            </v-flex>
+                        </v-layout>
                     </v-container>
                 </v-card-text>
             </v-card>
@@ -94,7 +98,9 @@ export default {
     },
     data() {
         return {
+            show: false,
             page: 1,
+            dataLoaded: false,
             searchText: "",
             pagination: {
                 data: [],
@@ -109,9 +115,6 @@ export default {
             api: `${this.server}/files-finder/${this.visibility}/${this.folder}`
         };
     },
-    mounted() {
-        this.loadPage(1);
-    },
     computed: {
         items() {
             if (this.pagination.local_pagination) {
@@ -119,7 +122,6 @@ export default {
                     this.pagination.from - 1,
                     this.pagination.to
                 );
-                console.log("its", its);
                 return its;
             }
             return this.pagination.data;
@@ -133,6 +135,7 @@ export default {
                 )
                 .then(response => {
                     this.pagination = response.data.data;
+                    this.dataLoaded = true;
                 });
         },
         onEnterKey(e) {
@@ -142,6 +145,15 @@ export default {
                 this.loadPage(1);
                 // }
             }
+        },
+        onLibClick(isOn) {
+            if (!this.isOn && !this.dataLoaded) {
+                this.loadPage(1);
+            }
+        },
+        selectFile(item) {
+            this.$emit("fileSelected", item);
+            this.show = false;
         }
     },
     watch: {
@@ -160,3 +172,12 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.card-hover {
+    cursor: pointer;
+    &:hover {
+        border: 3px solid rebeccapurple;
+    }
+}
+</style>
