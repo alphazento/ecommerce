@@ -22,6 +22,20 @@ class Admin extends AbstractAdminConfig {
                         'accessor' => sprintf(Consts::ENABLED, 'frontend'),
                     ],
                     [
+                        'title' => 'Allow Services',
+                        'ui' => 'config-multi-options-item',
+                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'frontend'),
+                        'options' => [
+                            ['label' => 'Facebook', 'value'=>'facebook'],
+                            ['label' => 'Google', 'value'=>'google'],
+                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
+                            ['label' => 'Twitter', 'value'=>'twitter'],
+                            ['label' => 'Github', 'value'=>'github'],
+                            ['label' => 'Gitlab', 'value'=>'gitlab'],
+                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
+                        ]
+                    ],
+                    [
                         'title' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'frontend'),
@@ -30,11 +44,6 @@ class Admin extends AbstractAdminConfig {
                             ['label' => 'token', 'value'=>'token']
                         ]
                     ],
-                    // [
-                    //     'title' => 'Allow Services',
-                    //     'ui' => 'config-options-item',
-                    //     'accessor' => sprintf(Consts::ALLOW_SERVICES, 'frontend'),
-                    // ],
                     [
                         'title' => 'Use State Check',
                         'ui' => 'config-boolean-item',
@@ -54,6 +63,20 @@ class Admin extends AbstractAdminConfig {
                         'title' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ENABLED, 'backend'),
+                    ],
+                    [
+                        'title' => 'Allow Services',
+                        'ui' => 'config-multi-options-item',
+                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
+                        'options' => [
+                            ['label' => 'Facebook', 'value'=>'facebook'],
+                            ['label' => 'Google', 'value'=>'google'],
+                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
+                            ['label' => 'Twitter', 'value'=>'twitter'],
+                            ['label' => 'Github', 'value'=>'github'],
+                            ['label' => 'Gitlab', 'value'=>'gitlab'],
+                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
+                        ]
                     ],
                     [
                         'title' => 'Response Type',
@@ -78,6 +101,72 @@ class Admin extends AbstractAdminConfig {
                         'title' => 'Can create account if user not exists',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'backend'),
+                    ],
+                ]
+            ]);
+
+            AdminService::registerGroup($groupTag, 'services',  [
+                'title' => 'Social Media Login Services',
+                'items' => [
+                    [
+                        'title' => 'Facebook',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::FACEBOOK_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'title' => 'Google',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GOOGLE_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'title' => 'LinkedIn',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::LINKEDIN_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'title' => 'Github',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GITHUB_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'title' => 'GitLab',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GITLAB_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'title' => 'Bitbucket',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::BITBUCKET_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
                     ],
                 ]
             ]);

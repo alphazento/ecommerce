@@ -11,4 +11,12 @@ class Consts {
 
     //only allow 
     const ALLOW_CREATE_ACCOUNT = 'hellosns.%s.allow_create_account';
+
+    const FACEBOOK_SERVICE = 'services.facebook';
+    const TWITTER_SERVICE = 'services.twitter';
+    const LINKEDIN_SERVICE = 'services.linkedin';
+    const GOOGLE_SERVICE = 'services.google';
+    const GITHUB_SERVICE = 'services.github';
+    const GITLAB_SERVICE = 'services.gitlab';
+    const BITBUCKET_SERVICE = 'services.bitbucket';
 }

@@ -1,8 +1,11 @@
 <template>
     <v-select
         class="limit-width"
-        :items="options"
         required
+        multiple
+        :items="options"
+        item-text="label"
+        item-value="value"
         v-model="innerValue"
         @change="valueChanged"
     ></v-select>

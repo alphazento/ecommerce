@@ -9,6 +9,8 @@ export default {
     "config-longtext-item": "components/configurable/LongText.vue",
     "config-boolean-item": "components/configurable/Switch.vue",
     "config-options-item": "components/configurable/Options.vue",
+    "config-multi-options-item": "components/configurable/MultipleOptions.vue",
+
     "config-image-uploader-item": "components/configurable/ImageUploader.vue",
     "config-json-item": "components/configurable/JsonEditor.vue",
     "simple-json-item": "components/configurable/SimpleJsonEditor.vue",

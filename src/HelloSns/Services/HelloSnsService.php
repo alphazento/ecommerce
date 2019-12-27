@@ -116,7 +116,7 @@ class HelloSnsService
 
         $stateDataKey = Config::get($this->getConfigKey(Consts::RESPONSE_TYPE), 'token') === 'token' ? 'authResponse' : 'state';
         $state = $request->session()->pull(self::STATE);
-        $stateArray = json_decode($request->input($stateDataKey, '{}'), true);
+        $stateArray = $request->input($stateDataKey, []);
         $inputState = $stateArray['state'] ?? false;
         if (strlen($state) > 0 && $inputState === $state) {
             return $stateArray;
