@@ -7,6 +7,11 @@ Route::group(
         'as' => 'admin:system:'
     ], function() {
         Route::get(
+            '/dashboard/menus', 
+            ['as' => 'admin.dashboard.menus', 'uses' => 'DashboardController@getMenus']
+        );
+
+        Route::get(
             '/configs/menus', 
             ['as' => 'admin.configs.menus', 'uses' => 'ConfigurationController@getMenus']
         );

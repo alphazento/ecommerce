@@ -7,31 +7,13 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
-// window.VueRouter = VueRouter;
 window.vStore = require('./store/store.js');
 window.Vue.use(VueRouter);
 
-import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
-import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
-import SalesOrdersPage from "./pages/sales_orders/RoutePage";
-
-window.router = new VueRouter({
-    mode: 'history',
-    routes: [{
-            name: "store.configuration",
-            path: "/admin/store-configurations",
-            component: StoreConfigurationPage
-        },
-        {
-            name: "store.dynamic_attributes",
-            path: "/admin/store-dynamic-attributes",
-            component: StoreDynamicAttributePage
-        },
-        {
-            name: "sales.orders",
-            path: "/admin/sales_orders",
-            component: SalesOrdersPage
-        }
-    ]
-});
-require('./._app.dev');
+var support = require('./._app.support');
+if (support.default.routes && support.default.routes.length > 0) {
+    window.router = new VueRouter({
+        mode: 'history',
+        routes: support.default.routes
+    });
+}

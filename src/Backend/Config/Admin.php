@@ -8,10 +8,10 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
-        AdminDashboardService::registerRootLevelMenuNode('Store', 'Store');
-        AdminConfigurationService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
+        AdminDashboardService::registerRootLevelMenuNode('Store', 'Store', 'mdi-store');
+        AdminDashboardService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
             'mdi-settings', '/admin/store-configurations');
-        AdminConfigurationService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
+        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
             'mdi-settings', '/admin/store-dynamic-attributes');
     }
 

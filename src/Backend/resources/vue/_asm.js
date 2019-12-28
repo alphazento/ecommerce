@@ -1,6 +1,5 @@
 import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
 import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
-import SalesOrdersPage from "./pages/sales_orders/RoutePage";
 
 export default {
     "components": {
@@ -32,11 +31,6 @@ export default {
             name: "store.dynamic_attributes",
             path: "/admin/store-dynamic-attributes",
             component: StoreDynamicAttributePage
-        },
-        {
-            name: "sales.orders",
-            path: "/admin/sales_orders",
-            component: SalesOrdersPage
         }
     ]
 }

@@ -201,7 +201,10 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
     protected function genRegisterComponentSupportFile() {
         $contents = [];
-        $imports = ['var Vue = window.Vue;'];
+        $imports = [
+            'var Vue = window.Vue;',
+            'var routes = [];'
+        ];
         foreach($this->componentJsonFiles as $themeName => $jsFile) {
             $configName = $themeName . '_ASM';
             $imports[] = sprintf('import %s from "@%s/_asm.js"', $configName, $themeName);
@@ -212,7 +215,10 @@ for (const [key, value] of Object.entries(%s.components)) {
         () => import(`@%s/${value}` /* webpackChunkName:"vue-dev-watch/%s" */ )
     );
 }', $configName, $themeName, Str::slug($themeName));
+            $contents[] = sprintf('if (%s.routes) { routes = routes.concat(%s.routes); }', $configName, $configName);
         }
+
+        $contents[] = 'export default { routes: routes }';
         $imports[] = '';
 
         if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.support.js'])) {

@@ -5,7 +5,7 @@ namespace Zento\Backend\Http\Controllers\Api;
 use Route;
 use Request;
 use Config;
-use Zento\Backend\Providers\Facades\AdminConfigurationService;
+use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
@@ -20,6 +20,6 @@ class DashboardController extends ApiBaseController
                 (new $className)->registerDashboardMenus();
             }
         }
-        return $this->withData(AdminConfigurationService::getMeus());
+        return $this->withData(AdminDashboardService::getMenus());
     }
 }

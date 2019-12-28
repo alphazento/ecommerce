@@ -22,7 +22,7 @@
                 </v-btn>
             </v-list-item>
             <v-expansion-panels accordion multiple>
-                <v-expansion-panel>
+                <v-expansion-panel v-for="(item, name) in menus" :key="name">
                     <v-expansion-panel-header
                         text-left
                         class="assign-drawer-item"
@@ -30,76 +30,27 @@
                         <v-list-item>
                             <v-list-item-avatar>
                                 <v-btn icon>
-                                    <v-icon large color="blue darken-2"
-                                        >mdi-store</v-icon
-                                    >
+                                    <v-icon large color="blue darken-2">{{
+                                        item.icon
+                                    }}</v-icon>
                                 </v-btn>
                             </v-list-item-avatar>
-                            <v-list-item-title>Store</v-list-item-title>
+                            <v-list-item-title>{{
+                                item.title
+                            }}</v-list-item-title>
                         </v-list-item>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-list-item>
-                            <router-link
-                                to="/admin/store-configurations"
-                                class="white--text"
-                            >
-                                Configuration
+                        <v-list-item
+                            v-for="(subItem, i) of item.items"
+                            :key="i"
+                        >
+                            <v-icon v-if="subItem.icon" color="blue darken-2">{{
+                                subItem.icon
+                            }}</v-icon>
+                            <router-link :to="subItem.url" class="white--text">
+                                {{ subItem.title }}
                             </router-link>
-                        </v-list-item>
-                        <v-list-item>
-                            <router-link
-                                to="/admin/store-dynamic-attributes"
-                                class="white--text"
-                            >
-                                Dynamic Attributes
-                            </router-link>
-                        </v-list-item>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-
-                <v-expansion-panel>
-                    <v-expansion-panel-header
-                        text-left
-                        class="assign-drawer-item"
-                    >
-                        <v-list-item>
-                            <v-list-item-avatar>
-                                <v-btn icon>
-                                    <v-icon large color="blue darken-2"
-                                        >mdi-warehouse</v-icon
-                                    >
-                                </v-btn>
-                            </v-list-item-avatar>
-                            <v-list-item-title>Catalog</v-list-item-title>
-                        </v-list-item>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        content
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-
-                <v-expansion-panel>
-                    <v-expansion-panel-header
-                        text-left
-                        class="assign-drawer-item"
-                    >
-                        <v-list-item>
-                            <v-list-item-avatar>
-                                <v-btn icon>
-                                    <v-icon large color="blue darken-2"
-                                        >mdi-warehouse</v-icon
-                                    >
-                                </v-btn>
-                            </v-list-item-avatar>
-                            <v-list-item-title>Sales</v-list-item-title>
-                        </v-list-item>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-list-item>
-                            <router-link to="/admin/sales_orders"
-                                >Orders</router-link
-                            >
                         </v-list-item>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -142,12 +93,25 @@ export default {
     },
     data() {
         return {
+            menus: {},
             drawer: true,
             mini: false
         };
     },
 
+    mounted() {
+        this.fetchMenus();
+    },
+
     methods: {
+        fetchMenus() {
+            axios.get("/api/v1/admin/dashboard/menus").then(response => {
+                console.log("fetchmenus", response.data);
+                if (response.data.success) {
+                    this.menus = response.data.data;
+                }
+            });
+        },
         onClick(e, item) {
             // this.$vuetify.goTo(item.href);
         }
