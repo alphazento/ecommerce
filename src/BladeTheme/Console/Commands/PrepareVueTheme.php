@@ -57,8 +57,8 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->mergeVueComponentPackageConfig();
         $this->mergeThemePackageConfig($themeName);
         $this->genWebpackMixJs();
-        $this->genRegisterComponentProdFile();
-        $this->genRegisterComponentDevFile();
+        // $this->genRegisterComponentProdFile();
+        $this->genRegisterComponentSupportFile();
         
         $this->info(sprintf('Theme package [%s] found:', $themeName));
         $this->info('   Please run command to compile:');
@@ -132,14 +132,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
                     }
                 }
 
-                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.json'])) {
-                    if (file_exists($file)) {
-                        $this->componentJsonFiles[$packageName] = $file;
-                        $this->components[$packageName] = json_decode(file_get_contents($file), true);
-                    }
-                }
-
-                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_components.js'])) {
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_asm.js'])) {
                     if (file_exists($file)) {
                         $this->componentJsonFiles[$packageName] = $file;
                     }
@@ -178,42 +171,42 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         file_put_contents(base_path(sprintf('webpack.mix.%s.js', $this->themeName)), implode(PHP_EOL, $contents));
     }
 
-    protected function genRegisterComponentProdFile() {
-        $contents = ['var Vue = window.Vue;'];
-        foreach($this->components as $themeName => $components) {
-            $alias = '@' . $themeName;
-            $jsFolder = strtolower($themeName);
-            foreach($components as $name => $file) {
-                if (isset($contents[$name])) {
-                    $this->warn(sprintf('Vue component [%s] has been defined in other module', $name));
-                    $this->warn(sprintf('Here is the previous defination', $contents[$name]));
-                } 
-                $lines = [];
-                $variableName = sprintf('Dynamic%sComponent', Str::studly($name));
-                $lines[] = sprintf('const %s= ()=> import("%s/%s" /* webpackChunkName:"%s/js/cmps/%s" */);', 
-                    $variableName,
-                    $alias,
-                    $file,
-                    $jsFolder,
-                    Str::slug($name)
-                );
-                $lines[] = sprintf('Vue.component("%s", %s);', $name, $variableName);
-                $contents[$name] = implode(PHP_EOL, $lines);
-            }
-        }
-        if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.prod.js'])) {
-            file_put_contents($file, implode(PHP_EOL, $contents));
-        }
-    }
+    // protected function genRegisterComponentProdFile() {
+    //     $contents = ['var Vue = window.Vue;'];
+    //     foreach($this->components as $themeName => $components) {
+    //         $alias = '@' . $themeName;
+    //         $jsFolder = strtolower($themeName);
+    //         foreach($components as $name => $file) {
+    //             if (isset($contents[$name])) {
+    //                 $this->warn(sprintf('Vue component [%s] has been defined in other module', $name));
+    //                 $this->warn(sprintf('Here is the previous defination', $contents[$name]));
+    //             } 
+    //             $lines = [];
+    //             $variableName = sprintf('Dynamic%sComponent', Str::studly($name));
+    //             $lines[] = sprintf('const %s= ()=> import("%s/%s" /* webpackChunkName:"%s/js/cmps/%s" */);', 
+    //                 $variableName,
+    //                 $alias,
+    //                 $file,
+    //                 $jsFolder,
+    //                 Str::slug($name)
+    //             );
+    //             $lines[] = sprintf('Vue.component("%s", %s);', $name, $variableName);
+    //             $contents[$name] = implode(PHP_EOL, $lines);
+    //         }
+    //     }
+    //     if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.prod.js'])) {
+    //         file_put_contents($file, implode(PHP_EOL, $contents));
+    //     }
+    // }
 
-    protected function genRegisterComponentDevFile() {
+    protected function genRegisterComponentSupportFile() {
         $contents = [];
         $imports = ['var Vue = window.Vue;'];
         foreach($this->componentJsonFiles as $themeName => $jsFile) {
-            $configName = $themeName . '_Configs';
-            $imports[] = sprintf('import %s from "@%s/_components.js"', $configName, $themeName);
+            $configName = $themeName . '_ASM';
+            $imports[] = sprintf('import %s from "@%s/_asm.js"', $configName, $themeName);
             $contents[] = sprintf('
-for (const [key, value] of Object.entries(%s)) {
+for (const [key, value] of Object.entries(%s.components)) {
     Vue.component(
         key,
         () => import(`@%s/${value}` /* webpackChunkName:"vue-dev-watch/%s" */ )
@@ -222,7 +215,7 @@ for (const [key, value] of Object.entries(%s)) {
         }
         $imports[] = '';
 
-        if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.dev.js'])) {
+        if ($file = PackageManager::packagePath($this->themeName, ['resources', 'vue', '._app.support.js'])) {
             file_put_contents($file, implode(PHP_EOL, $imports));
             file_put_contents($file, implode(PHP_EOL, $contents), FILE_APPEND);
         }

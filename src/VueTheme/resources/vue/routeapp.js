@@ -8,8 +8,8 @@ window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
 import SearchResultRoutePage from "./components/catalog/search/SearchResultRoutePage"
-window.VueRouter = VueRouter;
+// window.VueRouter = VueRouter;
 window.SearchResultRoutePage = SearchResultRoutePage;
 window.vStore = require('./store/store.js');
 window.Vue.use(VueRouter);
-require('./._app.dev');
+require('./._app.support');
