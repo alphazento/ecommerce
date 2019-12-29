@@ -4,6 +4,7 @@
         <p>Email: {{ value.email }}</p>
         <p>Customer Note: {{ order.customer_note }}</p>
         <p>IP: {{ order.remote_ip }}</p>
+        <p>Ship to</p>
     </div>
 </template>
 

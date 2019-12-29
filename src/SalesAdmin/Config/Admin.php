@@ -38,14 +38,14 @@ class Admin extends AbstractAdminConfig {
                         'options' => $this->getOrderStatusOptions(),
                     ],
                     [
-                        'text' => 'Customer',
-                        'ui' => 'z-orders-customer-column',
-                        'value' => 'customer',
-                    ],
-                    [
                         'text' => 'Payment',
                         'ui' => 'z-orders-payment-column',
                         'value' => 'payment',
+                    ],
+                    [
+                        'text' => 'Customer',
+                        'ui' => 'z-orders-customer-column',
+                        'value' => 'customer',
                     ],
                     [
                         'text' => 'Order Detail',
