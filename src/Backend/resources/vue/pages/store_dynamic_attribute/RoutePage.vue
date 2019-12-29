@@ -53,49 +53,29 @@
                     ></v-text-field>
                 </v-card-title>
                 <v-data-table :headers="defines" :items="data" :search="search">
-                    <template v-slot:item.attribute_name="{ item }">
-                        <v-btn icon @click="editAttribute(item)">
-                            <v-icon>mdi-settings</v-icon>
-                            {{ item.attribute_name }}
-                        </v-btn>
-                    </template>
-                    <template v-slot:item.enabled="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.enabled"
-                            :color="item.enabled ? 'success' : 'error'"
-                        >
-                            {{ item.enabled ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
-                    <template v-slot:item.single="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.single"
-                            :color="item.single ? 'success' : 'error'"
-                        >
-                            {{ item.single ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
-
-                    <template v-slot:item.with_value_map="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.with_value_map"
-                            :color="item.with_value_map ? 'success' : 'error'"
-                        >
-                            {{ item.with_value_map ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
-
-                    <template v-slot:item.is_search_layer="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.is_search_layer"
-                            :color="item.is_search_layer ? 'success' : 'error'"
-                        >
-                            {{ item.is_search_layer ? "Yes" : "No" }}
-                        </v-chip>
+                    <template v-slot:body="{ headers, items }">
+                        <tbody>
+                            <tr
+                                class="text-start"
+                                v-for="(row, i) of items"
+                                :key="i"
+                            >
+                                <td v-for="(col, ci) of headers" :key="ci">
+                                    <v-btn
+                                        v-if="ci == 0"
+                                        icon
+                                        @click="editAttribute(row)"
+                                    >
+                                        <v-icon>mdi-settings</v-icon>
+                                    </v-btn>
+                                    <component
+                                        :is="col.ui"
+                                        v-bind="ui_component_props(col, row)"
+                                    >
+                                    </component>
+                                </td>
+                            </tr>
+                        </tbody>
                     </template>
                 </v-data-table>
             </v-card>
@@ -142,7 +122,9 @@ export default {
         },
 
         navToGroup(group) {
-            this.$router.push({ query: { group: `${group}`}}).catch(err => {});
+            this.$router
+                .push({ query: { group: `${group}` } })
+                .catch(err => {});
         },
 
         fetchDefines() {
@@ -185,7 +167,6 @@ export default {
                     this.$store.dispatch("hideSpinner");
                     if (response.data && response.data.success) {
                         this.data = response.data.data;
-                        console.log("data", this.data);
                     }
                 });
         },
@@ -223,6 +204,13 @@ export default {
 
         closeDialog(ignore) {
             this.dialog = false;
+        },
+
+        ui_component_props(columDefines, rowItem) {
+            var data = Object.assign({}, columDefines);
+            data.value = rowItem[columDefines.value];
+            data.accessor = columDefines.value;
+            return data;
         }
     },
     watch: {

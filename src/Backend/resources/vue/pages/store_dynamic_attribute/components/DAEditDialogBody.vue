@@ -70,8 +70,8 @@ export default {
                 if (config !== undefined) {
                     components.push({
                         ui: config["editable"]
-                            ? config["ui"]
-                            : "config-readonly-label",
+                            ? config["edit_ui"]
+                            : config["ui"],
                         accessor: config["value"],
                         options: config["options"],
                         title: config["text"],

@@ -75,18 +75,20 @@ class Admin extends AbstractAdminConfig {
                 'items' => [
                     [
                         'text' => 'Name',
-                        'ui' => 'config-text-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',  //for edit
                         'value' => 'attribute_name'
                     ],
                     [
                         'text' => 'Type',
-                        'ui' => 'config-options-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-options-item',
                         'value' => 'attribute_type',
                         'editable' => true,
                         'options' => [
                             [
                                 'value' => 'integer',
-                                'label' => 'Int'
+                                'label' => 'integer'
                             ],
                             [
                                 'value' => 'varchar',
@@ -96,25 +98,29 @@ class Admin extends AbstractAdminConfig {
                     ],
                     [
                         'text' => 'Front Label',
-                        'ui' => 'config-text-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
                         'value' => 'label',
                         'editable' => true
                     ],
                     [
                         'text' => 'Admin Label',
-                        'ui' => 'config-text-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
                         'value' => 'admin_label',
                         'editable' => true
                     ],
                     [
                         'text' => 'Admin Group',
-                        'ui' => 'config-text-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
                         'value' => 'admin_group',
                         'editable' => true
                     ],
                     [
                         'text' => 'Admin Component',
-                        'ui' => 'config-options-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-options-item',
                         'value' => 'admin_component',
                         'editable' => true,
                         'options' => [
@@ -146,44 +152,51 @@ class Admin extends AbstractAdminConfig {
                     ],
                     [
                         'text' => 'Default Value',
-                        'ui' => 'config-text-item',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
                         'value' => 'default_value',
                         'editable' => true
                     ],
                     [
                         'text' => 'Enabled',
-                        'ui' => 'config-boolean-item',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
                         'value' => 'enabled',
                         'editable' => true
                     ],
                     [
                         'text' => 'Single',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
                         'value' => 'single',
-                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'text' => 'Swatch',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
                         'value' => 'swatch_type',
-                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'text' => 'Value Map',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
                         'value' => 'with_value_map',
-                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'text' => 'Is Search Layer',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
                         'value' => 'is_search_layer',
-                        'ui' => 'config-boolean-item',
                         'editable' => true
                     ],
                     [
                         'text' => 'Search Layer Sort',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
                         'value' => 'search_layer_sort',
-                        'ui' => 'config-text-item',
                         'editable' => true
                     ],
                 ]

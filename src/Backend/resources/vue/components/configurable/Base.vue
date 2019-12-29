@@ -1,9 +1,3 @@
-<template>
-    <p class="title" @change="valueChanged">
-        {{ innerValue }}
-    </p>
-</template>
-
 <script>
 export default {
     props: {

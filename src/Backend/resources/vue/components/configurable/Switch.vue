@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BaseLabel from "./Label";
+import BaseConfig from "./Base";
 export default {
     methods: {
         getValue() {
@@ -15,6 +15,6 @@ export default {
             return this.innerValue;
         }
     },
-    extends: BaseLabel
+    extends: BaseConfig
 };
 </script>

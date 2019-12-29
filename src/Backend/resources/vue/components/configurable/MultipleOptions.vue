@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import BaseLabel from "./Label";
+import BaseConfig from "./Base";
 export default {
-    extends: BaseLabel
+    extends: BaseConfig
 };
 </script>

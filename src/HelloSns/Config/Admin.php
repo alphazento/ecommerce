@@ -176,8 +176,8 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['tables/dynamicattributes']  = function($groupTag) {
-            AdminConfigurationService::removeItemFromGroup($groupTag, 'table', 'Type');
-        };
+        // $groups['tables/dynamicattributes']  = function($groupTag) {
+        //     AdminConfigurationService::removeItemFromGroup($groupTag, 'table', 'Type');
+        // };
     }
 }

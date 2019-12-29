@@ -2,6 +2,7 @@
     <v-select
         class="limit-width"
         :items="options"
+        :disabled="readonly"
         item-text="label"
         item-value="value"
         required
@@ -11,8 +12,11 @@
 </template>
 
 <script>
-import BaseLabel from "./Label";
+import BaseConfig from "./Base";
 export default {
-    extends: BaseLabel
+    extends: BaseConfig,
+    props: {
+        readonly: { type: Boolean, default: false }
+    }
 };
 </script>
