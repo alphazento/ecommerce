@@ -106,7 +106,6 @@ export default {
     methods: {
         fetchMenus() {
             axios.get("/api/v1/admin/dashboard/menus").then(response => {
-                console.log("fetchmenus", response.data);
                 if (response.data.success) {
                     this.menus = response.data.data;
                 }

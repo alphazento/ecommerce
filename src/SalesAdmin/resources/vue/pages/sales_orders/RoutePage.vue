@@ -2,14 +2,14 @@
     <v-container>
         <v-card-title>
             <span>Sales Orders</span>
-            <v-spacer></v-spacer>
+            <!-- <v-spacer></v-spacer>
             <v-text-field
                 v-model="search"
                 append-icon="mdi-search"
                 label="Search"
                 single-line
                 hide-details
-            ></v-text-field>
+            ></v-text-field> -->
         </v-card-title>
         <v-data-table
             :headers="defines"
@@ -18,6 +18,15 @@
         >
             <template v-slot:body="{ headers, items }">
                 <tbody>
+                    <tr>
+                        <td v-for="(col, ci) of headers" :key="ci">
+                            <component
+                                v-if="!!col.filter_ui"
+                                :is="col.filter_ui"
+                                v-bind="filter_ui_component_props(col.value)"
+                            ></component>
+                        </td>
+                    </tr>
                     <tr class="text-start" v-for="(row, i) of items" :key="i">
                         <td v-for="(col, ci) of headers" :key="ci">
                             <component
@@ -29,6 +38,7 @@
                     </tr>
                 </tbody>
             </template>
+
         </v-data-table>
     </v-container>
 </template>
@@ -41,7 +51,8 @@ export default {
             defines: [],
             pagination: {
                 data: []
-            }
+            },
+            filters: {}
         };
     },
     created() {
@@ -58,6 +69,11 @@ export default {
                     if (response.data && response.data.success) {
                         this.defines = response.data.data.table.items;
                         console.log("defines", this.defines);
+                        this.defines.forEach(item => {
+                            if (item.filterable !== undefined && this.filterable) {
+                                this.filters[item.value] = "";
+                            }
+                        })
                     }
                 });
         },
@@ -78,6 +94,14 @@ export default {
             data.value = rowItem[columDefines.value];
             data.accessor = columDefines.value;
             data.order = rowItem;
+            return data;
+        },
+        filter_ui_component_props(filterName) {
+            var data = {
+                accessor: filterName, 
+                value: this.filters[filterName] === undefined ? "" : this.filters[filterName],
+            };
+
             return data;
         }
     },

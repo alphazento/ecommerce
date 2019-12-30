@@ -29,38 +29,45 @@ class Admin extends AbstractAdminConfig {
                     [
                         'text' => 'Order Number',
                         'ui' => 'z-label',
-                        'value' => 'order_number'
+                        'value' => 'order_number',
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Status',
                         'ui' => 'z-options-display',
                         'value' => 'status_id',
                         'options' => $this->getOrderStatusOptions(),
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Payment',
                         'ui' => 'z-orders-payment-column',
                         'value' => 'payment',
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Customer',
                         'ui' => 'z-orders-customer-column',
                         'value' => 'customer',
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Order Detail',
                         'ui' => 'z-label',
-                        'value' => 'detail',
+                        'value' => 'order_detail',
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Order Items',
                         'ui' => 'z-label',
                         'value' => 'order_items',
+                        'filter_ui' => 'config-text-item'
                     ],
                     [
                         'text' => 'Created At',
                         'ui' => 'z-label',
                         'value' => 'created_at',
+                        'filter_ui' => 'config-date-range-item'
                     ],
                 ]
             ]);

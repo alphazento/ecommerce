@@ -16,6 +16,8 @@ export default {
         "config-boolean-item": "components/configurable/Switch.vue",
         "config-options-item": "components/configurable/Options.vue",
         "config-multi-options-item": "components/configurable/MultipleOptions.vue",
+        "config-date-item": "components/configurable/DatePicker.vue",
+        "config-date-range-item": "components/configurable/DateRangePicker.vue",
 
         "config-image-uploader-item": "components/configurable/ImageUploader.vue",
         "config-json-item": "components/configurable/JsonEditor.vue",
