@@ -3,6 +3,7 @@
         single-line
         outlined
         dense
+        :clearable="clearable"
         v-model="innerValue"
         @change="valueChanged"
     >
@@ -12,6 +13,12 @@
 <script>
 import BaseConfig from "./Base";
 export default {
-    extends: BaseConfig
+    extends: BaseConfig,
+    props: {
+        clearable: Boolean
+    },
+    mounted() {
+        console.log("clearable", this.clearable);
+    }
 };
 </script>

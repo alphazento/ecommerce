@@ -18,6 +18,7 @@ export default {
         "config-multi-options-item": "components/configurable/MultipleOptions.vue",
         "config-date-item": "components/configurable/DatePicker.vue",
         "config-date-range-item": "components/configurable/DateRangePicker.vue",
+        "config-data-table": "components/configurable/DataTable.vue",
 
         "config-image-uploader-item": "components/configurable/ImageUploader.vue",
         "config-json-item": "components/configurable/JsonEditor.vue",

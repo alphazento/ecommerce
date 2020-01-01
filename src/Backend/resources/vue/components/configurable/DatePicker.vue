@@ -1,8 +1,9 @@
 <template>
-    <v-menu :close-on-content-click="false" offset-y >
+    <v-menu :close-on-content-click="false" offset-y>
         <template v-slot:activator="{ on }">
             <v-text-field
                 v-on="on"
+                clearable
                 single-line
                 outlined
                 flat
@@ -16,6 +17,7 @@
         <v-date-picker
             v-model="innerValue"
             type="date"
+            @change="valueChanged"
         ></v-date-picker>
     </v-menu>
 </template>
@@ -23,11 +25,6 @@
 <script>
 import BaseConfig from "./Base";
 export default {
-    extends: BaseConfig,
-    mounted() {
-        if (!this.innerValue) {
-            this.innerValue = new Date().toISOString().substr(0, 10);
-        }
-    }
+    extends: BaseConfig
 };
 </script>

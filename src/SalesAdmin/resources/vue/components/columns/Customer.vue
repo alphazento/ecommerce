@@ -2,8 +2,8 @@
     <div v-if="!!value">
         <p>{{ value.name }}</p>
         <p>Email: {{ value.email }}</p>
-        <p>Customer Note: {{ order.customer_note }}</p>
-        <p>IP: {{ order.remote_ip }}</p>
+        <p>Customer Note: {{ extraData.customer_note }}</p>
+        <p>IP: {{ extraData.remote_ip }}</p>
         <p>Ship to</p>
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
             name: String,
             email: String
         },
-        order: {
+        extraData: {
             customer_note: String,
             remote_ip: String
         }

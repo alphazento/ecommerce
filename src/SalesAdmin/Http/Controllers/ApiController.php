@@ -8,14 +8,22 @@ use Request;
 use Registry;
 
 use Zento\SalesAdmin\Model\ORM\SalesOrder;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
+use Zento\SalesAdmin\Model\Filters\SalesOrderFilter;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class ApiController extends ApiBaseController
 {
-    function getOrders() {
-      $orders = SalesOrder::orderBy('id', 'desc')->paginate();
+    public function __construct() {
+      parent::__construct();
+      SalesOrderFilter::mixin(new \Zento\SalesAdmin\Model\Filters\MixFilter);
+    }
+
+    function getOrders(SalesOrderFilter $filters) {
+      // $orders = SalesOrder::orderBy('id', 'desc')->paginate();
+      // return $this->withData($orders);
+      $orders = SalesOrder::filter($filters)->paginate();
       return $this->withData($orders);
     }
 

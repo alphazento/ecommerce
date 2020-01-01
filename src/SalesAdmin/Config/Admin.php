@@ -30,38 +30,43 @@ class Admin extends AbstractAdminConfig {
                         'text' => 'Order Number',
                         'ui' => 'z-label',
                         'value' => 'order_number',
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
                     ],
                     [
                         'text' => 'Status',
-                        'ui' => 'z-options-display',
+                        'ui' => 'z-orders-status-action-column',
                         'value' => 'status_id',
                         'options' => $this->getOrderStatusOptions(),
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-options-item'
                     ],
                     [
                         'text' => 'Payment',
                         'ui' => 'z-orders-payment-column',
                         'value' => 'payment',
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
                     ],
                     [
                         'text' => 'Customer',
                         'ui' => 'z-orders-customer-column',
                         'value' => 'customer',
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
                     ],
                     [
                         'text' => 'Order Detail',
                         'ui' => 'z-label',
                         'value' => 'order_detail',
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
                     ],
                     [
                         'text' => 'Order Items',
                         'ui' => 'z-label',
                         'value' => 'order_items',
-                        'filter_ui' => 'config-text-item'
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
                     ],
                     [
                         'text' => 'Created At',
@@ -77,24 +82,37 @@ class Admin extends AbstractAdminConfig {
     protected function getOrderStatusOptions() {
         return [
             [
+                'value' => '',
+                'label' => 'Not Set'
+            ],
+            [
                 'value' => 0,
-                'label' => 'Pending'
+                'label' => 'Pending',
+                'color' => 'primary'
             ],
             [
                 'value' => 10,
-                'label' => 'Completed'
+                'label' => 'Completed',
+                'next_cadidates' => [1,4,5],
+                'color' => 'success'
             ],
             [
                 'value' => 4,
-                'label' => 'Cancel'
+                'label' => 'Cancel',
+                'next_cadidates' => [1, 5, 10],
+                'color' => 'error'
             ],
             [
                 'value' => 5,
-                'label' => 'Hold'
+                'label' => 'Hold',
+                'color' => 'pink'
+
             ],
             [
                 'value' => 1,
-                'label' => 'Processing'
+                'label' => 'Processing',
+                'next_cadidates' => [4, 5, 10],
+                'color' => 'primary'
             ]
         ];
     }
