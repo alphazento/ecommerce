@@ -19,28 +19,27 @@
 import BaseConfig from "./Base";
 export default {
     extends: BaseConfig,
-    data() {
-        return {
-            innerValue: ["", ""]
-        };
-    },
     methods: {
         fromDateChanged(date) {
             this.innerValue[0] = date.value;
-            this.$emit("valueChanged", {
-                accessor: this.accessor,
-                value: this.innerValue
-            });
+            this.datesChanged();
         },
         toDateChanged(date) {
             this.innerValue[1] = date.value;
+            this.datesChanged();
+        },
+        datesChanged() {
+            let value = this.innerValue;
+            if (!this.innerValue[0] && !this.innerValue[1]) {
+                value = null;
+            }
             this.$emit("valueChanged", {
                 accessor: this.accessor,
-                value: this.innerValue
+                value: value
             });
         }
     },
-    mounted() {
+    created() {
         if (!Array.isArray(this.innerValue)) {
             this.innerValue = ["", ""];
         }
@@ -51,7 +50,15 @@ export default {
                 this.innerValue.push(date);
             }
         }
-        console.log("date range", this.innerValue);
+    },
+    watch: {
+        value(nV, oV) {
+            if (nV) {
+                this.innerValue = nV;
+            } else {
+                this.innerValue = ["", ""];
+            }
+        }
     }
 };
 </script>

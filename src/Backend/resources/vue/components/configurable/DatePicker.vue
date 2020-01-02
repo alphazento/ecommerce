@@ -10,6 +10,7 @@
                 dense
                 v-model="innerValue"
                 @change="valueChanged"
+                @click:clear="cleared"
                 append-outer-icon="mdi-calendar-month"
             >
             </v-text-field>
@@ -25,6 +26,12 @@
 <script>
 import BaseConfig from "./Base";
 export default {
-    extends: BaseConfig
+    extends: BaseConfig,
+    methods: {
+        cleared() {
+            this.innerValue = null;
+            this.valueChanged();
+        }
+    }
 };
 </script>

@@ -40,7 +40,7 @@ export default {
         }
     },
     watch: {
-        value(oV, nV) {
+        value(nV, oV) {
             this.innerValue = nV;
         }
     }

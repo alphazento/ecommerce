@@ -6,6 +6,7 @@
         :clearable="clearable"
         v-model="innerValue"
         @change="valueChanged"
+        @click:clear="cleared"
     >
     </v-text-field>
 </template>
@@ -17,8 +18,11 @@ export default {
     props: {
         clearable: Boolean
     },
-    mounted() {
-        console.log("clearable", this.clearable);
+    methods: {
+        cleared() {
+            this.innerValue = '';
+            this.valueChanged();
+        }
     }
 };
 </script>

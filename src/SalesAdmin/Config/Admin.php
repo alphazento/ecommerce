@@ -38,7 +38,8 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'z-orders-status-action-column',
                         'value' => 'status_id',
                         'options' => $this->getOrderStatusOptions(),
-                        'filter_ui' => 'config-options-item'
+                        'filter_ui' => 'config-options-item',
+                        'filter_data_type' => 'number',
                     ],
                     [
                         'text' => 'Payment',
@@ -72,7 +73,7 @@ class Admin extends AbstractAdminConfig {
                         'text' => 'Created At',
                         'ui' => 'z-label',
                         'value' => 'created_at',
-                        'filter_ui' => 'config-date-range-item'
+                        'filter_ui' => 'config-date-range-item',
                     ],
                 ]
             ]);
@@ -88,7 +89,7 @@ class Admin extends AbstractAdminConfig {
             [
                 'value' => 0,
                 'label' => 'Pending',
-                'color' => 'primary'
+                'color' => '#E0BFBE'
             ],
             [
                 'value' => 10,

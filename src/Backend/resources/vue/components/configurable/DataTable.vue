@@ -15,22 +15,22 @@
       <template v-slot:body="{ headers, items }">
         <tbody>
           <tr v-if="useFilter">
-            <td v-for="col of headers" :key="col.accessor">
+            <td v-for="header of headers" :key="header.value">
               <component
-                v-if="!!col.filter_ui"
-                :is="col.filter_ui"
-                v-bind="prepare_component_props(col)"
-                :value="filters[col.accessor]"
+                v-if="!!header.filter_ui"
+                :is="header.filter_ui"
+                v-bind="prepare_component_props(header)"
+                :value="convertFilterValue(filters[header.value], header)"
                 @valueChanged="filterChanged"
               ></component>
             </td>
           </tr>
-          <tr class="text-start" v-for="(row, i) of items" :key="i">
-            <td v-for="(col, ci) of headers" :key="ci">
+          <tr class="text-start" v-for="(row, ri) of items" :key="ri">
+            <td v-for="(header) of headers" :key="header.value">
               <component
-                :is="col.ui"
-                v-bind="prepare_component_props(col, row)"
-                :value="row[col.value]"
+                :is="header.ui"
+                v-bind="prepare_component_props(header, row)"
+                :value="row[header.value]"
               ></component>
             </td>
           </tr>
@@ -57,7 +57,8 @@ export default {
     name: String,
     dataApiUrl: String,
     useFilter: Boolean,
-    serverSidePagination: Boolean
+    serverSidePagination: Boolean,
+    filterConnectRoute: Boolean
   },
   data() {
     return {
@@ -71,12 +72,15 @@ export default {
             per_page: 15
           }
         : {},
-      loading: false
+      loading: false,
+      routeQuery: {}
     };
   },
   created() {
+    if (this.filterConnectRoute) {
+      this.convertRouteQuery();
+    }
     this.fetchDefines();
-    this.fetchOrders();
   },
   methods: {
     fetchDefines() {
@@ -85,7 +89,7 @@ export default {
       axios
         .get(`/api/v1/admin/configs/groups/tables/${this.name}`)
         .then(response => {
-          this.fetchOrders();
+          this.realFetchOrders();
           // this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
             this.defines = response.data.data.table.items;
@@ -98,9 +102,9 @@ export default {
         });
     },
 
-    fetchOrders() {
+    realFetchOrders() {
       this.loading = true;
-      var queryString = this.buildQuery();
+      var queryString = this.buildQuery(true);
       this.$store.dispatch("showSpinner", "Loading data...");
       axios
         .get(`/api/v1/admin/${this.dataApiUrl}?${queryString}`)
@@ -113,27 +117,40 @@ export default {
         });
     },
 
-    buildQuery() {
+    fetchOrders() {
+      if (this.filterConnectRoute) {
+        this.routeQuery = this.buildQuery(false);
+        this.$router.push({ query: this.routeQuery }).catch(err => {
+          console.log(err);
+        });
+      } else {
+        this.realFetchOrders();
+      }
+    },
+
+    buildQuery(returnString) {
       var queryItems = [];
-      Object.keys(this.filters).forEach(key => {
-        var value = this.filters[key];
+      var routeQuery = {}; //when filterConnectRoute
+      for(const[key, value] of Object.entries(this.filters)) {
         if (value !== undefined && value !== "" && value !== null) {
           if (Array.isArray(value)) {
             var subKey = `${key}[]`;
             value.forEach(v => {
-              queryItems.push(`${subKey}=${v}`);
+                queryItems.push(`${subKey}=${v}`);
             });
+            routeQuery[key] = value;
           } else {
             queryItems.push(`${key}=${value}`);
+            routeQuery[key] = value;
           }
         }
-      });
-      return queryItems.join("&");
+      };
+      return returnString ? queryItems.join("&") : routeQuery;
     },
 
-    prepare_component_props(columDefines, extraData) {
-      var data = Object.assign({}, columDefines);
-      data.accessor = columDefines.value;
+    prepare_component_props(header, extraData) {
+      var data = Object.assign({}, header);
+      data.accessor = data.value;
       delete data.value;
       if (extraData !== undefined) {
         data.extraData = extraData;
@@ -143,6 +160,9 @@ export default {
 
     filterChanged(item) {
       this.filters[item.accessor] = item.value;
+      if (item.accessor !== 'page') {
+        this.filters['page'] = 1;
+      }
       this.fetchOrders();
     },
 
@@ -151,6 +171,35 @@ export default {
         this.filters.page = page;
         this.fetchOrders();
       }
+    },
+
+    convertRouteQuery() {
+      this.routeQuery = Object.assign({}, this.$route.query);
+      var filters = {};
+      for (const [key, value] of Object.entries(this.routeQuery)) {
+        key = key.replace('[]', '');
+        if (key === 'page' || key === 'per_page') {
+          filters[key] = parseInt(value);
+        } else {
+          filters[key] = value;
+        }
+      }
+      this.filters = filters;
+    },
+
+    convertFilterValue(value, header) {
+      if (header.filter_data_type === 'number') {
+        if (value !== '') {
+          return parseInt(value);
+        }
+      }
+      return value;
+    }
+  },
+  watch: {
+    $route() {
+      this.realFetchOrders();
+      // this.convertRouteQuery();
     }
   }
 };

@@ -17,6 +17,7 @@
       :search="search"
       use-filter
       server-side-pagination
+      filter-connect-route
     ></config-data-table>
   </v-container>
 </template>
