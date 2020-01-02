@@ -22,10 +22,33 @@
 import BaseConfig from "@Zento_Backend/components/configurable/Base";
 export default {
   extends: BaseConfig,
+  props: {
+    extraData: {
+      id: String
+    }
+  },
   data() {
     return {
       canEdit: true
     };
+  },
+  methods: {
+    valueChanged() {
+      axios
+        .patch(
+          `/api/v1/admin/sales/orders/${this.extraData.id}/status/${this.innerValue}`
+        )
+        .then(
+          response => {
+            if (!response.data.success) {
+              this.innerValue = this.oldVal;
+            }
+          },
+          err => {
+            this.innerValue = this.oldVal;
+          }
+        );
+    }
   },
   computed: {
     canDoOptions() {

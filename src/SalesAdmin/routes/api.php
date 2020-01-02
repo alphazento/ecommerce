@@ -21,6 +21,11 @@ Route::group(
         ['as' => 'orders.getstatuses', 'uses' => 'ApiController@getOrderStatuses']
     );
 
+    Route::patch(
+        '/orders/{id}/status/{status_id}', 
+        ['as' => 'orders.put.status', 'uses' => 'ApiController@setOrderStatus']
+    );
+
     Route::post(
         '/orders/:id/emails', 
         ['as' => 'orders.setemails', 'uses' => 'ApiController@setOrderEmails']

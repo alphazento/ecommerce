@@ -17,12 +17,10 @@ class ApiController extends ApiBaseController
 {
     public function __construct() {
       parent::__construct();
-      SalesOrderFilter::mixin(new \Zento\SalesAdmin\Model\Filters\MixFilter);
     }
 
     function getOrders(SalesOrderFilter $filters) {
-      // $orders = SalesOrder::orderBy('id', 'desc')->paginate();
-      // return $this->withData($orders);
+      $filters->mixin(new \Zento\SalesAdmin\Model\Filters\MixFilter);
       $orders = SalesOrder::filter($filters)->paginate();
       return $this->withData($orders);
     }
@@ -30,5 +28,17 @@ class ApiController extends ApiBaseController
     function getOrder() {
       $order = SalesOrder::where('id', Route::input('id'))->first();
       return $this->withData($orders);
+    }
+
+    function setOrderStatus() {
+      if ($order = SalesOrder::where('id', Route::input('id'))->first()) {
+        $status_id = Route::input('status_id');
+        if ($status_id !== null) {
+          $order->status_id = $status_id;
+          $order->save();
+          return $this;;
+        }
+      }
+      return $this->error(422, 'Not able to update order status');
     }
 }
