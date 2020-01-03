@@ -7,7 +7,7 @@
     item-value="value"
     required
     v-model="innerValue"
-    @change="valueChanged"
+    @change="changeStatus"
   >
     <template v-slot:selection="{item}">
       <v-btn width="100%" :color="item.color">{{item.label}}</v-btn>
@@ -33,10 +33,15 @@ export default {
     };
   },
   methods: {
-    valueChanged() {
+    valueChanged(data) {
+      let status = this.getLable(this.innerValue);
       axios
-        .patch(
-          `/api/v1/admin/sales/orders/${this.extraData.id}/status/${this.innerValue}`
+        .post(
+          `/api/v1/admin/sales/orders/${this.extraData.id}/status/${this.innerValue}`,
+          {
+            comment: data.comment,
+            notify: `[${status}]${data.notifyCustomer}`
+          }
         )
         .then(
           response => {
@@ -48,6 +53,43 @@ export default {
             this.innerValue = this.oldVal;
           }
         );
+    },
+
+    changeStatus() {
+      if (this.needComment()) {
+        let label = this.getLable(this.innerValue);
+        eventBus.$emit('openDialog', {
+          component: "z-admin-comment-dialog-body",
+          bind: { title: `change to status [${label}]`},
+          closeNotify: this.handleDialogClose
+        })
+      } else {
+        this.valueChanged();
+      }
+    },
+
+    handleDialogClose(result) {
+      if (result.success) {
+        //can continue to change status
+        this.valueChanged(result);
+      } else {
+        this.innerValue = this.oldVal;
+      }
+    },
+
+    needComment() {
+      return true;
+    },
+
+    getLable(value) {
+        let items = this.options.filter(item => {
+            return item.value === value;
+        });
+
+        if (items && items.length > 0) {
+            return items[0].label;
+        }
+        return "";
     }
   },
   computed: {

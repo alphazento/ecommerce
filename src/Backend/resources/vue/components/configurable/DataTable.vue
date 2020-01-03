@@ -4,6 +4,7 @@
       fixed-header
       :headers="defines"
       :items="pagination.data"
+      :show-select="showSelect"
       :search="search"
       :server-items-length="pagination.total"
       :page="pagination.current_page"
@@ -12,7 +13,7 @@
       :loading="loading"
       loading-text="Loading... Please wait"
     >
-      <template v-slot:body="{ headers, items }">
+      <template v-slot:body="{ headers, items, isSelected, select }">
         <tbody>
           <tr v-if="useFilter">
             <td v-for="header of headers" :key="header.value">
@@ -26,7 +27,12 @@
             </td>
           </tr>
           <tr class="text-start" v-for="(row, ri) of items" :key="ri">
-            <td v-for="(header) of headers" :key="header.value">
+            <td v-for="(header, hi) of headers" :key="header.value">
+              <v-simple-checkbox
+                 v-if="showSelect && hi===0"
+                 color="green" 
+                 :value="isSelected(row)" @input="select(row, !isSelected(row))">
+              </v-simple-checkbox>
               <component
                 :is="header.ui"
                 v-bind="prepare_component_props(header, row)"
@@ -55,6 +61,7 @@ export default {
   props: {
     search: String,
     name: String,
+    showSelect: false,
     dataApiUrl: String,
     useFilter: Boolean,
     serverSidePagination: Boolean,
@@ -73,7 +80,7 @@ export default {
           }
         : {},
       loading: false,
-      routeQuery: {}
+      routeQuery: {},
     };
   },
   created() {

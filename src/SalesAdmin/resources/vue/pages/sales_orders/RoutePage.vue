@@ -16,6 +16,7 @@
       data-api-url="sales/orders"
       :search="search"
       use-filter
+      :show-select="true"
       server-side-pagination
       filter-connect-route
     ></config-data-table>

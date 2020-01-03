@@ -5,6 +5,7 @@ export default {
         "z-orders-customer-column": "components/columns/Customer.vue",
         "z-orders-payment-column": "components/columns/Payment.vue",
         "z-orders-status-action-column": "components/columns/StatusAction.vue",
+        "z-admin-comment-dialog-body": "components/dialogbody/AdminComment.vue",
     },
     "routes": [{
         name: "sales.orders",

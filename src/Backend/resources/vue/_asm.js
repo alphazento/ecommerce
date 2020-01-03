@@ -24,6 +24,8 @@ export default {
         "config-json-item": "components/configurable/JsonEditor.vue",
         "simple-json-item": "components/configurable/SimpleJsonEditor.vue",
 
+        "z-dialog-container": "components/DialogContainer.vue",
+
         "dynamic-attribute-edit-dialogbody": "pages/store_dynamic_attribute/components/DAEditDialogBody.vue",
         // "admin-footer": "components/layout/ThemeFooter.vue",
     },

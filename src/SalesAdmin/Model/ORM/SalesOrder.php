@@ -11,11 +11,17 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
         'payment',
         'status',
         'status_history',
-        'customer'
+        'customer',
+        'admin_comments'
     ];
 
     public function customer() {
        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
+    public function admin_comments() {
+        return $this->hasMany(AdminComment::class, 'order_id', 'id')
+            ->orderBy('updated_at', 'desc');
     }
 
     public function scopeFilter($query, QueryFilter $filters)

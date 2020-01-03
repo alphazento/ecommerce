@@ -70,7 +70,7 @@ class Admin extends AbstractAdminConfig {
                         'clearable' => true
                     ],
                     [
-                        'text' => 'Created At',
+                        'text' => 'Purchase Date',
                         'ui' => 'z-label',
                         'value' => 'created_at',
                         'filter_ui' => 'config-date-range-item',
