@@ -16,7 +16,7 @@ class CreateSalesOrderStatusHistoryTable extends Migration
             $table->increments('id');
             $table->integer('order_id')->unsigned();
             $table->integer('status_id')->unsigned();
-            $table->string('admin_note', 255)->nullable();
+            $table->integer('admin_comment_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('order_id')

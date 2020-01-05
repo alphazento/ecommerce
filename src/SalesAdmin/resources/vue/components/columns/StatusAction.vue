@@ -40,7 +40,7 @@ export default {
           `/api/v1/admin/sales/orders/${this.extraData.id}/status/${this.innerValue}`,
           {
             comment: data.comment,
-            notify: `[${status}]${data.notifyCustomer}`
+            notify: data.notifyCustomer
           }
         )
         .then(
@@ -58,11 +58,11 @@ export default {
     changeStatus() {
       if (this.needComment()) {
         let label = this.getLable(this.innerValue);
-        eventBus.$emit('openDialog', {
+        eventBus.$emit("openDialog", {
           component: "z-admin-comment-dialog-body",
-          bind: { title: `change to status [${label}]`},
+          bind: { title: `change to status [${label}]` },
           closeNotify: this.handleDialogClose
-        })
+        });
       } else {
         this.valueChanged();
       }
@@ -82,14 +82,14 @@ export default {
     },
 
     getLable(value) {
-        let items = this.options.filter(item => {
-            return item.value === value;
-        });
+      let items = this.options.filter(item => {
+        return item.value === value;
+      });
 
-        if (items && items.length > 0) {
-            return items[0].label;
-        }
-        return "";
+      if (items && items.length > 0) {
+        return items[0].label;
+      }
+      return "";
     }
   },
   computed: {

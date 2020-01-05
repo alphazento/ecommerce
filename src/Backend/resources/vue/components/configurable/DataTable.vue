@@ -2,7 +2,8 @@
   <div>
     <v-data-table
       fixed-header
-      :headers="defines"
+      single-sort
+      :headers="defines.headers"
       :items="pagination.data"
       :show-select="showSelect"
       :search="search"
@@ -11,7 +12,10 @@
       :items-per-page="pagination.per_page"
       :hide-default-footer="serverSidePagination"
       :loading="loading"
-      loading-text="Loading... Please wait"
+      @update:sort-by="updateSortBy"
+      @update:sort-desc="updateSortDesc"
+      @item-selected="itemSelected"
+      @toggle-select-all="toggleSelectAll"
     >
       <template v-slot:body="{ headers, items, isSelected, select }">
         <tbody>
@@ -26,20 +30,32 @@
               ></component>
             </td>
           </tr>
-          <tr class="text-start" v-for="(row, ri) of items" :key="ri">
-            <td v-for="(header, hi) of headers" :key="header.value">
-              <v-simple-checkbox
-                 v-if="showSelect && hi===0"
-                 color="green" 
-                 :value="isSelected(row)" @input="select(row, !isSelected(row))">
-              </v-simple-checkbox>
-              <component
-                :is="header.ui"
-                v-bind="prepare_component_props(header, row)"
-                :value="row[header.value]"
-              ></component>
-            </td>
-          </tr>
+          <template v-for="(row, ri) of items">
+            <tr class="text-start" :key="ri">
+              <td v-for="(header, hi) of headers" :key="header.value">
+                <v-simple-checkbox
+                  v-if="showSelect && hi===0"
+                  color="green"
+                  :value="isSelected(row)"
+                  @input="select(row, !isSelected(row))"
+                ></v-simple-checkbox>
+                <component
+                  :is="header.ui"
+                  v-bind="prepare_component_props(header, row)"
+                  :value="row[header.value]"
+                ></component>
+              </td>
+            </tr>
+            <tr v-if="!!row.relative" class="text-start" :key="`${ri}_ext`">
+              <td v-for="(header) of headers" :key="header.value">
+                <component
+                  :is="header.ui"
+                  v-bind="prepare_component_props(header, row)"
+                  :value="row[header.value]"
+                ></component>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </template>
     </v-data-table>
@@ -69,7 +85,10 @@ export default {
   },
   data() {
     return {
-      defines: [],
+      defines: {
+        headers: [],
+        primary_key: "id"
+      },
       pagination: {
         data: []
       },
@@ -81,6 +100,7 @@ export default {
         : {},
       loading: false,
       routeQuery: {},
+      selectedItems: []
     };
   },
   created() {
@@ -99,8 +119,12 @@ export default {
           this.realFetchOrders();
           // this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
-            this.defines = response.data.data.table.items;
-            this.defines.forEach(item => {
+            this.defines = Object.assign(
+              this.defines,
+              response.data.data.table.items
+            );
+
+            this.defines.headers.forEach(item => {
               if (item.filterable !== undefined && item.filterable) {
                 this.filters[item.value] = "";
               }
@@ -119,6 +143,7 @@ export default {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
             this.pagination = response.data.data;
+            this.selectedItems = [];
           }
           this.loading = false;
         });
@@ -138,12 +163,12 @@ export default {
     buildQuery(returnString) {
       var queryItems = [];
       var routeQuery = {}; //when filterConnectRoute
-      for(const[key, value] of Object.entries(this.filters)) {
+      for (const [key, value] of Object.entries(this.filters)) {
         if (value !== undefined && value !== "" && value !== null) {
           if (Array.isArray(value)) {
             var subKey = `${key}[]`;
             value.forEach(v => {
-                queryItems.push(`${subKey}=${v}`);
+              queryItems.push(`${subKey}=${v}`);
             });
             routeQuery[key] = value;
           } else {
@@ -151,7 +176,7 @@ export default {
             routeQuery[key] = value;
           }
         }
-      };
+      }
       return returnString ? queryItems.join("&") : routeQuery;
     },
 
@@ -167,8 +192,8 @@ export default {
 
     filterChanged(item) {
       this.filters[item.accessor] = item.value;
-      if (item.accessor !== 'page') {
-        this.filters['page'] = 1;
+      if (item.accessor !== "page") {
+        this.filters["page"] = 1;
       }
       this.fetchOrders();
     },
@@ -184,8 +209,8 @@ export default {
       this.routeQuery = Object.assign({}, this.$route.query);
       var filters = {};
       for (const [key, value] of Object.entries(this.routeQuery)) {
-        key = key.replace('[]', '');
-        if (key === 'page' || key === 'per_page') {
+        key = key.replace("[]", "");
+        if (key === "page" || key === "per_page") {
           filters[key] = parseInt(value);
         } else {
           filters[key] = value;
@@ -195,12 +220,50 @@ export default {
     },
 
     convertFilterValue(value, header) {
-      if (header.filter_data_type === 'number') {
-        if (value !== '') {
+      if (header.filter_data_type === "number") {
+        if (value !== "") {
           return parseInt(value);
         }
       }
       return value;
+    },
+
+    updateSortBy(sorts) {
+      console.log("multi-sort", sorts);
+    },
+    updateSortDesc(sorts) {
+      console.log("desc-sort", sorts);
+    },
+
+    itemSelected(detail) {
+      let primary_key = detail.item[this.defines.primary_key];
+      if (detail.value) {
+        this.selectedItems.push(primary_key);
+      } else {
+        let idx = this.selectedItems.indexOf(primary_key);
+        if (idx >= 0) {
+          this.selectedItems.splice(idx, 1);
+        }
+      }
+      if (this.selectedItems.length === 0) {
+        return this.$emit("selectedRowsChange", []);
+      }
+      let items = this.pagination.data.filter(item => {
+        return this.selectedItems.includes(item[this.defines.primary_key]);
+      });
+      this.$emit("selectedRowsChange", items);
+    },
+
+    toggleSelectAll(detail) {
+      if (detail.value) {
+        this.selectedItems = detail.items.map(item => {
+          return item[this.defines.primary_key];
+        });
+        this.$emit("selectedRowsChange", detail.items);
+      } else {
+        this.selectedItems = [];
+        this.$emit("selectedRowsChange", []);
+      }
     }
   },
   watch: {

@@ -10,6 +10,7 @@
         single-line
         hide-details
       ></v-text-field>-->
+      <v-btn :disabled="selectRows.length === 0" color="success">Print Invoice & Pack Slip</v-btn>
     </v-card-title>
     <config-data-table
       name="orders"
@@ -19,6 +20,7 @@
       :show-select="true"
       server-side-pagination
       filter-connect-route
+      @selectedRowsChange="selectedRowsChange"
     ></config-data-table>
   </v-container>
 </template>
@@ -27,8 +29,14 @@
 export default {
   data() {
     return {
-      search: ""
+      search: "",
+      selectRows: []
     };
+  },
+  methods: {
+    selectedRowsChange(rows) {
+      this.selectRows = rows;
+    }
   },
   watch: {
     $route() {}

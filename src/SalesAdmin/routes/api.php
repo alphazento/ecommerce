@@ -51,5 +51,10 @@ Route::group(
         ['as' => 'orders.setcomments', 'uses' => 'ApiController@setComments']
     );
 
+    Route::post(
+        '/notes', 
+        ['as' => 'orders.addadminnote', 'uses' => 'ApiController@addAdminNote']
+    );
+
     // PUT    /V1/orders/:parent_id
 });

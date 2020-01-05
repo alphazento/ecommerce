@@ -21,60 +21,61 @@ class Admin extends AbstractAdminConfig {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Order Table Definition',
                 'items' => [
-                    [
-                        'text' => 'ID',
-                        'ui' => 'z-label',
-                        'value' => 'id'
+                    'headers' => [
+                        [
+                            'text' => 'ID/Order Number',
+                            'ui' => 'z-orders-number-and-log-column',
+                            'value' => 'order_number',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true
+                        ],
+                        [
+                            'text' => 'Status',
+                            'ui' => 'z-orders-status-action-column',
+                            'value' => 'status_id',
+                            'options' => $this->getOrderStatusOptions(),
+                            'filter_ui' => 'config-options-item',
+                            'filter_data_type' => 'number',
+                        ],
+                        [
+                            'text' => 'Payment',
+                            'ui' => 'z-orders-payment-column',
+                            'value' => 'payment',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
+                            'text' => 'Customer',
+                            'ui' => 'z-orders-customer-column',
+                            'value' => 'customer',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true
+                        ],
+                        [
+                            'text' => 'Order Detail',
+                            'ui' => 'z-label',
+                            'value' => 'order_detail',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
+                            'text' => 'Shipment',
+                            'ui' => 'z-label',
+                            'value' => 'order_items',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
+                            'text' => 'Purchase Date',
+                            'ui' => 'z-label',
+                            'value' => 'created_at',
+                            'filter_ui' => 'config-date-range-item',
+                        ],
                     ],
-                    [
-                        'text' => 'Order Number',
-                        'ui' => 'z-label',
-                        'value' => 'order_number',
-                        'filter_ui' => 'config-text-item',
-                        'clearable' => true
-                    ],
-                    [
-                        'text' => 'Status',
-                        'ui' => 'z-orders-status-action-column',
-                        'value' => 'status_id',
-                        'options' => $this->getOrderStatusOptions(),
-                        'filter_ui' => 'config-options-item',
-                        'filter_data_type' => 'number',
-                    ],
-                    [
-                        'text' => 'Payment',
-                        'ui' => 'z-orders-payment-column',
-                        'value' => 'payment',
-                        'filter_ui' => 'config-text-item',
-                        'clearable' => true
-                    ],
-                    [
-                        'text' => 'Customer',
-                        'ui' => 'z-orders-customer-column',
-                        'value' => 'customer',
-                        'filter_ui' => 'config-text-item',
-                        'clearable' => true
-                    ],
-                    [
-                        'text' => 'Order Detail',
-                        'ui' => 'z-label',
-                        'value' => 'order_detail',
-                        'filter_ui' => 'config-text-item',
-                        'clearable' => true
-                    ],
-                    [
-                        'text' => 'Order Items',
-                        'ui' => 'z-label',
-                        'value' => 'order_items',
-                        'filter_ui' => 'config-text-item',
-                        'clearable' => true
-                    ],
-                    [
-                        'text' => 'Purchase Date',
-                        'ui' => 'z-label',
-                        'value' => 'created_at',
-                        'filter_ui' => 'config-date-range-item',
-                    ],
+                    'primary_key' => 'id',
                 ]
             ]);
         };

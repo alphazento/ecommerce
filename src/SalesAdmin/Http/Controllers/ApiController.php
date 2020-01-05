@@ -39,17 +39,13 @@ class ApiController extends ApiBaseController
           if ($order->status_id != $status_id) {
             if ($comment = Request::get('comment', false)) {
               $notify = Request::get('notify', false);
-              $item = new AdminComment();
-              $item->order_id = $order->id;
-              $item->comment = $comment;
-              // $item->admin_id = Auth::user()->id;
-              $item->admin_id = 0;
-              $item->notify_to_customer = $notify;
-              try {
-                $item->save();
-              } catch(\Exception $e) {
-                return $this->error(422, 'Not able to save comment.');
-              }
+              $item = AdminComment::create([
+                'type_id' => AdminComment::ORDER_STATUS_CHANGE,
+                'admin_id' => 0,
+                'order_id' => $order->id,
+                'comment' => $comment,
+                'notify_to_customer' => $notify
+              ]);
             }
             $order->status_id = $status_id;
             $order->save();
@@ -58,5 +54,19 @@ class ApiController extends ApiBaseController
         }
       }
       return $this->error(422, 'Not able to update order status');
+    }
+
+    function addAdminNote() {
+      $order_id = Request::get('order_id');
+      $comment = Request::get('comment');
+      $notify = Request::get('notify');
+      $item = AdminComment::create([
+        'type_id' => AdminComment::ADMIN_NOTE,
+        'admin_id' => 0,
+        'order_id' => $order_id,
+        'comment' => $comment,
+        'notify_to_customer' => $notify
+      ]);
+      return $this->withData($item);
     }
 }

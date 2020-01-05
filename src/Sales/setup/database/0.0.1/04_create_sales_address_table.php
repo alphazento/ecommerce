@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesShipmentTable extends Migration
+class CreateSalesAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateSalesShipmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_order_shipments', function (Blueprint $table) {
+        Schema::create('sales_addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->integer('shipment_status')->unsigned();
             $table->integer('shipping_address_id')->unsigned();
-            $table->integer('billing_address_id')->unsigned();
             $table->string('shipping_method', 32)->nullable();
             $table->string('shipping_carrier', 128)->nullable();
             $table->string('shipment_instruction', 255)->nullable();

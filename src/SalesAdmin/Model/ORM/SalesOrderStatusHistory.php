@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Sales\Model\ORM;
+namespace Zento\SalesAdmin\Model\ORM;
 
 use DB;
 use Illuminate\Support\Collection;

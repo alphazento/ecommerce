@@ -12,7 +12,7 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
         'status',
         'status_history',
         'customer',
-        'admin_comments'
+        'admin_comments.administrator'
     ];
 
     public function customer() {
@@ -21,11 +21,16 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
 
     public function admin_comments() {
         return $this->hasMany(AdminComment::class, 'order_id', 'id')
+            ->where('type_id', '=', AdminComment::ADMIN_NOTE)
             ->orderBy('updated_at', 'desc');
     }
 
     public function scopeFilter($query, QueryFilter $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function status_history() {
+        return $this->hasMany(SalesOrderStatusHistory::class, 'order_id');
     }
 }

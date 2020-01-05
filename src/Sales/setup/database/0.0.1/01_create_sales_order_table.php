@@ -16,6 +16,7 @@ class CreateSalesOrderTable extends Migration
             $table->increments('id');
             $table->integer('payment_transaction_id')->unsigned();
             $table->string('order_number', 16);
+            $table->integer('shipping_address_id')->unsigned();
             $table->boolean('active')->default(1);
             $table->boolean('is_backorder');
             $table->integer('invoice_no')->unsigned();
