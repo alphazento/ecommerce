@@ -141,7 +141,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     protected function prepareForVue() {
         $url = (string)(route('api:payment:capture', ['method' => $this->getCode() ]));
         $mode = config(Consts::PAYMENT_GATEWAY_PAYPAL_MODE);
-        $clientId = config(sprintf(Const::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, $mode));
+        $clientId = config(sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, $mode));
         return [
             'name' => $this->getCode(),
             'title' => $this->getTitle(),

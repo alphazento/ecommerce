@@ -33,7 +33,6 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     
     public $_richData_ = [
         'payment',
-        'status',
     ];
 
     public function payment() {
@@ -42,13 +41,5 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
 
     public function shipment() {
         return $this->hasOne(SalesShipment::class, 'order_id');
-    }
-
-    public function shipping_address() {
-        return $this->hasOne(SalesShipment::class, 'order_id');
-    }
-
-    public function status() {
-        return $this->hasOne(SalesOrderStatus::class, 'id');
     }
 }

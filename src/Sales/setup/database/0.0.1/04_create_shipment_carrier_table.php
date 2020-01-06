@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesOrderStatusTable extends Migration
+class CreateShipmentCarrierTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,13 @@ class CreateSalesOrderStatusTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_order_statuses', function (Blueprint $table) {
+        Schema::create('shipment_carriers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 16);
+            $table->string('name', 255);
+            $table->string('description', 255)->nullable();
+            $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
@@ -26,6 +27,6 @@ class CreateSalesOrderStatusTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sales_order_statuses');
+        Schema::drop('shipment_carriers');
     }
 }

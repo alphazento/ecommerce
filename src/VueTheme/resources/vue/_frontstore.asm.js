@@ -1,5 +1,5 @@
 export default {
-    "components": {
+    components: {
         "spinner-layer": "components/SpinnerLayer.vue",
         "theme-manager": "components/layout/ThemeManager.vue",
         "theme-toolbar": "components/layout/ThemeToolbar.vue",

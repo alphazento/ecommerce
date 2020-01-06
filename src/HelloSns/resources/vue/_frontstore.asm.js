@@ -1,5 +1,5 @@
 export default {
-    "components": {
+    components: {
         "hello-sns": "components/HelloSns.vue",
     }
 }

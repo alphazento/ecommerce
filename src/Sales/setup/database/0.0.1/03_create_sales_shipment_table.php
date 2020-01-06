@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesAddressTable extends Migration
+class CreateSalesShipmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class CreateSalesAddressTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_addresses', function (Blueprint $table) {
+        Schema::create('sales_order_shipments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
             $table->integer('customer_id')->unsigned();
-            $table->integer('shipment_status')->unsigned();
-            $table->integer('shipping_address_id')->unsigned();
-            $table->string('shipping_method', 32)->nullable();
-            $table->string('shipping_carrier', 128)->nullable();
+            $table->integer('sales_address_id')->unsigned();
+            $table->integer('shipping_carrier_id')->unsigned()->nullable();
+            $table->integer('shipping_method_id')->unsigned()->nullable();
+            $table->integer('shipment_status_id')->unsigned();
             $table->string('shipment_instruction', 255)->nullable();
             $table->decimal('total_weight', 12, 4)->nullable();
             $table->decimal('total_qty', 12, 4)->nullable();
@@ -30,6 +30,14 @@ class CreateSalesAddressTable extends Migration
             $table->foreign('order_id')
                 ->references('id')
                 ->on('sales_orders');
+            
+            $table->foreign('customer_id')
+                ->references('id')
+                ->on('customers');
+            
+            $table->foreign('sales_address_id')
+                ->references('id')
+                ->on('sales_addresses');
         });
     }
 

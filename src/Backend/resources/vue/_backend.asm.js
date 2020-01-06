@@ -2,7 +2,7 @@ import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
 import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
 
 export default {
-    "components": {
+    components: {
         "spinner-layer": "components/SpinnerLayer.vue",
         "z-file-picker": "components/FilePicker.vue",
         "admin-toolbar": "components/layout/AdminToolbar.vue",
@@ -29,7 +29,7 @@ export default {
         "dynamic-attribute-edit-dialogbody": "pages/store_dynamic_attribute/components/DAEditDialogBody.vue",
         // "admin-footer": "components/layout/ThemeFooter.vue",
     },
-    "routes": [{
+    routes: [{
             name: "store.configuration",
             path: "/admin/store-configurations",
             component: StoreConfigurationPage

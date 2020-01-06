@@ -3,7 +3,7 @@ return [
     "Zento_Backend" => [
         "version" => "0.0.1",
         "commands" =>  [],
-        'is_vuetheme'=>'Zento_BladeTheme',
+        'vuetheme_type'=>'backend',
         "providers" => [
             "\\Zento\\Backend\\Providers\\Entry"
         ],

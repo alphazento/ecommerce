@@ -32,12 +32,14 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
     protected $mergedPackages = [];
     protected $npmPackageInstalled = false;
 
+    protected $themeType = 'frontstore';
+
     public function handle() {
         $packageConfigs = PackageManager::loadPackagesConfigs();
-
         foreach($packageConfigs ?? [] as $name => $packageConfig) {
             if ($assembly = PackageManager::assembly($name)) {
-                if ($assembly['is_vuetheme'] ?? false) {
+                if ($assembly['vuetheme_type'] ?? false) {
+                    $this->themeType = $assembly['vuetheme_type'];
                     $this->handleThemePackage($name);
                 }
             }
@@ -55,6 +57,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
 
         $this->mergeVueComponentPackageConfig();
+        $this->mergeThemePackageConfig('Zento_BladeTheme');  //all vuetheme depends on this theme
         $this->mergeThemePackageConfig($themeName);
         $this->genWebpackMixJs();
         // $this->genRegisterComponentProdFile();
@@ -98,10 +101,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
                         $this->_mergeThemePackageConfig($packageName, $assembly, $packageConfig);
                         return true;
                     } else {
-                        if ($assembly['is_vuetheme'] ?? false) {
-                            if (is_string($assembly['is_vuetheme'])) {
-                                $this->mergeThemePackageConfig($assembly['is_vuetheme']);
-                            }
+                        if ($assembly['vuetheme_type'] ?? false) {
                             $this->_mergeThemePackageConfig($packageName, $assembly, $packageConfig);
                             return true;
                         }
@@ -132,7 +132,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
                     }
                 }
 
-                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_asm.js'])) {
+                if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', sprintf('_%s.asm.js', $this->themeType)])) {
                     if (file_exists($file)) {
                         $this->componentJsonFiles[$packageName] = $file;
                     }
@@ -207,7 +207,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         ];
         foreach($this->componentJsonFiles as $themeName => $jsFile) {
             $configName = $themeName . '_ASM';
-            $imports[] = sprintf('import %s from "@%s/_asm.js"', $configName, $themeName);
+            $imports[] = sprintf('import %s from "@%s/_%s.asm.js"', $configName, $themeName, $this->themeType);
             $contents[] = sprintf('
             if (%s.components !== undefined) { 
                 for (const [key, value] of Object.entries(%s.components)) {

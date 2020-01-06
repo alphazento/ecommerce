@@ -1,5 +1,5 @@
 export default {
-    "components": {
+    components: {
         "paypal-card": "components/PaypalCard.vue"
     }
 }
