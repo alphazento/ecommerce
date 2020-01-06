@@ -21,15 +21,15 @@
 
           <v-flex md6 xs12>
             <google-address-autocomplete
-                id="map"
-                classname="form-control"
-                placeholder="Start typing your address..."
-                v-on:placechanged="getAddressData"
-                country="au"
-                :address="addressText"
-                :rules="addressRules"
-            >
-            </google-address-autocomplete>
+              id="map"
+              class="form-control"
+              placeholder="Start typing your address..."
+              v-on:placechanged="getAddressData"
+              country="au"
+              :address="addressText"
+              :rules="addressRules"
+              allow-manual-input
+            ></google-address-autocomplete>
           </v-flex>
 
           <v-flex md6 xs12>
@@ -39,7 +39,7 @@
               label="Company Name(Optional)"
               @change="addressChanged"
             ></v-text-field>
-          </v-flex>          
+          </v-flex>
         </v-layout>
       </v-container>
     </v-card>
@@ -49,7 +49,7 @@
 
 <script>
 //https://github.com/olefirenko/vue-google-autocomplete#correct-usage-of-the-types-parameter
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
   props: {
     step: {
@@ -68,25 +68,26 @@ export default {
 
   data() {
     return {
-      addressData: this.address ? this.address : {
-        name: this.fullname ? this.fullname : '',
-        company: '',
-        address1: '',
-        address2: '',
-        city: '',
-        country: '',
-        postal_code: '',
-        state: '',
-        phone: ''
-      },
+      addressData: this.address
+        ? this.address
+        : {
+            name: this.fullname ? this.fullname : "",
+            company: "",
+            address1: "",
+            address2: "",
+            city: "",
+            country: "",
+            postal_code: "",
+            state: "",
+            phone: ""
+          },
       dataChanged: false,
       valid: false,
-      addressRules: [
-        v => !!v || "Address is required"
-      ],
+      addressRules: [v => !!v || "Address is required"],
       nameRules: [
         v =>
-          !v || (v && v.length <= 255) ||
+          !v ||
+          (v && v.length <= 255) ||
           "Company Name must be less than 255 characters"
       ]
     };
@@ -96,11 +97,16 @@ export default {
     childMessage() {
       if (this.$refs.checkout_address_form.validate()) {
         if (this.dataChanged) {
-          this.$store.dispatch('setShippingAddress',  this.addressData).then(response => {
-            this.$emit("childMessage", this.step);
-          }, error => {
-              console.error("Got nothing from server. Prompt user to check internet connection and try again")
-          })
+          this.$store.dispatch("setShippingAddress", this.addressData).then(
+            response => {
+              this.$emit("childMessage", this.step);
+            },
+            error => {
+              console.error(
+                "Got nothing from server. Prompt user to check internet connection and try again"
+              );
+            }
+          );
         } else {
           this.$emit("childMessage", this.step);
         }
@@ -132,18 +138,19 @@ export default {
       if (address) {
         return `${address.address1} ${address.address2} ${address.city} ${address.state} ${address.postal_code}, ${address.country}`;
       } else {
-        return '';
+        return "";
       }
     }
   },
 
   components: { VueGoogleAutocomplete },
-  watch: { 
-      fullname: function(newVal, oldVal) { // watch it
-        if ('' === this.addressData.name) {
-          this.addressData.name = newVal;
-        }
+  watch: {
+    fullname: function(newVal, oldVal) {
+      // watch it
+      if ("" === this.addressData.name) {
+        this.addressData.name = newVal;
       }
     }
+  }
 };
 </script>
