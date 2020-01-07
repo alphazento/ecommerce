@@ -57,6 +57,18 @@ Route::group(
     );
 });
 
+Route::group(
+    [
+        'prefix' => '/api/v1',
+        'namespace' => '\Zento\Customer\Http\Controllers\Api',
+        // 'middleware' => ['cors', 'auth:api'],
+    ], function () {
+    Route::get(
+        '/countries', 
+        ['as' => 'api.getcountries', 'uses' => 'AddressController@countryAndStates']
+    );
+});
+
 //admin
 Route::group(
     [

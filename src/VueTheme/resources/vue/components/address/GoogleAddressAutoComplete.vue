@@ -20,41 +20,13 @@
         <!-- <v-icon>mdi-aspect-ratio</v-icon> -->
       </v-btn>
     </div>
-    <v-container v-else>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.address1" label="Address1"></v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.address2" label="Address2"></v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.city" label="City"></v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.state" label="State"></v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.country" label="Country"></v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex md12>
-          <v-text-field v-model="manualAddress.postal_code" label="Postal Code"></v-text-field>
-        </v-flex>
-      </v-layout>
+    <div v-else>
+      <manual-address-input>
+      </manual-address-input>
       <v-layout>
         <v-btn text color="purple" large @click="toggleAddressInput">Use Google Address Input</v-btn>
       </v-layout>
-    </v-container>
+    </div>
   </div>
 </template>
 

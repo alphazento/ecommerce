@@ -117,7 +117,7 @@ export default {
     },
     getAddressData(googleAddress, placeResultData, id) {
       this.convertGoogleAddressToAddress(googleAddress);
-      this.addressChanged = true;
+      this.addressChanged();
     },
     convertGoogleAddressToAddress(googleAddress) {
       this.addressData.city = googleAddress.locality;

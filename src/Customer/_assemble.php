@@ -1,7 +1,7 @@
 <?php
 return [
     "Zento_Customer"=>[
-        "version" => "0.0.1",
+        "version" => "0.0.3",
         "commands" => [
         ],
         "providers" => [
