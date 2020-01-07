@@ -24,11 +24,12 @@
               id="map"
               class="form-control"
               placeholder="Start typing your address..."
-              v-on:placechanged="getAddressData"
+              v-on:placechanged="googleAddressDataChanged"
               country="au"
               :address="addressText"
               :rules="addressRules"
               allow-manual-input
+              @manualAddressChanged="onManualAddressChange"
             ></google-address-autocomplete>
           </v-flex>
 
@@ -115,7 +116,10 @@ export default {
     addressChanged() {
       this.dataChanged = true;
     },
-    getAddressData(googleAddress, placeResultData, id) {
+    onManualAddressChange(address) {
+      this.addressData = Object.assign({}, address);
+    },
+    googleAddressDataChanged(googleAddress, placeResultData, id) {
       this.convertGoogleAddressToAddress(googleAddress);
       this.addressChanged();
     },

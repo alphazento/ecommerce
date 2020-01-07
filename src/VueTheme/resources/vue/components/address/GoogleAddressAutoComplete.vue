@@ -21,8 +21,7 @@
       </v-btn>
     </div>
     <div v-else>
-      <manual-address-input>
-      </manual-address-input>
+      <manual-address-input @change="onManualAddressChange"></manual-address-input>
       <v-layout>
         <v-btn text color="purple" large @click="toggleAddressInput">Use Google Address Input</v-btn>
       </v-layout>
@@ -50,14 +49,6 @@ export default {
         (v && !this.inputChangedButNotSet) ||
         "Address changed, but any validated address been seleted."
     );
-    data.manualAddress = {
-      address1: "",
-      address2: "",
-      city: "",
-      state: "",
-      country: "",
-      postal_code: ""
-    };
     data.manual_mode = false;
     return data;
   },
@@ -72,6 +63,9 @@ export default {
     },
     toggleAddressInput() {
       this.manual_mode = !this.manual_mode;
+    },
+    onManualAddressChange(address) {
+      this.$emit("manualAddressChanged", address);
     }
   }
 };
