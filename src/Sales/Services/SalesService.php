@@ -10,8 +10,8 @@ use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
 use Zento\Sales\Model\OrderNumberGenerator;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
+use Zento\Sales\Model\ORM\PaymentTransaction;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
-use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class SalesService
 {
@@ -23,7 +23,7 @@ class SalesService
             $order = null;
           }
         }
-
+        $quote = $transaction->quote;
         $order = $order ? $order : SalesOrder::create([
           'order_number' => app(OrderNumberGenerator::class)->generate(0),
           'is_backorder' => 0,

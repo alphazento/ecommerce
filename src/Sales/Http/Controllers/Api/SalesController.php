@@ -23,17 +23,9 @@ class SalesController extends ApiBaseController
       Request::validate([
           'pay_id'=>"required|string|max:32"
       ]);
-      
-      $data = Request::only('pay_id', 'customer_email', 'note', 'shipping_address', 'client_ip', 'guest_checkout');
-      $data['guest_checkout'] = $data['guest_checkout'] ?? Auth::user()->is_guest;
-      $data['client_ip'] = $data['client_ip']?? Request::ip();
+      $pay_id = Request::get('pay_id');
 
-      $eventResult = (new DraftOrderEvent($data['pay_id'], 
-        $data['customer_email'], 
-        $data['shipping_address'],
-        $data['note'] ?? null,
-        $data['guest_checkout'], 
-        $data['client_ip']))->fireUntil();
+      $eventResult = (new DraftOrderEvent($pay_id))->fireUntil();
       if ($eventResult->isSuccess()) {
           (new OrderCreatedEvent($eventResult->getData('order')))->fire();
       }
