@@ -14,14 +14,14 @@ class CreatePaymentTransactionTable extends Migration
     {
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('order_id')->unsigned()->default(0);  //order id
             $table->string('pay_id', 32)->unique(); //payment_method + payment id hash
             $table->string('ext_transaction_id', 255);     //3rd party payment id from method vendor
             $table->string('payment_method', 32);
             $table->string('status', 64);
-            $table->integer('customer_id')->unsign();
+            $table->integer('customer_id')->unsigned();
             $table->string('customer_email', 255)->nullable();
-            $table->integer('shipping_address_id');
-            
+            $table->text('quote')->nullable();
             $table->string('currency', 8);
             $table->decimal('subtotal', 15, 4)->default(0);
             $table->decimal('shipping', 15, 4)->default(0);

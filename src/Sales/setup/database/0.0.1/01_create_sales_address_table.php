@@ -24,6 +24,7 @@ class CreateSalesAddressTable extends Migration
             $table->string('postal_code', 16);
             $table->string('state', 32);
             $table->string('phone', 32)->nullable();
+            $table->string('hash', 32)->unique();
             // $table->boolean('is_active')->default(1);
             $table->timestamps();
 

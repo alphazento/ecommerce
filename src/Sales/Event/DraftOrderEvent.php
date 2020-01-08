@@ -20,7 +20,10 @@ class DraftOrderEvent extends \Zento\Kernel\Booster\Events\BaseEvent {
      * @param  string  $paymentTransaction
      * @return void
      */
-    public function __construct(string $pay_id, $note, $guest_checkout = 1, $client_ip = null)
+    public function __construct(string $pay_id, 
+        $note = null,
+        $guest_checkout = 1, 
+        $client_ip = null)
     {
         $this->data = compact('pay_id', 'note', 'guest_checkout', 'client_ip');
     }

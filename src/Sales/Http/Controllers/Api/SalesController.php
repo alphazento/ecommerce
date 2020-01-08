@@ -20,12 +20,20 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 class SalesController extends ApiBaseController
 {
     public function createOrder() {
-      $pay_id = Request::get('pay_id');
-      $note = Request::get('note', '');
-      $guest_checkout = Request::get('guest_checkout', Auth::user()->is_guest);
-      $client_ip = Request::get('client_ip') ?? Request::ip();
+      Request::validate([
+          'pay_id'=>"required|string|max:32"
+      ]);
+      
+      $data = Request::only('pay_id', 'customer_email', 'note', 'shipping_address', 'client_ip', 'guest_checkout');
+      $data['guest_checkout'] = $data['guest_checkout'] ?? Auth::user()->is_guest;
+      $data['client_ip'] = $data['client_ip']?? Request::ip();
 
-      $eventResult = (new DraftOrderEvent($pay_id, $note, $guest_checkout, $client_ip))->fireUntil();
+      $eventResult = (new DraftOrderEvent($data['pay_id'], 
+        $data['customer_email'], 
+        $data['shipping_address'],
+        $data['note'] ?? null,
+        $data['guest_checkout'], 
+        $data['client_ip']))->fireUntil();
       if ($eventResult->isSuccess()) {
           (new OrderCreatedEvent($eventResult->getData('order')))->fire();
       }

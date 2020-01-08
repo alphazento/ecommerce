@@ -8,6 +8,7 @@
               v-model="addressData.name"
               label="Receiver Full Name"
               @change="addressChanged"
+              :rules="[rules.required, rules.max255]"
             ></v-text-field>
           </v-flex>
 
@@ -16,6 +17,7 @@
               v-model="addressData.phone"
               label="Receiver Phone Number"
               @change="addressChanged"
+              :rules="[rules.required, rules.maxPhone]"
             ></v-text-field>
           </v-flex>
 
@@ -36,7 +38,7 @@
           <v-flex md6 xs12>
             <v-text-field
               v-model="addressData.company"
-              :rules="nameRules"
+              :rules="[rules.max128]"
               label="Company Name(Optional)"
               @change="addressChanged"
             ></v-text-field>
@@ -85,12 +87,12 @@ export default {
       dataChanged: false,
       valid: false,
       addressRules: [v => !!v || "Address is required"],
-      nameRules: [
-        v =>
-          !v ||
-          (v && v.length <= 255) ||
-          "Company Name must be less than 255 characters"
-      ]
+      rules: {
+        required: v => !!v || "Required Field.",
+        max128: v => !v || v.length <= 128 || "Max 128 characters",
+        max255: v => !v || v.length <= 64 || "Max 64 characters",
+        maxPhone: v => !v || v.length <= 15 || "Max 15 characters",
+      }
     };
   },
 

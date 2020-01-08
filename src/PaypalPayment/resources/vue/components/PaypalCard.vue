@@ -33,11 +33,12 @@ export default {
       const cartData = this.reducedCartData();
       axios.post('/api/v1/payment/capture/paypalexpress', {
         version: 'v2',
-        shopping_cart: cartData,
+        quote: cartData,
         payment: response
       }).then(response => {
         axios.post('/api/v1/sales/orders', {
-          pay_id: response.data.data.payment_transaction.pay_id
+          pay_id: response.data.data.payment_transaction.pay_id,
+          quote: cartData
         }).then(response => {
           console.log('order completed', response);
           this.$store.dispatch('showSpinner', "Order placed");
