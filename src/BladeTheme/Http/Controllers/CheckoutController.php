@@ -25,6 +25,9 @@ class CheckoutController extends \App\Http\Controllers\Controller
     }
     
     public function success() {
-        return BladeTheme::view('page.checkout.success');
+        if ($order_number = Request::session()->pull('order_number')) {
+            return BladeTheme::view('page.checkout.success', compact('order_number'));
+        } 
+        return redirect()->to('/');
     }
 }

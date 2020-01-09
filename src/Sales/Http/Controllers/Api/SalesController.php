@@ -27,7 +27,11 @@ class SalesController extends ApiBaseController
 
       $eventResult = (new DraftOrderEvent($pay_id))->fireUntil();
       if ($eventResult->isSuccess()) {
-          (new OrderCreatedEvent($eventResult->getData('order')))->fire();
+        $order = $eventResult->getData('order');
+        (new OrderCreatedEvent($order))->fire();
+        if (Request::hasSession()) {
+          Request::session()->flash('order_number', $order->order_number);
+        }
       }
       return $this->response($eventResult->toArray());
     }

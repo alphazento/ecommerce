@@ -24,7 +24,6 @@ class CreateSalesShipmentTable extends Migration
             $table->decimal('total_weight', 12, 4)->nullable();
             $table->decimal('total_qty', 12, 4)->nullable();
             $table->boolean('can_ship_partially')->default(0);
-            $table->smallInteger('can_ship_partially_item')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')

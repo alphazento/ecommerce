@@ -51,4 +51,8 @@ class Customer extends \Zento\Passport\Model\User
     public function guest() {
         return $this->is_guest;
     }
+
+    public function isApi() {
+        return false;
+    }
 }

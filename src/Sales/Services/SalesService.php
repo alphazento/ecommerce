@@ -52,7 +52,7 @@ class SalesService
 
         $transaction->update(['order_id' => $order->id]);
         $address = SalesAddress::createFromCart($quote);
-        $this->createShipmentRecord($order->id, $customer_id, $address->id);
+        // $this->createShipmentRecord($order->id, $customer_id, $address->id);
         return $order;
     }
     return null;
@@ -61,7 +61,7 @@ class SalesService
   protected function createShipmentRecord($orde_id, $customer_id, $address_id) {
     $shipment = new SalesShipment();
     $shipment->order_id = $orde_id;
-    $shipment->customer_id = $customer_id
+    $shipment->customer_id = $customer_id;
     $shipment->sales_address_id = $address_id;
     $shipment->shipment_status_id = 0;
     $shipment->shipping_carrier_id = 0;

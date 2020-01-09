@@ -124,12 +124,8 @@ Route::group(
             'as' =>'web.get.checkout', 'uses' => 'CheckoutController@index'
         ]);
 
-        Route::post('/checkout/process', [
-            'as' => 'web.post.checkout.process', 'uses' => 'CheckoutController@process'
-        ]);
-
-        Route::post('/checkout/success', [
-            'as' => 'web.post.cart.add.product', 'uses' => 'CheckoutController@success'
+        Route::get('/success', [
+            'as' => 'web.checkout.success', 'uses' => 'CheckoutController@success'
         ]);
     }
 );
@@ -143,6 +139,20 @@ Route::group(
         Route::put(
             '/guest/details',
             ['as' => 'ajax.checkout.put.guest', 'uses' => 'ApiController@putGuestDetails']
+        );
+    }
+);
+
+
+Route::group(
+    [
+        'prefix' => '/ajax/sales',
+        'namespace' => '\Zento\Sales\Http\Controllers\Api',
+        'middleware' => ['web'],
+    ], function () {
+        Route::post(
+            '/orders', 
+            ['as' => 'ajax.post.orders', 'uses' => 'SalesController@createOrder']
         );
     }
 );

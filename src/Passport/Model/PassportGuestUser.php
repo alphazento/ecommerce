@@ -4,7 +4,7 @@ namespace Zento\Passport\Model;
 
 use Illuminate\Support\Str;
 
-class PassportGuestUser extends user {
+class PassportGuestUser extends User {
     public function __construct(array $attrs = []) {
         parent::__construct($attrs);
         $this->is_guest = true;

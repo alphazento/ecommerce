@@ -38,12 +38,16 @@ export default {
         })
         .then(response => {
           axios
-            .post("/api/v1/sales/orders", {
+            .post("/ajax/sales/orders", {
               pay_id: response.data.data.payment_transaction.pay_id
             })
             .then(response => {
-              console.log("order completed", response);
-              this.$store.dispatch("showSpinner", "Order placed");
+              if (response.data.success) {
+                this.$store.dispatch("showSpinner", "Order placed");
+                window.location.href = '/checkout/success';
+              } else {
+                this.$store.dispatch("showSpinner", response.data.message);
+              }
             });
         });
     },

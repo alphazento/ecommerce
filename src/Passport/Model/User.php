@@ -85,4 +85,8 @@ class User extends Authenticatable
     public function guest() {
         return false;
     }
+
+    public function isApi() {
+        return true;
+    }
 }
