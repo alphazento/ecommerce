@@ -21,7 +21,6 @@ class SalesOrderStatus
   const PARTIAL_REFUNED = 12;
 
   public function getOptions() {
-    $i = 1;
     return [
       [
         'label' => 'PENDING',
@@ -52,7 +51,7 @@ class SalesOrderStatus
         'value' => self::READY_4_DISPATCH,
       ], 
       [
-        'label' => 'SENT';
+        'label' => 'SENT',
         'label' => 'DELIVERED',
         'value' => self::SENT,
       ], 
@@ -68,6 +67,6 @@ class SalesOrderStatus
         'label' => 'PARTIAL_REFUNED',
         'value' => self::PARTIAL_REFUNED
       ]
-    ]
+    ];
   }
 }

@@ -10,25 +10,20 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
     protected $fillable = [
-        'order_number',
-        'is_backorder',
-        'invoice_no',
         'store_id',
+        'order_number',
+        'invoice_id',
+        'payment_transaction_id',
         'status_id',
-        'coupon_code',
+        'hold_before_status_id',
+        'amend_from',
+        'resend_from',
+        'is_backorder',
         'customer_id',
-        'guest_checkout', #$cart->customer->isGuest(),
-        'ext_customer_id',
-        'ext_order_id',
         'customer_note',
-        'applied_rule_ids',
-        'remote_ip' ,
-        'total_item_qty',
-        'payment_transaction_id' ,
-        'total_amount_include_tax' ,
-        'base_currency_code' ,
-        'order_currency_code',
-        'base_to_order_currency_rate'
+        'is_guest',
+        'remote_ip',
+        'active'
     ];
     
     public $_richData_ = [
