@@ -23,15 +23,10 @@ class CreatePaymentTransactionTable extends Migration
             $table->string('customer_email', 255)->nullable();
             $table->text('quote')->nullable();
             $table->string('currency', 8);
-            $table->decimal('subtotal', 15, 4)->default(0);
-            $table->decimal('shipping', 15, 4)->default(0);
-            $table->decimal('total', 15, 4)->default(0);
-
             $table->decimal('amount_due', 15, 4)->default(0);
             $table->decimal('amount_authorized', 15, 4)->default(0);
             $table->decimal('amount_paid', 15, 4)->default(0);
-            $table->decimal('amount_refunded', 15, 4)->default(0);
-            $table->decimal('amount_canceled', 15, 4)->default(0);
+            $table->boolean('is_refund')->default(0);
             $table->timestamps();
         });
     }

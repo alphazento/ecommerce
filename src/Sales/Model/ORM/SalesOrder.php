@@ -13,7 +13,6 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
         'store_id',
         'order_number',
         'invoice_id',
-        'payment_transaction_id',
         'status_id',
         'hold_before_status_id',
         'amend_from',
@@ -23,15 +22,18 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
         'customer_note',
         'is_guest',
         'remote_ip',
-        'active'
+        'active',
+        'subtotal',
+        'total',
+        'tax_amount'
     ];
     
     public $_richData_ = [
-        'payment',
+        'shipment'
     ];
 
-    public function payment() {
-        return $this->hasOne(SalesOrderPayment::class, 'order_id');
+    public function payments() {
+        return $this->hasMany(SalesOrderPayment::class, 'order_id');
     }
 
     public function shipment() {

@@ -12,10 +12,9 @@ class CreateSalesShipmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_order_shipments', function (Blueprint $table) {
+        Schema::create('sales_shipments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
-            $table->integer('customer_id')->unsigned();
             $table->integer('sales_address_id')->unsigned();
             $table->integer('shipping_carrier_id')->unsigned()->nullable();
             $table->integer('shipping_method_id')->unsigned()->nullable();
@@ -29,10 +28,6 @@ class CreateSalesShipmentTable extends Migration
             $table->foreign('order_id')
                 ->references('id')
                 ->on('sales_orders');
-            
-            $table->foreign('customer_id')
-                ->references('id')
-                ->on('customers');
             
             $table->foreign('sales_address_id')
                 ->references('id')
@@ -48,6 +43,6 @@ class CreateSalesShipmentTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sales_order_shipments');
+        Schema::drop('sales_shipments');
     }
 }

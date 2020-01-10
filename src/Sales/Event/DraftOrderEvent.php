@@ -7,7 +7,8 @@ use Zento\Contracts\Interfaces\IPaymentTransaction;
 
 class DraftOrderEvent extends \Zento\Kernel\Booster\Events\BaseEvent {
     const HAS_ATTRS = [
-        'pay_id'
+        'pay_id',
+        'transaction'
     ];
 
     /**
@@ -17,8 +18,8 @@ class DraftOrderEvent extends \Zento\Kernel\Booster\Events\BaseEvent {
      * @param  string  $paymentTransaction
      * @return void
      */
-    public function __construct(string $pay_id)
+    public function __construct(string $pay_id, $transaction)
     {
-        $this->data = compact('pay_id');
+        $this->data = compact('pay_id', 'transaction');
     }
 }

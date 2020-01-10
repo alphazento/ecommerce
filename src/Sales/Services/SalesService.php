@@ -25,6 +25,8 @@ class SalesService
         if ($order = $transaction->order) {
           if (!$order->active) {
             $order = null;
+          } else {
+            return $order;
           }
         }
         $quote = $transaction->quote;
@@ -35,11 +37,10 @@ class SalesService
           $customer_id = $customer->id;
           $is_guest = 1;
         }
-        $order = $order ? $order : SalesOrder::create([
+        $order = SalesOrder::create([
           'store_id' => ShareBucket::get('store_id', 0),
           'order_number' => app(OrderNumberGenerator::class)->generate(0),
           'invoice_id' => 0,
-          'payment_transaction_id' => $transaction->id,
           'status_id' => SalesOrderStatus::PENDING,
           'is_backorder' => $is_backorder,
           // 'amend_from',
@@ -47,12 +48,14 @@ class SalesService
           'customer_id' => $customer_id,
           'customer_note' => '',
           'is_guest' => $is_guest,
-          'remote_ip' => $quote->client_ip ?? Request::ip()
-        ]);
-
+          'remote_ip' => $quote->client_ip ?? Request::ip(),
+          'subtotal' => $quote->subtotal,
+          'total' => $quote->total,
+          'tax_amount' => $quote->tax_amount,
+          ]);
         $transaction->update(['order_id' => $order->id]);
         $address = SalesAddress::createFromCart($quote);
-        // $this->createShipmentRecord($order->id, $customer_id, $address->id);
+        $this->createShipmentRecord($order->id, $customer_id, $address ? $address->id : 0);
         return $order;
     }
     return null;
@@ -61,7 +64,6 @@ class SalesService
   protected function createShipmentRecord($orde_id, $customer_id, $address_id) {
     $shipment = new SalesShipment();
     $shipment->order_id = $orde_id;
-    $shipment->customer_id = $customer_id;
     $shipment->sales_address_id = $address_id;
     $shipment->shipment_status_id = 0;
     $shipment->shipping_carrier_id = 0;

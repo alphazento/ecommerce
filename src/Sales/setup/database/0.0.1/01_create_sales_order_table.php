@@ -17,7 +17,6 @@ class CreateSalesOrderTable extends Migration
             $table->integer('store_id')->unsigned();
             $table->string('order_number', 16);
             $table->integer('invoice_id')->unsigned()->default(0);
-            $table->integer('payment_transaction_id')->unsigned();
             $table->integer('status_id')->unsigned();
             $table->integer('hold_before_status_id')->unsigned()->default(0);
             $table->integer('amend_from')->unsigned()->default(0);   //when customer need to amend order, origin order set active = 0
@@ -28,12 +27,11 @@ class CreateSalesOrderTable extends Migration
             $table->boolean('is_guest')->default(1);
             $table->string('remote_ip', 45)->nullable();
             $table->boolean('active')->default(1);
+            $table->decimal('subtotal', 8, 2)->unsigned()->default(0);
+            $table->decimal('tax_amount', 8, 2)->default(0);
+            $table->decimal('total', 8, 2)->unsigned()->default(0);
             $table->timestamps();
 
-            $table->foreign('payment_transaction_id')
-                ->references('id')
-                ->on('payment_transactions');
-            
             $table->foreign('customer_id')
                 ->references('id')
                 ->on('customers');

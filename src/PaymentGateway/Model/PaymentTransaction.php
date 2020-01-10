@@ -33,14 +33,9 @@ class PaymentTransaction extends \Illuminate\Database\Eloquent\Model implements 
             'customer_id' => $quote->customer_id, 
             'customer_email' => $quote->email, 
             'currency' => $quote->currency,
-            'subtotal' => $quote->subtotal,
-            'shipping' => $quote->shipping_fee,
-            'total' =>$quote->total,
             'amount_due' => $quote->total,
             'amount_authorized' => $authorized_amount,
             'amount_paid' => $paid_amount, 
-            'amount_refunded' => 0,
-            'amount_canceled' => 0,
         ];
         $transaction = new static($data);
         $payId = $transaction->genPayId();
@@ -50,7 +45,7 @@ class PaymentTransaction extends \Illuminate\Database\Eloquent\Model implements 
         $transaction->quote = json_encode($quote->toArray()); 
         $transaction->pay_id = $payId; 
         $transaction->save();
-        PaymentTransactionItem::createItemsFromCart($quote, $transaction->id);
+        // PaymentTransactionItem::createItemsFromCart($quote, $transaction->id);
         return $transaction;
     }
 }

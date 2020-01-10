@@ -8,10 +8,10 @@ use Zento\Kernel\Booster\Database\Eloquent\QueryFilter;
 class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
 {
     public $_richData_ = [
-        'payment',
-        'status',
+        'payments',
         'status_history',
         'customer',
+        'shipment',
         'admin_comments.administrator'
     ];
 
