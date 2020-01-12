@@ -11,6 +11,8 @@ use Zento\Customer\Model\ORM\Customer;
 use Zento\Sales\Model\ORM\SalesOrder;
 use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
+use Zento\Sales\Model\ORM\SalesOrderProduct;
+use Zento\Sales\Model\ORM\SalesOrderItem;
 use Zento\Sales\Model\OrderNumberGenerator;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
 use Zento\Sales\Model\ORM\PaymentTransaction;
@@ -56,6 +58,9 @@ class SalesService
         $transaction->update(['order_id' => $order->id]);
         $address = SalesAddress::createFromCart($quote);
         $this->createShipmentRecord($order->id, $customer_id, $address ? $address->id : 0);
+
+        SalesOrderProduct::recordProductsFromOrderQuote($order_id, $quote);
+        SalesOrderItem::recordItemsFromOrderQuote($order_id, $quote);
         return $order;
     }
     return null;
@@ -71,4 +76,5 @@ class SalesService
     $shipment->shipment_instruction = '';
     $shipment->save();
   }
+
 }

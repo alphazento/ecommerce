@@ -62,7 +62,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                         [
                             'text' => 'Shipment',
-                            'ui' => 'z-label',
+                            'ui' => 'z-orders-shipment-details',
                             'value' => 'order_items',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,

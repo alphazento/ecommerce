@@ -29,14 +29,13 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     ];
     
     public $_richData_ = [
-        'shipment'
     ];
 
     public function payments() {
-        return $this->hasMany(SalesOrderPayment::class, 'order_id');
+        return $this->hasMany(PaymentTransaction::class, 'order_id');
     }
 
-    public function shipment() {
-        return $this->hasOne(SalesShipment::class, 'order_id');
+    public function shipments() {
+        return $this->hasMany(SalesShipment::class, 'order_id');
     }
 }

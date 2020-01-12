@@ -12,8 +12,8 @@ class SalesShipment extends \Illuminate\Database\Eloquent\Model
     protected $fillable = ['order_id'];
     public $_richData_ = [
         'address',
-        'carrier',
-        'method',
+        // 'carrier',
+        // 'method',
     ];
 
     public function address() {

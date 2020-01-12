@@ -1,7 +1,7 @@
 <?php
 return [
     "Zento_Sales"=> [
-        "version"=> "0.0.2",
+        "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
             "\\Zento\\Sales\\Providers\\Entry"

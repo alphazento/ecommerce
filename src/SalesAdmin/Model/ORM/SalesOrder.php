@@ -11,7 +11,7 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
         'payments',
         'status_history',
         'customer',
-        'shipment',
+        'shipments',
         'admin_comments.administrator'
     ];
 
