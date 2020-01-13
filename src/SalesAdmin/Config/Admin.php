@@ -54,7 +54,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                         [
                             'text' => 'Order Detail',
-                            'ui' => 'z-label',
+                            'ui' => 'z-orders-details-column',
                             'value' => 'order_detail',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,

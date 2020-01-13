@@ -47,6 +47,11 @@ export default {
       });
       return total > 0;
     }
+  },
+  watch: {
+    extraData(nV, oV) {
+      this.payments = this.extraData.payments ? this.extraData.payments : [];
+    }
   }
 };
 </script>

@@ -25,6 +25,11 @@ export default {
     return {
       shipments: this.extraData.shipments ? this.extraData.shipments : []
     };
+  },
+  watch: {
+    extraData(nV, oV) {
+      this.shipments = this.extraData.shipments ? this.extraData.shipments : [];
+    }
   }
 };
 </script>

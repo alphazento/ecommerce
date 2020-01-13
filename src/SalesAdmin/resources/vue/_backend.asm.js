@@ -7,6 +7,7 @@ export default {
         "z-orders-number-and-log-column": "components/columns/OrderNumberAndLog.vue",
         "z-orders-status-action-column": "components/columns/StatusAction.vue",
         "z-orders-shipment-details": "components/columns/ShipmentDetails.vue",
+        "z-orders-details-column": "components/columns/OrderDetail.vue",
         "z-admin-comment-dialog-body": "components/dialogbody/AdminComment.vue",
     },
     routes: [{

@@ -38,4 +38,12 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     public function shipments() {
         return $this->hasMany(SalesShipment::class, 'order_id');
     }
+
+    public function products() {
+        return $this->hasMany(SalesOrderProduct::class, 'order_id');
+    }
+
+    public function items() {
+        return $this->hasMany(SalesOrderItem::class, 'order_id');
+    }
 }

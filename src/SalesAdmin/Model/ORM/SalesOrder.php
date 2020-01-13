@@ -12,7 +12,9 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
         'status_history',
         'customer',
         'shipments',
-        'admin_comments.administrator'
+        'admin_comments.administrator',
+        'products',
+        'items'
     ];
 
     public function customer() {
