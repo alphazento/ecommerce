@@ -28,9 +28,10 @@ class SalesOrderProduct extends \Illuminate\Database\Eloquent\Model
     public static function recordProductsFromOrderQuote($order_id, $quote) {
         foreach($quote->items ?? [] as $item) {
             $data = $item->toArray();
+            $data['options'] = isset($data['options']) ? json_encode($data['options']) : '';
             $data = Arr::except($data, ['id', 'cart_id']);
             $data['order_id'] = $order_id;
-            $data['actuals'] = $actuals;
+            $data['actuals'] = isset($data['actuals']) ? json_encode($data['actuals']) : '';
             static::create($data);
         }
     }

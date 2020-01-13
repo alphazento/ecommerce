@@ -25,11 +25,7 @@ class SalesService
     if ($transaction = PaymentTransaction::where('pay_id', '=', $pay_id)->first()) {
         $quote = $transaction->quote;
         if ($order = $transaction->order) {
-          if (!$order->active) {
-            $order = null;
-          } else {
-            return $order;
-          }
+          // return $order;
         }
         $quote = $transaction->quote;
         $customer_id = $quote->customer_id;
@@ -59,8 +55,8 @@ class SalesService
         $address = SalesAddress::createFromCart($quote);
         $this->createShipmentRecord($order->id, $customer_id, $address ? $address->id : 0);
 
-        SalesOrderProduct::recordProductsFromOrderQuote($order_id, $quote);
-        SalesOrderItem::recordItemsFromOrderQuote($order_id, $quote);
+        SalesOrderProduct::recordProductsFromOrderQuote($order->id, $quote);
+        SalesOrderItem::recordItemsFromOrderQuote($order->id, $quote);
         return $order;
     }
     return null;

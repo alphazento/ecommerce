@@ -23,6 +23,7 @@ class CreateSalesOrderProductTable extends Migration
             $table->smallInteger('quantity');
             $table->boolean('shippable');
             $table->boolean('taxable');
+            $table->decimal('unit_price', 8, 2);
             $table->decimal('row_price', 8, 2);
             $table->decimal('refund', 8, 2)->default(0);
             $table->string('actuals', 512);
