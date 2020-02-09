@@ -2,13 +2,19 @@
 
 namespace Zento\Catalog\Config;
 
+use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
-
+        AdminDashboardService::registerRootLevelMenuNode('Catalog', 'Catalog', 'mdi-warehouse');
+        AdminDashboardService::registerL1MenuNode('Catalog', 'Category', 'Category', 
+            'mdi-settings', '/admin/catalog/category');
+        AdminDashboardService::registerL1MenuNode('Catalog', 'Product', 'Product', 
+            'mdi-settings', '/admin/catalog/product');
     }
+
     public function registerConfigMenus() {
     }
 
@@ -206,6 +212,70 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                         'items' => $items
                     ]);
             }
+        };
+
+        $groups['tables/category'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'table',  [
+                'title' => 'Product Table Definition',
+                'items' => [
+                    'headers' => [
+                        [
+                            'text' => 'ID',
+                            'ui' => 'z-label',
+                            'value' => 'id',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true
+                        ],
+                        [
+                            'text' => 'SKU',
+                            'ui' => 'z-label',
+                            'value' => 'sku',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ],
+                        [
+                            'text' => 'Name',
+                            'ui' => 'z-label',
+                            'value' => 'name',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ]
+                    ],
+                    'primary_key' => 'id',
+                ]
+            ]);
+        };
+
+        $groups['tables/product'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'table',  [
+                'title' => 'Product Table Definition',
+                'items' => [
+                    'headers' => [
+                        [
+                            'text' => 'ID',
+                            'ui' => 'z-label',
+                            'value' => 'id',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true
+                        ],
+                        [
+                            'text' => 'SKU',
+                            'ui' => 'z-label',
+                            'value' => 'sku',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ],
+                        [
+                            'text' => 'Name',
+                            'ui' => 'z-label',
+                            'value' => 'name',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ]
+                    ],
+                    'primary_key' => 'id',
+                ]
+            ]);
         };
     }
 

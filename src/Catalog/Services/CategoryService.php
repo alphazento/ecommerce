@@ -122,6 +122,13 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
 		}
 		return $tree;
     }
+
+    public function treeConfigs() {
+        return [
+            'level_from' => $this->treeLevelFrom,
+            'level_to'=> $this->treeMaxLevel + $this->treeLevelFrom - 1,
+        ];
+    }
     
     /**
      * get a category's name

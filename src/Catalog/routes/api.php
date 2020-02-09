@@ -54,6 +54,11 @@ Route::group(
         );
 
         Route::get(
+            '/products', 
+            ['as' => 'admin.get.products', 'uses' => 'CatalogController@products']
+        );
+
+        Route::get(
             '/products/{id}', 
             ['as' => 'admin.get.product', 'uses' => 'CatalogController@product']
         );

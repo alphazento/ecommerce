@@ -22,7 +22,8 @@ class CatalogController extends ApiBaseController
 {
     public function categoriesTree() {
         $all = Request::get('all', false);
-        return $this->withData(CategoryService::tree(!$all));
+        $tree = CategoryService::tree(!$all);
+        return $this->with('tree_conf',CategoryService::treeConfigs())->withData($tree);
     }
 
     public function categories() {

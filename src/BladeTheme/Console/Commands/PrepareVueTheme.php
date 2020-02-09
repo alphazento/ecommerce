@@ -36,6 +36,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
     public function handle() {
         $packageConfigs = PackageManager::loadPackagesConfigs();
+        PackageManager::rebuildPackages();
         foreach($packageConfigs ?? [] as $name => $packageConfig) {
             if ($assembly = PackageManager::assembly($name)) {
                 if ($assembly['vuetheme_type'] ?? false) {
@@ -64,7 +65,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->genRegisterComponentSupportFile();
         
         $this->info(sprintf('Theme package [%s] found:', $themeName));
-        $this->info('   Please run command to compile:');
+        $this->info('  Please run command to compile:');
         // $this->warn(sprintf('    npm run dev "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
         // $this->warn(sprintf('    npm run prod "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
         // $this->warn(sprintf('    npm run watch "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
@@ -74,6 +75,9 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->warn(sprintf('    npm run prod "\'--theme=%s\'"', $themeName)); 
         $this->warn(sprintf('    npm run watch "\'--theme=%s\'"', $themeName)); 
         $this->warn(sprintf('    npm run hot "\'--theme=%s\'"', $themeName)); 
+
+        $this->info('  Loaded Packages:');
+        $this->line(sprintf('    %s', implode(', ', array_keys($this->mergedPackages))));
     }
 
     protected function mergeVueComponentPackageConfig() {
@@ -113,7 +117,7 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
     }
 
     protected function _mergeThemePackageConfig($packageName, $assembly, $packageConfig) {
-        $this->mergedPackages['packageName'] = true;
+        $this->mergedPackages[$packageName] = true;
         if ($file = PackageManager::packagePath($packageName, ['resources', 'vue'])) {
             if (file_exists($file)) {
                 $aliasValue = substr($file, strlen(base_path()) + 1);
@@ -145,7 +149,11 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
                             $exNpmPackages = json_decode(file_get_contents($file), true);
                             foreach($exNpmPackages as $npmPackage) {
                                 $this->info(sprintf("install [%s] depends npm package %s", $packageName, $npmPackage));
-                                exec(sprintf('cd %s && npm i %s',base_path(), $npmPackage));
+                                if ($this->command_exist('npm')) {
+                                    exec(sprintf('cd %s && npm i %s',base_path(), $npmPackage));
+                                } else {
+                                    $this->error('npm command is not found.');
+                                }
                             }
                         }
                     }
@@ -153,6 +161,11 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
                 
             }
         }
+    }
+
+    protected function command_exist($cmd) {
+        $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+        return !empty($return);
     }
 
     protected function genWebpackMixJs() {

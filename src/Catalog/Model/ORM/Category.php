@@ -73,4 +73,10 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function getUrlAttribute() {
         return sprintf('/%s.html', $this->url_key);
     }
+
+    public function toArray() {
+        $data = parent::toArray();
+        $data['name'] = $this->name;
+        return $data;
+    }
 }
