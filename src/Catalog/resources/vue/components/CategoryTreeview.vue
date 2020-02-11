@@ -31,7 +31,7 @@
             <v-icon>mdi-plus-circle</v-icon>
           </v-btn>
           <v-btn icon v-if="item.level >= tree_conf.level_from" @click="editCategory(item)">
-            <v-icon>mdi-settings</v-icon>
+            <v-icon>mdi-pencil-box-multiple-outline</v-icon>
           </v-btn>
         </template>
       </v-treeview>
@@ -85,20 +85,11 @@ export default {
       });
     },
     addCategory(item) {
-      console.log("addCategory clicked.", item);
+      this.$emit("categoryChanged", { mode: "new", item: item });
     },
     editCategory(item) {
-      console.log("editCategory clicked.", item);
+      this.$emit("categoryChanged", { mode: "edit", item: item });
     }
-
-    // axios
-    //             .get(`/api/v1/admin/configs/groups/${groupName}`)
-    //             .then(response => {
-    //                 this.$store.dispatch("hideSpinner");
-    //                 if (response.data && response.data.success) {
-    //                     this.groupData = response.data.data;
-    //                 }
-    //             });
   },
   mounted() {
     this.fetchCategories();

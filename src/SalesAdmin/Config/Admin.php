@@ -10,7 +10,7 @@ class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Sales', 'Sales', 'mdi-store');
         AdminDashboardService::registerL1MenuNode('Sales', 'Orders', 'Orders', 
-            'mdi-settings', '/admin/sales_orders');
+            'mdi-file-table-box-multiple', '/admin/sales_orders');
     }
 
     public function registerConfigMenus() {

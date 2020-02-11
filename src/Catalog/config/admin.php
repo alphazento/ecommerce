@@ -10,9 +10,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Catalog', 'Catalog', 'mdi-warehouse');
         AdminDashboardService::registerL1MenuNode('Catalog', 'Category', 'Category', 
-            'mdi-settings', '/admin/catalog/category');
+            'mdi-sitemap', '/admin/catalog/category');
         AdminDashboardService::registerL1MenuNode('Catalog', 'Product', 'Product', 
-            'mdi-settings', '/admin/catalog/product');
+            'mdi-shape', '/admin/catalog/product');
     }
 
     public function registerConfigMenus() {
@@ -23,7 +23,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'title' => 'Category Name',
                 'ui' => 'config-text-item',
-                'accessor' => 'name'
+                'accessor' => 'desc.name'
             ];
             $items[] = [
                 'title' => 'Enable Category',
@@ -59,13 +59,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 }
             }
             
-            AdminConfigurationService::registerGroup($groupTag, 'category',  [
-                'title' => 'Category Settings',
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
+                'title' => 'Basic Settings',
                 'items' => $items
             ]);
             foreach($itemsGroups as $group => $items) {
-                AdminConfigurationService::registerSubgroupToGroup($groupTag, 
-                    'category', 
+                AdminConfigurationService::registerGroup($groupTag, 
                     md5($group), 
                     [
                         'title' => $group,

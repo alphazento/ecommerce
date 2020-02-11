@@ -12,7 +12,7 @@ class Admin extends AbstractAdminConfig {
         AdminDashboardService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
             'mdi-settings', '/admin/store-configurations');
         AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
-            'mdi-settings', '/admin/store-dynamic-attributes');
+            'mdi-contain', '/admin/store-dynamic-attributes');
     }
 
     public function registerConfigMenus() {
@@ -125,28 +125,32 @@ class Admin extends AbstractAdminConfig {
                         'editable' => true,
                         'options' => [
                             [
-                                'value' => 'Text',
-                                'label' => 'Text'
+                                'value' => 'config-text-item',
+                                'label' => 'config-text-item'
                             ],
                             [
-                                'value' => 'LongText',
-                                'label' => 'LongText'
+                                'value' => 'config-longtext-item',
+                                'label' => 'config-longtext-item',
                             ],
                             [
-                                'value' => 'SelectBox',
-                                'label' => 'SelectBox'
+                                'value' => 'config-options-item',
+                                'label' => 'config-options-item',
                             ],
                             [
-                                'value' => 'MultiSelectBox',
-                                'label' => 'MultiSelectBox'
+                                'value' => 'config-multi-options-item',
+                                'label' => 'config-multi-options-item',
                             ],
                             [
-                                'value' => 'Switch',
-                                'label' => 'Switch'
+                                'value' => 'config-boolean-item',
+                                'label' => 'config-boolean-item',
                             ],
                             [
-                                'value' => 'Image',
-                                'label' => 'Image'
+                                'value' => 'config-date-item',
+                                'label' => 'config-date-item',
+                            ],
+                            [
+                                'value' => 'config-image-uploader-item',
+                                'label' => 'config-image-uploader-item',
                             ],
                         ]
                     ],

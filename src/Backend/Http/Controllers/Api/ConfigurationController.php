@@ -35,17 +35,18 @@ class ConfigurationController extends ApiBaseController
             }
         }
         if ($groups = AdminConfigurationService::getDetailGroup($key)) {
-            return $this->getGroupValues($groups);
+            $withValue = Request::get('withValue');
+            return $this->getGroupValues($groups, $withValue);
         } else {
             return $this->error(404, 'group not found.');
         }
     }
 
-    protected function getGroupValues(&$groups) {
+    protected function getGroupValues(&$groups, $withValue) {
         foreach($groups as $name => &$group) {
             if ($group['items'] ?? false) {
                 foreach($group['items'] as &$item) {
-                    if ($accessor = $item['accessor'] ?? false) {
+                    if ($withValue && ($accessor = $item['accessor'] ?? false)) {
                         $item['value'] = config($accessor);
                         if ($item['value'] === null && isset($item['defaultValue'])) {
                             $item['value'] = $item['defaultValue'];
@@ -56,7 +57,7 @@ class ConfigurationController extends ApiBaseController
             if ($group['subgroups'] ?? false) {
                 foreach($group['subgroups'] as &$subgroups) {
                     foreach($subgroups['items'] ?? [] as &$item) {
-                        if ($accessor = $item['accessor'] ?? false) {
+                        if ($withValue && ($accessor = $item['accessor'] ?? false)) {
                             $item['value'] = config($accessor);
                             if ($item['value'] === null && isset($item['defaultValue'])) {
                                 $item['value'] = $item['defaultValue'];
