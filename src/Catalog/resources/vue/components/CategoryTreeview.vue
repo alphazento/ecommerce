@@ -18,19 +18,33 @@
         :search="search"
         :filter="filter"
         :open.sync="open"
-        activatable
+        :active="active"
+        item-key="id"
         rounded
         hoverable
-        color="warning"
+        open-on-click
       >
         <template v-slot:prepend="{ item, open }">
           <v-icon>{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
         </template>
+        <template v-slot:label="{ item }">
+          <span>{{item.name}}(id:{{item.id}})</span>
+        </template>
         <template v-slot:append="{ item }">
-          <v-btn icon v-if="item.level < tree_conf.level_to" @click="addCategory(item)">
+          <v-btn
+            color="error"
+            icon
+            v-if="item.level < tree_conf.level_to && (selected_item.id !== item.id || selected_item.mode !== 'new')"
+            @click="addCategory(item)"
+          >
             <v-icon>mdi-plus-circle</v-icon>
           </v-btn>
-          <v-btn icon v-if="item.level >= tree_conf.level_from" @click="editCategory(item)">
+          <v-btn
+            color="primary"
+            icon
+            v-if="item.level >= tree_conf.level_from && (selected_item.id !== item.id || selected_item.mode !== 'edit')"
+            @click="editCategory(item)"
+          >
             <v-icon>mdi-pencil-box-multiple-outline</v-icon>
           </v-btn>
         </template>
@@ -48,6 +62,10 @@ export default {
     },
     extraData: {
       remote_ip: String
+    },
+    selectedItem: {
+      mode: String,
+      id: Number
     }
   },
   data() {
@@ -61,16 +79,23 @@ export default {
         }
       ],
       tree_conf: {
-        level_from: 0,
+        level_from: 3,
         level_to: 3
       },
       open: [1],
-      search: null
+      search: null,
+      selected_item: this.selectedItem
+        ? this.selectedItem
+        : { mode: "", id: -1 }
     };
   },
   computed: {
     filter() {
-      return (item, search, textKey) => item[textKey].indexOf(search) > -1;
+      return (item, search, textKey) =>
+        item[textKey].toLowerCase().indexOf(search.toLowerCase()) > -1;
+    },
+    active() {
+      return [this.selected_item.id];
     }
   },
   methods: {
@@ -85,14 +110,27 @@ export default {
       });
     },
     addCategory(item) {
-      this.$emit("categoryChanged", { mode: "new", item: item });
+      this.emitCategoryChanged(item, "new");
     },
     editCategory(item) {
-      this.$emit("categoryChanged", { mode: "edit", item: item });
+      this.emitCategoryChanged(item, "edit");
+    },
+
+    emitCategoryChanged(item, mode) {
+      let data = {
+        mode: mode,
+        item: item
+      };
+      this.$emit("categoryChanged", data);
     }
   },
   mounted() {
     this.fetchCategories();
+  },
+  watch: {
+    selectedItem(nV) {
+      this.selected_item = nV;
+    }
   }
 };
 </script>

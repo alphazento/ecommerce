@@ -5,13 +5,13 @@
     </v-card-title>
     <v-layout>
       <v-flex md3>
-        <category-treeview @categoryChanged="categoryChanged"></category-treeview>
+        <category-treeview :selected-item="seletedTreeviewItem" @categoryChanged="categoryChanged"></category-treeview>
       </v-flex>
       <v-flex md8>
         <v-card v-if="mode !== ''">
           <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
             <span v-if="mode==='new'">New Category of [{{parentCategory.name}}]</span>
-            <span v-else>Category[{{category.desc.name}}]</span>
+            <span v-else>{{category.desc.name}}</span>
             <v-spacer></v-spacer>
             <v-btn color="primary" fab dark large v-if="dirty">
               <v-icon dark>mdi-content-save</v-icon>
@@ -41,6 +41,10 @@ export default {
       mode: "",
       dirty: false,
       category: {},
+      seletedTreeviewItem: {
+        mode: "",
+        id: -1
+      },
       mergedData: {},
       originConfigs: {},
       parentCategory: {}
@@ -110,11 +114,6 @@ export default {
     handleConfirm(result) {
       if (result.success) {
         this.mergeCategoryData(result.data);
-        // this.mode = result.data.mode;
-        // this.category = JSON.parse(JSON.stringify(result.data.item));
-        // this.dirty = false;
-        // this.bindCategoryValues(this.mergedData);
-        // this.mergedData = Object.assign({}, this.mergedData);
       }
     },
     mergeCategoryData(data) {
@@ -129,6 +128,8 @@ export default {
       this.bindCategoryValues(this.mergedData);
       this.mergedData = Object.assign({}, this.mergedData);
       this.dirty = false;
+      this.seletedTreeviewItem.mode = data.mode;
+      this.seletedTreeviewItem.id = data.item.id;
     },
     configValueChanged(item) {
       this.dirty = true;

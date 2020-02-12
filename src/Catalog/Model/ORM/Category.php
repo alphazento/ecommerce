@@ -52,7 +52,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     }
     
     /**
-     * Scope a query to only include active users.
+     * Scope a query to only include active.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
