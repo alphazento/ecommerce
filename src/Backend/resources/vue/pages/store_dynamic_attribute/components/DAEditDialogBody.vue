@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-title class="headline">
-      <span v-if="item.id > 0">Edit Attribute for {{item.parent_table}}</span>
-      <span v-else>New Attribute for {{item.parent_table}}</span>
+      <span v-if="item.id > 0">Edit Attribute for {{itemCopy.parent_table}}</span>
+      <span v-else>New Attribute for {{itemCopy.parent_table}}</span>
     </v-card-title>
 
     <v-card-text>
@@ -20,9 +20,7 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-
       <v-btn color="green darken-1" text @click="closeDialog(false)">Disard</v-btn>
-
       <v-btn color="green darken-1" text @click="saveData">Save</v-btn>
     </v-card-actions>
   </v-card>
@@ -49,7 +47,7 @@ export default {
       configs: {},
       components: [],
       dataChanged: false,
-      itemCopy: null
+      itemCopy: {}
     };
   },
   methods: {
@@ -63,6 +61,7 @@ export default {
         let config = this.configs[key];
         if (config !== undefined) {
           components.push({
+            idx: components.length,
             ui: isNew || config["editable"] ? config["edit_ui"] : config["ui"],
             accessor: config["value"],
             options: config["options"],
@@ -77,17 +76,26 @@ export default {
     },
     configValueChanged(item) {
       this.dataChanged = true;
+      this.components[item.idx].value = item.value;
+      this.components = JSON.parse(JSON.stringify(this.components));
       this.itemCopy[item.accessor] = item.value;
     },
     saveData() {
       let id = this.itemCopy.id;
+      this.$store.dispatch("showSpinner", "Saving data...");
       if (id > 0) {
         axios
           .patch(`/api/v1/admin/dynamicattributes/${id}`, {
             attributes: this.itemCopy
           })
           .then(response => {
-            console.log("saveData", response);
+            this.$store.dispatch("hideSpinner");
+            if (response.data.success) {
+              this.$store.dispatch("keepSpinner", "Dynamic Attribute Saved.");
+              this.closeDialog(true);
+            } else {
+              this.$store.dispatch("keepSpinner", response.data.message);
+            }
           });
       } else {
         axios
@@ -95,7 +103,12 @@ export default {
             attributes: this.itemCopy
           })
           .then(response => {
-            console.log("saveData", response);
+            if (response.data.success) {
+              this.$store.dispatch("keepSpinner", "Dynamic Attribute Saved.");
+              this.closeDialog(true);
+            } else {
+              this.$store.dispatch("keepSpinner", response.data.message);
+            }
           });
       }
     }

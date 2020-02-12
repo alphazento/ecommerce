@@ -1,21 +1,12 @@
 <script>
 export default {
   props: {
-    accessor: {
-      type: String
-    },
-    title: {
-      type: String
-    },
-    ui: {
-      type: String
-    },
-    value: {
-      type: String | Number
-    },
-    options: {
-      type: Array
-    }
+    idx: String | Number, //it's optional
+    accessor: String,
+    title: String,
+    ui: String,
+    value: String | Number,
+    options: Array
   },
   data() {
     return {
@@ -33,7 +24,8 @@ export default {
         this.$emit("valueChanged", {
           accessor: this.accessor,
           value: this.getValue(),
-          is_json: this.is_json
+          is_json: this.is_json,
+          idx: this.idx
         });
       }
       this.oldVal = this.innerValue;

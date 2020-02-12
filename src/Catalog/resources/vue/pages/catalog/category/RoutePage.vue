@@ -11,7 +11,7 @@
         <v-card v-if="mode !== ''">
           <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
             <span v-if="mode==='new'">New Category of [{{parentCategory.name}}]</span>
-            <span v-else>{{category.desc.name}}</span>
+            <span v-else>{{category.name}}</span>
             <v-spacer></v-spacer>
             <v-btn color="primary" fab dark large v-if="dirty">
               <v-icon dark>mdi-content-save</v-icon>

@@ -23,7 +23,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'title' => 'Category Name',
                 'ui' => 'config-text-item',
-                'accessor' => 'desc.name'
+                'accessor' => 'name'
             ];
             $items[] = [
                 'title' => 'Enable Category',

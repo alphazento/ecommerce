@@ -17,6 +17,7 @@ class CreateCategoryTable extends Migration
     {
         $this->getBuilder()->create('categories', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 255)->index();
             $table->integer('attribute_set_id')->unsigned();
             $table->integer('parent_id')->unsigned();
             $table->string('path', 255)->index();

@@ -10,13 +10,8 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
  
     public $_richData_ = [
-        'desc',
         'children'
     ];
-
-    public function desc() {
-        return $this->hasOne(CategoryDescription::class, 'category_id');
-    }
 
     public function children() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
@@ -35,7 +30,6 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function parents() {
         $instance = $this->newRelatedInstance(Category::class);
         return (new HasManyInAggregatedField($instance->newQuery(), $this, $instance->getTable() . '.id',  'path'))
-            ->with('desc')
             ->orderBy('level')
             ->whereInAggregatedField(function($field) {
                 $data = explode('/', $field);
@@ -62,21 +56,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
         return $query->whereIn('is_active', $activeOnly ? [1]:[0,1]);
     }
 
-    public function getNameAttribute() {
-        return $this->desc->name ?? '';
-    }
-
-    public function getDescriptionAttribute() {
-        return $this->desc->description ?? '';
-    }
-
     public function getUrlAttribute() {
         return sprintf('/%s.html', $this->url_key);
-    }
-
-    public function toArray() {
-        $data = parent::toArray();
-        $data['name'] = $this->name;
-        return $data;
     }
 }
