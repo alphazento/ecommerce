@@ -71,7 +71,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
                         continue;
                     }
 
-                    $attrId = DanamicAttributeFactory::createRelationShipORM($category,
+                    list($attrId, $tableName) = DanamicAttributeFactory::createRelationShipORM($category,
                         $eavItem->codedesc->attribute_code, [$ftype], 
                         $this->isSingleEav($eavItem->codedesc->frontend_input),
                         !empty($eavItem->codedesc->options)

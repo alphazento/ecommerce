@@ -48,7 +48,7 @@
             <tbody>
               <tr class="text-start" v-for="(row, i) of items" :key="i">
                 <td v-for="(col, ci) of headers" :key="ci">
-                  <v-btn v-if="ci == 0" icon @click="editAttribute(row)">
+                  <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
                     <v-icon>mdi-pencil-box-multiple-outline</v-icon>
                   </v-btn>
                   <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
@@ -75,6 +75,7 @@ export default {
       baseRoute: "/admin/store-dynamic-attributes",
       defines: [],
       data: [],
+      newModelTemp: {},
       group: "",
       label: "Attributes",
       selectedItem: null,
@@ -112,7 +113,6 @@ export default {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
             this.defines = response.data.data.table.items;
-            console.log("defines", this.defines);
           }
         });
     },
@@ -141,6 +141,7 @@ export default {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
             this.data = response.data.data;
+            this.newModelTemp = response.data.default;
           }
         });
     },
@@ -169,10 +170,8 @@ export default {
     },
     newAttribute() {
       this.dialogMode = "edit";
-      this.selectedItem = {
-        parent_table: this.parent_table,
-        id: 0
-      };
+      this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
+      this.selectedItem.id = 0;
       this.dialog = true;
     },
 

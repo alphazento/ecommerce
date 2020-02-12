@@ -92,7 +92,11 @@ class Admin extends AbstractAdminConfig {
                             ],
                             [
                                 'value' => 'varchar',
-                                'label' => 'varchar'
+                                'label' => 'varchar(255)'
+                            ],
+                            [
+                                'value' => 'text',
+                                'label' => 'text'
                             ],
                         ]
                     ],

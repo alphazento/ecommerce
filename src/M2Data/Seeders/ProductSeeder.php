@@ -76,7 +76,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
                     }
 
                     $isSingleDyn = $this->isSingleEav($eavItem->codedesc->frontend_input);
-                    $attrId = DanamicAttributeFactory::createRelationShipORM($product,
+                    list($attrId, $tableName) = DanamicAttributeFactory::createRelationShipORM($product,
                         $eavItem->codedesc->attribute_code, 
                         [$ftype === 'gallery' ? 'varchar' : $ftype], 
                         $isSingleDyn,
