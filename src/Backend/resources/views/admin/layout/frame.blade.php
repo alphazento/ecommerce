@@ -22,8 +22,7 @@
 </div>
 
 <script src=@asset("zento_backend/js/app.js") type="text/javascript"></script>
-<script src=@asset("zento_bladetheme/vuetify2.2.3.js") type="text/javascript"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script> -->
+<script src=@asset("zento_backend/vendor/vuetify2.2.3.js") type="text/javascript"></script>
 @stack('admin.tail')
 </body>
 </html>

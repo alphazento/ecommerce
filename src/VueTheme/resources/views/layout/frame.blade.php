@@ -37,8 +37,7 @@ $appjs = $appjs ?? 'app.js';
 @endphp
 
 <script src=@asset("zento_vuetheme/js/" . $appjs) type="text/javascript"></script>
-<script src=@asset("zento_bladetheme/vuetify2.2.3.js") type="text/javascript"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script> -->
+<script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
 <script>
     window.themeData = @json($themeData); 
 </script>
