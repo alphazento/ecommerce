@@ -9,14 +9,18 @@ use Route;
 use Request;
 use Registry;
 use View;
+use ShareBucket;
+use Zento\Kernel\Consts;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\Catalog\Model\DB\CartridgeSeries;
 use Zento\Catalog\Model\Search\LegacySearch as Adapter;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
-use Illuminate\Support\Collection;
 use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
 use Zento\Catalog\Model\DB\CartridgeSeries\Description;
+use Zento\Catalog\Model\ORM\Category;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 class CatalogController extends ApiBaseController
 {
@@ -55,11 +59,29 @@ class CatalogController extends ApiBaseController
                 $field = Route::input('field');
                 $value = Request::get('value');
                 $category->{$field} = $value;
-                $category->save();
+                $category->push();
                 return $this->with($field, $value);
             }
         }
         return $this->error(420)->with($field, $value);
+    }
+
+    public function newCategory() {
+        $data = Request::all();
+        $category = new Category();
+        $filedList = $category->getTableFields();
+        $fileds = Arr::only($data, $category->getTableFields());
+        $category->fill($fileds);
+        $category->save();
+        ShareBucket::put(Consts::MODEL_RICH_MODE, true);
+        $category = Category::find($category->id);
+        $dynAttrs = Arr::except($data, $category->getTableFields());
+        foreach($dynAttrs as $field => $value) {
+            $category->{$field} = $value;
+        }
+        $category->path = $category->path . '/' . $category->id;
+        $category->push();
+        dd($category);
     }
 
     public function productsOfCategory() {

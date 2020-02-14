@@ -73,6 +73,11 @@ Route::group(
             ['as' => 'category.values', 'uses' => 'CatalogController@categoryValues']
         );
 
+        Route::post(
+            '/catalog/categories', 
+            ['as' => 'post.category', 'uses' => 'CatalogController@newCategory']
+        );
+        
         Route::patch(
             '/catalog/categories/{id}/{field}', 
             ['as' => 'category.put.filed', 'uses' => 'CatalogController@setCategoryField']

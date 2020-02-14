@@ -13,7 +13,7 @@
             <span v-if="mode==='new'">New Category of [{{parentCategory.name}}]</span>
             <span v-else>{{category.name}}</span>
             <v-spacer></v-spacer>
-            <v-btn color="primary" fab dark large v-if="dirty">
+            <v-btn color="primary" fab dark large v-if="dirty" @click="saveCategory">
               <v-icon dark>mdi-content-save</v-icon>
             </v-btn>
           </v-card-title>
@@ -70,10 +70,13 @@ export default {
           pV = o;
           o = o[k];
         } else {
+          if (w) {
+            o[k] = nV;
+          }
           return;
         }
       }
-      if (w !== undefined && w) {
+      if (w) {
         pV[pK] = nV;
       }
       return o;
@@ -119,7 +122,11 @@ export default {
     mergeCategoryData(data) {
       this.mode = data.mode;
       if (this.mode === "new") {
-        this.category = {};
+        this.category = {
+          parent_id: data.item.id,
+          level: data.item.level + 1,
+          path: data.item.path
+        };
         this.parentCategory = data.item;
       } else {
         this.category = JSON.parse(JSON.stringify(data.item));
@@ -132,10 +139,39 @@ export default {
       this.seletedTreeviewItem.id = data.item.id;
     },
     configValueChanged(item) {
-      this.dirty = true;
       this.accessObjectByString(this.category, item.accessor, item.value, true);
       this.bindCategoryValues(this.mergedData);
       this.mergedData = Object.assign({}, this.mergedData);
+      if (this.seletedTreeviewItem.mode === "new") {
+        this.dirty = true;
+      } else {
+        this.$store.dispatch("showSpinner", "Saving Changes...");
+        axios
+          .patch(
+            `/api/v1/admin/catalog/categories/${this.category.id}/${item.accessor}`,
+            {
+              value: item.value
+            }
+          )
+          .then(response => {
+            if (response.data.success) {
+              this.$store.dispatch("snackMessage", "Updated.");
+            } else {
+              this.$store.dispatch("snackMessage", "Failed to update.");
+            }
+          });
+      }
+      console.log("category1", this.category);
+    },
+
+    saveCategory() {
+      this.$store.dispatch("showSpinner", "Saving Changes...");
+      axios
+        .post("/api/v1/admin/catalog/categories", this.category)
+        .then(response => {
+          this.$store.dispatch("hideSpinner");
+          console.log(response);
+        });
     }
   },
   watch: {

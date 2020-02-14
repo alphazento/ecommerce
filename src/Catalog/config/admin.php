@@ -215,7 +215,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
         $groups['tables/category'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Product Table Definition',
+                'title' => 'Category Editor Template Definition',
                 'items' => [
                     'headers' => [
                         [
@@ -247,7 +247,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
         $groups['tables/product'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Product Table Definition',
+                'title' => 'Product Editor Template Definition',
                 'items' => [
                     'headers' => [
                         [

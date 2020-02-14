@@ -59,7 +59,7 @@
         </v-data-table>
       </v-card>
       <v-container v-else>
-        <span color="error">Please select Model first</span>
+        <span>Please select Model first</span>
       </v-container>
     </v-flex>
   </v-layout>
@@ -143,17 +143,6 @@ export default {
             this.data = response.data.data;
             this.newModelTemp = response.data.default;
           }
-        });
-    },
-
-    configValueChanged(item) {
-      this.$store.dispatch("showSpinner", "Updating...");
-      axios
-        .post(`/api/v1/admin/configs/${item.accessor}`, {
-          value: item.value
-        })
-        .then(response => {
-          this.$store.dispatch("hideSpinner");
         });
     },
 

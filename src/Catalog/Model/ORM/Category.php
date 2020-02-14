@@ -9,9 +9,25 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
  
+    protected $fillable = [
+        'name',
+        'attribute_set_id',
+        'parent_id',
+        'path',
+        'position',
+        'level',
+        'children_count',
+        'is_active',
+        'sort_by'
+    ];
+
     public $_richData_ = [
         'children'
     ];
+
+    public function getTableFields() {
+        return $this->fillable;
+    }
 
     public function children() {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');

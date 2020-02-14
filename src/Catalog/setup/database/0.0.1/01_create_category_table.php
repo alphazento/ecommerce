@@ -18,16 +18,16 @@ class CreateCategoryTable extends Migration
         $this->getBuilder()->create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255)->index();
-            $table->integer('attribute_set_id')->unsigned();
+            $table->integer('attribute_set_id')->unsigned()->nullable();
             $table->integer('parent_id')->unsigned();
             $table->string('path', 255)->index();
-            $table->string('hash', 32)->index();
             $table->integer('position');
             $table->integer('level')->default(0);
-            $table->integer('children_count');
+            $table->integer('children_count')->nullable();
             $table->boolean('is_active');
             $table->integer('sort_by')->unsigned()->nullable();
             $table->timestamps();
+            $table->unique(['parent_id', 'name']); 
         });
     }
 

@@ -71,7 +71,7 @@ class Admin extends AbstractAdminConfig {
 
         $groups['tables/dynamicattributes'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Table Definition',
+                'title' => 'Model Dynamic Attributes Editor Template Definition',
                 'items' => [
                     [
                         'text' => 'Name',
@@ -177,7 +177,7 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'z-boolean-chip',
                         'edit_ui' => 'config-boolean-item',
                         'value' => 'single',
-                        'editable' => true
+                        'editable' => false   //only new item is editable
                     ],
                     [
                         'text' => 'Swatch',

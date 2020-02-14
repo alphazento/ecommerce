@@ -91,10 +91,10 @@ export default {
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data.success) {
-              this.$store.dispatch("keepSpinner", "Dynamic Attribute Saved.");
+              this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
               this.closeDialog(true);
             } else {
-              this.$store.dispatch("keepSpinner", response.data.message);
+              this.$store.dispatch("snackMessage", response.data.message);
             }
           });
       } else {
@@ -104,10 +104,10 @@ export default {
           })
           .then(response => {
             if (response.data.success) {
-              this.$store.dispatch("keepSpinner", "Dynamic Attribute Saved.");
+              this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
               this.closeDialog(true);
             } else {
-              this.$store.dispatch("keepSpinner", response.data.message);
+              this.$store.dispatch("snackMessage", response.data.message);
             }
           });
       }

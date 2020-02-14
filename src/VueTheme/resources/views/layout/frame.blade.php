@@ -10,7 +10,7 @@
         <v-content>
             <theme-manager></theme-manager>
             <v-container>
-                <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'" >
+                <theme-toolbar :logo="'@asset("/zento_bladetheme/alphazento.svg")'" >
                     <template v-slot:breadcrumbs>
                         @if ($nav_page !== 'home')
                             @include('widget.breadcrumbs')

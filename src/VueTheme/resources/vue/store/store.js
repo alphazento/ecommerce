@@ -13,7 +13,7 @@ export default new Vuex.Store({
             opacity: 0.76,
             overlay: false,
             text: "",
-            showBtn: false
+            snack: false
         },
 
         swatches: {},
@@ -211,18 +211,8 @@ export default new Vuex.Store({
         }, text) {
             commit('controlSpinnerLayer', {
                 overlay: true,
-                text: text,
-                showBtn: false
-            });
-        },
-
-        keepSpinner({
-            commit
-        }, text) {
-            commit('controlSpinnerLayer', {
-                overlay: true,
-                text: text,
-                showBtn: true
+                snack: false,
+                text: text
             });
         },
 
@@ -230,9 +220,24 @@ export default new Vuex.Store({
             commit
         }) {
             commit('controlSpinnerLayer', {
-                overlay: false,
-                showBtn: false
+                overlay: false
             });
+        },
+
+        snackMessage({
+            commit
+        }, text) {
+            commit('controlSpinnerLayer', {
+                overlay: false,
+                snack: true,
+                text: text
+            });
+        },
+
+        controlSpinnerLayer({
+            commit
+        }, newO) {
+            commit('controlSpinnerLayer', newO);
         },
 
         updatePagination({
