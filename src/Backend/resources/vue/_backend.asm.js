@@ -1,5 +1,6 @@
 import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
 import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
+import StoreDynamicAttributeSetPage from "./pages/store_dynamic_attribute_set/RoutePage";
 
 export default {
     components: {
@@ -28,7 +29,7 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
-        "dynamic-attribute-edit-dialogbody": "pages/store_dynamic_attribute/components/DAEditDialogBody.vue",
+        "dynamic-attribute-editor-dialogbody": "pages/store_dynamic_attribute/components/DyanmicAttrEditorDialogBody.vue",
         // "admin-footer": "components/layout/ThemeFooter.vue",
     },
     routes: [{
@@ -40,6 +41,11 @@ export default {
             name: "store.dynamic_attributes",
             path: "/admin/store-dynamic-attributes",
             component: StoreDynamicAttributePage
+        },
+        {
+            name: "store.dynamic_attribute_set",
+            path: "/admin/store-dynamic-attribute-set",
+            component: StoreDynamicAttributeSetPage
         }
     ]
 }

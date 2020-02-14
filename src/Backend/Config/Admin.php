@@ -11,8 +11,10 @@ class Admin extends AbstractAdminConfig {
         AdminDashboardService::registerRootLevelMenuNode('Store', 'Store', 'mdi-store');
         AdminDashboardService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
             'mdi-settings', '/admin/store-configurations');
+        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attribute-set', 'Attribute Set', 
+            'mdi-contain', '/admin/store-dynamic-attribute-set');
         AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
-            'mdi-contain', '/admin/store-dynamic-attributes');
+            'mdi-code-braces', '/admin/store-dynamic-attributes');
     }
 
     public function registerConfigMenus() {
@@ -206,6 +208,34 @@ class Admin extends AbstractAdminConfig {
                         'edit_ui' => 'config-text-item',
                         'value' => 'search_layer_sort',
                         'editable' => true
+                    ],
+                ]
+            ]);
+        };
+
+        $groups['tables/dynamicattribute-set'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'table',  [
+                'title' => 'Attribute Set Editor Template Definition',
+                'items' => [
+                    [
+                        'text' => 'Name',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',  //for edit
+                        'value' => 'name'
+                    ],
+                    [
+                        'text' => 'Description',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-longtext-item',
+                        'value' => 'description',
+                        'editable' => true,
+                    ],
+                    [
+                        'text' => 'Active',
+                        'ui' => 'z-boolean-chip',
+                        'edit_ui' => 'config-boolean-item',
+                        'value' => 'active',
+                        'editable' => true,
                     ],
                 ]
             ]);

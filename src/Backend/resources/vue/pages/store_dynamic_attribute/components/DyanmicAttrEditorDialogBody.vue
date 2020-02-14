@@ -20,7 +20,7 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="green darken-1" text @click="closeDialog(false)">Disard</v-btn>
+      <v-btn color="green darken-1" text @click="discard">Disard</v-btn>
       <v-btn color="green darken-1" text @click="saveData">Save</v-btn>
     </v-card-actions>
   </v-card>
@@ -36,11 +36,10 @@ const CONFIG_ITEM = {
 };
 export default {
   props: {
+    editFor: String,
     mode: String,
     defines: Array[CONFIG_ITEM],
-    item: {
-      type: Object
-    }
+    item: Object
   },
   data() {
     return {
@@ -51,8 +50,14 @@ export default {
     };
   },
   methods: {
-    closeDialog(ignore) {
-      this.$emit("close", ignore);
+    discard() {
+      this.$emit("close", { success: false });
+    },
+    closeDialog(success, data) {
+      this.$emit("close", {
+        success: success,
+        data: data
+      });
     },
     prepareData() {
       let isNew = !this.item.id;
@@ -83,29 +88,31 @@ export default {
     saveData() {
       let id = this.itemCopy.id;
       this.$store.dispatch("showSpinner", "Saving data...");
+      let service =
+        this.editFor === "set" ? "dynamicattribute-set" : "dynamicattributes";
       if (id > 0) {
         axios
-          .patch(`/api/v1/admin/dynamicattributes/${id}`, {
+          .patch(`/api/v1/admin/${service}/${id}`, {
             attributes: this.itemCopy
           })
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data.success) {
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.closeDialog(true);
+              this.closeDialog(true, response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }
           });
       } else {
         axios
-          .post(`/api/v1/admin/dynamicattributes`, {
+          .post(`/api/v1/admin/${service}`, {
             attributes: this.itemCopy
           })
           .then(response => {
             if (response.data.success) {
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.closeDialog(true);
+              this.closeDialog(true, response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }

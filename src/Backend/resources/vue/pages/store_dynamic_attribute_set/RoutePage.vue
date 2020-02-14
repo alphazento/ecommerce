@@ -5,6 +5,7 @@
         :defines="defines"
         :item="selectedItem"
         :mode="dialogMode"
+        :edit-for="'set'"
         @close="closeDialog"
       ></dynamic-attribute-editor-dialogbody>
     </v-dialog>
@@ -12,22 +13,22 @@
     <v-flex md2>
       <v-expansion-panels v-model="pannel" accordion multiple mandatory>
         <v-expansion-panel>
-          <v-expansion-panel-header text-left>Dynamic Attributes</v-expansion-panel-header>
+          <v-expansion-panel-header text-left>Dynamic Attribute Set</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-list-item>
-              <a @click.stop="navToGroup('categories')">Category Model</a>
+              <a @click.stop="navToGroup('categories')">For Category</a>
             </v-list-item>
             <v-list-item>
-              <a @click.stop="navToGroup('products')">Product Model</a>
+              <a @click.stop="navToGroup('products')">For Product</a>
             </v-list-item>
             <v-list-item>
-              <a @click.stop="navToGroup('customers')">Customer Model</a>
+              <a @click.stop="navToGroup('customers')">For Customer</a>
             </v-list-item>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-flex>
-    <v-flex md10>
+    <v-flex md4>
       <v-card v-if="!!group">
         <v-card-title>
           <span class="text-uppercase">{{ label }}</span>
@@ -62,6 +63,7 @@
         <span>Please select Model first</span>
       </v-container>
     </v-flex>
+    <v-flex md6>Set Edit</v-flex>
   </v-layout>
 </template>
 
@@ -72,7 +74,7 @@ export default {
       dialog: false,
       filter: true,
       search: "",
-      baseRoute: "/admin/store-dynamic-attributes",
+      baseRoute: "/admin/store-dynamic-attribute-set",
       defines: [],
       data: [],
       newModelTemp: {},
@@ -92,7 +94,7 @@ export default {
     initBreadCrumbs() {
       this.$store.dispatch("clearBreadcrumbs", null);
       this.$store.dispatch("addBreadcrumbItem", {
-        text: "Store Dyanmic Attributes",
+        text: "Store Dyanmic Attribute Set",
         href: this.baseRoute
       });
       this.$store.dispatch("addBreadcrumbItem", {
@@ -108,7 +110,7 @@ export default {
     fetchDefines() {
       this.$store.dispatch("showSpinner", "Fetching Defines...");
       axios
-        .get("/api/v1/admin/configs/groups/tables/dynamicattributes")
+        .get("/api/v1/admin/configs/groups/tables/dynamicattribute-set")
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -121,22 +123,22 @@ export default {
       this.group = groupName;
       switch (groupName) {
         case "categories":
-          this.label = "Category Model";
+          this.label = "Attribute Set For Category";
           break;
         case "products":
-          this.label = "Product Model";
+          this.label = "Attribute Set For Product";
           break;
         case "customers":
-          this.label = "Customer Model";
+          this.label = "Attribute Set For Customer";
           break;
       }
-      this.$store.dispatch("showSpinner", "Fetching Dynamic Attributes...");
+      this.$store.dispatch("showSpinner", "Fetching Attribute Set...");
       this.$store.dispatch("replaceBreadcrumbLastItem", {
         text: this.group,
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattributes/${groupName}`)
+        .get(`/api/v1/admin/dynamicattribute-set/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -145,7 +147,6 @@ export default {
           }
         });
     },
-
     handleRoute() {
       if (this.$route.query["group"] !== undefined) {
         this.fetchDynamicAttributes(this.$route.query["group"]);
@@ -157,6 +158,7 @@ export default {
       this.dialogMode = "edit";
       this.dialog = true;
     },
+
     newAttribute() {
       this.dialogMode = "edit";
       this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
