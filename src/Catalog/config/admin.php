@@ -5,6 +5,7 @@ namespace Zento\Catalog\Config;
 use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
@@ -31,9 +32,22 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'is_active'
             ];
 
+            $items[] = [
+                'title' => 'Attribute Set',
+                'ui' => 'config-options-item',
+                'accessor' => 'attribute_set_id',
+                'options'  => $this->genAttributeSetOptions()
+            ];
+
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
+                'title' => 'Basic Settings',
+                'items' => $items
+            ]);
+
             $itemsGroups = [];
 
-            $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'categories')
+            $dynAttrs = DynamicAttribute::with(['options'])
+                ->where('parent_table', 'categories')
                 ->where('enabled', 1)
                 ->get();
 
@@ -59,10 +73,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 }
             }
             
-            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Basic Settings',
-                'items' => $items
-            ]);
             foreach($itemsGroups as $group => $items) {
                 AdminConfigurationService::registerGroup($groupTag, 
                     md5($group), 
@@ -283,6 +293,20 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         foreach($optionCollection ?? [] as $item) {
             $options[] = ['label' => $item['value'], 'value' => ('' . $item['id'])];
         }
+        return $options;
+    }
+
+    protected function genAttributeSetOptions() {
+        $collection = DynamicAttributeSet::where('model', '=', 'categories')
+            ->where('active', 1)
+            ->getQuery()
+            ->get(['id', 'name'])
+            ->all();
+        $options = [];
+
+        foreach($collection as $item) {
+            $options[] = ['label' => $item->name, 'value' => $item->id];
+        };
         return $options;
     }
 }

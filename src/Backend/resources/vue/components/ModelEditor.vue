@@ -42,10 +42,10 @@ export default {
     };
   },
   created() {
-    this.fetchModelDetails(this.model);
+    this.fetchModelTemplate(this.model);
   },
   methods: {
-    fetchModelDetails(model) {
+    fetchModelTemplate(model) {
       if (model && model !== "") {
         this.$store.dispatch("showSpinner", "Loading details");
         axios
@@ -69,7 +69,7 @@ export default {
   },
   watch: {
     model(nv, ov) {
-      this.fetchModelDetails(nv);
+      this.fetchModelTemplate(nv);
     },
     modelData(nv, ov) {
       this.model_data = nv;
