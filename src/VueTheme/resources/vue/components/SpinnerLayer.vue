@@ -30,7 +30,7 @@ export default {
     indeterminate: true,
     size: 96,
     width: 4,
-    timeout: 6000
+    timeout: 4000
   }),
   computed: {
     spinnerOverlay() {

@@ -72,6 +72,8 @@ export default {
       this.fetchModelTemplate(nv);
     },
     modelData(nv, ov) {
+      //normally fetch model data by this component,
+      //but some use case need to modify the model_data outsiede, so it can pass it back.
       this.model_data = nv;
     }
   }

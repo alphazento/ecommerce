@@ -44,6 +44,14 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => $items
             ]);
 
+            $daSets = DynamicAttributeSet::with('attributes')
+                ->where('model', '=', 'categories')
+                ->where('active', 1)
+                ->get();
+
+            //reserve for frontend
+            AdminConfigurationService::registerGroup($groupTag, '_attribute_sets_', $daSets->toArray());
+
             $itemsGroups = [];
 
             $dynAttrs = DynamicAttribute::with(['options'])
@@ -81,16 +89,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                         'items' => $items
                     ]);
             }
-            // AdminConfigurationService::registerSubgroupToGroup($groupTag, 'category', 'seo', [
-            //     'title' => 'Search Engine Optimization ',
-            //     'items' => [
-            //         [
-            //             'title' => 'Url Key',
-            //             'ui' => 'config-longtext-item',
-            //             'accessor' => 'url_key'
-            //         ]
-            //     ]
-            // ]);
         };
 
         $groups['catalog/product'] = function($groupTag) {
