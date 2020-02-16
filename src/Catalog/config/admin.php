@@ -39,24 +39,20 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'options'  => $this->genAttributeSetOptions()
             ];
 
-            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Basic Settings',
-                'items' => $items
-            ]);
 
             $daSets = DynamicAttributeSet::with('attributes')
                 ->where('model', '=', 'categories')
                 ->where('active', 1)
                 ->get();
 
-            //reserve for frontend
-            AdminConfigurationService::registerGroup($groupTag, '_attribute_sets_', $daSets->toArray());
+            //not display, but for the logic
+            AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
 
             $itemsGroups = [];
 
             $dynAttrs = DynamicAttribute::with(['options'])
                 ->where('parent_table', 'categories')
-                ->where('enabled', 1)
+                ->where('active', 1)
                 ->get();
 
             foreach($dynAttrs as $item) {
@@ -80,7 +76,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     ];
                 }
             }
-            
+
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
+                'title' => 'Basic Settings',
+                'items' => $items
+            ]);
+
             foreach($itemsGroups as $group => $items) {
                 AdminConfigurationService::registerGroup($groupTag, 
                     md5($group), 
@@ -177,7 +178,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ];
 
             $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
-                ->where('enabled', 1)
+                ->where('active', 1)
                 ->get();
 
             foreach($dynAttrs as $item) {

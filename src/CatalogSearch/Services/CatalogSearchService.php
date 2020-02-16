@@ -373,7 +373,7 @@ class CatalogSearchService
             if (!Cache::has($key)) {
                 $collection = DynamicAttribute::with(['options'])
                     ->where('parent_table', 'products')
-                    ->where('enabled', 1)
+                    ->where('active', 1)
                     ->where('is_search_layer', 1)
                     ->orderBy('search_layer_sort')
                     ->get();

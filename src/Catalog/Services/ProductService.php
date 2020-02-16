@@ -60,7 +60,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
     public function getProductSwatches() {
         $attributes = DynamicAttribute::with(['options'])
             ->where('swatch_type', '>', '0')
-            ->where('enabled', 1)
+            ->where('active', 1)
             ->get();
         
         $results = [];
@@ -76,7 +76,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
 
     public function getProductSearchables() {
         return DynamicAttribute::where('is_search_layer', '>', '0')
-            ->where('enabled', 1)
+            ->where('active', 1)
             ->pluck('attribute_name')
             ->toArray();
     }

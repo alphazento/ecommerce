@@ -168,10 +168,10 @@ class Admin extends AbstractAdminConfig {
                         'editable' => true
                     ],
                     [
-                        'text' => 'Enabled',
+                        'text' => 'Active',
                         'ui' => 'z-boolean-chip',
                         'edit_ui' => 'config-boolean-item',
-                        'value' => 'enabled',
+                        'value' => 'active',
                         'editable' => true
                     ],
                     [
