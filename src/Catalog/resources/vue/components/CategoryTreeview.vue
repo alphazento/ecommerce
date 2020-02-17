@@ -112,18 +112,18 @@ export default {
       });
     },
     addCategory(item) {
-      this.emitCategoryChanged(item, "new");
+      this.emitCategoryChange(item, "new");
     },
     editCategory(item) {
-      this.emitCategoryChanged(item, "edit");
+      this.emitCategoryChange(item, "edit");
     },
 
-    emitCategoryChanged(item, mode) {
+    emitCategoryChange(item, mode) {
       let data = {
         mode: mode,
         item: item
       };
-      this.$emit("categoryChanged", data);
+      this.$emit("categoryChange", data);
     }
   },
   mounted() {

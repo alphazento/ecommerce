@@ -42,10 +42,10 @@ export default {
     };
   },
   created() {
-    this.fetchModelTemplate(this.model);
+    this.fetchModelSchema(this.model);
   },
   methods: {
-    fetchModelTemplate(model) {
+    fetchModelSchema(model) {
       if (model && model !== "") {
         this.$store.dispatch("showSpinner", "Loading details");
         axios
@@ -58,7 +58,7 @@ export default {
             this.$store.dispatch("hideSpinner");
             if (response.data && response.data.success) {
               this.model_data = response.data.data;
-              this.$emit("modelConfigDataFetched", this.model_data);
+              this.$emit("fetchSchema", this.model_data);
             }
           });
       }
@@ -69,7 +69,7 @@ export default {
   },
   watch: {
     model(nv, ov) {
-      this.fetchModelTemplate(nv);
+      this.fetchModelSchema(nv);
     },
     modelData(nv, ov) {
       //normally fetch model data by this component,

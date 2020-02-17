@@ -47,7 +47,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             //not display, but for the logic
             AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
-
             $itemsGroups = [];
 
             $dynAttrs = DynamicAttribute::with(['options'])
@@ -84,7 +83,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
             foreach($itemsGroups as $group => $items) {
                 AdminConfigurationService::registerGroup($groupTag, 
-                    md5($group), 
+                    $group, 
                     [
                         'title' => $group,
                         'items' => $items

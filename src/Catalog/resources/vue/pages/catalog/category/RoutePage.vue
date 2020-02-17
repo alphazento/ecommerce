@@ -5,7 +5,7 @@
     </v-card-title>
     <v-layout>
       <v-flex md3>
-        <category-treeview :selected-item="seletedTreeviewItem" @categoryChanged="categoryChanged"></category-treeview>
+        <category-treeview :selected-item="seletedTreeviewItem" @categoryChange="categoryChange"></category-treeview>
       </v-flex>
       <v-flex md8>
         <v-card v-if="mode !== ''">
@@ -20,9 +20,9 @@
 
           <config-model-editor
             model="catalog/category"
-            :model-data="mergedData"
+            :model-data="modelData"
             :with-value="false"
-            @modelConfigDataFetched="modelConfigDataFetched"
+            @fetchSchema="fetchSchema"
             @configValueChanged="configValueChanged"
           ></config-model-editor>
         </v-card>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { type } from 'os';
 export default {
   data() {
     return {
@@ -45,18 +46,13 @@ export default {
         mode: "",
         id: -1
       },
-      mergedData: {},
-      originConfigs: {},
+      schema: {},
+      schemaFetched: false,
+      modelData: {},
       parentCategory: {}
     };
   },
   methods: {
-    modelConfigDataFetched(item) {
-      this.originConfigs = item;
-      this.mergedData = JSON.parse(JSON.stringify(this.originConfigs));
-      this.bindCategoryValues(this.mergedData);
-      this.mergedData = Object.assign({}, this.mergedData);
-    },
     accessObjectByString(o, s, nV, w) {
       s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
       s = s.replace(/^\./, ""); // strip a leading dot
@@ -82,23 +78,29 @@ export default {
       return o;
     },
 
-    bindCategoryValues(o) {
+    fetchSchema(schema) {
+      this.schema = schema;
+      this.schemaFetched = true;
+      this.combineModel();
+    },
+    
+    bindValues(o, from) {
       for (const [key, item] of Object.entries(o)) {
-        if (typeof item === "object") {
+        if (item && (typeof item === "object")) {
           if (item["accessor"] !== undefined) {
             item["value"] = this.accessObjectByString(
-              this.category,
+              from,
               item["accessor"]
             );
           } else {
-            this.bindCategoryValues(item);
+            this.bindValues(item, from);
           }
         }
       }
     },
 
-    categoryChanged(data) {
-      if (data.mode === "new" || this.category.id !== data.item.id) {
+    categoryChange(event) {
+      if (event.mode === "new" || this.category.id !== event.item.id) {
         if (this.dirty && this.mode !== "") {
           eventBus.$emit("openDialog", {
             component: "z-dialog-confirm-body",
@@ -110,15 +112,17 @@ export default {
             closeNotify: this.handleConfirm
           });
         } else {
-          this.mergeCategoryData(data);
+          this.mergeCategoryData(event);
         }
       }
     },
+
     handleConfirm(result) {
       if (result.success) {
         this.mergeCategoryData(result.data);
       }
     },
+
     mergeCategoryData(data) {
       this.mode = data.mode;
       if (this.mode === "new") {
@@ -131,17 +135,26 @@ export default {
       } else {
         this.category = JSON.parse(JSON.stringify(data.item));
       }
-      this.mergedData = JSON.parse(JSON.stringify(this.originConfigs));
-      this.bindCategoryValues(this.mergedData);
-      this.mergedData = Object.assign({}, this.mergedData);
+
+      if (this.schemaFetched) {
+        this.combineModel();
+      }
+      
       this.dirty = false;
       this.seletedTreeviewItem.mode = data.mode;
       this.seletedTreeviewItem.id = data.item.id;
     },
+
+    combineModel() {
+        let modelData = JSON.parse(JSON.stringify(this.schema));
+        this.bindValues(modelData, this.category);
+        this.modelData = Object.assign({}, modelData);
+    },
+
     configValueChanged(item) {
       this.accessObjectByString(this.category, item.accessor, item.value, true);
-      this.bindCategoryValues(this.mergedData);
-      this.mergedData = Object.assign({}, this.mergedData);
+      this.bindValues(this.modelData, this.category);
+      this.modelData = Object.assign({}, this.modelData);
       if (this.seletedTreeviewItem.mode === "new") {
         this.dirty = true;
       } else {
