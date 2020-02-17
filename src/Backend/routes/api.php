@@ -33,7 +33,12 @@ Route::group(
 
         Route::get(
             '/dynamicattributes/{model}', 
-            ['as' => 'admin.da.get', 'uses' => 'DAController@getAttributes']
+            ['as' => 'admin.da.get.by.model', 'uses' => 'DAController@getModelAttributes']
+        );
+
+        Route::get(
+            '/dynamicattributes/{model}/{attribute_set_name}', 
+            ['as' => 'admin.da.get.by.model.daset', 'uses' => 'DAController@getModelAttributesBySetName']
         );
 
         Route::post(
@@ -47,8 +52,13 @@ Route::group(
         );
 
         Route::get(
-            '/dynamicattribute-set/{model}', 
-            ['as' => 'admin.da_set.get', 'uses' => 'DAController@getAttributeSets']
+            '/dynamicattribute-sets/model/{model}', 
+            ['as' => 'admin.da_set.get.all', 'uses' => 'DAController@getAttributeSets']
+        );
+
+        Route::get(
+            '/dynamicattribute-sets/{id}', 
+            ['as' => 'admin.da_set.get', 'uses' => 'DAController@getAttributeSet']
         );
 
         Route::post(

@@ -86,7 +86,7 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'z-label',
                         'edit_ui' => 'config-options-item',
                         'value' => 'attribute_type',
-                        'editable' => true,
+                        'editable' => false,
                         'options' => [
                             [
                                 'value' => 'integer',

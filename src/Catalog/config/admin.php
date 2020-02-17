@@ -57,6 +57,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             foreach($dynAttrs as $item) {
                 if (empty($item->admin_group)) {
                     $items[] = [
+                        'da_id' => $item->id,
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,
@@ -68,6 +69,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                         $itemsGroups[$group] = [];
                     }
                     $itemsGroups[$group][] = [
+                        'da_id' => $item->id,
                         'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
                         'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
                         'accessor' => $item->attribute_name,

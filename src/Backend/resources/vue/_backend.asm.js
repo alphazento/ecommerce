@@ -30,6 +30,8 @@ export default {
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
         "dynamic-attribute-editor-dialogbody": "pages/store_dynamic_attribute/components/DyanmicAttrEditorDialogBody.vue",
+        "z-dynamic-attribute-set-binding": "pages/store_dynamic_attribute_set/components/DynamicAttributeSetBinding.vue",
+
         // "admin-footer": "components/layout/ThemeFooter.vue",
     },
     routes: [{

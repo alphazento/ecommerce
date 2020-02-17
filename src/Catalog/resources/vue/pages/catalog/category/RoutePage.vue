@@ -42,6 +42,7 @@ export default {
       mode: "",
       dirty: false,
       category: {},
+      categoryFetched: false,
       seletedTreeviewItem: {
         mode: "",
         id: -1
@@ -49,7 +50,8 @@ export default {
       schema: {},
       schemaFetched: false,
       modelData: {},
-      parentCategory: {}
+      parentCategory: {},
+      availableAttrsGroups: {}
     };
   },
   methods: {
@@ -80,8 +82,11 @@ export default {
 
     fetchSchema(schema) {
       this.schema = schema;
+      this.calcAvailableAttrsGroups();
       this.schemaFetched = true;
-      this.combineModel();
+      if (this.categoryFetched) {
+        this.combineModel();
+      }
     },
     
     bindValues(o, from) {
@@ -112,6 +117,7 @@ export default {
             closeNotify: this.handleConfirm
           });
         } else {
+          this.categoryFetched = true;
           this.mergeCategoryData(event);
         }
       }
@@ -119,6 +125,7 @@ export default {
 
     handleConfirm(result) {
       if (result.success) {
+        this.categoryFetched = true;
         this.mergeCategoryData(result.data);
       }
     },
@@ -145,10 +152,50 @@ export default {
       this.seletedTreeviewItem.id = data.item.id;
     },
 
+    calcAvailableAttrsGroups() {
+      let defaultGroup = this.schema._extra_.filter(item => {
+        return item.name.toLowerCase() === 'default';
+      });
+
+      let defaultAttrIds = [];
+      defaultGroup.forEach(group => {
+        let ids = group.attributes.map(item => item.id);
+        this.availableAttrsGroups[group.id] = ids;
+        defaultAttrIds = defaultAttrIds.concat(ids);
+      });
+
+      this.availableAttrsGroups['default'] = defaultAttrIds;
+
+      this.schema._extra_.forEach(group => {
+        if (group.name.toLowerCase() !== 'default') {
+          let ids = group.attributes.map(item => item.id);
+          ids = ids.concat(this.defaultAttrIds);
+          this.availableAttrsGroups[group.id] = ids;
+        }
+      });
+    },
+
     combineModel() {
-        let modelData = JSON.parse(JSON.stringify(this.schema));
-        this.bindValues(modelData, this.category);
-        this.modelData = Object.assign({}, modelData);
+      let groupKey = this.category.attribute_set_id ? this.category.attribute_set_id : 'default';
+      let availableAttrIds = this.availableAttrsGroups[groupKey];
+      let modelData = JSON.parse(JSON.stringify(this.schema));
+
+      delete modelData['_extra_'];
+      for (const [key, group] of Object.entries(modelData)) {
+        for(var i = group.items.length -1; i >=0; i--) {
+          let item = group.items[i];
+          //if is dynamic attribute, will have da_id
+          if (item['da_id'] !== undefined && !availableAttrIds.includes(item['da_id'])) { 
+            group.items.splice(i, 1);
+          }
+        }
+        if (group.items.length === 0) {
+          delete modelData[key];
+        }
+      }
+
+      this.bindValues(modelData, this.category);
+      this.modelData = Object.assign({}, modelData);
     },
 
     configValueChanged(item) {

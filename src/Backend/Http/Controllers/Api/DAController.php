@@ -15,10 +15,20 @@ use Illuminate\Support\Arr;
 
 class DAController extends ApiBaseController
 {
-    public function getAttributes() {
+    public function getModelAttributes() {
         $model = Route::input('model');
         return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
             ->withData(DynamicAttribute::where('parent_table', $model)->get());
+    }
+
+    public function getModelAttributesBySetName() {
+        $model = Route::input('model');
+        $da_set_name = Route::input('attribute_set_name');
+        if ($set = DynamicAttribute::with('attributes')->where('parent_table', $model)->where('name', '=', $da_set_name)->first()) {
+            return $this->withData($set->attributes->toArray());
+        } else {
+            return $this->withData([]);
+        }
     }
 
     public function updateAttribute() {
@@ -72,9 +82,13 @@ class DAController extends ApiBaseController
 
     public function getAttributeSets() {
         $model = Route::input('model');
-        return $this->with('default', 
-            with(new DynamicAttributeSet)->defaultDynAttr($model))
+        return $this->with('default', with(new DynamicAttributeSet)->defaultDynAttr($model))
             ->withData(DynamicAttributeSet::where('model', $model)->get());
+    }
+
+    public function getAttributeSet() {
+        $attr_set_id = Route::input('id');
+        return $this->withData(DynamicAttributeSet::with('attributes')->find($attr_set_id));
     }
 
     public function updateAttributeSet() {

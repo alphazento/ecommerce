@@ -47,7 +47,7 @@
         <v-data-table :headers="defines" :items="data" :search="search">
           <template v-slot:body="{ headers, items }">
             <tbody>
-              <tr class="text-start" v-for="(row, i) of items" :key="i">
+              <tr class="text-start" v-for="(row, i) of items" :key="i"  @click="rowClick(row)">
                 <td v-for="(col, ci) of headers" :key="ci">
                   <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
                     <v-icon>mdi-pencil-box-multiple-outline</v-icon>
@@ -63,7 +63,9 @@
         <span>Please select Model first</span>
       </v-container>
     </v-flex>
-    <v-flex md6>Set Edit</v-flex>
+    <v-flex md6>
+      <z-dynamic-attribute-set-binding :id="bindingSetId" v-if="bindingSetId>0"></z-dynamic-attribute-set-binding>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -82,7 +84,8 @@ export default {
       label: "Attributes",
       selectedItem: null,
       dialogMode: "new",
-      pannel: [0]
+      pannel: [0],
+      bindingSetId: 0
     };
   },
   created() {
@@ -138,7 +141,7 @@ export default {
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattribute-set/${groupName}`)
+        .get(`/api/v1/admin/dynamicattribute-sets/model/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -183,6 +186,11 @@ export default {
       data.value = rowItem[columDefines.value];
       data.accessor = columDefines.value;
       return data;
+    },
+
+    rowClick(row) {
+      console.log('rowClick', row)
+      this.bindingSetId = row.id;
     }
   },
   watch: {
