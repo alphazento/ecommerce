@@ -11,6 +11,7 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Catalog\Model\ORM\Category;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Customer\Model\ORM\Customer;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeInSet;
 use Illuminate\Support\Arr;
 
 class DAController extends ApiBaseController
@@ -118,10 +119,24 @@ class DAController extends ApiBaseController
     }
 
     public function addAttributeToSet() {
-        return $this->success('OK');
+        $attr_set_id = Route::input('attr_set_id');
+        $attr_id = Route::input('attr_id');
+        $relationShip = new DynamicAttributeInSet();
+        $relationShip->attribute_set_id = $attr_set_id;
+        $relationShip->attribute_id = $attr_id;
+        $relationShip->save();
+        return $this;
     }
 
     public function deleteAttributeFromSet() {
-        return $this->success('OK');
+        $attr_set_id = Route::input('attr_set_id');
+        $attr_id = Route::input('attr_id');
+        if ($relationShip = DynamicAttributeInSet::where('attribute_set_id', $attr_set_id)
+            ->where('attribute_id', $attr_id)
+            ->first())
+        {
+            $relationShip->delete();
+        }
+        return $this;
     }
 }
