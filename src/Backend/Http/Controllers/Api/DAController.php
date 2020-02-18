@@ -15,20 +15,19 @@ use Illuminate\Support\Arr;
 
 class DAController extends ApiBaseController
 {
+    public function getAttribute(){
+        if ($id = Route::input('id')) {
+            if ($attr = DynamicAttribute::find($id)) {
+                return $this->withData($attr->toArray());
+            }
+        }
+        return $this->error(404, 'Not found');
+    }
+
     public function getModelAttributes() {
         $model = Route::input('model');
         return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
             ->withData(DynamicAttribute::where('parent_table', $model)->get());
-    }
-
-    public function getModelAttributesBySetName() {
-        $model = Route::input('model');
-        $da_set_name = Route::input('attribute_set_name');
-        if ($set = DynamicAttribute::with('attributes')->where('parent_table', $model)->where('name', '=', $da_set_name)->first()) {
-            return $this->withData($set->attributes->toArray());
-        } else {
-            return $this->withData([]);
-        }
     }
 
     public function updateAttribute() {
@@ -80,10 +79,14 @@ class DAController extends ApiBaseController
         return $this->withData($model->toArray());
     }
 
-    public function getAttributeSets() {
+    public function getModelAttributeSets() {
         $model = Route::input('model');
+        $collection = DynamicAttributeSet::where('model', $model);
+        if (Request::input('with_attributes')) {
+            $collection->with('attributes');
+        }
         return $this->with('default', with(new DynamicAttributeSet)->defaultDynAttr($model))
-            ->withData(DynamicAttributeSet::where('model', $model)->get());
+            ->withData($collection->get());
     }
 
     public function getAttributeSet() {

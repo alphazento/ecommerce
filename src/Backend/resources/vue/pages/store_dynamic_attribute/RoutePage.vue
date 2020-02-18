@@ -136,7 +136,7 @@ export default {
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattributes/${groupName}`)
+        .get(`/api/v1/admin/dynamicattributes/models/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {

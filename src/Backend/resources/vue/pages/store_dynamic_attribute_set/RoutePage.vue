@@ -64,7 +64,7 @@
       </v-container>
     </v-flex>
     <v-flex md6>
-      <z-dynamic-attribute-set-binding :id="bindingSetId" v-if="bindingSetId>0"></z-dynamic-attribute-set-binding>
+      <z-dynamic-attribute-set-binding :model="group" :id="bindingSetId" v-if="bindingSetId>0"></z-dynamic-attribute-set-binding>
     </v-flex>
   </v-layout>
 </template>
@@ -141,7 +141,7 @@ export default {
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattribute-sets/model/${groupName}`)
+        .get(`/api/v1/admin/dynamicattribute-sets/models/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -189,7 +189,6 @@ export default {
     },
 
     rowClick(row) {
-      console.log('rowClick', row)
       this.bindingSetId = row.id;
     }
   },
