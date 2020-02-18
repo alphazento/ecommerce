@@ -62,13 +62,23 @@ Route::group(
         );
 
         Route::post(
-            '/dynamicattribute-set', 
+            '/dynamicattribute-sets', 
             ['as' => 'admin.post.da_set', 'uses' => 'DAController@createAttributeSet']
         );
 
         Route::patch(
-            '/dynamicattribute-set/{id}', 
+            '/dynamicattribute-sets/{id}', 
             ['as' => 'admin.patch.da_set', 'uses' => 'DAController@updateAttributeSet']
+        );
+
+        Route::put(
+            '/dynamicattribute-sets/{attr_set_id}/attributes/{attr_id}', 
+            ['as' => 'admin.put.da.to.set', 'uses' => 'DAController@addAttributeToSet']
+        );
+
+        Route::delete(
+            '/dynamicattribute-sets/{attr_set_id}/attributes/{attr_id}', 
+            ['as' => 'admin.delete.da.from.set', 'uses' => 'DAController@deleteAttributeFromSet']
         );
 
         Route::patch('/model/{model}/{id}', 

@@ -116,4 +116,12 @@ class DAController extends ApiBaseController
             return $this->error(400, $e->getMessage());
         }
     }
+
+    public function addAttributeToSet() {
+        return $this->success('OK');
+    }
+
+    public function deleteAttributeFromSet() {
+        return $this->success('OK');
+    }
 }
