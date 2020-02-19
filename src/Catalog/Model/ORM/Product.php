@@ -26,6 +26,14 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         'special_price'
     ];
 
+    protected $fillable = [
+        'name',
+        'attribute_set_id',
+        'sku',
+        'type_id',
+        'active'
+    ];
+
     public static function registerType($type_id, $class) {
         self::$typeMapping[$type_id] = $class;
     }
@@ -104,10 +112,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public function categories() {
         return $this->hasManyThrough(Category::class, CategoryProduct::class, 'product_id', 'id', 'id', 'category_id')
             ->orderBy('level');
-    }
-
-    public function getNameAttribute() {
-        return $this->desc->name ?? '';
     }
 
     public function getDescriptionAttribute() {
