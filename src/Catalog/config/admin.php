@@ -269,6 +269,22 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'clearable' => true
                         ],
                         [
+                            'text' => 'Sku',
+                            'ui' => 'z-label',
+                            'value' => 'sku',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
+                            'text' => 'Name',
+                            'ui' => 'z-label',
+                            'value' => 'name',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
                             'text' => 'Product Type',
                             'ui' => 'z-options-display',
                             'value' => 'type_id',
@@ -283,14 +299,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
                         ],
-                        [
-                            'text' => 'Sku',
-                            'ui' => 'z-label',
-                            'value' => 'sku',
-                            'filter_ui' => 'config-text-item',
-                            'clearable' => true,
-                            'sortable' => false
-                        ],
+                       
                         [
                             'text' => 'Image',
                             'ui' => 'config-image-uploader-item',
