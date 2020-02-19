@@ -16,13 +16,13 @@
           <v-expansion-panel-header text-left>Dynamic Attribute Set</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-list-item>
-              <a @click.stop="navToGroup('categories')">For Category</a>
+              <a @click.stop="navToGroup('Category')">For Category</a>
             </v-list-item>
             <v-list-item>
-              <a @click.stop="navToGroup('products')">For Product</a>
+              <a @click.stop="navToGroup('Product')">For Product</a>
             </v-list-item>
             <v-list-item>
-              <a @click.stop="navToGroup('customers')">For Customer</a>
+              <a @click.stop="navToGroup('Cutomer')">For Customer</a>
             </v-list-item>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -124,17 +124,7 @@ export default {
 
     fetchDynamicAttributes(groupName) {
       this.group = groupName;
-      switch (groupName) {
-        case "categories":
-          this.label = "Attribute Set For Category";
-          break;
-        case "products":
-          this.label = "Attribute Set For Product";
-          break;
-        case "customers":
-          this.label = "Attribute Set For Customer";
-          break;
-      }
+      this.label = groupName;
       this.$store.dispatch("showSpinner", "Fetching Attribute Set...");
       this.$store.dispatch("replaceBreadcrumbLastItem", {
         text: this.group,

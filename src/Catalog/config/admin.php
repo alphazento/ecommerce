@@ -6,6 +6,7 @@ use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
+use Zento\Catalog\Model\ORM\Product;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
@@ -257,7 +258,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
         $groups['tables/product'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Product Editor Template Definition',
+                'title' => 'Product Table Definition',
                 'items' => [
                     'headers' => [
                         [
@@ -268,24 +269,73 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'clearable' => true
                         ],
                         [
-                            'text' => 'SKU',
+                            'text' => 'Product Type',
+                            'ui' => 'z-options-display',
+                            'value' => 'type_id',
+                            'options' => $this->genProductTypsMapping(),
+                            'filter_ui' => 'config-options-item',
+                            'filter_data_type' => 'string',
+                        ],
+                        [
+                            'text' => 'Status',
                             'ui' => 'z-label',
-                            'value' => 'sku',
+                            'value' => 'status',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
                         ],
                         [
-                            'text' => 'Name',
+                            'text' => 'Sku',
                             'ui' => 'z-label',
-                            'value' => 'name',
+                            'value' => 'sku',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
+                            'sortable' => false
+                        ],
+                        [
+                            'text' => 'Image',
+                            'ui' => 'config-image-uploader-item',
+                            'visibility' => 'public',
+                            'folder' => 'website',
+                            'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif',
+                            'value' => 'image'
                         ]
                     ],
                     'primary_key' => 'id',
                 ]
             ]);
         };
+
+        // $groups['tables/product'] = function($groupTag) {
+        //     AdminConfigurationService::registerGroup($groupTag, 'table',  [
+        //         'title' => 'Product Editor Template Definition',
+        //         'items' => [
+        //             'headers' => [
+        //                 [
+        //                     'text' => 'ID',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'id',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true
+        //                 ],
+        //                 [
+        //                     'text' => 'SKU',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'sku',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true,
+        //                 ],
+        //                 [
+        //                     'text' => 'Name',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'name',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true,
+        //                 ]
+        //             ],
+        //             'primary_key' => 'id',
+        //         ]
+        //     ]);
+        // };
     }
 
     protected function mapOptions($optionCollection) {
@@ -308,5 +358,14 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $options[] = ['label' => $item->name, 'value' => $item->id];
         };
         return $options;
+    }
+
+    protected function genProductTypsMapping() {
+       return  array_map(function($key) {
+            return [
+                'label' => $key,
+                'value' => $key
+            ];
+        }, array_keys(Product::getProductTypes()));
     }
 }

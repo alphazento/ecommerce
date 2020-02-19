@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      attributes: {},
+      attributes: [],
       attribute_status_mapping: {},
       current_attribute_set: {id:-1},
       current_id: this.id
@@ -67,8 +67,14 @@ export default {
     valueChanged(id) {
       let url = `/api/v1/admin/dynamicattribute-sets/${this.current_id}/attributes/${id}`;
       let method = this.attribute_status_mapping[id] ? 'put' : 'delete';
+      this.$store.dispatch('showSpinner', 'Updating...');
       axios[method](url).then(response => {
-        console.log(response);
+        this.$store.dispatch('hideSpinner');
+        if (response.data.success) {
+          this.$store.dispatch('snackMessage', 'Added to Attribute Set');
+        } else {
+          this.$store.dispatch('snackMessage', 'Removed from Attribute Set');
+        }
       });
     }
   },

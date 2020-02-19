@@ -13,6 +13,7 @@ use Zento\Catalog\Model\ORM\Product;
 use Zento\Customer\Model\ORM\Customer;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeInSet;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class DAController extends ApiBaseController
 {
@@ -26,7 +27,7 @@ class DAController extends ApiBaseController
     }
 
     public function getModelAttributes() {
-        $model = Route::input('model');
+        $model = Str::plural(Route::input('model'));
         return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
             ->withData(DynamicAttribute::where('parent_table', $model)->get());
     }
@@ -81,7 +82,7 @@ class DAController extends ApiBaseController
     }
 
     public function getModelAttributeSets() {
-        $model = Route::input('model');
+        $model = Str::plural(Route::input('model'));
         $collection = DynamicAttributeSet::where('model', $model);
         if (Request::input('with_attributes')) {
             $collection->with('attributes');
@@ -125,7 +126,7 @@ class DAController extends ApiBaseController
         $relationShip->attribute_set_id = $attr_set_id;
         $relationShip->attribute_id = $attr_id;
         $relationShip->save();
-        return $this;
+        return $this->withData($relationShip);
     }
 
     public function deleteAttributeFromSet() {
@@ -137,6 +138,6 @@ class DAController extends ApiBaseController
         {
             $relationShip->delete();
         }
-        return $this;
+        return $this->withData($relationShip);
     }
 }

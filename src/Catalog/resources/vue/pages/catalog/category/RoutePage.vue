@@ -112,7 +112,7 @@ export default {
             bind: {
               title:
                 "<p>Unsaved Changes</p>If you proceed to edit new category, any changes you have made will be lost. Are you sure you want to edit new category?",
-              passData: data
+              passData: event
             },
             closeNotify: this.handleConfirm
           });

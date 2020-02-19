@@ -29,6 +29,10 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public static function registerType($type_id, $class) {
         self::$typeMapping[$type_id] = $class;
     }
+
+    public static function getProductTypes() {
+        return self::$typeMapping;
+    }
     
     public function shippable() {
         return true;
