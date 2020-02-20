@@ -6,11 +6,17 @@ abstract class AbstractAdminConfig {
     /**
      * register configuration menus
      */
-    abstract public function registerDashboardMenus();
+    public function registerDashboardMenus() {
+
+    }
+    
     /**
      * register configuration menus
      */
-    abstract public function registerConfigMenus();
+    public function registerConfigMenus() {
+
+    }
+
     public function registerGroups($l0name, $l1name) {
         $groupTag = strtolower(sprintf('%s/%s', $l0name, $l1name));
         $groups = [];

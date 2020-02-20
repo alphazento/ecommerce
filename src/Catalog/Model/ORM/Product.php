@@ -21,7 +21,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     ];
 
     public $_richData_ = [
-        'desc',
         'prices',
         'special_price'
     ];
@@ -44,10 +43,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     
     public function shippable() {
         return true;
-    }
-   
-    public function desc() {
-        return $this->hasOne(ProductDescription::class, 'product_id');
     }
 
     public function prices() {
@@ -112,10 +107,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public function categories() {
         return $this->hasManyThrough(Category::class, CategoryProduct::class, 'product_id', 'id', 'id', 'category_id')
             ->orderBy('level');
-    }
-
-    public function getDescriptionAttribute() {
-        return $this->desc->description ?? '';
     }
 
     public function getPriceAttribute() {

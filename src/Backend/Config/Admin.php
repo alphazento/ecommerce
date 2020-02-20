@@ -196,10 +196,10 @@ class Admin extends AbstractAdminConfig {
                         'editable' => true
                     ],
                     [
-                        'text' => 'Is Search Layer',
+                        'text' => 'Searchable',
                         'ui' => 'z-boolean-chip',
                         'edit_ui' => 'config-boolean-item',
-                        'value' => 'is_search_layer',
+                        'value' => 'searchable',
                         'editable' => true
                     ],
                     [

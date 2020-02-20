@@ -13,7 +13,6 @@ use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\Category;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 use Zento\Catalog\Model\ORM\ProductPrice;
-use Zento\Catalog\Model\ORM\ProductDescription;
 use Zento\Catalog\Providers\Facades\CategoryService;
 
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
@@ -45,6 +44,7 @@ class CatalogSearchService
         'sub_categories' => 'filterCategory',
         'price' => 'filterPrice',
         'text' =>'filterText',
+        'name' =>'filterText',
     ];
  
     protected $sort_bys = [
@@ -108,13 +108,7 @@ class CatalogSearchService
     }
 
     protected function orderByName($builder, $field, $direction = 'asc') {
-        $table = (new ProductDescription)->getTable();
-        if (!isset($this->joined_tables[$table])) {
-            $product_table = $builder->getModel()->getTable();
-            $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-            $this->joined_tables[$table] = true;
-        }
-        $builder->orderBy($table . '.name', $direction);
+        $builder->orderBy('name', $direction);
     }
 
     // /**
@@ -241,7 +235,7 @@ class CatalogSearchService
         $model = new Product;
         $product_table = $model->getTable();
         //select must include type_id for mutiple product type
-        $builder = $model->newQuery()->select([$product_table . '.id', $product_table . '.type_id']);
+        $builder = $model->newQuery()->select([$product_table . '.id', $product_table . '.type_id',  $product_table . '.name']);
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer
@@ -374,7 +368,7 @@ class CatalogSearchService
                 $collection = DynamicAttribute::with(['options'])
                     ->where('parent_table', 'products')
                     ->where('active', 1)
-                    ->where('is_search_layer', 1)
+                    ->where('searchable', 1)
                     ->orderBy('search_layer_sort')
                     ->get();
                 $ds = $collection->toArray();

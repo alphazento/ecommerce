@@ -20,6 +20,7 @@ export default {
         "config-date-item": "components/configurable/DatePicker.vue",
         "config-date-range-item": "components/configurable/DateRangePicker.vue",
         "config-data-table": "components/configurable/DataTable.vue",
+        "z-config-actions": "components/configurable/Actions.vue",
         "config-model-editor": "components/ModelEditor.vue",
 
         "config-image-uploader-item": "components/configurable/ImageUploader.vue",

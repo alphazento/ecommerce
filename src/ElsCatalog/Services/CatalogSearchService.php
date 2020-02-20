@@ -191,7 +191,7 @@ class CatalogSearchService extends \Zento\CatalogSearch\Services\CatalogSearchSe
                 $collection = DynamicAttribute::with(['options'])
                     ->where('parent_table', 'products')
                     ->where('active', 1)
-                    ->where('is_search_layer', 1)
+                    ->where('searchable', 1)
                     ->orderBy('search_layer_sort')
                     ->get();
                 $ds = $collection->toArray();

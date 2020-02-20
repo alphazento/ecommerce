@@ -12,7 +12,7 @@
       </a>
       <v-card-title>
         <div class="mx-5">
-          <p class="title blue--text">{{ product.desc.name }}</p>
+          <p class="title blue--text">{{ product.name }}</p>
           <!-- <p class="ma-0 subheading body-1 font-weight-bold text-left"></p> -->
           <br />
           <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>

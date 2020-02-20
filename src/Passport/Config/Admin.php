@@ -7,9 +7,6 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Passport\Consts;
 
 class Admin extends AbstractAdminConfig {
-    public function registerDashboardMenus() {
-
-    }
     public function registerConfigMenus() {
         AdminConfigurationService::registerL1MenuNode('Website', 'Passport', 'Passport');
     }

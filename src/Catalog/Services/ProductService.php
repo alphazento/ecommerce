@@ -75,7 +75,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
     }
 
     public function getProductSearchables() {
-        return DynamicAttribute::where('is_search_layer', '>', '0')
+        return DynamicAttribute::where('searchable', '>', '0')
             ->where('active', 1)
             ->pluck('attribute_name')
             ->toArray();

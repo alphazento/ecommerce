@@ -43,6 +43,7 @@
                   :is="header.ui"
                   v-bind="prepare_component_props(header, row)"
                   :value="row[header.value]"
+                  v-on:proxyEvent="proxyEvent"
                 ></component>
               </td>
             </tr>
@@ -264,6 +265,9 @@ export default {
         this.selectedItems = [];
         this.$emit("selectedRowsChange", []);
       }
+    },
+    proxyEvent(event) {
+      this.$emit('proxyAction', event);
     }
   },
   watch: {

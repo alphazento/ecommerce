@@ -13,9 +13,6 @@ class Admin extends AbstractAdminConfig {
             'mdi-file-table-box-multiple', '/admin/sales_orders');
     }
 
-    public function registerConfigMenus() {
-    }
-
     public function _registerGroups($groupTag, &$groups) {
         $groups['tables/orders'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [

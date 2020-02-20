@@ -5,10 +5,10 @@
         </v-flex>
         <v-flex md7 xs12>
             <h1 class="display-2 text-uppercase">
-                {{ product.desc.name }}
+                {{ product.name }}
             </h1>
             <br/>
-            <p v-html="product.desc.description"/>
+            <p v-html="product.description"/>
             <!-- <product-tab
                 :description="product.desc.description"
                 :flex="'md9 xs12'"

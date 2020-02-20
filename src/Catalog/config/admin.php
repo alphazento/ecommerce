@@ -17,9 +17,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             'mdi-shape', '/admin/catalog/product');
     }
 
-    public function registerConfigMenus() {
-    }
-
     protected function _registerGroups($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {
             $items[] = [
@@ -110,12 +107,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'title' => 'Visibility',
                 'ui' => 'config-options-item',
                 'accessor' => 'visibility',
-                'options' => [
-                    ['label' => 'Not Visible Individually', 'value' => 1],
-                    ['label' => 'Catalog', 'value' => 2],
-                    ['label' => 'Search', 'value' => 3],
-                    ['label' => 'Catalog, Search', 'value' => 4],
-                ]
+                'options' => $this->getProductVisibilityOptions()
             ];
 
             $items[] = [
@@ -208,6 +200,14 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 }
             }
             
+
+            $daSets = DynamicAttributeSet::with('attributes')
+                ->where('model', '=', 'products')
+                ->where('active', 1)
+                ->get();
+            //not display, but for the logic
+            AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
+
             AdminConfigurationService::registerGroup($groupTag, 'product',  [
                 'title' => 'Product Settings',
                 'items' => $items
@@ -291,15 +291,22 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'options' => $this->genProductTypsMapping(),
                             'filter_ui' => 'config-options-item',
                             'filter_data_type' => 'string',
-                        ],
-                        [
-                            'text' => 'Status',
-                            'ui' => 'z-label',
-                            'value' => 'status',
-                            'filter_ui' => 'config-text-item',
                             'clearable' => true,
                         ],
-                       
+                        [
+                            'text' => 'Visibility',
+                            'ui' => 'z-options-display',
+                            'value' => 'visibility',
+                            'options' => $this->getProductVisibilityOptions(),
+                            'filter_ui' => 'config-options-item',
+                            'clearable' => true,
+                        ],
+                        [
+                            'text' => 'Active',
+                            'ui' => 'z-boolean-chip',
+                            'value' => 'Active',
+                            'filter_ui' => 'config-boolean-item'
+                        ],
                         [
                             'text' => 'Image',
                             'ui' => 'config-image-uploader-item',
@@ -307,6 +314,21 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'folder' => 'website',
                             'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif',
                             'value' => 'image'
+                        ],
+                        [
+                            'text' => 'Actions',
+                            'ui' => 'z-config-actions',
+                            'value' => '_none_',
+                            'options' => [
+                                [
+                                    'label' => 'Edit',
+                                    'value' => 'editProduct'
+                                ],
+                                [
+                                    'label' => 'Delete',
+                                    'value' => 'deleteProduct'
+                                ],
+                            ]
                         ]
                     ],
                     'primary_key' => 'id',
@@ -376,5 +398,13 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'value' => $key
             ];
         }, array_keys(Product::getProductTypes()));
+    }
+    protected function getProductVisibilityOptions() {
+        return [
+            ['label' => 'Not Visible Individually', 'value' => 1],
+            ['label' => 'Catalog', 'value' => 2],
+            ['label' => 'Search', 'value' => 3],
+            ['label' => 'Catalog, Search', 'value' => 4],
+        ];
     }
 }

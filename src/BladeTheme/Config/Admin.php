@@ -9,10 +9,6 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Facades\ThemeManager;
 
 class Admin extends AbstractAdminConfig {
-    public function registerDashboardMenus() {
-
-    }
-
     public function registerConfigMenus() {
         AdminConfigurationService::registerRootLevelMenuNode('Theme', 'Theme');
         AdminConfigurationService::registerL1MenuNode('Theme', 'Themes', 'Themes');

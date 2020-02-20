@@ -9,8 +9,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
 
     }
-    public function registerConfigMenus() {
-    }
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['sales/paymentgateway'] = function($groupTag) {

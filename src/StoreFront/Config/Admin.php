@@ -7,9 +7,6 @@ use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerDashboardMenus() {
-
-    }
     public function registerConfigMenus() {
         AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront', 'StoreFront');
     }

@@ -41,10 +41,10 @@
                         <v-flex md1 xs1></v-flex>
                         <v-flex md10 xs10>
                             <h1 class="display-2 text-uppercase">
-                                {{ product.desc.name }}
+                                {{ product.name }}
                             </h1>
                             <br/>
-                            <p v-html="product.desc.description "></p>
+                            <p v-html="product.description "></p>
                         </v-flex>
                     </v-layout>
                     <v-layout row>

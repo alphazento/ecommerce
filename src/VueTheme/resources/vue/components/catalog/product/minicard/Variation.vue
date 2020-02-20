@@ -46,7 +46,7 @@
 
             <v-card-title>
                 <div class="mx-5">
-                    <p class="title blue--text">{{ product.desc.name }}</p>
+                    <p class="title blue--text">{{ product.name }}</p>
                     <br />
                     <v-rating
                         readonly

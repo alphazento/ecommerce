@@ -6,7 +6,8 @@ export default {
     title: String,
     ui: String,
     value: String | Number,
-    options: Array
+    options: Array,
+    extraData: Object
   },
   data() {
     return {

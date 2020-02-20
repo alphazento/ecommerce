@@ -3,7 +3,8 @@ import ProductRoutePage from "./pages/catalog/product/RoutePage";
 
 export default {
     components: {
-        "category-treeview": "components/CategoryTreeview.vue"
+        "category-treeview": "components/CategoryTreeview.vue",
+        "z-dyna-attr-model-editor": "components/DAModelEditor.vue"
     },
     routes: [{
         name: "catalog.category",
