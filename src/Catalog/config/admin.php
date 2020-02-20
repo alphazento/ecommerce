@@ -47,34 +47,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
             $itemsGroups = [];
 
-            $dynAttrs = DynamicAttribute::with(['options'])
-                ->where('parent_table', 'categories')
-                ->where('active', 1)
-                ->get();
-
-            foreach($dynAttrs as $item) {
-                if (empty($item->admin_group)) {
-                    $items[] = [
-                        'da_id' => $item->id,
-                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                        'accessor' => $item->attribute_name,
-                        'options'  => $this->mapOptions($item->options)
-                    ];
-                } else {
-                    $group = $item->admin_group;
-                    if (!isset($itemsGroups[$group])) {
-                        $itemsGroups[$group] = [];
-                    }
-                    $itemsGroups[$group][] = [
-                        'da_id' => $item->id,
-                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                        'accessor' => $item->attribute_name,
-                        'options'  => $this->mapOptions($item->options)
-                    ];
-                }
-            }
+            $this->groupDynamicAttributes('categories', $itemsGroups, $items);
 
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Basic Settings',
@@ -100,14 +73,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'title' => 'Enable Product',
                 'ui' => 'config-boolean-item',
-                'accessor' => 'is_active'
-            ];
-
-            $items[] = [
-                'title' => 'Visibility',
-                'ui' => 'config-options-item',
-                'accessor' => 'visibility',
-                'options' => $this->getProductVisibilityOptions()
+                'accessor' => 'active'
             ];
 
             $items[] = [
@@ -116,60 +82,60 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'description',
             ];
             
-            $itemsGroups = ['Price' => [], 'Search Engine Optimization'=>[]];
-            $itemsGroups['Price'][] = [
-                'title' => 'Price',
-                'ui' => 'config-text-item',
-                'accessor' => 'price',
-            ];
+            // $itemsGroups = ['Price' => [], 'Search Engine Optimization'=>[]];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'Price',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'price',
+            // ];
 
-            $itemsGroups['Price'][] = [
-                'title' => 'RRP',
-                'ui' => 'config-text-item',
-                'accessor' => 'rrp',
-            ];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'RRP',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'rrp',
+            // ];
 
-            $itemsGroups['Price'][] = [
-                'title' => 'Cost',
-                'ui' => 'config-text-item',
-                'accessor' => 'cost',
-            ];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'Cost',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'cost',
+            // ];
 
-            $itemsGroups['Price'][] = [
-                'title' => 'Special Price',
-                'ui' => 'config-text-item',
-                'accessor' => 'special_price',
-            ];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'Special Price',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'special_price',
+            // ];
 
-            $itemsGroups['Price'][] = [
-                'title' => 'Special From',
-                'ui' => 'config-text-item',
-                'accessor' => 'special_from',
-            ];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'Special From',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'special_from',
+            // ];
 
-            $itemsGroups['Price'][] = [
-                'title' => 'Special To',
-                'ui' => 'config-text-item',
-                'accessor' => 'special_to',
-            ];
+            // $itemsGroups['Price'][] = [
+            //     'title' => 'Special To',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'special_to',
+            // ];
 
-            $itemsGroups['Search Engine Optimization'][] = [
-                'title' => 'Meta Description',
-                'ui' => 'config-text-item',
-                'accessor' => 'meta_description',
-            ];
+            // $itemsGroups['Search Engine Optimization'][] = [
+            //     'title' => 'Meta Description',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'meta_description',
+            // ];
 
-            $itemsGroups['Search Engine Optimization'][] = [
-                'title' => 'Meta Title',
-                'ui' => 'config-text-item',
-                'accessor' => 'meta_description',
-            ];
+            // $itemsGroups['Search Engine Optimization'][] = [
+            //     'title' => 'Meta Title',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'meta_description',
+            // ];
 
-            $itemsGroups['Search Engine Optimization'][] = [
-                'title' => 'Meta Keyword',
-                'ui' => 'config-text-item',
-                'accessor' => 'meta_keyword',
-            ];
+            // $itemsGroups['Search Engine Optimization'][] = [
+            //     'title' => 'Meta Keyword',
+            //     'ui' => 'config-text-item',
+            //     'accessor' => 'meta_keyword',
+            // ];
 
             $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
                 ->where('active', 1)
@@ -206,17 +172,19 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 ->where('active', 1)
                 ->get();
             //not display, but for the logic
-            AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
 
-            AdminConfigurationService::registerGroup($groupTag, 'product',  [
-                'title' => 'Product Settings',
+            $this->groupDynamicAttributes('products', $itemsGroups, $items);
+
+            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
+                'title' => 'Basic Settings',
                 'items' => $items
             ]);
 
+            AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
+
             foreach($itemsGroups as $group => $items) {
-                AdminConfigurationService::registerSubgroupToGroup($groupTag, 
-                    'product', 
-                    md5($group), 
+                AdminConfigurationService::registerGroup($groupTag, 
+                    $group, 
                     [
                         'title' => $group,
                         'items' => $items
@@ -406,5 +374,36 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ['label' => 'Search', 'value' => 3],
             ['label' => 'Catalog, Search', 'value' => 4],
         ];
+    }
+
+    protected function groupDynamicAttributes($model, &$itemsGroups, &$items) {
+        $dynAttrs = DynamicAttribute::with(['options'])
+        ->where('parent_table', $model)
+        ->where('active', 1)
+        ->get();
+
+        foreach($dynAttrs as $item) {
+            if (empty($item->admin_group)) {
+                $items[] = [
+                    'da_id' => $item->id,
+                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
+                    'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
+                    'accessor' => $item->attribute_name,
+                    'options'  => $this->mapOptions($item->options)
+                ];
+            } else {
+                $group = $item->admin_group;
+                if (!isset($itemsGroups[$group])) {
+                    $itemsGroups[$group] = [];
+                }
+                $itemsGroups[$group][] = [
+                    'da_id' => $item->id,
+                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
+                    'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
+                    'accessor' => $item->attribute_name,
+                    'options'  => $this->mapOptions($item->options)
+                ];
+            }
+        }
     }
 }
