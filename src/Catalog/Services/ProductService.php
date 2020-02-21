@@ -5,9 +5,9 @@ namespace Zento\Catalog\Services;
 use DB;
 use Store;
 use Closure;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServiceInterface
 {
@@ -24,7 +24,6 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
 
     public function getProductBySku($sku) {
         return $this->singleProductExtraRelation(Product::where('sku', $sku)->first());
-
     }
 
     public function getProductsByIds(array $ids) {

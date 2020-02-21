@@ -19,7 +19,7 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
         $model = $this->model;
         $builder = $model::whereIn('id', $identifiers);
         if ($activeOnly) {
-            $builder->where('is_active', '=', 1);
+            $builder->where('active', '=', 1);
         }
         $categories = $builder->get();
         $ids = [];
@@ -50,7 +50,7 @@ class CategoryService extends \Zento\Catalog\Services\CategoryService
         if (!isset($this->cache[$cacheKey])) {
             $builder = $model::where('level', $level);
             if ($activeOnly) {
-                $builder->where('is_active', '=', 1);
+                $builder->where('active', '=', 1);
             }
             $this->cache[$cacheKey] = $builder->orderBy('sort_by')->get();
         }

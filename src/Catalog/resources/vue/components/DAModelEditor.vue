@@ -188,7 +188,8 @@ export default {
       if (this.isNew) {
         this.dirty = true;
       } else {
-        this.$store.dispatch("showSpinner", "Saving Changes...");
+        this.$emit('propertyChange', {model: this.model, preoperty: item.accessor, value: item.value});
+        // this.$store.dispatch("showSpinner", "Saving Changes...");
         // axios
         //   .patch(
         //     `/api/v1/admin/catalog/categories/${this.model.id}/${item.accessor}`,
@@ -208,7 +209,7 @@ export default {
     },
 
     saveModel() {
-      console.log('saveModel');
+      this.$emit('saveModel', this.model);
       // this.$store.dispatch("showSpinner", "Saving Changes...");
       // axios
       //   .post("/api/v1/admin/catalog/categories", this.model)

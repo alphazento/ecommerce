@@ -45,7 +45,7 @@ class CatalogController extends Controller
     public function product() {
         if ($productId = Route::input('id')) {
             $resp = BladeTheme::requestInnerApi('GET', 
-                BladeTheme::apiUrl(sprintf('products/%s', $productId))
+                BladeTheme::apiUrl(sprintf('catalog/products/%s', $productId))
             );
 
             if ($resp->success) {
@@ -70,7 +70,7 @@ class CatalogController extends Controller
 
     protected function fetchAllCategories() {
         if (!$this->allCategories) {
-            $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('categories/tree'));
+            $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('catalog/categories/tree'));
             $this->allCategories = $resp->success ? $resp->data : null;
         }
         return $this->allCategories;
@@ -78,7 +78,7 @@ class CatalogController extends Controller
 
     protected function fetchCategories($category_ids) {
         $resp = BladeTheme::requestInnerApi('GET', 
-            BladeTheme::apiUrl(sprintf('categories/%s', $category_ids)));
+            BladeTheme::apiUrl(sprintf('catalog/categories/%s', $category_ids)));
         if ($succeed) {
             return $resp->data;
         }

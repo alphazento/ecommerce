@@ -17,7 +17,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
         'position',
         'level',
         'children_count',
-        'is_active',
+        'active',
         'sort_by'
     ];
 
@@ -69,7 +69,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
      */
     public function scopeActive($query, $activeOnly = true)
     {
-        return $query->whereIn('is_active', $activeOnly ? [1]:[0,1]);
+        return $query->whereIn('active', $activeOnly ? [1]:[0,1]);
     }
 
     public function getUrlAttribute() {

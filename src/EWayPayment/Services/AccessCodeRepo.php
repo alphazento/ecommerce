@@ -53,7 +53,7 @@ class AccessCodeRepo {
             'State' => $shippingAddress['state'],
             'PostalCode' =>$shippingAddress['postal_code'],
             'Country' => 'AU',
-            'IsActive'=> $shippingAddress['is_active'],
+            'Active'=> $shippingAddress['active'],
             'Email'=> $shoppingCart['email'],
             'Phone' => $shippingAddress['phone'],
             'Mobile' => $shippingAddress['phone'],

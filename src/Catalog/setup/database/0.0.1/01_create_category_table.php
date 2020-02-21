@@ -24,7 +24,7 @@ class CreateCategoryTable extends Migration
             $table->integer('position');
             $table->integer('level')->default(0);
             $table->integer('children_count')->nullable();
-            $table->boolean('is_active');
+            $table->boolean('active');
             $table->integer('sort_by')->unsigned()->nullable();
             $table->timestamps();
             $table->unique(['parent_id', 'name']); 

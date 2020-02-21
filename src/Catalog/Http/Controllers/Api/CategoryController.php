@@ -2,27 +2,16 @@
 
 namespace Zento\Catalog\Http\Controllers\Api;
 
-use CategoryService;
-use ProductService;
-use Product;
 use Route;
 use Request;
-use Registry;
-use View;
 use ShareBucket;
+use CategoryService;
 use Zento\Kernel\Consts;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Zento\Catalog\Model\DB\CartridgeSeries;
-use Zento\Catalog\Model\Search\LegacySearch as Adapter;
-use Zento\Kernel\Facades\DanamicAttributeFactory;
-use Zento\Catalog\Model\DB\CartridgeSeries\ProductCrossTable;
-use Zento\Catalog\Model\DB\CartridgeSeries\Description;
 use Zento\Catalog\Model\ORM\Category;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 
-class CatalogController extends ApiBaseController
+class CategoryController extends ApiBaseController
 {
     public function categoriesTree() {
         $all = Request::get('all', false);
@@ -53,17 +42,17 @@ class CatalogController extends ApiBaseController
         return $this->withData($category);
     }
 
-    public function setCategoryField() {
+    public function setAttribute() {
         if ($id = Route::input('id')) {
             if ($category = CategoryService::getCategoryById($id)) {
-                $field = Route::input('field');
+                $attribute = Route::input('attribute');
                 $value = Request::get('value');
-                $category->{$field} = $value;
-                $category->push();
-                return $this->with($field, $value);
+                $category->{$attribute} = $value;
+                $category->update();
+                return $this->withData($category);
             }
         }
-        return $this->error(420)->with($field, $value);
+        return $this->error(420)->with($attribute, $value);
     }
 
     public function newCategory() {
@@ -76,11 +65,11 @@ class CatalogController extends ApiBaseController
         ShareBucket::put(Consts::MODEL_RICH_MODE, true);
         $category = Category::find($category->id);
         $dynAttrs = Arr::except($data, $category->getTableFields());
-        foreach($dynAttrs as $field => $value) {
-            $category->{$field} = $value;
+        foreach($dynAttrs as $attribute => $value) {
+            $category->{$attribute} = $value;
         }
         $category->path = $category->path . '/' . $category->id;
-        $category->push();
+        $category->update();
         dd($category);
     }
 
@@ -89,11 +78,6 @@ class CatalogController extends ApiBaseController
         \zento_assert($category);
         return $this->with('category', $category)
                     ->with('products', $category->products()->paginate(Request::get('per_page', 9)));
-    }
-
-    public function product() {
-        $product = ProductService::getProductById(Route::input('id'));
-        return $this->withData($product);
     }
 
     public function newProductSection() {

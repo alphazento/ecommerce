@@ -28,7 +28,7 @@ class Provider extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             BladeTheme::registerPreRouteCallAction(function($bladeTheme) {
                 // prepare cateogry tree for category menus
-                $apiResp = $bladeTheme->requestInnerApi('GET', $bladeTheme->apiUrl('categories/tree'));
+                $apiResp = $bladeTheme->requestInnerApi('GET', $bladeTheme->apiUrl('catalog/categories/tree'));
                 $footer = config(Consts::CONFIG_KEY_FOOTER_DATA, '{}');
                 $logo = config(\Zento\StoreFront\Consts::LOGO);
                 $bladeTheme->addGlobalViewData(

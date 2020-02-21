@@ -37,7 +37,11 @@ class BladeTheme {
         app()->instance('request', $request);
         
         ShareBucket::put(\Zento\Passport\Http\Middleware\GuestToken::ALLOW_GUEST_API, true);
-        $resp = Route::dispatch($request)->getOriginalContent();
+        try {
+            $resp = Route::dispatch($request)->getOriginalContent();
+        } catch (\Exception $e) {
+            throw new \Exception(sprintf('Request to [%s] %s', $url, $e->getMessage()));
+        }
 
         //restore to origin stack
         app()->instance('request', $originRequest);

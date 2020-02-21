@@ -40,6 +40,10 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public static function getProductTypes() {
         return self::$typeMapping;
     }
+
+    public function getTableFields() {
+        return $this->fillable;
+    }
     
     public function shippable() {
         return true;
@@ -62,8 +66,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
      */
     public function newFromBuilder($attributes = [], $connection = null)
     {
-        $model = $this->newInstanceBaseTypeId($attributes);
-
+        $model = self::newInstanceBaseTypeId($attributes, $this);
         $model->setRawAttributes((array) $attributes, true);
 
         $model->setConnection($connection ?: $this->getConnectionName());
@@ -73,7 +76,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         return $model;
     }
 
-    protected function newInstanceBaseTypeId($attributes = []) {
+    public static function newInstanceBaseTypeId($attributes = [], $pthis = null) {
         $type_id = false;
         if (is_array($attributes)) {
             if (isset($attributes['type_id'])) {
@@ -85,10 +88,14 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         if ($type_id) {
             if (isset(self::$typeMapping[$type_id])) {
                 $class = self::$typeMapping[$type_id];
-                return new $class([], true);
+                return with(new static)->newInstance([], true);
             }
         } else {
-            return $this->newInstance([], true);
+            if ($pthis) {
+                return $pthis->newInstance([], true);
+            } else {
+                return with(new static)->newInstance([], true);
+            }
         }
     }
 

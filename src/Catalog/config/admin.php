@@ -18,6 +18,44 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     }
 
     protected function _registerGroups($groupTag, &$groups) {
+        $this->mappingCategoryModelDefines($groupTag, $groups);
+        $this->mappingProductModelDefines($groupTag, $groups);
+        $this->mappingCategoryDatatableDefines($groupTag, $groups);
+        $this->mappingProductDatatableDefines($groupTag, $groups);
+        // $groups['tables/product'] = function($groupTag) {
+        //     AdminConfigurationService::registerGroup($groupTag, 'table',  [
+        //         'title' => 'Product Editor Template Definition',
+        //         'items' => [
+        //             'headers' => [
+        //                 [
+        //                     'text' => 'ID',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'id',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true
+        //                 ],
+        //                 [
+        //                     'text' => 'SKU',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'sku',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true,
+        //                 ],
+        //                 [
+        //                     'text' => 'Name',
+        //                     'ui' => 'z-label',
+        //                     'value' => 'name',
+        //                     'filter_ui' => 'config-text-item',
+        //                     'clearable' => true,
+        //                 ]
+        //             ],
+        //             'primary_key' => 'id',
+        //         ]
+        //     ]);
+        // };
+    }
+
+    protected function mappingCategoryModelDefines($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {
             $items[] = [
                 'title' => 'Category Name',
@@ -25,9 +63,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'name'
             ];
             $items[] = [
-                'title' => 'Enable Category',
+                'title' => 'Active',
                 'ui' => 'config-boolean-item',
-                'accessor' => 'is_active'
+                'accessor' => 'active'
             ];
 
             $items[] = [
@@ -63,7 +101,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     ]);
             }
         };
+    }
 
+    protected function mappingProductModelDefines($groupTag, &$groups) {
         $groups['catalog/product'] = function($groupTag) {
             $items[] = [
                 'title' => 'Name',
@@ -71,7 +111,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'name'
             ];
             $items[] = [
-                'title' => 'Enable Product',
+                'title' => 'Active',
                 'ui' => 'config-boolean-item',
                 'accessor' => 'active'
             ];
@@ -191,10 +231,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     ]);
             }
         };
+    }
 
+    protected function mappingCategoryDatatableDefines($groupTag, &$groups) {
         $groups['tables/category'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Category Editor Template Definition',
+                'title' => 'Category DataTable Template Definition',
                 'items' => [
                     'headers' => [
                         [
@@ -223,7 +265,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 ]
             ]);
         };
+    }
 
+    protected function mappingProductDatatableDefines($groupTag, &$groups) {
         $groups['tables/product'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Product Table Definition',
@@ -303,38 +347,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 ]
             ]);
         };
-
-        // $groups['tables/product'] = function($groupTag) {
-        //     AdminConfigurationService::registerGroup($groupTag, 'table',  [
-        //         'title' => 'Product Editor Template Definition',
-        //         'items' => [
-        //             'headers' => [
-        //                 [
-        //                     'text' => 'ID',
-        //                     'ui' => 'z-label',
-        //                     'value' => 'id',
-        //                     'filter_ui' => 'config-text-item',
-        //                     'clearable' => true
-        //                 ],
-        //                 [
-        //                     'text' => 'SKU',
-        //                     'ui' => 'z-label',
-        //                     'value' => 'sku',
-        //                     'filter_ui' => 'config-text-item',
-        //                     'clearable' => true,
-        //                 ],
-        //                 [
-        //                     'text' => 'Name',
-        //                     'ui' => 'z-label',
-        //                     'value' => 'name',
-        //                     'filter_ui' => 'config-text-item',
-        //                     'clearable' => true,
-        //                 ]
-        //             ],
-        //             'primary_key' => 'id',
-        //         ]
-        //     ]);
-        // };
     }
 
     protected function mapOptions($optionCollection) {

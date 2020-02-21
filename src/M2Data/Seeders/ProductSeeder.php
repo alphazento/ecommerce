@@ -11,7 +11,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
 
     protected $attrsInMainTable = [
         'default_sort_by' => 'sort_by',         //m2 attr => zento
-        'is_active' => 'is_active',
+        'active' => 'active',
 
         //description group
         'name' => 'name',         //m2 attr => zento

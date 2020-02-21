@@ -11,7 +11,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
 
     protected $attrsInMainTable = [
         'default_sort_by' => 'sort_by',         //m2 attr => zento
-        'is_active' => 'is_active',
+        'active' => 'active',
     // ];
 
     // protected $attrsInDescriptionTable = [
@@ -50,7 +50,7 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             $category->position = $item->position;
             $category->level = $item->level;
             $category->children_count = $item->children_count;
-            $category->is_active = true;
+            $category->active = true;
             $category->sort_by = 0;
             // $category->name = 'category' . $category->id;
             // $category->image = '';

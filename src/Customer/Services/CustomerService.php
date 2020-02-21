@@ -17,12 +17,12 @@ class CustomerService
   }
 
   public function activate(\Illuminate\Foundation\Auth\User $user) {
-    $user->is_active = true;
+    $user->active = true;
     return $user->update();
   }
 
   public function deactivate(\Illuminate\Foundation\Auth\User $user) {
-    $user->is_active = false;
+    $user->active = false;
     return $user->update();
   }
 
@@ -39,7 +39,7 @@ class CustomerService
   public function addAddress(\Illuminate\Foundation\Auth\User $user, array $address_attributes) {
       $address_attributes['customer_id'] = $user->id;
       $address = new CustomerAddress($address_attributes);
-      if ($existAddress = CustomerAddress::where('hash', $address->uniqueHash())->where('is_active', 1)->first()) {
+      if ($existAddress = CustomerAddress::where('hash', $address->uniqueHash())->where('active', 1)->first()) {
         return $existAddress;
       } else {
         $address->save();
@@ -78,14 +78,14 @@ class CustomerService
 
   public function getCustomerAddresses($customer_id, $only_active = true) {
     return CustomerAddress::where('customer_id', $customer_id)
-      ->whereIn('is_active', $only_active ? [1] : [0, 1])
+      ->whereIn('active', $only_active ? [1] : [0, 1])
       ->get();
   }
 
   public function getCustomerAddress($customer_id, $address_id, $only_active = true) {
     return CustomerAddress::where('customer_id', $customer_id)
       ->where('id', $address_id)
-      ->whereIn('is_active', $only_active ? [1] : [0, 1])
+      ->whereIn('active', $only_active ? [1] : [0, 1])
       ->first();
   }
 }

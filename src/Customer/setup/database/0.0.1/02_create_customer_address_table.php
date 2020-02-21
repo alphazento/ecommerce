@@ -25,7 +25,7 @@ class CreateCustomerAddressTable extends Migration
             $table->string('postal_code', 16);
             $table->string('state', 32);
             $table->string('phone', 32)->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

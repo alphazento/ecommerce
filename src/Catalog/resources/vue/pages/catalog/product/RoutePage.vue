@@ -27,6 +27,8 @@
         :title="'product'"
         :model-name="'catalog/product'"
         :edit-with="editItem" 
+        @propertyChange="propertyChange"
+        @saveModel="saveModel"
         >
       </z-dyna-attr-model-editor>
     </v-tab-item>
@@ -56,6 +58,31 @@ export default {
         case 'deleteProduct':
           break;
       }
+    },
+    propertyChange(event) {
+      this.$store.dispatch("showSpinner", "Saving Changes...");
+      axios
+        .patch(
+          `/api/v1/admin/catalog/products/${event.model.id}/${event.preoperty}`,
+          {
+            value: event.value
+          }
+        )
+        .then(response => {
+          if (response.data.success) {
+            this.$store.dispatch("snackMessage", "Updated.");
+          } else {
+            this.$store.dispatch("snackMessage", "Failed to update.");
+          }
+        });
+    },
+    saveMode(model) {
+      this.$store.dispatch("showSpinner", "Saving Changes...");
+      axios
+        .post("/api/v1/admin/catalog/products", this.model)
+        .then(response => {
+          this.$store.dispatch("hideSpinner");
+        });
     }
   },
   watch: {
