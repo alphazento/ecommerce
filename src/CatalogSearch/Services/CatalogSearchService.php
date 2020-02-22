@@ -234,8 +234,13 @@ class CatalogSearchService
     protected function applyFilter($criteria, $withAggregate = true) {
         $model = new Product;
         $product_table = $model->getTable();
+        $fields = $model->getTableFields();
+        $fields[] = 'id';
+        $fields = array_map(function($field) use($product_table) {
+            return $product_table . '.' . $field;
+        }, $fields);
         //select must include type_id for mutiple product type
-        $builder = $model->newQuery()->select([$product_table . '.id', $product_table . '.type_id',  $product_table . '.name']);
+        $builder = $model->newQuery()->select($fields);
         $priceFilter = null;  // price's aggregate is special
 
         //apply extra filter layer

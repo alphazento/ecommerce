@@ -72,7 +72,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'title' => 'Attribute Set',
                 'ui' => 'config-options-item',
                 'accessor' => 'attribute_set_id',
-                'options'  => $this->genAttributeSetOptions()
+                'options'  => $this->genAttributeSetOptions('categories')
             ];
 
 
@@ -109,6 +109,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'title' => 'Name',
                 'ui' => 'config-text-item',
                 'accessor' => 'name'
+            ];
+            $items[] = [
+                'title' => 'Attribute Set',
+                'ui' => 'config-options-item',
+                'accessor' => 'attribute_set_id',
+                'options'  => $this->genAttributeSetOptions('products')
             ];
             $items[] = [
                 'title' => 'Active',
@@ -177,41 +183,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //     'accessor' => 'meta_keyword',
             // ];
 
-            $dynAttrs = DynamicAttribute::with(['options'])->where('parent_table', 'products')
-                ->where('active', 1)
-                ->get();
-
-            foreach($dynAttrs as $item) {
-                if ('visibility' == $item->attribute_name) {
-                    continue;
-                }
-                if (empty($item->admin_group)) {
-                    $items[] = [
-                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                        'accessor' => $item->attribute_name,
-                        'options'  => $this->mapOptions($item->options)
-                    ];
-                } else {
-                    $group = $item->admin_group;
-                    if (!isset($itemsGroups[$group])) {
-                        $itemsGroups[$group] = [];
-                    }
-                    $itemsGroups[$group][] = [
-                        'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                        'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                        'accessor' => $item->attribute_name,
-                        'options'  => $this->mapOptions($item->options)
-                    ];
-                }
-            }
             
-
-            $daSets = DynamicAttributeSet::with('attributes')
-                ->where('model', '=', 'products')
-                ->where('active', 1)
-                ->get();
-            //not display, but for the logic
 
             $this->groupDynamicAttributes('products', $itemsGroups, $items);
 
@@ -220,6 +192,11 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'items' => $items
             ]);
 
+            $daSets = DynamicAttributeSet::with('attributes')
+            ->where('model', '=', 'products')
+            ->where('active', 1)
+            ->get();
+            //not display, but for the logic
             AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
 
             foreach($itemsGroups as $group => $items) {
@@ -357,8 +334,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         return $options;
     }
 
-    protected function genAttributeSetOptions() {
-        $collection = DynamicAttributeSet::where('model', '=', 'categories')
+    protected function genAttributeSetOptions($model) {
+        $collection = DynamicAttributeSet::where('model', '=', $model)
             ->where('active', 1)
             ->getQuery()
             ->get(['id', 'name'])
