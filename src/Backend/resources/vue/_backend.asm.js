@@ -10,6 +10,7 @@ export default {
         "z-file-picker": "components/configurable/FilePicker.vue",
 
         "z-label": "components/display/Label.vue",
+        "z-image": "components/display/Image.vue",
         "z-boolean-chip": "components/display/BooleanChip.vue",
         "z-options-display": "components/display/Options.vue",
         "config-text-item": "components/configurable/Text.vue",

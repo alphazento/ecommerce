@@ -183,8 +183,6 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //     'accessor' => 'meta_keyword',
             // ];
 
-            
-
             $this->groupDynamicAttributes('products', $itemsGroups, $items);
 
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
@@ -193,9 +191,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ]);
 
             $daSets = DynamicAttributeSet::with('attributes')
-            ->where('model', '=', 'products')
-            ->where('active', 1)
-            ->get();
+                ->where('model', '=', 'products')
+                ->where('active', 1)
+                ->get();
             //not display, but for the logic
             AdminConfigurationService::registerGroup($groupTag, '_extra_', $daSets->toArray());
 
@@ -296,14 +294,20 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'value' => 'Active',
                             'filter_ui' => 'config-boolean-item'
                         ],
+                        // [
+                        //     'text' => 'Image',
+                        //     'ui' => 'config-image-uploader-item',
+                        //     'visibility' => 'public',
+                        //     'folder' => 'website',
+                        //     'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml',
+                        //     'fileType' => 'png,jpeg,jpg,bmp,gif,ico,svg',
+                        //     'value' => 'image'
+                        // ],
                         [
                             'text' => 'Image',
-                            'ui' => 'config-image-uploader-item',
-                            'visibility' => 'public',
-                            'folder' => 'website',
-                            'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml',
-                            'fileType' => 'png,jpeg,jpg,bmp,gif,ico,svg',
-                            'value' => 'image'
+                            'ui' => 'z-image',
+                            'value' => 'image',
+                            'maxWidth' => '150px'
                         ],
                         [
                             'text' => 'Actions',
@@ -366,6 +370,22 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         ];
     }
 
+    protected function buildConfigItem($dynAttr) {
+        $item = [
+            'da_id' => $dynAttr->id,
+            'title' => empty($dynAttr->admin_label) ? $dynAttr->attribute_name : $dynAttr->admin_label,
+            'ui' => empty($dynAttr->admin_component) ? 'config-text-item' : $dynAttr->admin_component,
+            'accessor' => $dynAttr->attribute_name,
+            'options'  => $this->mapOptions($dynAttr->options)
+        ];
+        if ($item['ui'] === 'config-image-uploader-item') {
+            $item['visibility'] = 'public';
+            $item['folder'] = 'catalog';
+            $item['accept'] = 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml';
+            $item['fileType'] = 'png,jpeg,jpg,bmp,gif,ico,svg';
+        }
+        return $item;
+    }
     protected function groupDynamicAttributes($model, &$itemsGroups, &$items) {
         $dynAttrs = DynamicAttribute::with(['options'])
         ->where('parent_table', $model)
@@ -374,25 +394,13 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
         foreach($dynAttrs as $item) {
             if (empty($item->admin_group)) {
-                $items[] = [
-                    'da_id' => $item->id,
-                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                    'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                    'accessor' => $item->attribute_name,
-                    'options'  => $this->mapOptions($item->options)
-                ];
+                $items[] = $this->buildConfigItem($item);
             } else {
                 $group = $item->admin_group;
                 if (!isset($itemsGroups[$group])) {
                     $itemsGroups[$group] = [];
                 }
-                $itemsGroups[$group][] = [
-                    'da_id' => $item->id,
-                    'title' => empty($item->admin_label) ? $item->attribute_name : $item->admin_label,
-                    'ui' => empty($item->admin_component) ? 'config-text-item' : $item->admin_component,
-                    'accessor' => $item->attribute_name,
-                    'options'  => $this->mapOptions($item->options)
-                ];
+                $itemsGroups[$group][] = $this->buildConfigItem($item);
             }
         }
     }
