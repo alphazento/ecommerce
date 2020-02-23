@@ -50,12 +50,15 @@ class FileUploadController extends ApiBaseController
                 $file->storeAs($path, Str::slug($file->getClientOriginalName()), compact('disk', 'visibility'));
                 break;
         }
-                
-        if (Str::startsWith($url, env('APP_URL'))){
-            $url = Str::replaceFirst(env('APP_URL'), '', $url);
-            $url = Str::start($url, '/');
+
+        $value = $url;
+        $thumbnail = $url;
+        $name = $fileName;
+        if (Str::startsWith($value, env('APP_URL'))){
+            $value = Str::replaceFirst(env('APP_URL'), '', $value);
+            $value = Str::start($value, '/');
         }
-        return $this->success(200)->withData(compact('url'));
+        return $this->success(200)->withData(compact('url', 'thumbnail', 'name', 'value'));
     }
 
     protected function getStrategy($visibility) {

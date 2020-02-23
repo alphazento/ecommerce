@@ -1,8 +1,6 @@
 <template>
- <v-tabs  v-model="tab">
-    <v-tab>
-      All Products
-    </v-tab>
+  <v-tabs v-model="tab">
+    <v-tab>All Products</v-tab>
     <v-tab v-if="editItem.model.id">
       <v-icon left>mdi-lock</v-icon>
       {{editItem.model.name}}
@@ -10,7 +8,7 @@
         <v-icon left>mdi-close</v-icon>
       </v-btn>
     </v-tab>
-  
+
     <v-tab-item>
       <config-data-table
         :search="search"
@@ -23,24 +21,23 @@
       ></config-data-table>
     </v-tab-item>
     <v-tab-item>
-      <z-dyna-attr-model-editor 
+      <z-dyna-attr-model-editor
         :title="'product'"
         :model-name="'catalog/product'"
-        :edit-with="editItem" 
+        :edit-with="editItem"
         @propertyChange="propertyChange"
         @saveModel="saveModel"
-        >
-      </z-dyna-attr-model-editor>
+      ></z-dyna-attr-model-editor>
     </v-tab-item>
- </v-tabs>
+  </v-tabs>
 </template>
 
 <script>
-import { type } from 'os';
+import { type } from "os";
 export default {
   data() {
     return {
-      search:"",
+      search: "",
       editItem: {
         isNew: false,
         model: {}
@@ -50,12 +47,12 @@ export default {
   },
   methods: {
     proxyAction(event) {
-      switch(event.action) {
-        case 'editProduct':
-          this.editItem = { isNew: false, model: event.data};
+      switch (event.action) {
+        case "editProduct":
+          this.editItem = { isNew: false, model: event.data };
           this.tab = 1;
           break;
-        case 'deleteProduct':
+        case "deleteProduct":
           break;
       }
     },
@@ -76,7 +73,7 @@ export default {
           }
         });
     },
-    saveMode(model) {
+    saveModel(model) {
       this.$store.dispatch("showSpinner", "Saving Changes...");
       axios
         .post("/api/v1/admin/catalog/products", this.model)

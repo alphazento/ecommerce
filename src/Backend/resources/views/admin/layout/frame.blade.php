@@ -24,5 +24,6 @@
 <script src=@asset("zento_backend/js/app.js") type="text/javascript"></script>
 <script src=@asset("zento_backend/vendor/vuetify2.2.3.js") type="text/javascript"></script>
 @stack('admin.tail')
+
 </body>
 </html>

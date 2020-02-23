@@ -1,5 +1,5 @@
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
-<link rel="icon" href=@asset("/zento_bladetheme/alphazento_green.svg")>
+<link rel="icon" href=@asset(config('store.logo'))>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
 <link rel="stylesheet" href=@asset("zento_backend/vendor/font-awesome.min.css")>

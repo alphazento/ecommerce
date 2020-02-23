@@ -118,9 +118,6 @@ export default {
   props: {
     links: {
       type: Array
-    },
-    logo: {
-      type: String
     }
   },
   data() {
@@ -128,7 +125,8 @@ export default {
       searchText: this.$store.state.searchResult.criteria.text,
       drawer: false,
       searcher: false,
-      signinDialog: false
+      signinDialog: false,
+      logo: window.themeData.logo
     };
   },
 

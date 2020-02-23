@@ -60,7 +60,7 @@
       <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- logo -->
       <a href="/admin">
-        <v-img src="/zento_bladetheme/alphazento.svg" :max-height="45" contain :position="'left'"></v-img>
+        <v-img :src="$store.state.themeData.logo" :max-height="45" contain :position="'left'"></v-img>
       </a>
       <!-- category menus -->
       <v-spacer></v-spacer>

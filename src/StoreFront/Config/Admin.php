@@ -7,6 +7,7 @@ use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
+    protected $storages;
     public function registerConfigMenus() {
         AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront', 'StoreFront');
     }
@@ -21,7 +22,8 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-image-uploader-item',
                         'visibility' => 'public',
                         'folder' => 'website',
-                        'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif',
+                        'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml',
+                        'fileType' => 'png,jpeg,jpg,bmp,gif,ico,svg',
                         'accessor' => Consts::LOGO
                     ],
                     [
@@ -107,7 +109,6 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
-    protected $storages;
     protected function getStorages() {
         if (!$this->storages) {
             $this->storages = [];

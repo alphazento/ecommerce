@@ -6,7 +6,12 @@
     </router-view>
 @endsection
 
+
+
 @push('admin.tail')
+@php
+$logo = config(\Zento\StoreFront\Consts::LOGO);
+@endphp
 <script>
 const store = window.vStore.default;
 const router = window.router;
@@ -19,6 +24,9 @@ const app = new Vue({
   router: router,
   data: {
     component: null
+  },
+  created() {
+      this.$store.dispatch('setThemeData', @json(['logo'=>$logo]));
   }
 });
 </script>

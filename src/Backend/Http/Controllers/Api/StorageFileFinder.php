@@ -62,14 +62,17 @@ class StorageFileFinder extends ApiBaseController
         }
         switch($fileType) {
             case 'image':
-                $pattern = sprintf('%s/%s.{jpg,jpeg,png,bmp,gif,ico,svg}', $searchIn, $searchText);
             break;
             case 'all':
             case '*':
                 $pattern = sprintf('%s/%s', $searchIn, $searchText);
             break;
-            default:
+            
+            case '':
                 $pattern = sprintf('%s/%s.%s', $searchIn, $searchText, $fileType);
+            break;
+            default:
+                $pattern = sprintf('%s/%s.{%s}', $searchIn, $searchText, $fileType);
             break;
         }
 
