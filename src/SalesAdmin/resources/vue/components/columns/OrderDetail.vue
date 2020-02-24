@@ -2,7 +2,7 @@
   <v-container>
     <v-list-item two-line v-for="(item, idx) in products" :key="idx">
       <v-list-item-avatar tile size="80">
-        <v-img :src="getProductImageUrl(item.product)"></v-img>
+        <v-img :src="item.product.image" eager></v-img>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="mb-1">
@@ -48,13 +48,13 @@ export default {
       return "#";
     },
 
-    getProductImageUrl: function(product, relativePath) {
-      if (product) {
-        relativePath = relativePath || "/images/catalog/product";
-        return `${relativePath}/${product.image}`;
-      }
-      return "not-found.png";
-    }
+    // getProductImageUrl: function(product, relativePath) {
+    //   if (product) {
+    //     relativePath = relativePath || "/images/catalog/product";
+    //     return `${relativePath}/${product.image}`;
+    //   }
+    //   return "not-found.png";
+    // }
   }
 };
 </script>

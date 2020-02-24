@@ -27,9 +27,10 @@
                                 height="280px"
                             >
                                 <v-img
-                                    :src="getProductImageUrl(item)"
+                                    :src="item"
                                     height="280px"
                                     contain
+                                    eager
                                 >
                                     <v-container fill-height fluid>
                                         <v-layout fill-height>

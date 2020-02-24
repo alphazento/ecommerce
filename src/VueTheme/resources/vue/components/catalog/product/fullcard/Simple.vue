@@ -1,7 +1,7 @@
 <template>
     <v-layout row>
         <v-flex md5 xs12>
-            <v-img max-width="400px" :src="getProductImageUrl(product)"></v-img>
+            <v-img max-width="400px" :src="product.image" eager></v-img>
         </v-flex>
         <v-flex md7 xs12>
             <h1 class="display-2 text-uppercase">

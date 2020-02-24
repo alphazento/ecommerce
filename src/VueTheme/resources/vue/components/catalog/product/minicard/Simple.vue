@@ -2,7 +2,7 @@
   <v-hover v-slot:default="{ hover }">
     <v-card class="mx-auto">
       <a :href="getProductUrl(product)">
-        <v-img :src="getProductImageUrl(product)" height="280px" contain>
+        <v-img :src="product.image" height="280px" contain eager>
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox></v-flex>

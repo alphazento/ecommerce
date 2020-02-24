@@ -15,8 +15,9 @@
                 <v-sheet height="100%" tile>
                     <v-row class="fill-height" align="center" justify="center">
                         <v-img
-                            :src="getProductImageUrl(item)"
+                            :src="item.image"
                             contain
+                            eager
                         >
                             <v-container fill-height fluid>
                                 <v-layout fill-height>

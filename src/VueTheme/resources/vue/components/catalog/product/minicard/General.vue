@@ -3,9 +3,10 @@
         <v-card class="mx-auto">
             <a :href="getProductUrl(product)">
                 <v-img
-                    :src="getProductImageUrl(product)"
+                    :src="product.image"
                     height="280px"
                     contain
+                    eager
                 ></v-img>
             </a>
             <v-card-title class="title">
