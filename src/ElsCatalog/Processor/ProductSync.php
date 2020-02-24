@@ -33,7 +33,7 @@ class ProductSync {
     }
 
     protected function mergeSearchablesToParent(array &$product) {
-        if ($product['type_id'] === 'configurable') {
+        if ($product['model_type'] === 'configurable') {
             foreach($this->searchables ?? [] as $attribute) {
                 $values = $product[$attribute] ?? [];
                 $values = is_array($values) ? $values : [$values];

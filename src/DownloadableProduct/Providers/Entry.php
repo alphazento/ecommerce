@@ -10,7 +10,7 @@ use Zento\DownloadableProduct\Model\ORM\Product as DownloadableProduct;
 class Entry extends \Illuminate\Support\ServiceProvider
 {
     public function boot() {
-        DownloadableProduct::registerType(DownloadableProduct::TYPE_ID, DownloadableProduct::class);
+        DownloadableProduct::registerType(DownloadableProduct::MODEL_TYPE, DownloadableProduct::class);
         $callback = function($items) {
             if (DownloadableProduct::isRichMode()) {
                 DownloadableProduct::assignExtraRelation($items);

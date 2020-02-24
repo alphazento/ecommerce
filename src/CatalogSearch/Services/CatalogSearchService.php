@@ -239,7 +239,7 @@ class CatalogSearchService
         $fields = array_map(function($field) use($product_table) {
             return $product_table . '.' . $field;
         }, $fields);
-        //select must include type_id for mutiple product type
+        //select must include model_type for mutiple product type
         $builder = $model->newQuery()->select($fields);
         $priceFilter = null;  // price's aggregate is special
 

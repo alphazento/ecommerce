@@ -31,7 +31,7 @@
             console.log('product', this.product);
             this.$store.dispatch('setUser', this.user);
             this.$store.dispatch('setSwatches', this.swatches);
-            switch(this.product.type_id) {
+            switch(this.product.model_type) {
                 case 'simple':
                     this.productCard = 'full-simple-product-card';
                     break;

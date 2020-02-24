@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="value" :max-width="maxWidth"></v-img>
+  <v-img  :max-width="maxWidth"  :src="value" eager></v-img>
 </template>
 
 <script>

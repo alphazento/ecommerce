@@ -7,11 +7,12 @@
         show-size
         :accept="accept"
         :rules="rules"
-        @change="fileChanged"
         v-model="chosenFile"
         :success="success"
         :success-messages="success_message"
+        @change="fileChanged"
       ></v-file-input>
+      <v-btn v-if="chosenFile" large color="primary"  @click="uploadFile">Upload</v-btn>
     </v-flex>
     <v-flex md3 v-if="uploading">
       <v-progress-circular indeterminate size="48" width="2" color="light-blue"></v-progress-circular>
@@ -57,7 +58,12 @@ export default {
     };
   },
   methods: {
-    fileChanged(file) {
+    fileChanged() {
+      this.success = false;
+      this.success_message = '';
+    }, 
+    uploadFile() {
+      let file = this.chosenFile;
       if (file.size > this.max_size) {
         return;
       }
@@ -82,12 +88,17 @@ export default {
           this.chosenFile = null;
           this.success = true;
           this.success_message = `${file.name} uploaded.`;
+          this.fileuploaed(response.data.data);
         })
         .catch(function() {
           console.log("FAILURE!!");
           this.uploading = false;
           this.success = false;
         });
+    },
+
+    fileuploaed(data) {
+        this.$emit('fileuploaed', response.data.data);
     }
   }
 };

@@ -272,10 +272,10 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'sortable' => false
                         ],
                         [
-                            'text' => 'Product Type',
+                            'text' => 'Product Model Type',
                             'ui' => 'z-options-display',
-                            'value' => 'type_id',
-                            'options' => $this->genProductTypsMapping(),
+                            'value' => 'model_type',
+                            'options' => $this->getProductModelTypsMapping(),
                             'filter_ui' => 'config-options-item',
                             'filter_data_type' => 'string',
                             'clearable' => true,
@@ -353,7 +353,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         return $options;
     }
 
-    protected function genProductTypsMapping() {
+    protected function getProductModelTypsMapping() {
        return  array_map(function($key) {
             return [
                 'label' => $key,
@@ -380,9 +380,10 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         ];
         if ($item['ui'] === 'config-image-uploader-item') {
             $item['visibility'] = 'public';
-            $item['folder'] = 'catalog';
+            $item['folder'] = 'catalog/product';
             $item['accept'] = 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml';
             $item['fileType'] = 'png,jpeg,jpg,bmp,gif,ico,svg';
+            $item['maxWidth'] = '300px';
         }
         return $item;
     }

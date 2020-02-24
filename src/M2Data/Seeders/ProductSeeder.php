@@ -53,7 +53,7 @@ class ProductSeeder extends \Illuminate\Database\Seeder {
 
             $product->id = $item->entity_id;
             $product->attribute_set_id = $item->attribute_set_id;
-            $product->type_id = $item->type_id;
+            $product->model_type = $item->model_type;
             $product->has_options = $item->has_options;
             $product->required_options = $item->required_options;
             $product->sku = $item->sku;

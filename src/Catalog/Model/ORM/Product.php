@@ -11,7 +11,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
-    const TYPE_ID = "simple";
+    const MODEL_TYPE = "simple";
 
     protected static $typeMapping = [
         'simple' => '\Zento\Catalog\Model\ORM\Product',
@@ -29,12 +29,12 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         'name',
         'attribute_set_id',
         'sku',
-        'type_id',
+        'model_type',
         'active'
     ];
 
-    public static function registerType($type_id, $class) {
-        self::$typeMapping[$type_id] = $class;
+    public static function registerType($model_type, $class) {
+        self::$typeMapping[$model_type] = $class;
     }
 
     public static function getProductTypes() {
@@ -77,17 +77,17 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     }
 
     public static function newInstanceBaseTypeId($attributes = [], $pthis = null) {
-        $type_id = false;
+        $model_type = false;
         if (is_array($attributes)) {
-            if (isset($attributes['type_id'])) {
-                $type_id = $attributes['type_id'];
+            if (isset($attributes['model_type'])) {
+                $model_type = $attributes['model_type'];
             }
-        } elseif (is_object($attributes) && property_exists($attributes, 'type_id')) {
-            $type_id = $attributes->type_id;
+        } elseif (is_object($attributes) && property_exists($attributes, 'model_type')) {
+            $model_type = $attributes->model_type;
         }
-        if ($type_id) {
-            if (isset(self::$typeMapping[$type_id])) {
-                $class = self::$typeMapping[$type_id];
+        if ($model_type) {
+            if (isset(self::$typeMapping[$model_type])) {
+                $class = self::$typeMapping[$model_type];
                 return with(new static)->newInstance([], true);
             }
         } else {
@@ -126,7 +126,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
     public static function assignExtraRelation($products) {
         $reduced = array_filter($products, function($product) {
-            return $product->type_id === static::TYPE_ID;
+            return $product->model_type === static::MODEL_TYPE;
         });
         $ids = array_map(function($product) {
             return $product->id;

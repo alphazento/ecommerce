@@ -3,28 +3,31 @@
     <v-menu :close-on-content-click="false" offset-y v-model="show">
       <template v-slot:activator="{ on, value }">
         <v-btn icon dark v-on="on" @click="onLibClick(value)">
-          <v-icon large color="deep-purple">mdi-image-multiple</v-icon>
+          <v-icon large color="deep-purple">mdi-dots-horizontal-circle</v-icon>
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span>Select Or Upload File</span>
+          <span>Select/Upload File to Folder "{{folder}}", visibility:{{visibility}}</span>
         </v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-layout row>
-              <v-flex md9>
+              <v-flex md7>
                 <v-file-input
                   label="Select upload file"
                   filled
                   show-size
                   :accept="accept"
                   :rules="rules"
-                  @change="fileChanged"
                   v-model="chosenFile"
                   :success="success"
                   :success-messages="success_message"
+                  @change="fileChanged"
                 ></v-file-input>
+              </v-flex>
+              <v-flex md3 v-if="chosenFile">
+                <v-btn @click="uploadFile">Upload</v-btn>
               </v-flex>
               <v-flex md3 v-if="uploading">
                 <v-progress-circular indeterminate size="48" width="2" color="light-blue"></v-progress-circular>
@@ -52,13 +55,11 @@
                     <v-card flat tile class="d-flex card-hover" @click="selectFile(item)">
                       <v-img
                         :src="item.thumbnail"
-                        :lazy-src="
-                                            'https://picsum.photos/10/6?image=15'
-                                        "
                         aspect-ratio="1"
                         class="grey lighten-2 align-end"
                       >
-                        <v-card-title class="title white--text" v-text="item.name"></v-card-title>
+                        <v-card-title class="title white--text primary" v-text="item.name">
+                        </v-card-title>
                         <template v-slot:placeholder>
                           <v-row class="fill-height ma-0" align="center" justify="center">
                             <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -170,6 +171,10 @@ export default {
     selectFile(item) {
       this.$emit("fileSelected", item);
       this.show = false;
+    },
+    fileuploaed(data) {
+      this.pagination.data.unshift(data);
+      this.pagination.to++;
     }
   },
   watch: {

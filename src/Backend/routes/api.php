@@ -101,7 +101,8 @@ Route::group(
         Route::post(
             '/upload/{visibility}/{folder}',
             ['as'=>'post.upload.to.folder', 'uses'=>'FileUploadController@uploadFile']
-        )->where('visibility', 'public|private');
+        )->where('visibility', 'public|private')
+        ->where('folder', '.*');
 
         Route::get('/files-finder/{visibility}', 
             ['as'=>'get.files-finder.in-folder', 'uses'=>'StorageFileFinder@findFiles']
@@ -109,7 +110,8 @@ Route::group(
 
         Route::get('/files-finder/{visibility}/{folder}', 
             ['as'=>'get.files-finder', 'uses'=>'StorageFileFinder@findFiles']
-        )->where('visibility', 'public|private');
+        )->where('visibility', 'public|private')
+         ->where('folder', '.*');
     }
 );
 

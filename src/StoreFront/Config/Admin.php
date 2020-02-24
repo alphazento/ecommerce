@@ -24,7 +24,8 @@ class Admin extends AbstractAdminConfig {
                         'folder' => 'website',
                         'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml',
                         'fileType' => 'png,jpeg,jpg,bmp,gif,ico,svg',
-                        'accessor' => Consts::LOGO
+                        'accessor' => Consts::LOGO,
+                        'maxWidth' => '150px',
                     ],
                     [
                         'title' => 'Currency',

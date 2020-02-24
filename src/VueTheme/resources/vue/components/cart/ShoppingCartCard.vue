@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     cartItemComponent(item) {
-      switch (item.product.type_id) {
+      switch (item.product.model_type) {
         case "configurable":
           return "full-cart-item-configurable";
           break;
