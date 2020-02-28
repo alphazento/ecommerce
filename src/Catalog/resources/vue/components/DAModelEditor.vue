@@ -1,7 +1,7 @@
 <template>
     <v-card v-if="editWith">
       <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
-        <span v-if="isNew">{{ title }}</span>
+        <span v-if="isNew" class="warning">{{ newModelTitle }}</span>
         <span v-else>{{model.name}}</span>
         <v-spacer></v-spacer>
         <v-btn color="primary" fab dark large v-if="dirty" @click="saveModel">
@@ -22,12 +22,13 @@
 import { type } from 'os';
 export default {
   props: {
-      title: String,
+      newModelTitle: String,
       modelName: String,
       editWith: {
         isNew: Boolean,
         model: Object
-      }
+      },
+      newModel: Object
   },
   data() {
     let _editWith = this.editWith ? this.editWith : { isNew: false, model: {} };
@@ -39,7 +40,7 @@ export default {
       schema: {},
       schemaHasFetched: false,
       modelData: {},
-      availableAttrsGroups: {}
+      availableAttrsGroups: {},
     };
   },
   methods: {
@@ -70,9 +71,11 @@ export default {
 
     fetchSchema(schema) {
       this.modelSchema = schema;
+      this.defaultModel = JSON
       this.calcAvailableAttrsGroups();
       this.schemaHasFetched = true;
-      if (this.modelHasFetched) {
+      if (this.modelHasFetched || this.editWith) {
+        this.modelHasFetched = true;
         this.combineModel();
       }
     },
@@ -119,10 +122,7 @@ export default {
     mergeModelData(data) {
       this.isNew = data.isNew;
       if (this.isNew) {
-        this.model = {
-          parent_id: data.model.id,
-          level: data.model.level + 1,
-        };
+        this.model = JSON.parse(JSON.stringify(this.newModel));
       } else {
         this.model = JSON.parse(JSON.stringify(data.model));
       }
@@ -216,6 +216,11 @@ export default {
       //     this.$store.dispatch("hideSpinner");
       //     console.log(response);
       //   });
+    }
+  },
+  created() {
+    if (this.editWith !== undefined) {
+      this.modelChange(this.editWith, false);
     }
   },
   watch: {

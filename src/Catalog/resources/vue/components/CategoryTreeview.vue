@@ -34,7 +34,7 @@
           <v-btn
             color="error"
             icon
-            v-if="item.level < tree_conf.level_to && (selected_item.id !== item.id || selected_item.mode !== 'new')"
+            v-if="canShowAddBtn(item)"
             @click="addCategory(item)"
           >
             <v-icon>mdi-plus-circle</v-icon>
@@ -42,7 +42,7 @@
           <v-btn
             color="primary"
             icon
-            v-if="item.level >= tree_conf.level_from && (selected_item.id !== item.id || selected_item.mode !== 'edit')"
+            v-if="canShowEditBtn(item)"
             @click="editCategory(item)"
           >
             <v-icon>mdi-pencil-box-multiple-outline</v-icon>
@@ -63,10 +63,11 @@ export default {
     extraData: {
       remote_ip: String
     },
-    selectedItem: {
-      mode: String,
-      id: Number
-    }
+    editItem: {
+      isNew: Boolean,
+      model: Object
+    },
+    refresh: Number
   },
   data() {
     return {
@@ -84,9 +85,9 @@ export default {
       },
       open: [1],
       search: null,
-      selected_item: this.selectedItem
-        ? this.selectedItem
-        : { mode: "", id: -1 }
+      edit_item: this.editItem
+        ? this.editItem
+        : { model:{id: -1}, isNew: false }
     };
   },
   computed: {
@@ -95,7 +96,8 @@ export default {
         item[textKey].toLowerCase().indexOf(search.toLowerCase()) > -1;
     },
     active() {
-      return [this.selected_item.id];
+      var id = this.editItem ? this.editItem.model.id : 0;
+      return [id];
     }
   },
   methods: {
@@ -112,18 +114,34 @@ export default {
       });
     },
     addCategory(item) {
-      this.emitCategoryChange(item, "new");
+      this.emitSelectedItemChange(item, true);
     },
     editCategory(item) {
-      this.emitCategoryChange(item, "edit");
+      this.emitSelectedItemChange(item, false);
     },
 
-    emitCategoryChange(item, mode) {
+    emitSelectedItemChange(item, isNew) {
       let data = {
-        mode: mode,
-        item: item
+        isNew: isNew,
+        model: item
       };
-      this.$emit("categoryChange", data);
+      this.$emit("selectedItemChange", data);
+    },
+
+    canShowAddBtn(item) {
+      var level =  item.level < this.tree_conf.level_to;
+      if (level && this.editItem) {
+        return this.editItem.isNew || this.editItem.model.id !== item.id;
+      }
+      return false;
+    },
+
+    canShowEditBtn(item) {
+      var level =  item.level >= this.tree_conf.level_from;
+      if (level && this.editItem) {
+        return !this.editItem.isNew || this.editItem.model.id !== item.id;
+      }
+      return false;
     }
   },
   mounted() {
@@ -131,7 +149,12 @@ export default {
   },
   watch: {
     selectedItem(nV) {
-      this.selected_item = nV;
+      this.edit_item = nV;
+    },
+    refresh(nV, oV) {
+      if (nV != oV) {
+       this.fetchCategories();
+      }
     }
   }
 };

@@ -48,7 +48,7 @@ class CategoryController extends ApiBaseController
                 $attribute = Route::input('attribute');
                 $value = Request::get('value');
                 $category->{$attribute} = $value;
-                $category->update();
+                $category->push();
                 return $this->withData($category);
             }
         }
@@ -57,18 +57,21 @@ class CategoryController extends ApiBaseController
 
     public function newCategory() {
         $data = Request::all();
+        unset($data['id']);
+
         $category = new Category();
         $filedList = $category->getTableFields();
         $fileds = Arr::only($data, $category->getTableFields());
         $category->fill($fileds);
         $category->save();
-        ShareBucket::put(Consts::MODEL_RICH_MODE, true);
-        $category = Category::find($category->id);
-        $dynAttrs = Arr::except($data, $category->getTableFields());
-        foreach($dynAttrs as $attribute => $value) {
-            $category->{$attribute} = $value;
+        //must reload to make sure it will load dynamic attributes
+        if ($category = CategoryService::getCategoryById($category->id)) {
+            $dynAttrs = Arr::except($data, $category->getTableFields());
+            foreach($dynAttrs as $attribute => $value) {
+                $category->{$attribute} = $value;
+            }
+            $category->push();
         }
-        $category->push();
         return $this->withData($category);
     }
 

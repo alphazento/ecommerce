@@ -87,16 +87,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.v-middle {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.bottom-line {
-  border-bottom: 1px solid grey;
-}
-.component-container {
-  padding-top: 18px;
-}
-</style>
