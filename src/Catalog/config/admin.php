@@ -69,6 +69,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ];
 
             $items[] = [
+                'title' => 'Position',
+                'ui' => 'config-text-item',
+                'accessor' => 'position'
+            ];
+
+            $items[] = [
                 'title' => 'Attribute Set',
                 'ui' => 'config-options-item',
                 'accessor' => 'attribute_set_id',

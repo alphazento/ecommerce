@@ -23,7 +23,7 @@ class CreateCategoryTable extends Migration
             $table->string('path', 255)->index();
             $table->integer('position');
             $table->integer('level')->default(0);
-            $table->integer('children_count')->nullable();
+            $table->integer('children_count')->nullable()->default(0);
             $table->boolean('active');
             $table->integer('sort_by')->unsigned()->nullable();
             $table->timestamps();

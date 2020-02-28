@@ -136,7 +136,6 @@ export default {
         this.category = {
           parent_id: data.item.id,
           level: data.item.level + 1,
-          path: data.item.path
         };
         this.parentCategory = data.item;
       } else {

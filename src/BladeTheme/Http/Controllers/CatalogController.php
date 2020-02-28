@@ -23,7 +23,7 @@ class CatalogController extends Controller
                 $resp = BladeTheme::requestInnerApi('GET', 
                     sprintf('%s/%s', $catalog_search_uri, $query)
                 );
-                $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
+                $pagination = $resp->success && is_object($resp->data) ? $resp->data->toArray() : $resp->data;
 
                 $page_data = ['type' => 'category', 
                     'title' => $category->name, 

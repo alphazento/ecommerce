@@ -122,7 +122,6 @@ export default {
         this.model = {
           parent_id: data.model.id,
           level: data.model.level + 1,
-          path: data.model.path
         };
       } else {
         this.model = JSON.parse(JSON.stringify(data.model));

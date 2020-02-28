@@ -68,9 +68,8 @@ class CategoryController extends ApiBaseController
         foreach($dynAttrs as $attribute => $value) {
             $category->{$attribute} = $value;
         }
-        $category->path = $category->path . '/' . $category->id;
-        $category->update();
-        dd($category);
+        $category->push();
+        return $this->withData($category);
     }
 
     public function productsOfCategory() {

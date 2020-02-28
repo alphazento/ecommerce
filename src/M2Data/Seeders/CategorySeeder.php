@@ -45,8 +45,6 @@ class CategorySeeder extends \Illuminate\Database\Seeder {
             $category->id = $item->entity_id;
             $category->attribute_set_id = $item->attribute_set_id;
             $category->parent_id = $item->parent_id;
-            $category->path = $item->path;
-            $category->hash = md5($item->path);
             $category->position = $item->position;
             $category->level = $item->level;
             $category->children_count = $item->children_count;
