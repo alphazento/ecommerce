@@ -1,11 +1,32 @@
 <template>
   <v-tabs v-model="tab">
-    <v-tab>All Products</v-tab>
-    <v-tab v-if="editItem.model.id">
+    <v-menu bottom right>
+      <template v-slot:activator="{ on }">
+        <v-btn text class="align-self-center mr-4" v-on="on">
+          more
+          <v-icon right>mdi-menu-down</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list class="grey lighten-3">
+        <v-list-item>
+          <v-btn color="error" @click="newProductTab" v-if="!editItem.isNew || !productTab">
+            <v-icon>mdi-plus-circle</v-icon>New Product
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <v-tab>
       <v-icon left>mdi-lock</v-icon>
-      {{editItem.model.name}}
-      <v-btn icon color="error">
-        <v-icon left>mdi-close</v-icon>
+      <span>All Products&nbsp;&nbsp;</span>
+    </v-tab>
+    <v-tab v-if="productTab">
+      <v-icon left>mdi-lock</v-icon>
+      <span class="error" v-if="editItem.isNew">New Product</span>
+      <span v-else>{{editItem.model.name}}</span>
+      <v-btn icon color="error" @click="closeProductTab">
+        <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-tab>
 
@@ -26,6 +47,7 @@
         :model-name="'catalog/product'"
         :edit-with="editItem"
         @propertyChange="propertyChange"
+        @defaultAttributeSet="setDefaultAttributeSet"
         @saveModel="saveModel"
       ></z-dyna-attr-model-editor>
     </v-tab-item>
@@ -42,7 +64,9 @@ export default {
         isNew: false,
         model: {}
       },
-      tab: 0
+      tab: 0,
+      productTab: false,
+      defaultAttributeSet: { id: 0 }
     };
   },
   methods: {
@@ -51,6 +75,7 @@ export default {
         case "editProduct":
           this.editItem = { isNew: false, model: event.data };
           this.tab = 1;
+          this.productTab = true;
           break;
         case "deleteProduct":
           break;
@@ -67,6 +92,7 @@ export default {
         )
         .then(response => {
           if (response.data.success) {
+            Object.assign(this.editItem.model, response.data.data);
             this.$store.dispatch("snackMessage", "Updated.");
           } else {
             this.$store.dispatch("snackMessage", "Failed to update.");
@@ -80,6 +106,26 @@ export default {
         .then(response => {
           this.$store.dispatch("hideSpinner");
         });
+    },
+    setDefaultAttributeSet(daset) {
+      this.defaultAttributeSet = daset;
+    },
+    closeProductTab() {
+      this.productTab = false;
+    },
+    newProductTab() {
+      this.editItem = {
+        isNew: true,
+        model: {
+          name: "",
+          visibility: 3,
+          attribute_set_id: this.defaultAttributeSet.id,
+          model_type: "simple",
+          active: "false"
+        }
+      };
+      this.tab = 1;
+      this.productTab = true;
     }
   },
   watch: {
