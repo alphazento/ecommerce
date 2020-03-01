@@ -144,9 +144,9 @@ export default new Vuex.Store({
         loadCart({
             commit
         }) {
-            this.dispatch('showSpinner', "Loading shopping cart")
+            // this.dispatch('showSpinner', "Loading shopping cart")
             axios.get('/api/v1/cart').then(response => {
-                this.dispatch('hideSpinner')
+                // this.dispatch('hideSpinner')
                 if (response.data && response.data.success) {
                     commit('setCart', response.data.data)
                 }
