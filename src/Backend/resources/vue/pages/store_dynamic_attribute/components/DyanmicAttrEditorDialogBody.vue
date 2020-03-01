@@ -1,28 +1,19 @@
 <template>
   <v-card>
-    <v-card-title class="headline">
-      <span v-if="item.id > 0">Edit Attribute for {{itemCopy.parent_table}}</span>
+    <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
+      <span v-if="item.id > 0">Attribute [{{itemCopy.attribute_name}}] of {{itemCopy.parent_table}}</span>
       <span v-else>New Attribute for {{itemCopy.parent_table}}</span>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" fab dark large v-if="dirty" @click="saveAttribute">
+        <v-icon dark>mdi-content-save</v-icon>
+      </v-btn>
     </v-card-title>
 
-    <v-card-text>
-      <v-form>
-        <v-layout v-for="(comp, i) of components" :key="i">
-          <v-flex md3>
-            <p class="subtitle-1">{{ comp.title }}:</p>
-          </v-flex>
-          <v-flex md9>
-            <component :is="comp.ui" v-bind="comp" @valueChanged="configValueChanged"></component>
-          </v-flex>
-        </v-layout>
-      </v-form>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn color="green darken-1" text @click="discard">Disard</v-btn>
-      <v-btn color="green darken-1" text @click="saveData">Save</v-btn>
-    </v-card-actions>
+    <config-model-editor
+      :model-data="modelData"
+      :with-value="false"
+      @configValueChanged="itemValueChanged"
+    ></config-model-editor>
   </v-card>
 </template>
 
@@ -45,8 +36,14 @@ export default {
     return {
       configs: {},
       components: [],
-      dataChanged: false,
-      itemCopy: {}
+      itemCopy: {},
+      modelData: {
+        default: {
+          title: "Dynamic Attribute Settings",
+          items: []
+        }
+      },
+      dirty: false
     };
   },
   methods: {
@@ -76,16 +73,16 @@ export default {
         }
       }
       this.components = components;
-      this.dataChanged = false;
+      this.modelData.default.items = this.components;
       this.itemCopy = Object.assign({}, this.item);
     },
-    configValueChanged(item) {
-      this.dataChanged = true;
+    itemValueChanged(item) {
+      this.dirty = true;
       this.components[item.idx].value = item.value;
       this.components = JSON.parse(JSON.stringify(this.components));
       this.itemCopy[item.accessor] = item.value;
     },
-    saveData() {
+    saveAttribute() {
       let id = this.itemCopy.id;
       this.$store.dispatch("showSpinner", "Saving data...");
       let service =

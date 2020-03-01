@@ -19,7 +19,7 @@ class CatalogController extends Controller
                 $request = Request::instance();
                 $path =  $request->path();
                 $query = Str::after($request->getRequestUri(), $request->path());
-                $catalog_search_uri = BladeTheme::apiUrl(sprintf('catalog/categories/%s', $category_id));
+                $catalog_search_uri = BladeTheme::apiUrl(sprintf('catalog/search/categories/%s', $category_id));
                 $resp = BladeTheme::requestInnerApi('GET', 
                     sprintf('%s/%s', $catalog_search_uri, $query)
                 );
@@ -29,7 +29,6 @@ class CatalogController extends Controller
                     'title' => $category->name, 
                     'description' => $category->description,
                     'catalog_search_uri' => $catalog_search_uri];
-
                 foreach($category->parents as $parent) {
                     if ($parent->id > 2) {
                         BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($parent), $parent->name);

@@ -117,6 +117,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'accessor' => 'name'
             ];
             $items[] = [
+                'title' => 'Product Type',
+                'ui' => 'config-options-item',
+                'accessor' => 'model_type',
+                'options'  => $this->getProductModelTypsMapping('products')
+            ];
+            $items[] = [
                 'title' => 'Attribute Set',
                 'ui' => 'config-options-item',
                 'accessor' => 'attribute_set_id',
@@ -297,7 +303,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                         [
                             'text' => 'Active',
                             'ui' => 'z-boolean-chip',
-                            'value' => 'Active',
+                            'value' => 'active',
                             'filter_ui' => 'config-boolean-item'
                         ],
                         // [

@@ -1,16 +1,7 @@
 <template>
   <v-layout>
-    <v-dialog v-model="dialog" max-width="960">
-      <dynamic-attribute-editor-dialogbody
-        :defines="defines"
-        :item="selectedItem"
-        :mode="dialogMode"
-        @close="closeDialog"
-      ></dynamic-attribute-editor-dialogbody>
-    </v-dialog>
-
     <v-flex md2>
-      <v-expansion-panels v-model="pannel" accordion multiple mandatory>
+      <v-expansion-panels value="0" accordion mandatory>
         <v-expansion-panel>
           <v-expansion-panel-header text-left>Dynamic Attributes</v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -28,39 +19,72 @@
       </v-expansion-panels>
     </v-flex>
     <v-flex md10>
-      <v-card v-if="!!group">
-        <v-card-title>
-          <span class="text-uppercase">{{ label }}</span>
-          <v-btn icon color="error" @click="newAttribute">
-            <v-icon>mdi-plus-circle</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-search"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table :headers="defines" :items="data" :search="search">
-          <template v-slot:body="{ headers, items }">
-            <tbody>
-              <tr class="text-start" v-for="(row, i) of items" :key="i">
-                <td v-for="(col, ci) of headers" :key="ci">
-                  <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
-                    <v-icon>mdi-pencil-box-multiple-outline</v-icon>
-                  </v-btn>
-                  <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
-                </td>
-              </tr>
-            </tbody>
+      <v-tabs v-model="tab">
+        <v-menu bottom right>
+          <template v-slot:activator="{ on }">
+            <v-btn text class="align-self-center mr-4" v-on="on">
+              more
+              <v-icon right>mdi-menu-down</v-icon>
+            </v-btn>
           </template>
-        </v-data-table>
-      </v-card>
-      <v-container v-else>
-        <span>Please select Model first</span>
-      </v-container>
+          <v-list class="grey lighten-3">
+            <v-list-item>
+              <v-btn color="error" @click="newAttribute" v-if="editMode != 'new' || !attributeTab">
+                <v-icon>mdi-plus-circle</v-icon>New Attribute
+              </v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-tab>
+          <v-icon left>mdi-lock</v-icon>
+          <span>All Attributes of {{group}}</span>
+        </v-tab>
+        <v-tab v-if="attributeTab">
+          <v-icon left>mdi-lock</v-icon>
+          <span class="error" v-if="editMode=='new'">New Attribute</span>
+          <span v-else>{{selectedItem.attribute_name}}</span>
+          <v-btn icon color="error" @click="closeProductTab">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-tab>
+
+        <v-tab-item>
+          <v-card v-if="!!group">
+            <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table :headers="defines" :items="data" :search="search">
+              <template v-slot:body="{ headers, items }">
+                <tbody>
+                  <tr class="text-start" v-for="(row, i) of items" :key="i">
+                    <td v-for="(col, ci) of headers" :key="ci">
+                      <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
+                        <v-icon>mdi-pencil-box-multiple-outline</v-icon>
+                      </v-btn>
+                      <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <dynamic-attribute-editor-dialogbody
+            :defines="defines"
+            :item="selectedItem"
+            :mode="editMode"
+            @close="closeDialog"
+          ></dynamic-attribute-editor-dialogbody>
+        </v-tab-item>
+      </v-tabs>
     </v-flex>
   </v-layout>
 </template>
@@ -69,18 +93,16 @@
 export default {
   data() {
     return {
-      dialog: false,
-      filter: true,
       search: "",
       baseRoute: "/admin/store-dynamic-attributes",
       defines: [],
       data: [],
       newModelTemp: {},
       group: "",
-      label: "Attributes",
       selectedItem: null,
-      dialogMode: "new",
-      pannel: [0]
+      editMode: "new",
+      tab: 0,
+      attributeTab: false
     };
   },
   created() {
@@ -119,7 +141,6 @@ export default {
 
     fetchDynamicAttributes(groupName) {
       this.group = groupName;
-      this.label = groupName;
       this.$store.dispatch("showSpinner", "Fetching Dynamic Attributes...");
       this.$store.dispatch("replaceBreadcrumbLastItem", {
         text: this.group,
@@ -144,18 +165,24 @@ export default {
 
     editAttribute(item) {
       this.selectedItem = item;
-      this.dialogMode = "edit";
-      this.dialog = true;
+      this.editMode = "edit";
+      this.attributeTab = true;
+      this.tab = 1;
     },
     newAttribute() {
-      this.dialogMode = "edit";
+      this.editMode = "new";
       this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
       this.selectedItem.id = 0;
-      this.dialog = true;
+      this.attributeTab = true;
+      this.tab = 1;
+    },
+
+    closeProductTab() {
+      this.attributeTab = false;
     },
 
     closeDialog(result) {
-      this.dialog = false;
+      this.attributeTab = false;
       if (result.success) {
         let item = this.data.find(item => item.id == result.data.id);
         if (item !== undefined) {

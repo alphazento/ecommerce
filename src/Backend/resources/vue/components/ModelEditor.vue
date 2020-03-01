@@ -42,7 +42,9 @@ export default {
     };
   },
   created() {
-    this.fetchModelSchema(this.model);
+    if (this.model) {
+      this.fetchModelSchema(this.model);
+    }
   },
   methods: {
     fetchModelSchema(model) {

@@ -19,7 +19,7 @@
 
     <v-tab>
       <v-icon left>mdi-lock</v-icon>
-      <span>All Products&nbsp;&nbsp;</span>
+      <span>All Products</span>
     </v-tab>
     <v-tab v-if="productTab">
       <v-icon left>mdi-lock</v-icon>

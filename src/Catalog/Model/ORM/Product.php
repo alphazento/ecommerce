@@ -72,7 +72,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         $model->setConnection($connection ?: $this->getConnectionName());
 
         $model->fireModelEvent('retrieved', false);
-
+        $model->lazyLoadRelation();
         return $model;
     }
 
@@ -88,7 +88,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         if ($model_type) {
             if (isset(self::$typeMapping[$model_type])) {
                 $class = self::$typeMapping[$model_type];
-                return with(new static)->newInstance([], true);
+                return with(new $class)->newInstance([], true);
             }
         } else {
             if ($pthis) {
