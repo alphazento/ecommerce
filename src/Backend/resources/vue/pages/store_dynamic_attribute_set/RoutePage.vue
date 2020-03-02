@@ -1,17 +1,7 @@
 <template>
   <v-layout>
-    <v-dialog v-model="dialog" max-width="960">
-      <dynamic-attribute-editor-dialogbody
-        :defines="defines"
-        :item="selectedItem"
-        :mode="dialogMode"
-        :edit-for="'set'"
-        @close="closeDialog"
-      ></dynamic-attribute-editor-dialogbody>
-    </v-dialog>
-
     <v-flex md2>
-      <v-expansion-panels v-model="pannel" accordion multiple mandatory>
+      <v-expansion-panels value="0" accordion mandatory>
         <v-expansion-panel>
           <v-expansion-panel-header text-left>Dynamic Attribute Set</v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -28,43 +18,75 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-flex>
-    <v-flex md4>
-      <v-card v-if="!!group">
-        <v-card-title>
-          <span class="text-uppercase">{{ label }}</span>
-          <v-btn icon color="error" @click="newAttribute">
-            <v-icon>mdi-plus-circle</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-search"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table :headers="defines" :items="data" :search="search">
-          <template v-slot:body="{ headers, items }">
-            <tbody>
-              <tr class="text-start" v-for="(row, i) of items" :key="i"  @click="rowClick(row)">
-                <td v-for="(col, ci) of headers" :key="ci">
-                  <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
-                    <v-icon>mdi-pencil-box-multiple-outline</v-icon>
-                  </v-btn>
-                  <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
-                </td>
-              </tr>
-            </tbody>
+
+    <v-flex md10>
+      <v-tabs v-model="tab" v-if="!!group">
+        <v-menu bottom right>
+          <template v-slot:activator="{ on }">
+            <v-btn text class="align-self-center mr-4" v-on="on">
+              more
+              <v-icon right>mdi-menu-down</v-icon>
+            </v-btn>
           </template>
-        </v-data-table>
-      </v-card>
-      <v-container v-else>
-        <span>Please select Model first</span>
-      </v-container>
-    </v-flex>
-    <v-flex md6>
-      <z-dynamic-attribute-set-binding :model="group" :id="bindingSetId" v-if="bindingSetId>0"></z-dynamic-attribute-set-binding>
+          <v-list class="grey lighten-3">
+            <v-list-item>
+              <v-btn color="error" @click="newAttributeSet" v-if="editMode != 'new' || !editorTab">
+                <v-icon>mdi-plus-circle</v-icon>New Attribute Set
+              </v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-tab>
+          <v-icon left>mdi-lock</v-icon>
+          <span>All Attribute Sets of {{group}}</span>
+        </v-tab>
+        <v-tab v-if="editorTab">
+          <v-icon left>mdi-lock</v-icon>
+          <span class="error" v-if="editMode=='new'">New Attribute Set</span>
+          <span v-else>{{selectedItem.name}}</span>
+          <v-btn icon color="error" @click="closeEditorTab">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-tab>
+
+        <v-tab-item>
+          <v-card v-if="!!group">
+            <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table :headers="defines" :items="data" :search="search">
+              <template v-slot:body="{ headers, items }">
+                <tbody>
+                  <tr class="text-start" v-for="(row, i) of items" :key="i">
+                    <td v-for="(col, ci) of headers" :key="ci">
+                      <v-btn v-if="ci == 0" icon @click="editAttributeSet(row)" color="primary">
+                        <v-icon>mdi-pencil-box-multiple-outline</v-icon>
+                      </v-btn>
+                      <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <z-dynamic-attribute-and-set-editor
+            :defines="defines"
+            :item="selectedItem"
+            :mode="editMode"
+            edit-for="Set"
+          ></z-dynamic-attribute-and-set-editor>
+          <z-dynamic-attribute-set-binding :model="group" :id="selectedItem.id" v-if="selectedItem && selectedItem.id>0"></z-dynamic-attribute-set-binding>
+        </v-tab-item>
+      </v-tabs>
     </v-flex>
   </v-layout>
 </template>
@@ -73,19 +95,18 @@
 export default {
   data() {
     return {
-      dialog: false,
+      baseRoute: "/admin/store-dynamic-attribute-sets",
       filter: true,
       search: "",
-      baseRoute: "/admin/store-dynamic-attribute-set",
       defines: [],
       data: [],
       newModelTemp: {},
       group: "",
       label: "Attributes",
       selectedItem: null,
-      dialogMode: "new",
-      pannel: [0],
-      bindingSetId: 0
+      editMode: "new",
+      tab: 0,
+      editorTab: false
     };
   },
   created() {
@@ -113,7 +134,7 @@ export default {
     fetchDefines() {
       this.$store.dispatch("showSpinner", "Fetching Defines...");
       axios
-        .get("/api/v1/admin/configs/groups/tables/dynamicattribute-set")
+        .get("/api/v1/admin/configs/groups/tables/dynamic-attribute-sets")
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -131,7 +152,7 @@ export default {
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattribute-sets/models/${groupName}`)
+        .get(`/api/v1/admin/dynamic-attribute-sets/models/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -140,27 +161,33 @@ export default {
           }
         });
     },
+
     handleRoute() {
       if (this.$route.query["group"] !== undefined) {
         this.fetchDynamicAttributes(this.$route.query["group"]);
       }
     },
 
-    editAttribute(item) {
+    editAttributeSet(item) {
       this.selectedItem = item;
-      this.dialogMode = "edit";
-      this.dialog = true;
+      this.editMode = "edit";
+      this.editorTab = true;
+      this.tab = 1;
     },
 
-    newAttribute() {
-      this.dialogMode = "edit";
+    newAttributeSet() {
+      this.editMode = "new";
       this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
       this.selectedItem.id = 0;
-      this.dialog = true;
+      this.editorTab = true;
+      this.tab = 1;
+    },
+
+    closeEditorTab() {
+      this.editorTab = false;
     },
 
     closeDialog(result) {
-      this.dialog = false;
       if (result.success) {
         let item = this.data.find(item => item.id == result.data.id);
         if (item !== undefined) {
@@ -176,10 +203,6 @@ export default {
       data.value = rowItem[columDefines.value];
       data.accessor = columDefines.value;
       return data;
-    },
-
-    rowClick(row) {
-      this.bindingSetId = row.id;
     }
   },
   watch: {
@@ -189,13 +212,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.v-middle {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.bottom-line {
-  border-bottom: 1px solid grey;
-}
-</style>

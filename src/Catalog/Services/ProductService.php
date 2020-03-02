@@ -68,7 +68,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
             foreach($attr->options as $option) {
                 $options[$option->value] = $option->swatch_value;
             }
-            $results[$attr->attribute_name] = $options;
+            $results[$attr->name] = $options;
         }
         return $results;
     }
@@ -76,7 +76,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
     public function getProductSearchables() {
         return DynamicAttribute::where('searchable', '>', '0')
             ->where('active', 1)
-            ->pluck('attribute_name')
+            ->pluck('name')
             ->toArray();
     }
 

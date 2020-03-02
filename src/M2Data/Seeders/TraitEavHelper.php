@@ -31,7 +31,7 @@ trait TraitEavHelper {
         $dynAttribute = null;
         if (!$attrId) {
             if ($dynAttribute = DynamicAttribute::where('parent_table', $model)
-                    ->where('attribute_name', $codedesc->attribute_code)
+                    ->where('name', $codedesc->attribute_code)
                     ->first()) 
             {
                 $attrId = $dynAttribute->id;

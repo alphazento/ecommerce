@@ -385,9 +385,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function buildConfigItem($dynAttr) {
         $item = [
             'da_id' => $dynAttr->id,
-            'title' => empty($dynAttr->admin_label) ? $dynAttr->attribute_name : $dynAttr->admin_label,
+            'title' => empty($dynAttr->admin_label) ? $dynAttr->name : $dynAttr->admin_label,
             'ui' => empty($dynAttr->admin_component) ? 'config-text-item' : $dynAttr->admin_component,
-            'accessor' => $dynAttr->attribute_name,
+            'accessor' => $dynAttr->name,
             'options'  => $this->mapOptions($dynAttr->options)
         ];
         if ($item['ui'] === 'config-image-uploader-item') {

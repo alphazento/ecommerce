@@ -179,7 +179,7 @@ class CatalogSearchService extends \Zento\CatalogSearch\Services\CatalogSearchSe
         $aggraegatableDAs = $this->getSearchLayerDynAttributes();
         $attrs = ['category'];
         foreach($aggraegatableDAs as $da) {
-            $attrs[] = $da['attribute_name'] . '.keyword';
+            $attrs[] = $da['name'] . '.keyword';
         }
         $builder->aggs($attrs);
     }

@@ -31,7 +31,7 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
-        "dynamic-attribute-editor-dialogbody": "pages/store_dynamic_attribute/components/DyanmicAttrEditorDialogBody.vue",
+        "z-dynamic-attribute-and-set-editor": "pages/common/DyanmicAttrAndSetEditor.vue",
         "z-dynamic-attribute-set-binding": "pages/store_dynamic_attribute_set/components/DynamicAttributeSetBinding.vue",
 
         // "admin-footer": "components/layout/ThemeFooter.vue",
@@ -48,7 +48,7 @@ export default {
         },
         {
             name: "store.dynamic_attribute_set",
-            path: "/admin/store-dynamic-attribute-set",
+            path: "/admin/store-dynamic-attribute-sets",
             component: StoreDynamicAttributeSetPage
         }
     ]

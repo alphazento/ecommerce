@@ -126,9 +126,9 @@ class Builder extends \Illuminate\Database\Schema\Builder
             $attributes = DanamicAttributeFactory::getDynamicAttributes($this->ormModel, []);
             foreach($attributes as $attribute) {
                 if (count($attribute['options']) > 0) {
-                    $body[$attribute['attribute_name']] =  $this->prepareFiledMapping(['type' => 'string', 'keyword' => true]);
+                    $body[$attribute['name']] =  $this->prepareFiledMapping(['type' => 'string', 'keyword' => true]);
                 } else {
-                    $body[$attribute['attribute_name']] =  $this->prepareFiledMapping($attribute['attribute_type']);
+                    $body[$attribute['name']] =  $this->prepareFiledMapping($attribute['attribute_type']);
                 }
             }
         }

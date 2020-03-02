@@ -32,52 +32,52 @@ Route::group(
         );
 
         Route::get(
-            '/dynamicattributes/{id}', 
+            '/dynamic-attributes/{id}', 
             ['as' => 'admin.da.get.by.id', 'uses' => 'DAController@getAttribute']
         );
 
         Route::get(
-            '/dynamicattributes/models/{model}', 
+            '/dynamic-attributes/models/{model}', 
             ['as' => 'admin.da.get.by.model', 'uses' => 'DAController@getModelAttributes']
         );
 
         Route::post(
-            '/dynamicattributes', 
+            '/dynamic-attributes', 
             ['as' => 'admin.post.da', 'uses' => 'DAController@createAttribute']
         );
 
         Route::patch(
-            '/dynamicattributes/{id}', 
+            '/dynamic-attributes/{id}', 
             ['as' => 'admin.patch.da', 'uses' => 'DAController@updateAttribute']
         );
 
         Route::get(
-            '/dynamicattribute-sets/models/{model}', 
+            '/dynamic-attribute-sets/models/{model}', 
             ['as' => 'admin.da_set.get.all', 'uses' => 'DAController@getModelAttributeSets']
         );
 
         Route::get(
-            '/dynamicattribute-sets/{id}', 
+            '/dynamic-attribute-sets/{id}', 
             ['as' => 'admin.da_set.get', 'uses' => 'DAController@getAttributeSet']
         );
 
         Route::post(
-            '/dynamicattribute-sets', 
+            '/dynamic-attribute-sets', 
             ['as' => 'admin.post.da_set', 'uses' => 'DAController@createAttributeSet']
         );
 
         Route::patch(
-            '/dynamicattribute-sets/{id}', 
+            '/dynamic-attribute-sets/{id}', 
             ['as' => 'admin.patch.da_set', 'uses' => 'DAController@updateAttributeSet']
         );
 
         Route::put(
-            '/dynamicattribute-sets/{attr_set_id}/attributes/{attr_id}', 
+            '/dynamic-attribute-sets/{attr_set_id}/attributes/{attr_id}', 
             ['as' => 'admin.put.da.to.set', 'uses' => 'DAController@addAttributeToSet']
         );
 
         Route::delete(
-            '/dynamicattribute-sets/{attr_set_id}/attributes/{attr_id}', 
+            '/dynamic-attribute-sets/{attr_set_id}/attributes/{attr_id}', 
             ['as' => 'admin.delete.da.from.set', 'uses' => 'DAController@deleteAttributeFromSet']
         );
 

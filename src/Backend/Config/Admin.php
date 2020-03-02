@@ -11,8 +11,8 @@ class Admin extends AbstractAdminConfig {
         AdminDashboardService::registerRootLevelMenuNode('Store', 'Store', 'mdi-store');
         AdminDashboardService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
             'mdi-settings', '/admin/store-configurations');
-        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attribute-set', 'Attribute Set', 
-            'mdi-contain', '/admin/store-dynamic-attribute-set');
+        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attribute-sets', 'Attribute Set', 
+            'mdi-contain', '/admin/store-dynamic-attribute-sets');
         AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
             'mdi-code-braces', '/admin/store-dynamic-attributes');
     }
@@ -71,7 +71,7 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['tables/dynamicattributes'] = function($groupTag) {
+        $groups['tables/dynamic-attributes'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Model Dynamic Attributes Editor Template Definition',
                 'items' => [
@@ -79,7 +79,7 @@ class Admin extends AbstractAdminConfig {
                         'text' => 'Name',
                         'ui' => 'z-label',
                         'edit_ui' => 'config-text-item',  //for edit
-                        'value' => 'attribute_name'
+                        'value' => 'name'
                     ],
                     [
                         'text' => 'Type',
@@ -213,7 +213,7 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['tables/dynamicattribute-set'] = function($groupTag) {
+        $groups['tables/dynamic-attribute-sets'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Attribute Set Editor Template Definition',
                 'items' => [

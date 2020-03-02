@@ -19,7 +19,7 @@
       </v-expansion-panels>
     </v-flex>
     <v-flex md10>
-      <v-tabs v-model="tab">
+      <v-tabs v-model="tab"  v-if="!!group">
         <v-menu bottom right>
           <template v-slot:activator="{ on }">
             <v-btn text class="align-self-center mr-4" v-on="on">
@@ -29,7 +29,7 @@
           </template>
           <v-list class="grey lighten-3">
             <v-list-item>
-              <v-btn color="error" @click="newAttribute" v-if="editMode != 'new' || !attributeTab">
+              <v-btn color="error" @click="newAttribute" v-if="editMode != 'new' || !editorTab">
                 <v-icon>mdi-plus-circle</v-icon>New Attribute
               </v-btn>
             </v-list-item>
@@ -40,11 +40,11 @@
           <v-icon left>mdi-lock</v-icon>
           <span>All Attributes of {{group}}</span>
         </v-tab>
-        <v-tab v-if="attributeTab">
+        <v-tab v-if="editorTab">
           <v-icon left>mdi-lock</v-icon>
           <span class="error" v-if="editMode=='new'">New Attribute</span>
-          <span v-else>{{selectedItem.attribute_name}}</span>
-          <v-btn icon color="error" @click="closeProductTab">
+          <span v-else>{{selectedItem.name}}</span>
+          <v-btn icon color="error" @click="closeEditorTab">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-tab>
@@ -77,12 +77,12 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <dynamic-attribute-editor-dialogbody
+          <z-dynamic-attribute-and-set-editor
             :defines="defines"
             :item="selectedItem"
             :mode="editMode"
             @close="closeDialog"
-          ></dynamic-attribute-editor-dialogbody>
+          ></z-dynamic-attribute-and-set-editor>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -102,7 +102,7 @@ export default {
       selectedItem: null,
       editMode: "new",
       tab: 0,
-      attributeTab: false
+      editorTab: false
     };
   },
   created() {
@@ -130,7 +130,7 @@ export default {
     fetchDefines() {
       this.$store.dispatch("showSpinner", "Fetching Defines...");
       axios
-        .get("/api/v1/admin/configs/groups/tables/dynamicattributes")
+        .get("/api/v1/admin/configs/groups/tables/dynamic-attributes")
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -147,7 +147,7 @@ export default {
         href: `${this.baseRoute}?group=${groupName}`
       });
       axios
-        .get(`/api/v1/admin/dynamicattributes/models/${groupName}`)
+        .get(`/api/v1/admin/dynamic-attributes/models/${groupName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
@@ -166,23 +166,23 @@ export default {
     editAttribute(item) {
       this.selectedItem = item;
       this.editMode = "edit";
-      this.attributeTab = true;
+      this.editorTab = true;
       this.tab = 1;
     },
     newAttribute() {
       this.editMode = "new";
       this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
       this.selectedItem.id = 0;
-      this.attributeTab = true;
+      this.editorTab = true;
       this.tab = 1;
     },
 
-    closeProductTab() {
-      this.attributeTab = false;
+    closeEditorTab() {
+      this.editorTab = false;
     },
 
     closeDialog(result) {
-      this.attributeTab = false;
+      this.editorTab = false;
       if (result.success) {
         let item = this.data.find(item => item.id == result.data.id);
         if (item !== undefined) {

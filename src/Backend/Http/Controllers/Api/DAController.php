@@ -54,7 +54,7 @@ class DAController extends ApiBaseController
         }
 
         $model = null;
-        switch($data['parent_table']) {
+        switch(strtolower($data['parent_table'])) {
             case 'categories':
                 $model = new Category();
             break;
@@ -70,7 +70,7 @@ class DAController extends ApiBaseController
         }
 
         list($attrId, $tableName) = DanamicAttributeFactory::createRelationShipORM($model,
-            $data['attribute_name'], 
+            $data['name'], 
             [$data['attribute_type']], 
             $data['single'],
             $data['with_value_map'],

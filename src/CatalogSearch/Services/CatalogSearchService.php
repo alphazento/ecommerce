@@ -254,7 +254,7 @@ class CatalogSearchService
         $searchLayerDynamicAttrs = $this->getSearchLayerDynAttributes();
         $dynAttrs = [];
         foreach($searchLayerDynamicAttrs as $da) {
-            $dynAttrs[] = $da['attribute_name'];
+            $dynAttrs[] = $da['name'];
         }
 
         foreach($criteria as $name => $filter) {
@@ -396,7 +396,7 @@ class CatalogSearchService
         foreach($aggraegatableDAs as $da) {
             $query = clone $builder;
             $table = $da['attribute_table'];
-            $attr_name = $da['attribute_name'];
+            $attr_name = $da['name'];
             $query->depressDynAttrCondition($attr_name);
             if (!isset($this->joined_tables[$table])) {
                 $query->join($table, $product_table . '.id', '=', $table . '.foreignkey');
@@ -485,7 +485,7 @@ class CatalogSearchService
         } else {
             $dynAttrs = DanamicAttributeFactory::getAttributeDesc('products');
             foreach($dynAttrs as $attr) {
-                if ($attr->attribute_name === $order_by_field) {
+                if ($attr->name === $order_by_field) {
                     $this->applyOrderByEavField($builder, $order_by_field, $dir);
                     return;
                 }

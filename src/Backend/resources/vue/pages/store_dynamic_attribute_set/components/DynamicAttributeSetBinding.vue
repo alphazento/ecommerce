@@ -7,9 +7,9 @@
       <v-container>
         <v-layout row>
           <v-flex md4 v-for="item of attributes" :key="item.id">
-              <v-checkbox v-model="attribute_status_mapping[item.id]" :label="item.attribute_name" @change="valueChanged(item.id)" ></v-checkbox>
+              <v-checkbox v-model="attribute_status_mapping[item.id]" :label="item.name" @change="valueChanged(item.id)" ></v-checkbox>
           </v-flex>
-        </v-layout>     
+        </v-layout>
       </v-container>
     </v-card-text>
   </v-card>
@@ -34,7 +34,7 @@ export default {
     fetchModelAttributes() {
       this.$store.dispatch('showSpinner', 'Fetching attributes...');
       return axios
-          .get(`/api/v1/admin/dynamicattributes/models/${this.model}`)
+          .get(`/api/v1/admin/dynamic-attributes/models/${this.model}`)
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data && response.data.success) {
@@ -51,7 +51,7 @@ export default {
     fetchAttributeSet() {
       this.$store.dispatch('showSpinner', 'Fetching attribute set data...');
       axios
-        .get(`/api/v1/admin/dynamicattribute-sets/${this.current_id}`).then(response => {
+        .get(`/api/v1/admin/dynamic-attribute-sets/${this.current_id}`).then(response => {
           if (response.data.success) {
             this.current_attribute_set = response.data.data;
             this.attributes.forEach(item => {
@@ -65,7 +65,7 @@ export default {
         })
     },
     valueChanged(id) {
-      let url = `/api/v1/admin/dynamicattribute-sets/${this.current_id}/attributes/${id}`;
+      let url = `/api/v1/admin/dynamic-attribute-sets/${this.current_id}/attributes/${id}`;
       let method = this.attribute_status_mapping[id] ? 'put' : 'delete';
       this.$store.dispatch('showSpinner', 'Updating...');
       axios[method](url).then(response => {

@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
-      <span v-if="item.id > 0">Attribute [{{itemCopy.attribute_name}}] of {{itemCopy.parent_table}}</span>
-      <span v-else>New Attribute for {{itemCopy.parent_table}}</span>
+      <span v-if="item.id > 0">Attribute {{editFor}} [{{itemCopy.name}}] of {{itemCopy.parent_table}}</span>
+      <span v-else>New Attribute {{editFor}} for {{itemCopy.parent_table}}</span>
       <v-spacer></v-spacer>
       <v-btn color="primary" fab dark large v-if="dirty" @click="saveAttribute">
         <v-icon dark>mdi-content-save</v-icon>
@@ -47,15 +47,6 @@ export default {
     };
   },
   methods: {
-    discard() {
-      this.$emit("close", { success: false });
-    },
-    closeDialog(success, data) {
-      this.$emit("close", {
-        success: success,
-        data: data
-      });
-    },
     prepareData() {
       let isNew = !this.item.id;
       let components = [];
@@ -81,13 +72,9 @@ export default {
       this.components[item.idx].value = item.value;
       this.components = JSON.parse(JSON.stringify(this.components));
       this.itemCopy[item.accessor] = item.value;
-    },
-    saveAttribute() {
       let id = this.itemCopy.id;
-      this.$store.dispatch("showSpinner", "Saving data...");
-      let service =
-        this.editFor === "set" ? "dynamicattribute-set" : "dynamicattributes";
       if (id > 0) {
+        this.$store.dispatch("showSpinner", "Saving data...");
         axios
           .patch(`/api/v1/admin/${service}/${id}`, {
             attributes: this.itemCopy
@@ -95,26 +82,31 @@ export default {
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data.success) {
+              this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.closeDialog(true, response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }
           });
-      } else {
+      }
+    },
+    saveAttribute() {
+      let id = this.itemCopy.id;
+      this.$store.dispatch("showSpinner", "Saving data...");
+      let service =
+        this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
         axios
           .post(`/api/v1/admin/${service}`, {
             attributes: this.itemCopy
           })
           .then(response => {
             if (response.data.success) {
+              this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.closeDialog(true, response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }
           });
-      }
     }
   },
   mounted() {
