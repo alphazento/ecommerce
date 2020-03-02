@@ -140,4 +140,13 @@ class DAController extends ApiBaseController
         }
         return $this->withData($relationShip);
     }
+
+    public function getAttributeValues(){
+        if ($id = Route::input('id')) {
+            if ($attr = DynamicAttribute::with('options')->find($id)) {
+                return $this->withData($attr->toArray());
+            }
+        }
+        return $this->error(404, 'Not found');
+    }
 }

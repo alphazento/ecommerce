@@ -68,7 +68,7 @@
                       <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
                         <v-icon>mdi-pencil-box-multiple-outline</v-icon>
                       </v-btn>
-                      <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
+                      <component :is="col.ui" v-bind="buildDynCompProps(col, row)"></component>
                     </td>
                   </tr>
                 </tbody>
@@ -81,8 +81,11 @@
             :defines="defines"
             :item="selectedItem"
             :mode="editMode"
-            @close="closeDialog"
+            @itemUpdated="itemUpdated"
           ></z-dynamic-attribute-and-set-editor>
+
+          <z-dynamic-attribute-value-map-manager v-if="selectedItem && selectedItem.with_value_map" :id="selectedItem.id" :is-swatch="!!selectedItem.swatch">
+          </z-dynamic-attribute-value-map-manager>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -124,6 +127,9 @@ export default {
     },
 
     navToGroup(group) {
+      if (this.group !== group) {
+        this.editorTab = false;
+      }
       this.$router.push({ query: { group: `${group}` } }).catch(err => {});
     },
 
@@ -181,23 +187,15 @@ export default {
       this.editorTab = false;
     },
 
-    closeDialog(result) {
-      this.editorTab = false;
-      if (result.success) {
-        let item = this.data.find(item => item.id == result.data.id);
-        if (item !== undefined) {
-          Object.assign(item, result.data);
-        } else {
-          this.data.push(result.data);
-        }
-      }
-    },
-
-    ui_component_props(columDefines, rowItem) {
+    buildDynCompProps(columDefines, rowItem) {
       var data = Object.assign({}, columDefines);
       data.value = rowItem[columDefines.value];
       data.accessor = columDefines.value;
       return data;
+    },
+    itemUpdated(item) {
+      console.log('itemUpdated', item);
+      Object.assign(this.selectedItem, item);
     }
   },
   watch: {

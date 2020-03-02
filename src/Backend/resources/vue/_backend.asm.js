@@ -31,10 +31,9 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
-        "z-dynamic-attribute-and-set-editor": "pages/common/DyanmicAttrAndSetEditor.vue",
-        "z-dynamic-attribute-set-binding": "pages/store_dynamic_attribute_set/components/DynamicAttributeSetBinding.vue",
-
-        // "admin-footer": "components/layout/ThemeFooter.vue",
+        "z-dynamic-attribute-and-set-editor": "pages/inner_components/DyanmicAttrAndSetEditor.vue",
+        "z-dynamic-attribute-set-attrs-manager": "pages/inner_components/DynamicAttributeSetAttrsManager.vue",
+        "z-dynamic-attribute-value-map-manager": "pages/inner_components/AttributeValueMapManager.vue",
     },
     routes: [{
             name: "store.configuration",

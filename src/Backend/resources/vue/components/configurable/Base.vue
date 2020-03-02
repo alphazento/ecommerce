@@ -22,12 +22,16 @@ export default {
     },
     valueChanged(nV) {
       if (this.innerValue !== this.oldVal) {
-        this.$emit("valueChanged", {
+        var data = {
           accessor: this.accessor,
           value: this.getValue(),
           is_json: this.is_json,
           idx: this.idx
-        });
+        };
+        this.$emit("valueChanged", data);
+        if(data.rollback) {
+          this.innerValue = this.oldVal;
+        }
       }
       this.oldVal = this.innerValue;
     }

@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="current_id > 0">
-    <v-card-title class="headline">
-      Dynamic Attributes belongs to Attribute Set [{{ current_attribute_set.name }}]
+    <v-card-title class="headline primary white--text">
+      Contains Dynamic Attributes
     </v-card-title>
     <v-card-text>
       <v-container>

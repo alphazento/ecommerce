@@ -46,7 +46,7 @@ trait TraitEavHelper {
                     ->first();
                 if (!$attrValue && $option->value) {
                     if ($option->swatch) {
-                        $dynAttribute->swatch_type = 1 + $option->swatch->type;
+                        $dynAttribute->swatch = 1 + $option->swatch->type;
                         $dynAttribute->update();
                     }
                     $attrValue = DynamicAttributeValueMap::create([

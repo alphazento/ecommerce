@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
       <span v-if="item.id > 0">Attribute {{editFor}} [{{itemCopy.name}}] of {{itemCopy.parent_table}}</span>
-      <span v-else>New Attribute {{editFor}} for {{itemCopy.parent_table}}</span>
+      <span v-else>New Attribute {{editFor}}</span>
       <v-spacer></v-spacer>
       <v-btn color="primary" fab dark large v-if="dirty" @click="saveAttribute">
         <v-icon dark>mdi-content-save</v-icon>
@@ -28,7 +28,6 @@ const CONFIG_ITEM = {
 export default {
   props: {
     editFor: String,
-    mode: String,
     defines: Array[CONFIG_ITEM],
     item: Object
   },
@@ -39,7 +38,7 @@ export default {
       itemCopy: {},
       modelData: {
         default: {
-          title: "Dynamic Attribute Settings",
+          title: "Details",
           items: []
         }
       },
@@ -75,6 +74,7 @@ export default {
       let id = this.itemCopy.id;
       if (id > 0) {
         this.$store.dispatch("showSpinner", "Saving data...");
+        let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
         axios
           .patch(`/api/v1/admin/${service}/${id}`, {
             attributes: this.itemCopy
@@ -84,6 +84,7 @@ export default {
             if (response.data.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
+              this.$emit('itemUpdated', response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }
@@ -91,18 +92,18 @@ export default {
       }
     },
     saveAttribute() {
-      let id = this.itemCopy.id;
       this.$store.dispatch("showSpinner", "Saving data...");
-      let service =
-        this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
+      let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
         axios
           .post(`/api/v1/admin/${service}`, {
             attributes: this.itemCopy
           })
           .then(response => {
+            this.$store.dispatch("hideSpinner");
             if (response.data.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
+              this.$emit('itemUpdated', response.data.data);
             } else {
               this.$store.dispatch("snackMessage", response.data.message);
             }

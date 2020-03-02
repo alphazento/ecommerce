@@ -185,7 +185,7 @@ class Admin extends AbstractAdminConfig {
                         'text' => 'Swatch',
                         'ui' => 'z-boolean-chip',
                         'edit_ui' => 'config-boolean-item',
-                        'value' => 'swatch_type',
+                        'value' => 'swatch',
                         'editable' => true
                     ],
                     [

@@ -69,7 +69,7 @@
                       <v-btn v-if="ci == 0" icon @click="editAttributeSet(row)" color="primary">
                         <v-icon>mdi-pencil-box-multiple-outline</v-icon>
                       </v-btn>
-                      <component :is="col.ui" v-bind="ui_component_props(col, row)"></component>
+                      <component :is="col.ui" v-bind="buildDynCompProps(col, row)"></component>
                     </td>
                   </tr>
                 </tbody>
@@ -83,8 +83,9 @@
             :item="selectedItem"
             :mode="editMode"
             edit-for="Set"
+            @itemUpdated="itemUpdated"
           ></z-dynamic-attribute-and-set-editor>
-          <z-dynamic-attribute-set-binding :model="group" :id="selectedItem.id" v-if="selectedItem && selectedItem.id>0"></z-dynamic-attribute-set-binding>
+          <z-dynamic-attribute-set-attrs-manager v-if="selectedItem && selectedItem.id>0" :model="group" :id="selectedItem.id" ></z-dynamic-attribute-set-attrs-manager>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -102,7 +103,6 @@ export default {
       data: [],
       newModelTemp: {},
       group: "",
-      label: "Attributes",
       selectedItem: null,
       editMode: "new",
       tab: 0,
@@ -128,6 +128,9 @@ export default {
     },
 
     navToGroup(group) {
+      if (this.group !== group) {
+        this.editorTab = false;
+      }
       this.$router.push({ query: { group: `${group}` } }).catch(err => {});
     },
 
@@ -143,9 +146,8 @@ export default {
         });
     },
 
-    fetchDynamicAttributes(groupName) {
+    fetchDynamicAttributeSets(groupName) {
       this.group = groupName;
-      this.label = groupName;
       this.$store.dispatch("showSpinner", "Fetching Attribute Set...");
       this.$store.dispatch("replaceBreadcrumbLastItem", {
         text: this.group,
@@ -164,7 +166,7 @@ export default {
 
     handleRoute() {
       if (this.$route.query["group"] !== undefined) {
-        this.fetchDynamicAttributes(this.$route.query["group"]);
+        this.fetchDynamicAttributeSets(this.$route.query["group"]);
       }
     },
 
@@ -197,12 +199,18 @@ export default {
         }
       }
     },
-
-    ui_component_props(columDefines, rowItem) {
+    buildDynCompProps(columDefines, rowItem) {
       var data = Object.assign({}, columDefines);
       data.value = rowItem[columDefines.value];
       data.accessor = columDefines.value;
       return data;
+    },
+    itemUpdated(item) {
+      Object.assign(this.selectedItem, item);
+      if (this.editMode === 'new') {
+        this.editMode = 'edit';
+        this.fetchDynamicAttributeSets(this.group);
+      }
     }
   },
   watch: {
