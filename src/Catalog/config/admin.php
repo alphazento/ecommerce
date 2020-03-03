@@ -304,7 +304,12 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'text' => 'Active',
                             'ui' => 'z-boolean-chip',
                             'value' => 'active',
-                            'filter_ui' => 'config-boolean-item'
+                            'filter_ui' => 'config-options-item',
+                            'options' => [
+                                ['label' => 'Active', 'value' => 1],
+                                ['label' => 'Unactive', 'value' => 0]
+                            ],
+                            'clearable' => true,
                         ],
                         // [
                         //     'text' => 'Image',
@@ -346,7 +351,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function mapOptions($optionCollection) {
         $options = [];
         foreach($optionCollection ?? [] as $item) {
-            $options[] = ['label' => $item['value'], 'value' => ('' . $item['id'])];
+            $options[] = ['label' => $item['value'], 'value' => $item['id']];
         }
         return $options;
     }

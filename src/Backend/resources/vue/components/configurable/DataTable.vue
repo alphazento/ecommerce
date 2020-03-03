@@ -117,7 +117,7 @@ export default {
       axios
         .get(`/api/v1/admin/configs/groups/tables/${this.name}`)
         .then(response => {
-          this.realFetchOrders();
+          this.realfetchData();
           // this.$store.dispatch("hideSpinner");
           if (response.data && response.data.success) {
             this.defines = Object.assign(
@@ -134,7 +134,7 @@ export default {
         });
     },
 
-    realFetchOrders() {
+    realfetchData() {
       this.loading = true;
       var queryString = this.buildQuery(true);
       this.$store.dispatch("showSpinner", "Loading data...");
@@ -142,22 +142,28 @@ export default {
         .get(`/api/v1/admin/${this.dataApiUrl}?${queryString}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
-          if (response.data && response.data.success) {
-            this.pagination = response.data.data;
-            this.selectedItems = [];
-          }
+          if (response.data) {
+            if(response.data.success) {
+              this.pagination = response.data.data;
+              this.selectedItems = [];
+            } else {
+              if (response.data.code == 404) {
+                this.pagination = {data:[]};
+              }
+            }
+          } 
           this.loading = false;
         });
     },
 
-    fetchOrders() {
+    fetchData() {
       if (this.filterConnectRoute) {
         this.routeQuery = this.buildQuery(false);
         this.$router.push({ query: this.routeQuery }).catch(err => {
           console.log(err);
         });
       } else {
-        this.realFetchOrders();
+        this.realfetchData();
       }
     },
 
@@ -196,13 +202,13 @@ export default {
       if (item.accessor !== "page") {
         this.filters["page"] = 1;
       }
-      this.fetchOrders();
+      this.fetchData();
     },
 
     paginationHandler(page) {
       if (this.serverSidePagination) {
         this.filters.page = page;
-        this.fetchOrders();
+        this.fetchData();
       }
     },
 
@@ -272,7 +278,7 @@ export default {
   },
   watch: {
     $route() {
-      this.realFetchOrders();
+      this.realfetchData();
       // this.convertRouteQuery();
     }
   }

@@ -8,15 +8,15 @@
     </v-card-subtitle>
 
     <v-card-text>
-       <v-data-table :headers="headers" :items="attribute.options">
+       <v-data-table :headers="tableHeaders" :items="attribute.options">
           <template v-slot:body="{ headers, items }">
             <tbody>
               <tr class="text-start" v-for="(row, i) of items" :key="i">
-                <td v-for="(col, ci) of headers" :key="ci">
-                  <v-btn v-if="ci == 0" icon @click="deleteValue(row)" color="error">
+                <td v-for="col of headers" :key="col.accessor">
+                  <v-btn v-if="col.accessor == '_action_'" icon @click="deleteValue(row)" color="error">
                     <v-icon>mdi-minus-circle</v-icon>
                   </v-btn>
-                  <component :is="col.ui" v-bind="buildDynCompProps(col, row)"
+                  <component v-else :is="col.ui" v-bind="buildDynCompProps(col, row)"
                     v-on:valueChanged="valueChanged"
                   ></component>
                 </td>
@@ -25,11 +25,36 @@
           </template>
         </v-data-table>
     </v-card-text>
+    <v-card-actions>
+      <div  v-if="addNew">
+        <v-btn @click="toggleNewValue" color="warning" large>
+          <v-icon>mdi-minus-circle</v-icon>Cancel
+        </v-btn>
+        <v-btn @click="saveNewValue" color="primary" large :disabled="!newValueDirty">
+          <v-icon dark>mdi-content-save</v-icon>Save
+        </v-btn>
+      </div>
+      <v-btn v-else @click="toggleNewValue" color="primary" large>
+        <v-icon>mdi-plus-circle</v-icon>Add New Value
+      </v-btn>
+    </v-card-actions>
+    <v-container v-if="addNew">
+        <v-layout row v-for="item of tableHeaders.slice(2)" :key="item.accessor">
+            <v-flex md4 >
+              {{item.text}}
+            </v-flex>
+            <v-flex md8>
+              <component :is="item.ui"
+                v-on:valueChanged="newValueChanged"
+                v-bind="buildDynCompProps(item, newValue)"
+              ></component>
+            </v-flex>
+        </v-layout>
+    </v-container>
   </v-card>
 </template>
 
 <script>
-
 export default {
   props: {
    id: Number,
@@ -38,23 +63,30 @@ export default {
   data() {
     return {
       attribute: {options: []},
-      defines: [
+      headerDefine: [
+         {text: "Action", ui: false, accessor: "_action_"},
          {text: "ID", ui: "z-label", accessor: "id"},
          {text: "Value", ui: "config-text-item", accessor: "value"}
       ],
       error: false,
-      message: ""
+      message: "",
+      addNew: false,
+      newValue: {
+        value: '',
+        swatch: ''
+      },
+      newValueDirty: false
     };
   },
   computed: {
-    headers() {
-     let defines = [this.defines[0], this.defines[1]];
+    tableHeaders() {
+     let headerDefine = [...this.headerDefine];
      if (this.attribute.swatch) {
-       defines.push(
+       headerDefine.push(
          {text: "Swatch Value", ui: "config-text-item", accessor: "swatch_value"}
        );
      }
-     return defines;
+     return headerDefine;
     }
   },
   methods: {
@@ -76,16 +108,13 @@ export default {
       data.value = rowItem[define.accessor];
       return data;
     },
-    deleteValue(row) {
-
-    },
     checkValueDuplicate(data) {
       var value = data[data.accessor];
       var foundItems = this.attribute.options.filter(item => {
         return item[data.accessor].toLowerCase() === value.toLowerCase();
       });
       var message = `Attribute[id=${data.idx}]'s ${data.accessor}="${value}" is duplicated. Change has been rollbacked.`;
-      if (foundItems !== undefined) {
+      if (foundItems !== undefined && foundItems.length > 0) {
         if (foundItems.length > 1) {
           this.message = message;
           return false;
@@ -104,6 +133,26 @@ export default {
       } else {
 
       }
+    },
+    toggleNewValue() {
+      this.addNew = !this.addNew;
+      this.newValue.value = "";
+      this.newValue.swatch = "";
+      this.newValueDirty = false;
+    },
+    deleteValue(item) {
+
+    },
+    newValueChanged(data) {
+      this.newValue[data.accessor] = data.value;
+      this.newValueDirty = true;
+      this.error = !this.checkValueDuplicate(data);
+      if (this.error) {
+        this.newValueDirty = false;
+      }
+    },
+    saveNewValue() {
+      
     }
   },
   mounted() {
@@ -113,6 +162,8 @@ export default {
   },
   watch: {
     id(nV, oV) {
+      this.addNew = true;
+      this.toggleNewValue();
       this.fetchAttributeWithOptions();
     },
     isSwatch(nV, oV) {

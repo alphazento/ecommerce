@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-actions>
-          <v-btn flat text>
+          <v-btn text>
             <span>{{innerValue}}</span>
             <z-file-picker 
               v-bind="{...$props, ...$attrs}"

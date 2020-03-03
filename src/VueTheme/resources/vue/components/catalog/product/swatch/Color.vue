@@ -4,8 +4,8 @@
         column
     >
         <v-chip v-for="(color, i) in items" :key=i :color="cssColors[color]">
-            <div :style="chipStype(color, i=== selection)">
-                <v-avatar left v-if="i=== selection" 
+            <div :style="chipStype(color, String(i) == String(selection))">
+                <v-avatar left v-if="String(i) == String(selection)" 
                 >
                     <v-icon>mdi-checkbox-marked-circle</v-icon>
                 </v-avatar>
