@@ -7,8 +7,9 @@
 @section('pagecontent')
 <v-container fluid>
     <component 
-    :is="productCard"
-    v-bind="{ product: product }"></component>
+        :is="productCard"
+        v-bind="{ product: product }" show-qutity>
+    </component>
    <product-tabs :tabs="detailTabs" :product="product"></product-tabs>
 </v-container>
 @endsection

@@ -38,10 +38,13 @@ export default {
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data && response.data.success) {
-              this.attributes = response.data.data;
+              var attributes = response.data.data;
+              attributes.forEach(item => {
+                this.attribute_status_mapping[item.id] = false;
+              });
+              this.attributes = attributes;
             }
             this.$store.dispatch('hideSpinner');
-
             if (this.current_id) {
               this.fetchAttributeSet();
             }
@@ -54,12 +57,9 @@ export default {
         .get(`/api/v1/admin/dynamic-attribute-sets/${this.current_id}`).then(response => {
           if (response.data.success) {
             this.current_attribute_set = response.data.data;
-            this.attributes.forEach(item => {
-                this.attribute_status_mapping[item.id] = false;
-            });
             this.current_attribute_set.attributes.forEach(item => {
                 this.attribute_status_mapping[item.id] = true;
-            })
+            });
           }
           this.$store.dispatch('hideSpinner');
         })
