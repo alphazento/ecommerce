@@ -132,13 +132,10 @@ class DAController extends ApiBaseController
     public function deleteAttributeFromSet() {
         $attr_set_id = Route::input('attr_set_id');
         $attr_id = Route::input('attr_id');
-        if ($relationShip = DynamicAttributeInSet::where('attribute_set_id', $attr_set_id)
+        DynamicAttributeInSet::where('attribute_set_id', $attr_set_id)
             ->where('attribute_id', $attr_id)
-            ->first())
-        {
-            $relationShip->delete();
-        }
-        return $this->withData($relationShip);
+            ->delete();
+        return $this;
     }
 
     public function getAttributeValues(){

@@ -6,13 +6,13 @@
                     {{ product.name }}
                 </h1>
                 <v-card-text>
-                    <v-img style="margin-left: auto;margin-right: auto;" :src="product.image" eager ></v-img>
+                    <v-img max-width="600px" style="margin-left: auto;margin-right: auto;" :src="product.image" eager ></v-img>
                 </v-card-text >
             </v-card>
         </v-flex>
         <v-flex md5 xs12>
             <v-form method="POST"
-                :action="`/shoppingcart/add_product/${product.id}`">
+                action="`/shoppingcart/add_product/${product.id}`">
                 <v-card flat>
                     <v-card-text class="font-weight-bold ">
                         <v-layout row>
@@ -51,9 +51,7 @@
 </template>
 
 <script>
-var mixin = require("../../../../mixin/catalogpollyfill");
 export default {
-    mixins: [mixin.default],
     props: {
         product: {
             type: Object

@@ -26,15 +26,16 @@
             product: @json($product->toArray()),
             detailTabs: @json($jsonFields),
             swatches: @json($swatches),
-            productCard: 'full-simple-product-card'
+            // productCard: 'full-simple-product-card'
+            productCard: 'z-product-page-layout'
         },
         created() {
-            console.log('product', this.product);
             this.$store.dispatch('setUser', this.user);
             this.$store.dispatch('setSwatches', this.swatches);
             switch(this.product.model_type) {
                 case 'simple':
                     this.productCard = 'full-simple-product-card';
+                    this.productCard = 'z-product-page-layout';
                     break;
                 case 'configurable':
                     this.productCard = 'full-configurable-product-card';

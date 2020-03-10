@@ -1,7 +1,7 @@
 <template>
   <v-select
-    class="limit-width"
     :items="qtys"
+    :max-width="maxWidth"
     label="Quantity"
     required
     v-model="innerValue"
@@ -12,15 +12,10 @@
 <script>
 export default {
   props: {
-    min: {
-      type: Number
-    },
-    max: {
-      type: Number
-    },
-    value: {
-      type: Number
-    }
+    min: Number,
+    max: Number,
+    value: Number,
+    maxWidth: String
   },
   data() {
     return {
@@ -44,9 +39,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.limit-width {
-  max-width: 100px;
-}
-</style>

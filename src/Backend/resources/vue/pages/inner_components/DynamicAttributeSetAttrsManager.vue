@@ -6,8 +6,8 @@
     <v-card-text>
       <v-container>
         <v-layout row>
-          <v-flex md4 v-for="item of attributes" :key="item.id">
-              <v-checkbox v-model="attribute_status_mapping[item.id]" :label="item.name" @change="valueChanged(item.id)" ></v-checkbox>
+          <v-flex md4 v-for="(item, id) of attribute_status_mapping" :key="id">
+              <v-checkbox v-model="item.checked" :label="item.name" @change="valueChanged(id)" ></v-checkbox>
           </v-flex>
         </v-layout>
       </v-container>
@@ -38,11 +38,7 @@ export default {
           .then(response => {
             this.$store.dispatch("hideSpinner");
             if (response.data && response.data.success) {
-              var attributes = response.data.data;
-              attributes.forEach(item => {
-                this.attribute_status_mapping[item.id] = false;
-              });
-              this.attributes = attributes;
+              this.attributes = response.data.data;
             }
             this.$store.dispatch('hideSpinner');
             if (this.current_id) {
@@ -57,16 +53,24 @@ export default {
         .get(`/api/v1/admin/dynamic-attribute-sets/${this.current_id}`).then(response => {
           if (response.data.success) {
             this.current_attribute_set = response.data.data;
+            var mapping = {};
+            this.attributes.forEach(item => {
+                mapping[item.id] = {
+                  name: item.name,
+                  checked: false
+                };
+              });
             this.current_attribute_set.attributes.forEach(item => {
-                this.attribute_status_mapping[item.id] = true;
+                mapping[item.id].checked = true;
             });
+            this.attribute_status_mapping = mapping;
           }
           this.$store.dispatch('hideSpinner');
         })
     },
     valueChanged(id) {
       let url = `/api/v1/admin/dynamic-attribute-sets/${this.current_id}/attributes/${id}`;
-      let method = this.attribute_status_mapping[id] ? 'put' : 'delete';
+      let method = this.attribute_status_mapping[id].checked ? 'put' : 'delete';
       this.$store.dispatch('showSpinner', 'Updating...');
       axios[method](url).then(response => {
         this.$store.dispatch('hideSpinner');
