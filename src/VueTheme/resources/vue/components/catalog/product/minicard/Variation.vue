@@ -40,7 +40,7 @@
         </div>
       </v-card-title>
       <v-card-actions class="text-center">
-        <product-swatches-card :product="product" @productElementsUpdated="productElementsUpdated"></product-swatches-card>
+        <product-variations-block :product="product" @productElementsUpdated="productElementsUpdated"></product-variations-block>
       </v-card-actions>
       <!-- <v-card-actions>
           <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>

@@ -62,10 +62,10 @@ export default {
     swatchCard(name) {
       switch (name) {
         case "color":
-          return "product-color-swatch-card";
+          return "product-color-swatch";
           break;
         case "size":
-          return "product-size-swatch-card";
+          return "product-size-selector";
           break;
       }
     },

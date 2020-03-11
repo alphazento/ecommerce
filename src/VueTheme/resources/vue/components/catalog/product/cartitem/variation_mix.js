@@ -5,7 +5,7 @@ export default {
         };
     },
     created() {
-        this.product_image = this.getProductImageUrl(this.item.actuals[0].product);
+        this.product_image = this.item.actuals[0].product.image;
         let keys = Object.keys(this.item.options);
         let url_paras = [];
         keys.forEach(name => {

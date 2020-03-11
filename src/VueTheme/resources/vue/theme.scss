@@ -1,0 +1,51 @@
+.v-middle {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.btn__addtocart {
+    color: #fff !important;
+    background-color: #600bd2 !important;
+    margin: 5px 5px;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-v-padding {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.product__special-price {
+    font-size: 1.875rem;
+    line-height: 1.13;
+    color: #5c5c5c !important;
+}
+
+.product__rrp-price {
+    font-size: 14px;
+}
+
+.product__price-saved {
+    font-size: 14px;
+    font-weight:700;
+    color: #df3938;
+}
+
+@media (max-width: 799px) {
+    .product__image-carousel {
+        max-height: 350px;
+    }
+}
+
+@media (min-width: 800px) {
+    .product__image-carousel {
+        max-height: 600px;
+    }
+}

@@ -19,7 +19,7 @@
             <v-layout row>
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">
-                <qty-select :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></qty-select>
+                <quantity-selector :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></quantity-selector>
               </v-flex>
               <v-flex md5 xs5 class="v-middle text-right">${{item.row_price}}</v-flex>
             </v-layout>

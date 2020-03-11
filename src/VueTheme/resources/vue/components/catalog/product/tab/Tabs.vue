@@ -7,8 +7,8 @@
             centered
             light
         >
-            <v-tab v-for="(tab, idx) in tabs" :key="idx" :href="`#tab-${idx}`"
-                >{{ tab }}
+            <v-tab v-for="(tab, idx) in tabs" :key="idx" :href="`#tab-${idx}`">
+                {{ tab }}
             </v-tab>
         </v-tabs>
         <v-tabs-items v-model="model">

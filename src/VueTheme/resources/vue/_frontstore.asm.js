@@ -1,7 +1,7 @@
 export default {
     components: {
         "spinner-layer": "components/SpinnerLayer.vue",
-        "theme-manager": "components/layout/ThemeManager.vue",
+        "theme-manager": "ThemeManager.vue",
         "theme-toolbar": "components/layout/ThemeToolbar.vue",
         "theme-footer": "components/layout/ThemeFooter.vue",
         "navigation-drawer": "components/layout/NavigationDrawer.vue",
@@ -12,9 +12,9 @@ export default {
 
         'signin-signup': "components/account/SignInSignUp",
 
-        "product-color-swatch-card": "components/catalog/product/swatch/Color.vue",
-        "product-size-swatch-card": "components/catalog/product/swatch/Size.vue",
-        "product-swatches-card": "components/catalog/product/swatch/ProductSwatches.vue",
+        "product-color-swatch": "components/catalog/product/variations/Color.vue",
+        "product-size-selector": "components/catalog/product/variations/Size.vue",
+        "product-variations-block": "components/catalog/product/variations/ProductVariationsBlock.vue",
 
         "mini-simple-product-card": "components/catalog/product/minicard/Simple.vue",
         "mini-variation-product-card": "components/catalog/product/minicard/Variation.vue",
@@ -22,15 +22,14 @@ export default {
         "mini-grouped-product-card": "components/catalog/product/minicard/Grouped.vue",
 
         "full-simple-product-card": "components/catalog/product/fullcard/Simple.vue",
-        "full-configurable-product-card": "components/catalog/product/fullcard/Configurable.vue",
         "full-downloadable-product-card": "components/catalog/product/fullcard/Downloadable.vue",
         "z-product-image-carousel": "components/catalog/product/fullcard/ProductImageCarousel.vue",
-        "z-product-page-layout": "components/catalog/product/ProductPageLayout.vue",
         "z-product-action-card": "components/catalog/product/fullcard/ActionCard.vue",
         "z-product-review-bullet": "components/catalog/product/fullcard/bullets/ReviewBullet.vue",
         "z-product-price-bullet": "components/catalog/product/fullcard/bullets/PriceBullet.vue",
         "z-product-stock-bullet": "components/catalog/product/fullcard/bullets/StockBullet.vue",
         "z-product-shipping-bullet": "components/catalog/product/fullcard/bullets/ShippingBullet.vue",
+        "z-configuable-product-bullet": "components/catalog/product/fullcard/bullets/ConfigurableProductBullet.vue",
 
         "mini-cart-item-simple": "components/catalog/product/cartitem/MiniSimple.vue",
         "full-cart-item-simple": "components/catalog/product/cartitem/FullSimple.vue",
@@ -42,7 +41,7 @@ export default {
         "product-tabs": "components/catalog/product/tab/Tabs.vue",
 
         "product-grid": "components/catalog/product/ProductGrid.vue",
-        "qty-select": "components/QtySelect.vue",
+        "quantity-selector": "components/QuantitySelector.vue",
         "shopping-cart-card": "components/cart/ShoppingCartCard.vue",
         "mini-cart-card": "components/cart/MiniCartCard.vue",
         "checkout-contact-card": "components/checkout/ContactDetailsCard.vue",

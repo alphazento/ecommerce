@@ -192,7 +192,7 @@ class CatalogSearchService extends \Zento\CatalogSearch\Services\CatalogSearchSe
                     ->where('parent_table', 'products')
                     ->where('active', 1)
                     ->where('searchable', 1)
-                    ->orderBy('search_layer_sort')
+                    ->orderBy('sort')
                     ->get();
                 $ds = $collection->toArray();
                 ShareBucket::put($key, $ds);

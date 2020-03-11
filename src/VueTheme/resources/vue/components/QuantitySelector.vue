@@ -28,7 +28,10 @@ export default {
     this.innerValue = this.value || this.min;
     var max = this.max > this.innerValue ? this.max : this.innerValue;
     for (var i = 1; i <= max; i++) {
-      this.qtys.push(i);
+      this.qtys.push({
+        value: i,
+        text: `Quantity: ${i}`
+      });
     }
   },
   methods: {

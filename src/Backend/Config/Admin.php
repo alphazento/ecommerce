@@ -4,7 +4,6 @@ namespace Zento\Backend\Config;
 
 use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
-use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
@@ -106,7 +105,14 @@ class Admin extends AbstractAdminConfig {
                         'text' => 'Front Label',
                         'ui' => 'z-label',
                         'edit_ui' => 'config-text-item',
-                        'value' => 'label',
+                        'value' => 'front_label',
+                        'editable' => true
+                    ],
+                    [
+                        'text' => 'Front Group/Tab',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
+                        'value' => 'front_group',
                         'editable' => true
                     ],
                     [
@@ -203,10 +209,10 @@ class Admin extends AbstractAdminConfig {
                         'editable' => true
                     ],
                     [
-                        'text' => 'Search Layer Sort',
+                        'text' => 'Sort',
                         'ui' => 'z-label',
                         'edit_ui' => 'config-text-item',
-                        'value' => 'search_layer_sort',
+                        'value' => 'sort',
                         'editable' => true
                     ],
                 ]

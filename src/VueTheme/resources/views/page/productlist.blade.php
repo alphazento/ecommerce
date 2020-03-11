@@ -1,6 +1,6 @@
 @extends('layout.frame', ['nav_page' => 'products'])
 @push('head')
-    <title>BaicyTek Home page</title>
+    <title>Product List | Alphazento</title>
 @endpush
 
 @section('pagecontent')

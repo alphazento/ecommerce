@@ -7,6 +7,7 @@ use Request;
 use BladeTheme;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class CatalogController extends Controller
 {
@@ -60,8 +61,23 @@ class CatalogController extends Controller
                 } else {
                     $category = $product->categories[0] ?? false;
                 }
+
+                $tabs = [];
+                if ($collection = DynamicAttribute::whereIn('name', array_keys($product->getDynRelations()))
+                    ->where('front_group', '!=', '')
+                    ->whereNotNull('front_group')
+                    ->select('name', 'front_label', 'front_group')
+                    ->orderBy('sort')
+                    ->orderBy('front_label')
+                    ->get()) 
+                {
+                    foreach($collection as $item) {
+                        $tabs[$item->front_group][] = ['label' => $item->front_label, 'attribute' => $item->name];
+                    }
+                }
+
                 BladeTheme::breadcrumb(BladeTheme::getProductUrl($product), $product->name);
-                return BladeTheme::view('page.product', compact('product', 'category', 'categories'));
+                return BladeTheme::view('page.product', compact('product', 'category', 'categories', 'tabs'));
             }
             return BladeTheme::view('page.404');
         }

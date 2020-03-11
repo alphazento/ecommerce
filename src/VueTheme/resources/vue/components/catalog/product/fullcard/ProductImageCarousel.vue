@@ -1,5 +1,5 @@
 <template>
-    <v-carousel cycle show-arrows light>
+    <v-carousel cycle show-arrows light height="100%" class="product__image-carousel">
         <v-carousel-item
             v-for="image in images"
             :key="image"

@@ -31,10 +31,10 @@
 
                     <v-card-actions>
                         <input type="hidden" name="qty" v-model="selectedQty" />
-                        <qty-select
+                        <quantity-selector
                             :max="20"
                             v-model="selectedQty"
-                        ></qty-select>
+                        ></quantity-selector>
                         <v-btn
                             depressed
                             large
