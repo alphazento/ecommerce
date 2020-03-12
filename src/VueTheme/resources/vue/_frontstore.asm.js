@@ -37,7 +37,6 @@ export default {
         "full-cart-item-configurable": "components/catalog/product/cartitem/FullVariation.vue",
         "full-cart-item-downloadable": "components/catalog/product/cartitem/FullDownloadable.vue",
 
-        "product-tab": "components/catalog/product/tab/Tab.vue",
         "product-tabs": "components/catalog/product/tab/Tabs.vue",
 
         "product-grid": "components/catalog/product/ProductGrid.vue",

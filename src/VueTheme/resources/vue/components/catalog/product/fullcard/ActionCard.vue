@@ -1,6 +1,6 @@
 <template>
     <v-form ref="addtocart_form" method="POST" :action="`/shoppingcart/add_product/${product.id}`" lazy-validation @submit="submit">
-        <v-card class="mx-auto my-12" >
+        <v-card class="mx-auto" >
             <v-card-title>
                 <h1 class="text-uppercase">
                     {{ product.name }}

@@ -4,6 +4,12 @@
     @include('layout.head')
 </head>
 
+<script src=@asset("zento_vuetheme/js/" . ($appjs ?? 'app.js')) type="text/javascript"></script>
+<script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
+<script>
+    window.themeData = @json($themeData); 
+</script>
+
 <body>
 <div id="app" >
     <v-app>
@@ -32,15 +38,7 @@
         </v-content>
     </v-app>
 </div>
-@php 
-$appjs = $appjs ?? 'app.js';
-@endphp
 
-<script src=@asset("zento_vuetheme/js/" . $appjs) type="text/javascript"></script>
-<script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
-<script>
-    window.themeData = @json($themeData); 
-</script>
 @stack('tail')
 </body>
 </html>

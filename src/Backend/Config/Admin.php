@@ -164,6 +164,14 @@ class Admin extends AbstractAdminConfig {
                                 'value' => 'config-image-uploader-item',
                                 'label' => 'config-image-uploader-item',
                             ],
+                            [
+                                'value' => 'z-vue-editor',
+                                'label' => 'z-vue-editor',
+                            ],
+                            [
+                                'value' => 'z-markdown-editor',
+                                'label' => 'z-markdown-editor',
+                            ],
                         ]
                     ],
                     [

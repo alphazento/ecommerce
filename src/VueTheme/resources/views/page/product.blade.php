@@ -29,7 +29,20 @@
     </v-layout>
     <v-layout row>
         <v-flex md8 xs12>
-            
+            <product-tabs :product="product" :product-tabs="tabs">
+                <template v-slot:extra-tab-headers="{product}">
+                    <v-tab href="#extra-tab-review">
+                        Product Review
+                    </v-tab>
+                </template>
+                <template v-slot:extra-tabs="{product}">
+                    <v-tab-item value="extra-tab-review">
+                        <div>
+                            Be the first to review.
+                        </div>
+                    </v-tab-item>
+                </template>
+            </product-tabs>
         </v-flex>
         <v-flex md8 xs12>
         </v-flex>
@@ -38,7 +51,7 @@
 @endsection
 
 @push('tail')
-    <script>
+<script>
     const store = window.vStore.default;
     const app = new Vue({
         el: '#app',
@@ -49,6 +62,7 @@
             return {
                 user: @json($user),
                 product: product,
+                tabs: @json($tabs),
                 detailTabs: @json($jsonFields),
                 swatches: @json($swatches),
                 price: product.prices.price,
@@ -70,5 +84,5 @@
             }
         }
     });
-    </script>
+</script>
 @endpush
