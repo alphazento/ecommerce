@@ -222,14 +222,14 @@ class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
             $configName = $themeName . '_ASM';
             $imports[] = sprintf('import %s from "@%s/_%s.asm.js"', $configName, $themeName, $this->themeType);
             $contents[] = sprintf('
-            if (%s.components !== undefined) { 
-                for (const [key, value] of Object.entries(%s.components)) {
-                    Vue.component(
-                        key,
-                        () => import(`@%s/${value}` /* webpackChunkName:"vue-dev-watch/%s" */ )
-                    );
-                }
-            }', $configName, $configName, $themeName, Str::slug($themeName));
+if (%s.components !== undefined) { 
+    for (const [key, value] of Object.entries(%s.components)) {
+        Vue.component(
+            key,
+            () => import(`@%s/${value}` /* webpackChunkName:"vue-dev-watch/%s" */ )
+        );
+    }
+}' . PHP_EOL, $configName, $configName, $themeName, Str::slug($themeName));
             $contents[] = sprintf('if (%s.routes) { routes = routes.concat(%s.routes); }', $configName, $configName);
         }
 

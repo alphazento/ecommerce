@@ -8,7 +8,7 @@ use Zento\Passport\Consts;
 
 class Admin extends AbstractAdminConfig {
     public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'Passport', 'Passport');
+        AdminConfigurationService::registerL1MenuNode('Website', 'Passport');
     }
 
     public function _registerGroups($groupTag, &$groups) {

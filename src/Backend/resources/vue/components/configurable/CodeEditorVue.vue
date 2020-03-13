@@ -1,9 +1,28 @@
 <template>
-    <codemirror v-model="innerValue" :options="cmOptions"  @changes="codeChanges"/>
+    <div>
+        <v-tabs
+            v-model="tab"
+            background-color=" accent-4"
+            light
+        >
+            <v-tab :href="`#code-tab-${accessor}`">{{language}}</v-tab>
+            <v-tab :href="`#markdown-tab-${accessor}`">Preview</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+            <v-tab-item :value="`code-tab-${accessor}`">
+                <codemirror v-model="innerValue" :options="cmOptions"  @changes="codeChanges"/>
+            </v-tab-item>
+            <v-tab-item :value="`markdown-tab-${accessor}`">
+                <vue-markdown :source="innerValue"></vue-markdown>
+            </v-tab-item>
+        </v-tabs-items>
+    </div>
 </template>
 
 <script>
 import { codemirror } from 'vue-codemirror'
+import VueMarkdown from 'vue-markdown'
+
 // import theme style
 import 'codemirror/theme/base16-dark.css'
 
@@ -46,7 +65,7 @@ import 'codemirror/addon/fold/xml-fold.js'
 
 import BaseConfig from "./Base";
 export default {
-    components: { codemirror },
+    components: { codemirror, VueMarkdown },
     extends: BaseConfig,
     props: {
         language: {
@@ -67,7 +86,8 @@ export default {
                 keyMap: "sublime",
             },
             timer: null,
-            dirty: false
+            dirty: false,
+            tab: ""
         }
     },
     methods: {

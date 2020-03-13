@@ -8,7 +8,7 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
     public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'HelloSns', 'HelloSns');
+        AdminConfigurationService::registerL1MenuNode('Website', 'HelloSns');
     }
 
     public function _registerGroups($groupTag, &$groups) {

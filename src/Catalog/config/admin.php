@@ -10,10 +10,10 @@ use Zento\Catalog\Model\ORM\Product;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     public function registerDashboardMenus() {
-        AdminDashboardService::registerRootLevelMenuNode('Catalog', 'Catalog', 'mdi-warehouse');
-        AdminDashboardService::registerL1MenuNode('Catalog', 'Category', 'Category', 
+        AdminDashboardService::registerRootLevelMenuNode('Catalog', 'mdi-warehouse');
+        AdminDashboardService::registerL1MenuNode('Catalog', 'Category', 
             'mdi-sitemap', '/admin/catalog/category');
-        AdminDashboardService::registerL1MenuNode('Catalog', 'Product', 'Product', 
+        AdminDashboardService::registerL1MenuNode('Catalog', 'Product', 
             'mdi-shape', '/admin/catalog/product');
     }
 

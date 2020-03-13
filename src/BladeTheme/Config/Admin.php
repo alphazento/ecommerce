@@ -10,8 +10,8 @@ use Zento\Kernel\Facades\ThemeManager;
 
 class Admin extends AbstractAdminConfig {
     public function registerConfigMenus() {
-        AdminConfigurationService::registerRootLevelMenuNode('Theme', 'Theme');
-        AdminConfigurationService::registerL1MenuNode('Theme', 'Themes', 'Themes');
+        AdminConfigurationService::registerRootLevelMenuNode('Theme');
+        AdminConfigurationService::registerL1MenuNode('Theme', 'Themes');
     }
 
     public function _registerGroups($groupTag, &$groups) {

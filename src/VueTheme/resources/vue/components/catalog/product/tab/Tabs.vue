@@ -20,10 +20,8 @@
                     <v-list>
                         <v-list-item v-for="(item, idx) in tab" :key="idx">
                             <v-list-item-content>
-                                <v-list-item-title v-text="item.label" color="primary"></v-list-item-title>
-                                <hr>
-                                <br/>
-                                <div v-html="product[item.attribute]"></div>
+                                <!-- <div v-if="item.type=='markdown'"><>
+                                <div v-else v-html="product[item.attribute]"></div> -->
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>

@@ -8,8 +8,8 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
-        AdminDashboardService::registerRootLevelMenuNode('Sales', 'Sales', 'mdi-store');
-        AdminDashboardService::registerL1MenuNode('Sales', 'Orders', 'Orders', 
+        AdminDashboardService::registerRootLevelMenuNode('Sales', 'mdi-store');
+        AdminDashboardService::registerL1MenuNode('Sales', 'Orders', 
             'mdi-file-table-box-multiple', '/admin/sales_orders');
     }
 

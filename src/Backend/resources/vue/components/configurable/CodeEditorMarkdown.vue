@@ -1,5 +1,7 @@
+
 <script>
 import BaseEditor from "./CodeEditorVue";
+
 export default {
     extends: BaseEditor,
     props: {

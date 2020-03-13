@@ -9,7 +9,7 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 class Admin extends AbstractAdminConfig {
     protected $storages;
     public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront', 'StoreFront');
+        AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront');
     }
 
     public function _registerGroups($groupTag, &$groups) {

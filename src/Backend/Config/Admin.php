@@ -7,24 +7,21 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
-        AdminDashboardService::registerRootLevelMenuNode('Store', 'Store', 'mdi-store');
-        AdminDashboardService::registerL1MenuNode('Store', 'configuration', 'Configuration', 
-            'mdi-settings', '/admin/store-configurations');
-        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attribute-sets', 'Attribute Set', 
-            'mdi-contain', '/admin/store-dynamic-attribute-sets');
-        AdminDashboardService::registerL1MenuNode('Store', 'dynamic-attributes', 'Dynamic Attributes', 
-            'mdi-code-braces', '/admin/store-dynamic-attributes');
+        AdminDashboardService::registerRootLevelMenuNode('Store', 'mdi-store');
+        AdminDashboardService::registerL1MenuNode('Store', 'Configuration', 'mdi-settings', '/admin/store-configurations');
+        AdminDashboardService::registerL1MenuNode('Store', 'Attribute Set', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
+        AdminDashboardService::registerL1MenuNode('Store', 'Dynamic Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
     }
 
     public function registerConfigMenus() {
-        AdminConfigurationService::registerRootLevelMenuNode('Website', 'Website');
-        AdminConfigurationService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminConfigurationService::registerRootLevelMenuNode('Checkout', 'Checkout');
-        AdminConfigurationService::registerRootLevelMenuNode('ThirdParty', 'Third Party');
-        AdminConfigurationService::registerL1MenuNode('Website', 'Web', 'Web');
-        AdminConfigurationService::registerL1MenuNode('Website', 'Admin', 'Admin');
-        AdminConfigurationService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
-        AdminConfigurationService::registerL1MenuNode('Sales', 'Email', 'Email');
+        AdminConfigurationService::registerRootLevelMenuNode('Website');
+        AdminConfigurationService::registerRootLevelMenuNode('Sales');
+        AdminConfigurationService::registerRootLevelMenuNode('Checkout');
+        AdminConfigurationService::registerRootLevelMenuNode('Third Party');
+        AdminConfigurationService::registerL1MenuNode('Website', 'Web');
+        AdminConfigurationService::registerL1MenuNode('Website', 'Admin');
+        AdminConfigurationService::registerL1MenuNode('Sales', 'Payment Gateway');
+        AdminConfigurationService::registerL1MenuNode('Sales', 'Email');
     }
 
     public function _registerGroups($groupTag, &$groups) {
@@ -102,11 +99,17 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'text' => 'Front Label',
+                        'text' => 'Front Component',
                         'ui' => 'z-label',
-                        'edit_ui' => 'config-text-item',
-                        'value' => 'front_label',
-                        'editable' => true
+                        'edit_ui' => 'config-options-item',
+                        'value' => 'front_component',
+                        'editable' => true,
+                        'options' => [
+                            [
+                                'value' => 'div',
+                                'label' => 'html/text/vue'
+                            ]
+                        ]
                     ],
                     [
                         'text' => 'Front Group/Tab',

@@ -66,13 +66,13 @@ class CatalogController extends Controller
                 if ($collection = DynamicAttribute::whereIn('name', array_keys($product->getDynRelations()))
                     ->where('front_group', '!=', '')
                     ->whereNotNull('front_group')
-                    ->select('name', 'front_label', 'front_group')
+                    ->select('name', 'front_component', 'front_group')
                     ->orderBy('sort')
-                    ->orderBy('front_label')
+                    ->orderBy('front_component')
                     ->get()) 
                 {
                     foreach($collection as $item) {
-                        $tabs[$item->front_group][] = ['label' => $item->front_label, 'attribute' => $item->name];
+                        $tabs[$item->front_group][] = ['type' => $item->front_component, 'attribute' => $item->name];
                     }
                 }
 

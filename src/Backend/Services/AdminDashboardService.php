@@ -2,6 +2,8 @@
 
 namespace Zento\Backend\Services;
 
+use Illuminate\Support\Str;
+
 class AdminDashboardService
 {
   protected $menus = [];
@@ -13,11 +15,12 @@ class AdminDashboardService
   /**
    * the url should be vue route url
    */
-  public function registerRootLevelMenuNode($name, $title, $icon = null, $url = null) 
+  public function registerRootLevelMenuNode($name, $icon = null, $url = null) 
   {
-    if (!isset($this->menus[$name])) {
-      $this->menus[$name] = [
-        'title' => $title,
+    $key = strtolower(Str::slug($name));
+    if (!isset($this->menus[$key])) {
+      $this->menus[$key] = [
+        'title' => $name,
         'url' => $url,
         'icon' => $icon,
         'items' => []
@@ -25,16 +28,18 @@ class AdminDashboardService
     }
   }
 
-  public function registerL1MenuNode($parentName, $l1Name, $title, $icon = null,  $url = null) {
-    if (!isset($this->menus[$parentName])) 
+  public function registerL1MenuNode($parentName, $l1Name, $icon = null,  $url = null) {
+    $key0 = strtolower(Str::slug($parentName));
+    if (!isset($this->menus[$key0])) 
     {
       throw new \Exception(sprintf('Parent Menu %s not exists.', $parentName));
     }
 
-    if (!$this->hasL1MenuNode($parentName, $l1Name))
+    if (!$this->hasL1MenuNode($key0, $l1Name))
     {
-      $this->menus[$parentName]['items'][$l1Name] = [
-        'title' => $title,
+      $key1 = strtolower(Str::slug($l1Name));
+      $this->menus[$key0]['items'][$key1] = [
+        'title' => $l1Name,
         'icon' => $icon,
         'url' => $url,
       ];
@@ -43,10 +48,12 @@ class AdminDashboardService
 
   protected function hasL1MenuNode($parentName, $l1Name) 
   {
-    if (!isset($this->menus[$parentName])) {
+    $key0 = strtolower(Str::slug($parentName));
+    if (!isset($this->menus[$key0])) {
       throw new \Exception(sprintf('Parent Menu %s not exists.', $parentName));
     }
-    $menu = $this->menus[$parentName]['items'];
-    return isset($menu[$l1Name]);
+    $menu = $this->menus[$key0]['items'];
+    $key1 = strtolower(Str::slug($l1Name));
+    return isset($menu[$key1]);
   }
 }
