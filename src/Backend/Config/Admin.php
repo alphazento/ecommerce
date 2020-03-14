@@ -106,8 +106,12 @@ class Admin extends AbstractAdminConfig {
                         'editable' => true,
                         'options' => [
                             [
-                                'value' => 'div',
-                                'label' => 'html/text/vue'
+                                'label' => 'text/html/vue',
+                                'value' => 'z-html-block',
+                            ],
+                            [
+                                'label' => 'markdown',
+                                'value' => 'z-markdown',
                             ]
                         ]
                     ],

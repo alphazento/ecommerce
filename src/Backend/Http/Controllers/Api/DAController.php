@@ -146,4 +146,13 @@ class DAController extends ApiBaseController
         }
         return $this->error(404, 'Not found');
     }
+
+    public function getAttributeBelongsSets() {
+        if ($id = Route::input('id')) {
+            if ($attr = DynamicAttribute::with('sets')->find($id)) {
+                return $this->withData($attr->toArray());
+            }
+        }
+        return $this->error(404, 'Not found');
+    }
 }

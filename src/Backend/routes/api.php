@@ -57,6 +57,11 @@ Route::group(
             ['uses' => 'DAController@getAttributeValues']
         );
 
+        Route::get(
+            '/dynamic-attributes/{id}/sets', 
+            ['uses' => 'DAController@getAttributeBelongsSets']
+        );
+
         Route::post(
             '/dynamic-attributes/{id}/values', 
             ['uses' => 'DAController@getAttribute']

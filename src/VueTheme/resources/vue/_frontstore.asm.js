@@ -41,6 +41,8 @@ export default {
 
         "product-grid": "components/catalog/product/ProductGrid.vue",
         "quantity-selector": "components/QuantitySelector.vue",
+        "z-markdown": "components/Markdown.vue",
+        "z-html-block": "components/HtmlBlock.vue",
         "shopping-cart-card": "components/cart/ShoppingCartCard.vue",
         "mini-cart-card": "components/cart/MiniCartCard.vue",
         "checkout-contact-card": "components/checkout/ContactDetailsCard.vue",

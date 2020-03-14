@@ -1,15 +1,15 @@
 <template>
     <v-expansion-panels accordion multiple focusable v-if="current_id > 0">
         <v-expansion-panel>
-            <v-expansion-panel-header text-left>
-                Contains Dynamic Attributes
+            <v-expansion-panel-header text-left
+                >Belongs To Dynamic Attribute Sets
             </v-expansion-panel-header>
             <v-expansion-panel-content>
                 <v-container>
                     <v-layout row>
                         <v-flex
                             md4
-                            v-for="(item, id) of attribute_checked_mapping"
+                            v-for="(item, id) of set_checked_mapping"
                             :key="id"
                         >
                             <v-checkbox
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-// Manage Attribute Set to have many Attributes
+// Manage Attribute belongs to many Attribute sets
 export default {
     props: {
         model: String,
@@ -34,57 +34,56 @@ export default {
     },
     data() {
         return {
-            attributes: [],
-            attribute_checked_mapping: {},
-            current_attribute_set: { id: -1 },
+            sets: [],
+            set_checked_mapping: {},
+            current_attribute: { id: -1 },
             current_id: this.id
         };
     },
     methods: {
-        fetchModelAttributes() {
+        fetchModelAttributeSets() {
             this.$store.dispatch("showSpinner", "Fetching attributes...");
             return axios
-                .get(`/api/v1/admin/dynamic-attributes/models/${this.model}`)
+                .get(
+                    `/api/v1/admin/dynamic-attribute-sets/models/${this.model}`
+                )
                 .then(response => {
                     this.$store.dispatch("hideSpinner");
                     if (response.data && response.data.success) {
-                        this.attributes = response.data.data;
+                        this.sets = response.data.data;
                     }
                     this.$store.dispatch("hideSpinner");
                     if (this.current_id) {
-                        this.fetchAttributeSet();
+                        this.fetchAttribute();
                     }
                 });
         },
 
-        fetchAttributeSet() {
-            this.$store.dispatch(
-                "showSpinner",
-                "Fetching attribute set data..."
-            );
+        fetchAttribute() {
+            this.$store.dispatch("showSpinner", "Fetching attribute...");
             axios
-                .get(`/api/v1/admin/dynamic-attribute-sets/${this.current_id}`)
+                .get(`/api/v1/admin/dynamic-attributes/${this.current_id}/sets`)
                 .then(response => {
                     if (response.data.success) {
-                        this.current_attribute_set = response.data.data;
+                        this.current_attribute = response.data.data;
                         var mapping = {};
-                        this.attributes.forEach(item => {
+                        this.sets.forEach(item => {
                             mapping[item.id] = {
                                 name: item.name,
                                 checked: false
                             };
                         });
-                        this.current_attribute_set.attributes.forEach(item => {
+                        this.current_attribute.sets.forEach(item => {
                             mapping[item.id].checked = true;
                         });
-                        this.attribute_checked_mapping = mapping;
+                        this.set_checked_mapping = mapping;
                     }
                     this.$store.dispatch("hideSpinner");
                 });
         },
         valueChanged(id) {
-            let url = `/api/v1/admin/dynamic-attribute-sets/${this.current_id}/attributes/${id}`;
-            let method = this.attribute_checked_mapping[id].checked
+            let url = `/api/v1/admin/dynamic-attribute-sets/${id}/attributes/${this.current_id}`;
+            let method = this.set_checked_mapping[id].checked
                 ? "put"
                 : "delete";
             this.$store.dispatch("showSpinner", "Updating...");
@@ -93,7 +92,7 @@ export default {
                 if (response.data.success) {
                     this.$store.dispatch(
                         "snackMessage",
-                        "Added to Attribute Set"
+                        "Assigned to Attribute Set"
                     );
                 } else {
                     this.$store.dispatch(
@@ -106,17 +105,17 @@ export default {
     },
     mounted() {
         if (this.model) {
-            this.fetchModelAttributes();
+            this.fetchModelAttributeSets();
         }
     },
     watch: {
         id(nV, oV) {
             this.current_id = nV;
-            this.fetchAttributeSet();
+            this.fetchAttribute();
         },
         model(nV, oV) {
             this.current_id = 0;
-            this.fetchModelAttributes();
+            this.fetchModelAttributeSets();
         }
     }
 };
