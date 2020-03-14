@@ -434,7 +434,7 @@ class CatalogSearchService
                 $aggregation[$attr_name] =[
                     'filter' => $attr_name,
                     'is_dynattr' => true,
-                    'label' => $da['label'],
+                    'label' => empty($da['front_label']) ? $attr_name : $da['front_label'],
                     'items' => $items,
                     'applied' => $applied
                 ];

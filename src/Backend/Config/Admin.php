@@ -99,6 +99,13 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
+                        'text' => 'Front Label',
+                        'ui' => 'z-label',
+                        'edit_ui' => 'config-text-item',
+                        'value' => 'front_label',
+                        'editable' => true,
+                    ],
+                    [
                         'text' => 'Front Component',
                         'ui' => 'z-label',
                         'edit_ui' => 'config-options-item',
