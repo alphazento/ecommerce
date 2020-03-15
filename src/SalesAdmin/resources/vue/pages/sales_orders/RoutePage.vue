@@ -34,9 +34,19 @@ export default {
     };
   },
   methods: {
+    initBreadCrumbs() {
+      this.$store.dispatch("clearBreadcrumbs", null);
+      this.$store.dispatch("addBreadcrumbItem", {
+        text: "Sales/Orders",
+        href: this.$route.path
+      });
+    },
     selectedRowsChange(rows) {
       this.selectRows = rows;
     }
+  },
+  created() {
+    this.initBreadCrumbs();
   },
   watch: {
     $route() {}

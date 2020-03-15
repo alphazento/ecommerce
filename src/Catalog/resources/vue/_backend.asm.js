@@ -9,10 +9,16 @@ export default {
     routes: [{
         name: "catalog.category",
         path: "/admin/catalog/category",
-        component: CategoryRoutePage
+        component: CategoryRoutePage,
+        meta: {
+            title: 'Catalog Category'
+        }
     }, {
         name: "catalog.product",
         path: "/admin/catalog/product",
-        component: ProductRoutePage
+        component: ProductRoutePage,
+        meta: {
+            title: 'Catalog Product'
+        }
     }]
 }

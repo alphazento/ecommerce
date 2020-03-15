@@ -70,6 +70,13 @@ export default {
     };
   },
   methods: {
+    initBreadCrumbs() {
+      this.$store.dispatch("clearBreadcrumbs", null);
+      this.$store.dispatch("addBreadcrumbItem", {
+        text: "Catalog/Product",
+        href: this.$route.path
+      });
+    },
     proxyAction(event) {
       switch (event.action) {
         case "editProduct":
@@ -127,6 +134,9 @@ export default {
       this.tab = 1;
       this.productTab = true;
     }
+  },
+  created() {
+    this.initBreadCrumbs();
   },
   watch: {
     $route() {}

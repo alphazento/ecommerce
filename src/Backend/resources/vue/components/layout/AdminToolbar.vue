@@ -69,9 +69,9 @@
       <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- logo -->
       <a href="/admin">
-        <v-img :src="$store.state.themeData.logo" :max-height="45" contain :position="'left'"></v-img>
+        <img :src="$store.state.themeData.logo" style="max-height:60px" />
       </a>
-      <!-- category menus -->
+      <z-breadcrumbs divider=">"></z-breadcrumbs>
       <v-spacer></v-spacer>
 
       <!-- account -->

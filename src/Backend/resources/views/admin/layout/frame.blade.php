@@ -13,8 +13,7 @@
                 <template v-slot:sns_login>
                     @stub('sns_login')
                 </template>
-            </admin-toolbar>
-            <z-breadcrumbs divider=">"></z-breadcrumbs>
+            </admin-toolbar>            
             @yield('pagecontent')
             {{-- <admin-footer></admin-footer> --}}
         </v-content>
