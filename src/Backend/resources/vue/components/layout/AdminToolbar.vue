@@ -19,9 +19,14 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
+      <!-- Side Menus-->
       <v-expansion-panels accordion multiple>
         <v-expansion-panel v-for="(item, name) in menus" :key="name">
-          <v-expansion-panel-header text-left class="assign-drawer-item">
+          <v-expansion-panel-header
+            text-left
+            class="assign-drawer-item"
+            :class="hasSubItemSelected(item)"
+          >
             <v-list-item>
               <v-list-item-avatar>
                 <v-btn icon>
@@ -39,8 +44,12 @@
               </v-list-item-title>
             </v-list-item>
           </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-list-item v-for="(subItem, i) of item.items" :key="i">
+          <v-expansion-panel-content :class="hasSubItemSelected(item)">
+            <v-list-item
+              v-for="(subItem, i) of item.items"
+              :key="i"
+              :class="subMenuSelected(subItem)"
+            >
               <v-icon v-if="subItem.icon" color="blue darken-2">
                 {{
                 subItem.icon
@@ -84,12 +93,14 @@ export default {
     return {
       menus: {},
       drawer: true,
-      mini: false
+      mini: false,
+      urlPath: ""
     };
   },
 
   mounted() {
     this.fetchMenus();
+    this.urlPath = this.$route.path;
   },
 
   methods: {
@@ -102,11 +113,25 @@ export default {
     },
     onClick(e, item) {
       // this.$vuetify.goTo(item.href);
+    },
+    hasSubItemSelected(item) {
+      let found = Object.values(item.items).find(subItem => {
+        return this.urlPath == subItem.url;
+      });
+      return found ? "cyan" : "";
+    },
+    subMenuSelected(subItem) {
+      return this.urlPath == subItem.url ? "pink" : "";
     }
   },
   computed: {
     user() {
       return this.$store.state.user;
+    }
+  },
+  watch: {
+    $route() {
+      this.urlPath = this.$route.path;
     }
   }
 };

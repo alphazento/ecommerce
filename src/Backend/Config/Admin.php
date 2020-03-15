@@ -9,8 +9,8 @@ class Admin extends AbstractAdminConfig {
     public function registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Store', 'mdi-store');
         AdminDashboardService::registerL1MenuNode('Store', 'Configuration', 'mdi-settings', '/admin/store-configurations');
-        AdminDashboardService::registerL1MenuNode('Store', 'Attribute Set', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
-        AdminDashboardService::registerL1MenuNode('Store', 'Dynamic Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
+        AdminDashboardService::registerL1MenuNode('Store', 'Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
+        AdminDashboardService::registerL1MenuNode('Store', 'Attribute Sets', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
     }
 
     public function registerConfigMenus() {

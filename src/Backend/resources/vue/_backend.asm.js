@@ -33,6 +33,7 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
+        "z-dynamic-attribute-model-navigator": "pages/inner_components/DnayamictAttributeModelNavigator.vue",
         "z-dynamic-attribute-and-set-editor": "pages/inner_components/DyanmicAttrAndSetEditor.vue",
         "z-dynamic-attribute-set-attrs-manager": "pages/inner_components/DynamicAttributeSetAttrsManager.vue",
         "z-dynamic-attribute-belongs-set-manager": "pages/inner_components/DynamicAttributeBlongsSetManager.vue",
