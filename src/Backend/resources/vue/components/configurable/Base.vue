@@ -3,7 +3,7 @@ export default {
   props: {
     idx: String | Number, //it's optional
     accessor: String,
-    title: String,
+    text: String,
     ui: String,
     value: String | Number,
     options: Array,
@@ -13,7 +13,12 @@ export default {
     return {
       oldVal: this.value,
       innerValue: this.value,
-      is_json: false
+      is_json: false,
+      rules: {
+        required: v => !!v || "Required Field.",
+        isNumber: v => !v || isNaN(v) || 'Please input only number',
+        max255: v => !v || v.length <= 64 || "Max 64 characters"
+      }
     };
   },
   methods: {

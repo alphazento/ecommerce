@@ -27,15 +27,15 @@ class Admin extends AbstractAdminConfig {
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/admin'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'ip_restrict',  [
-                'title' => 'Allow IPs',
+                'text' => 'Allow IPs',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-text-item',
                         'accessor' => 'admin.ip_restrict.eanbled'
                     ],
                     [
-                        'title' => 'Admin URL',
+                        'text' => 'Admin URL',
                         'ui' => 'config-text-item',
                         'accessor' => 'admin.admin_url'
                     ],
@@ -45,10 +45,10 @@ class Admin extends AbstractAdminConfig {
 
         $groups['website/web'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'base',  [
-                'title' => 'Basic Settings',
+                'text' => 'Basic Settings',
                 'items' => [
                     [
-                        'title' => 'Base URL',
+                        'text' => 'Base URL',
                         'ui' => 'config-text-item',
                         'accessor' => 'website.web.base_url'
                     ],
@@ -56,10 +56,10 @@ class Admin extends AbstractAdminConfig {
             ]);
 
             AdminConfigurationService::registerGroup($groupTag, 'url_rewrite',  [
-                'title' => 'Allow Url Rewrite',
+                'text' => 'Allow Url Rewrite',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => 'website.web.url_rewrite.eanbled'
                     ]
@@ -69,7 +69,7 @@ class Admin extends AbstractAdminConfig {
 
         $groups['tables/dynamic-attributes'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Model Dynamic Attributes Editor Template Definition',
+                'text' => 'Model Dynamic Attributes Editor Template Definition',
                 'items' => [
                     [
                         'text' => 'Name',
@@ -243,7 +243,7 @@ class Admin extends AbstractAdminConfig {
 
         $groups['tables/dynamic-attribute-sets'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Attribute Set Editor Template Definition',
+                'text' => 'Attribute Set Editor Template Definition',
                 'items' => [
                     [
                         'text' => 'Name',

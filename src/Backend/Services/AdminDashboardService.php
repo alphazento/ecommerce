@@ -20,7 +20,7 @@ class AdminDashboardService
     $key = strtolower(Str::slug($name));
     if (!isset($this->menus[$key])) {
       $this->menus[$key] = [
-        'title' => $name,
+        'text' => $name,
         'url' => $url,
         'icon' => $icon,
         'items' => []
@@ -39,7 +39,7 @@ class AdminDashboardService
     {
       $key1 = strtolower(Str::slug($l1Name));
       $this->menus[$key0]['items'][$key1] = [
-        'title' => $l1Name,
+        'text' => $l1Name,
         'icon' => $icon,
         'url' => $url,
       ];

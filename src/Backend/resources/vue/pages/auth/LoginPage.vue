@@ -55,6 +55,9 @@
 </template>
 
 <script>
+
+import { AUTH_REQUEST } from "../../store/actions"
+
 export default {
     data() {
         return {
@@ -74,6 +77,11 @@ export default {
     },
     methods: {
         login() {
+            this.$store.dispatch(AUTH_REQUEST, { username: this.email, password: this.password }).then(() => {
+                this.$router.push("/admin");
+            });
+        },
+        login1() {
             this.$store.dispatch("showSpinner", "Logging in...");
             axios
                 .post("/api/v1/admin/oauth2/token", {

@@ -58,8 +58,7 @@ class AdminConfigurationService extends AdminDashboardService
     $items = $this->config_groups[$l0name_slash_l1Name][$groupName]['items'] ?? [];
     for($i = 0, $len = count($items); $i < $len; $i++) {
       $item = $items[$i];
-      if ((isset($item['title']) && $item['title'] === $itemName) 
-        || (isset($item['text']) && $item['text'] === $itemName)) {
+      if ((isset($item['text']) && $item['text'] === $itemName)) {
           array_splice($this->config_groups[$l0name_slash_l1Name][$groupName]['items'], $i, 1);
       }
     }

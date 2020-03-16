@@ -3,12 +3,12 @@
     <v-flex md3>
       <v-expansion-panels accordion v-if="menus" focusable>
         <v-expansion-panel v-for="(item, name) in menus" :key="name">
-          <v-expansion-panel-header text-left>{{ item.title }}</v-expansion-panel-header>
+          <v-expansion-panel-header text-left>{{ item.text }}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-list-item v-for="(subItem, subName) in item.items" :key="subName">
               <a @click.stop="navToGroup(name, subName)">
                 {{
-                subItem.title
+                subItem.text
                 }}
               </a>
             </v-list-item>
@@ -42,19 +42,19 @@ export default {
   },
   methods: {
     initBreadCrumbs() {
-      this.$store.dispatch("clearBreadcrumbs", null);
-      this.$store.dispatch("addBreadcrumbItem", {
+      this.$store.dispatch("CLEAR_BREADCRUMBS", null);
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "Store Configurations",
         href: this.baseRoute
       });
-      this.$store.dispatch("addBreadcrumbItem", {
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "All",
         href: this.baseRoute
       });
     },
     calcMenus() {
-      if (this.$store.state.cachedData.store_config_menus !== undefined) {
-        this.menus = this.$store.state.cachedData.store_config_menus;
+      if (sessionStorage.getItem('config_menus') !== undefined) {
+        this.menus = sessionStorage.getItem('config_menus');
       }
     },
     fetchMenus() {
@@ -62,9 +62,7 @@ export default {
       axios.get("/api/v1/admin/configs/menus").then(response => {
         this.$store.dispatch("hideSpinner");
         if (response.data && response.data.success) {
-          this.$store.dispatch("cacheData", {
-            store_config_menus: response.data.data
-          });
+          sessionStorage.setItem('config_menus', response.data.data);
           this.calcMenus();
         } else {
           this.model = "";

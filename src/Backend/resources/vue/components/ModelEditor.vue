@@ -8,7 +8,7 @@
             <v-list-item :key="subName">
               <v-layout class="bottom-line">
                 <v-flex md3 class="v-middle">
-                  <span>{{ subItem.title }}</span>
+                  <span>{{ subItem.text }}</span>
                 </v-flex>
                 <v-flex md6>
                   <div class="component-container">
@@ -18,7 +18,7 @@
                 <v-flex md3>{{ subItem.description }}</v-flex>
               </v-layout>
             </v-list-item>
-            <v-divider :key="subItem.title"></v-divider>
+            <v-divider :key="subItem.text"></v-divider>
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>

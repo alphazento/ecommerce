@@ -39,7 +39,7 @@
               </v-list-item-avatar>
               <v-list-item-title>
                 {{
-                item.title
+                item.text
                 }}
               </v-list-item-title>
             </v-list-item>
@@ -55,7 +55,7 @@
                 subItem.icon
                 }}
               </v-icon>
-              <router-link :to="subItem.url" class="white--text">{{ subItem.title }}</router-link>
+              <router-link :to="subItem.url" class="white--text">{{ subItem.text }}</router-link>
             </v-list-item>
           </v-expansion-panel-content>
         </v-expansion-panel>

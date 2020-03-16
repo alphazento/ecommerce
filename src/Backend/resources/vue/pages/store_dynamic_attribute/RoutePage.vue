@@ -118,12 +118,12 @@ export default {
   },
   methods: {
     initBreadCrumbs() {
-      this.$store.dispatch("clearBreadcrumbs", null);
-      this.$store.dispatch("addBreadcrumbItem", {
+      this.$store.dispatch("CLEAR_BREADCRUMBS", null);
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "Store Dyanmic Attributes",
         href: this.baseRoute
       });
-      this.$store.dispatch("addBreadcrumbItem", {
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "All",
         href: this.baseRoute
       });

@@ -48,8 +48,8 @@ export default {
   },
   methods: {
     initBreadCrumbs() {
-      this.$store.dispatch("clearBreadcrumbs", null);
-      this.$store.dispatch("addBreadcrumbItem", {
+      this.$store.dispatch("CLEAR_BREADCRUMBS", null);
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "Catalog/Category",
         href: this.$route.path
       });

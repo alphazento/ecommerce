@@ -5,7 +5,7 @@ import StoreDynamicAttributeSetPage from "./pages/store_dynamic_attribute_set/Ro
 export default {
     components: {
         "spinner-layer": "components/SpinnerLayer.vue",
-        "admin-toolbar": "components/layout/AdminToolbar.vue",
+        "z-admin-toolbar": "components/layout/AdminToolbar.vue",
         "z-breadcrumbs": "components/layout/Breadcrumbs.vue",
         "z-file-picker": "components/configurable/FilePicker.vue",
 

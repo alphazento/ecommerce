@@ -57,7 +57,7 @@ export default {
             ui: isNew || config["editable"] ? config["edit_ui"] : config["ui"],
             accessor: config["value"],
             options: config["options"],
-            title: config["text"],
+            text: config["text"],
             value: value
           });
         }

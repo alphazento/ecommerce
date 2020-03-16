@@ -9,11 +9,11 @@
     <v-app>
         <spinner-layer></spinner-layer>
         <v-content>
-            <admin-toolbar>
+            <z-admin-toolbar>
                 <template v-slot:sns_login>
                     @stub('sns_login')
                 </template>
-            </admin-toolbar>            
+            </z-admin-toolbar>            
             @yield('pagecontent')
             {{-- <admin-footer></admin-footer> --}}
         </v-content>

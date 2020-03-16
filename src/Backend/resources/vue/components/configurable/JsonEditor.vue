@@ -68,7 +68,7 @@ export default {
                         }
                     } else {
                         components[key] = {
-                            title: key,
+                            text: key,
                             ui: schema[key],
                             value: value,
                             accessor: key,
