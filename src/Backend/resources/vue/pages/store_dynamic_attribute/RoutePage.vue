@@ -143,8 +143,8 @@ export default {
         .get("/api/v1/admin/configs/groups/tables/dynamic-attributes")
         .then(response => {
           this.$store.dispatch("hideSpinner");
-          if (response.data && response.data.success) {
-            this.defines = response.data.data.table.items;
+          if (response && response.success) {
+            this.defines = response.data.table.items;
           }
         });
     },
@@ -160,9 +160,9 @@ export default {
         .get(`/api/v1/admin/dynamic-attributes/models/${modelName}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
-          if (response.data && response.data.success) {
-            this.data = response.data.data;
-            this.newModelTemp = response.data.default;
+          if (response && response.success) {
+            this.data = response.data;
+            this.newModelTemp = response.default;
           }
         });
     },

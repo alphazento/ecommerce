@@ -23,10 +23,17 @@ Route::group(
 
         Route::get('/users/{id}',
             [
-                'as'=>'get.users',
+                'as'=>'get.user',
                 'uses'=>'AclController@getUser'
             ]
         );
+
+        Route::get('/users/me',
+            [
+                'as'=>'get.me',
+                'uses'=>'AclController@getUser'
+            ]
+        )->unshiftMiddleware('disable_acl');
 
         Route::delete('/users/{id}',
             [

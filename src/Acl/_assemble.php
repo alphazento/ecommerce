@@ -14,8 +14,8 @@ return [
         ],
         "listeners"=>  [
         ],
-        "middlewaregroup"=> [
-           
+        "middlewares"=> [
+           'disable_acl' => '\Zento\Acl\Http\Middleware\DisableAclCheck'
         ],
         "depends"=> [
             "Zento_Passport",

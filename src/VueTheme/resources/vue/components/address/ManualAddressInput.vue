@@ -279,9 +279,9 @@ export default {
     initCountryAndStates() {
       if (this.country_list.length === 0) {
         axios.get("/api/v1/countries").then(response => {
-          if (response.data.success) {
-            this.country_list = response.data.data.countries;
-            this.country_state_list = response.data.data.states;
+          if (response.success) {
+            this.country_list = response.data.countries;
+            this.country_state_list = response.data.states;
             if (this.country_list.length === 1) {
               this.address.country = this.country_list[0].value;
             }

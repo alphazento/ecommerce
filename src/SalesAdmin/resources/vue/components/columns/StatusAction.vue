@@ -45,7 +45,7 @@ export default {
         )
         .then(
           response => {
-            if (!response.data.success) {
+            if (!response.success) {
               this.innerValue = this.oldVal;
             }
           },

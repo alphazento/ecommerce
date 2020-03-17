@@ -46,7 +46,7 @@ export default {
     }
     // navPage(page) {
     //   axios.get(this.apiUrl + "?page=" + page).then(response => {
-    //     this.pagiData = response.data.data.products;
+    //     this.pagiData = response.data.products;
     //   });
     // }
   }

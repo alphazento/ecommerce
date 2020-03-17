@@ -58,8 +58,8 @@ export default {
           )
           .then(response => {
             this.$store.dispatch("hideSpinner");
-            if (response.data && response.data.success) {
-              this.model_data = response.data.data;
+            if (response && response.success) {
+              this.model_data = response.data;
               this.$emit("fetchSchema", this.model_data);
             }
           });

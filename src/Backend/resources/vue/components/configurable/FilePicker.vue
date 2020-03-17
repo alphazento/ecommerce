@@ -139,7 +139,7 @@ export default {
           `${this.api}?text=${this.searchText}&page=${page}&type=${this.fileType}`
         )
         .then(response => {
-          this.pagination = response.data.data;
+          this.pagination = response.data;
           this.dataLoaded = true;
         });
       this.oldSearchText = this.searchText;

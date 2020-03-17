@@ -98,8 +98,8 @@ export default {
           }
         )
         .then(response => {
-          if (response.data.success) {
-            Object.assign(this.editItem.model, response.data.data);
+          if (response.success) {
+            Object.assign(this.editItem.model, response.data);
             this.$store.dispatch("snackMessage", "Updated.");
           } else {
             this.$store.dispatch("snackMessage", "Failed to update.");

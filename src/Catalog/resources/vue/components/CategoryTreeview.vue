@@ -105,11 +105,11 @@ export default {
       this.$store.dispatch("showSpinner", "Loading categories data");
       axios.get("/api/v1/admin/catalog/categories/tree").then(response => {
         this.$store.dispatch("hideSpinner");
-        if (response.data.success) {
-          this.tree_conf = response.data.tree_conf;
+        if (response.success) {
+          this.tree_conf = response.tree_conf;
           this.items[0].level =
             this.tree_conf.level_from > 1 ? this.tree_conf.level_from - 1 : 0;
-          this.items[0].children = response.data.data;
+          this.items[0].children = response.data;
         }
       });
     },

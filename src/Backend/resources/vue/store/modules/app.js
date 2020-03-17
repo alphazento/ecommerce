@@ -1,19 +1,30 @@
 import {
+  SET_THEME_DATA,
   CLEAR_BREADCRUMBS,
   ADD_BREADCRUMB_ITEM,
   REPLACE_BREADCRUMB_LAST_ITEM
 } from "../actions";
 
 const state = {
-  breadcrumbs: []
+  breadcrumbs: [],
+  themeData: {
+    footer: {},
+    logo: ''
+  }
 };
 
 const getters = {
   getBreadCrumbs: state => state.breadcrumbs,
-  isProfileLoaded: state => !!state.profile.name
+  themeSettings: state => state.themeData
 };
 
 const actions = {
+  [SET_THEME_DATA]: ({
+    commit
+  }, values) => {
+    commit('SET_THEME_DATA', values)
+  },
+
   [CLEAR_BREADCRUMBS]: ({
     commit
   }) => {
@@ -30,10 +41,14 @@ const actions = {
     commit
   }, item) => {
     commit(REPLACE_BREADCRUMB_LAST_ITEM, item);
-  }
+  },
 };
 
 const mutations = {
+  [SET_THEME_DATA]: (state, values) => {
+    state.themeData = values;
+  },
+
   [CLEAR_BREADCRUMBS]: state => {
     state.breadcrumbs = [{
       text: 'Dashboard',
@@ -51,6 +66,7 @@ const mutations = {
 
 export default {
   state,
+  getters,
   actions,
   mutations
 };

@@ -2,6 +2,7 @@
 
 namespace Zento\Acl\Http\Controllers;
 
+use Auth;
 use Route;
 use Request;
 use Illuminate\Support\Facades\Validator;
@@ -85,8 +86,15 @@ class AclController extends ApiBaseController
      * ]}
      */
     public function getUser() {
+        $id = Route::input('id');
+        if ($id == 'me') {
+            return $this->withData(Auth::user());
+        }
         $model = $this->getUserModel();
-        return $this->withData($model::all());
+        if ($user = $model::find($id)) {
+            return $this->withData($user);
+        }
+        return $this->error(404);
     }
 
     public function getUserPermissions() {

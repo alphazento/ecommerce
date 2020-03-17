@@ -15,7 +15,9 @@ const state = {
   }
 };
 
-const getters = {};
+const getters = {
+  spinnerParameters: state => state.spinnerOverlay
+};
 
 const actions = {
   [SHOW_SPINNER]: ({

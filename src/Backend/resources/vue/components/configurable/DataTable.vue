@@ -119,10 +119,10 @@ export default {
         .then(response => {
           this.realfetchData();
           // this.$store.dispatch("hideSpinner");
-          if (response.data && response.data.success) {
+          if (response && response.success) {
             this.defines = Object.assign(
               this.defines,
-              response.data.data.table.items
+              response.data.table.items
             );
 
             this.defines.headers.forEach(item => {
@@ -142,12 +142,12 @@ export default {
         .get(`/api/v1/admin/${this.dataApiUrl}?${queryString}`)
         .then(response => {
           this.$store.dispatch("hideSpinner");
-          if (response.data) {
-            if(response.data.success) {
-              this.pagination = response.data.data;
+          if (response) {
+            if(response.success) {
+              this.pagination = response.data;
               this.selectedItems = [];
             } else {
-              if (response.data.code == 404) {
+              if (response.code == 404) {
                 this.pagination = {data:[]};
               }
             }

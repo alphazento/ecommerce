@@ -81,12 +81,12 @@ export default {
           })
           .then(response => {
             this.$store.dispatch("hideSpinner");
-            if (response.data.success) {
+            if (response.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.$emit('itemUpdated', response.data.data);
+              this.$emit('itemUpdated', response.data);
             } else {
-              this.$store.dispatch("snackMessage", response.data.message);
+              this.$store.dispatch("snackMessage", response.message);
             }
           });
       }
@@ -100,12 +100,12 @@ export default {
           })
           .then(response => {
             this.$store.dispatch("hideSpinner");
-            if (response.data.success) {
+            if (response.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.$emit('itemUpdated', response.data.data);
+              this.$emit('itemUpdated', response.data);
             } else {
-              this.$store.dispatch("snackMessage", response.data.message);
+              this.$store.dispatch("snackMessage", response.message);
             }
           });
     }

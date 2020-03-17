@@ -49,8 +49,8 @@ export default {
                 )
                 .then(response => {
                     this.$store.dispatch("hideSpinner");
-                    if (response.data && response.data.success) {
-                        this.sets = response.data.data;
+                    if (response && response.success) {
+                        this.sets = response.data;
                     }
                     this.$store.dispatch("hideSpinner");
                     if (this.current_id) {
@@ -64,8 +64,8 @@ export default {
             axios
                 .get(`/api/v1/admin/dynamic-attributes/${this.current_id}/sets`)
                 .then(response => {
-                    if (response.data.success) {
-                        this.current_attribute = response.data.data;
+                    if (response.success) {
+                        this.current_attribute = response.data;
                         var mapping = {};
                         this.sets.forEach(item => {
                             mapping[item.id] = {
@@ -89,7 +89,7 @@ export default {
             this.$store.dispatch("showSpinner", "Updating...");
             axios[method](url).then(response => {
                 this.$store.dispatch("hideSpinner");
-                if (response.data.success) {
+                if (response.success) {
                     this.$store.dispatch(
                         "snackMessage",
                         "Assigned to Attribute Set"

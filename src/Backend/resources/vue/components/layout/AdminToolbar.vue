@@ -7,6 +7,7 @@
       :mini-variant.sync="mini"
       :permanent="drawer"
       class="fixed-position"
+      v-if="!!userProfile.is_guest"
     >
       <v-list-item>
         <v-list-item-avatar>
@@ -69,13 +70,13 @@
       <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- logo -->
       <a href="/admin">
-        <img :src="$store.state.themeData.logo" style="max-height:60px" />
+        <img :src="themeSettings.logo" style="max-height:60px" />
       </a>
       <z-breadcrumbs divider=">"></z-breadcrumbs>
       <v-spacer></v-spacer>
 
       <!-- account -->
-      <v-btn icon @click.stop="signin" v-if="!!user.is_guest">
+      <v-btn icon @click.stop="signin">
         <v-icon color="grey">mdi-account-circle</v-icon>
       </v-btn>
     </v-app-bar>
@@ -83,6 +84,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     logo: {
@@ -106,8 +109,8 @@ export default {
   methods: {
     fetchMenus() {
       axios.get("/api/v1/admin/dashboard/menus").then(response => {
-        if (response.data.success) {
-          this.menus = response.data.data;
+        if (response.success) {
+          this.menus = response.data;
         }
       });
     },
@@ -125,9 +128,7 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.$store.state.user;
-    }
+    ...mapGetters(['themeSettings', 'userProfile']),
   },
   watch: {
     $route() {

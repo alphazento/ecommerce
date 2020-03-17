@@ -23,7 +23,6 @@ function routeGuard(to, from, next) {
 
 import LoginPage from "./pages/auth/LoginPage";
 
-
 if (support.default.routes && support.default.routes.length > 0) {
     support.default.routes.forEach(route => {
         route.beforeEnter = routeGuard;

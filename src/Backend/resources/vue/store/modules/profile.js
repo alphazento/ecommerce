@@ -1,7 +1,7 @@
 import {
   PROFILE_REQUEST,
-  PROFILE_ERROR,
-  PROFILE_SUCCESS
+  PROFILE_SUCCESS,
+  PROFILE_ERROR
 } from "../actions";
 
 import {
@@ -13,8 +13,8 @@ const state = {
 };
 
 const getters = {
-  getProfile: state => state.profile,
-  isProfileLoaded: state => !!state.profile.name
+  userProfile: state => state.profile,
+  isProfileLoaded: state => !!state.profile.is_guest
 };
 
 const actions = {
@@ -22,15 +22,12 @@ const actions = {
     commit,
     dispatch
   }) => {
-    commit(PROFILE_REQUEST);
-    axios.get({
-        url: "user/me"
-      })
+    axios.get("/api/v1/admin/acl/administrator/users/me")
       .then(resp => {
-        commit(USER_SUCCESS, resp);
+        commit(PROFILE_SUCCESS, resp);
       })
-      .catch(() => {
-        commit(USER_ERROR);
+      .catch(err => {
+        commit(PROFILE_ERROR);
         // if resp is unauthorized, logout, to
         dispatch(AUTH_LOGOUT);
       });
@@ -38,13 +35,11 @@ const actions = {
 };
 
 const mutations = {
-  [PROFILE_REQUEST]: state => {},
   [PROFILE_SUCCESS]: (state, resp) => {
-    Vue.set(state, "profile", resp);
+    console.log(PROFILE_SUCCESS, resp);
+    state.profile = resp;
   },
-  [PROFILE_ERROR]: state => {
-    // state.status = "error";
-  },
+  [PROFILE_ERROR]: state => {},
   [AUTH_LOGOUT]: state => {
     state.profile = {};
   }

@@ -75,7 +75,7 @@ export default {
           }
         )
         .then(response => {
-          if (response.data.success) {
+          if (response.success) {
             this.$store.dispatch("snackMessage", "Updated.");
           } else {
             this.$store.dispatch("snackMessage", "Failed to update.");
@@ -86,15 +86,15 @@ export default {
     saveModel(model) {
       this.$store.dispatch("showSpinner", "Saving Changes...");
       axios.post("/api/v1/admin/catalog/categories", model).then(response => {
-        if (response.data.success) {
+        if (response.success) {
           this.editItem = {
             isNew: false,
-            model: response.data.data
+            model: response.data
           };
           this.$store.dispatch("snackMessage", "New Category Created.");
           this.categories_changes++;
         } else {
-          this.$store.dispatch("snackMessage", response.data.message);
+          this.$store.dispatch("snackMessage", response.message);
         }
         this.$store.dispatch("hideSpinner");
       });

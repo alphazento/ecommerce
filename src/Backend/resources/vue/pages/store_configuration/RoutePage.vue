@@ -61,8 +61,8 @@ export default {
       this.$store.dispatch("showSpinner", "Loading configurations");
       axios.get("/api/v1/admin/configs/menus").then(response => {
         this.$store.dispatch("hideSpinner");
-        if (response.data && response.data.success) {
-          sessionStorage.setItem('config_menus', response.data.data);
+        if (response && response.success) {
+          sessionStorage.setItem('config_menus', response.data);
           this.calcMenus();
         } else {
           this.model = "";

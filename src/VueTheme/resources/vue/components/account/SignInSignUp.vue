@@ -200,10 +200,10 @@ export default {
                     password: this.password
                 })
                 .then(response => {
-                    if (response.data.success) {
+                    if (response.success) {
                         window.location.reload();
                     } else {
-                        this.errorMessage = response.data.message;
+                        this.errorMessage = response.message;
                         this.$store.dispatch("hideSpinner");
                     }
                 });
@@ -218,10 +218,10 @@ export default {
                     password_confirmation: this.confirm_password
                 })
                 .then(response => {
-                    if (response.data.success) {
+                    if (response.success) {
                         window.location.reload();
                     } else {
-                        this.errorMessage = response.data.message;
+                        this.errorMessage = response.message;
                         this.$store.dispatch("hideSpinner");
                     }
                 });
@@ -234,10 +234,10 @@ export default {
                 })
                 .then(response => {
                     this.$store.dispatch("hideSpinner");
-                    if (response.data.success) {
+                    if (response.success) {
                         this.mode = "reset-passwd-success";
                     } else {
-                        this.errorMessage = response.data.message;
+                        this.errorMessage = response.message;
                     }
                 });
         },

@@ -5,6 +5,7 @@ namespace Zento\Acl\Services;
 use Store;
 use Auth;
 use Request;
+use ShareBucket;
 
 use Zento\Acl\Model\Auth\GuestUser;
 use Zento\Acl\Model\Auth\AclUserInterface;
@@ -22,6 +23,10 @@ class Acl implements AclInterface {
      * check by request
      */
     public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
+        if (ShareBucket::get('disable_acl_check')) {
+            return true;
+        }
+
         $user = $user ?? $this->getUser();
         if ($this->inBlackList($request, $user)) {
             return false;

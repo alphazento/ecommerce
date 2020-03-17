@@ -82,13 +82,13 @@ export default {
           }
         )
         .then(response => {
-          this.innerValue = response.data.data.url;
+          this.innerValue = response.data.url;
           this.valueChanged();
           this.uploading = false;
           this.chosenFile = null;
           this.success = true;
           this.success_message = `${file.name} uploaded.`;
-          this.fileuploaed(response.data.data);
+          this.fileuploaed(response.data);
         })
         .catch(function() {
           console.log("FAILURE!!");
@@ -98,7 +98,7 @@ export default {
     },
 
     fileuploaed(data) {
-        this.$emit('fileuploaed', response.data.data);
+        this.$emit('fileuploaed', response.data);
     }
   }
 };

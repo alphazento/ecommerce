@@ -40,6 +40,10 @@ export default {
         "z-dynamic-attribute-value-map-manager": "pages/inner_components/AttributeValueMapManager.vue"
     },
     routes: [{
+            name: "store.home",
+            path: "/admin"
+        },
+        {
             name: "store.configuration",
             path: "/admin/store-configurations",
             component: StoreConfigurationPage

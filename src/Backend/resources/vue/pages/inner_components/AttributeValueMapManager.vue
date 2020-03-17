@@ -96,8 +96,8 @@ export default {
           .get(`/api/v1/admin/dynamic-attributes/${this.id}/values`)
           .then(response => {
             this.$store.dispatch("hideSpinner");
-            if (response.data && response.data.success) {
-              this.attribute = response.data.data;
+            if (response && response.success) {
+              this.attribute = response.data;
             }
             this.$store.dispatch('hideSpinner');
           });

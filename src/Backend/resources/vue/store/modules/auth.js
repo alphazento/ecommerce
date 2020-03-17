@@ -1,21 +1,39 @@
 /* eslint-disable promise/param-names */
 import {
+  AXIOS_AUTH_INTERCEPTOR,
   AUTH_REQUEST,
   AUTH_ERROR,
   AUTH_SUCCESS,
   AUTH_LOGOUT,
-  PROFILE_REQUEST
+  PROFILE_REQUEST,
+
+  SHOW_SPINNER,
+  HIDE_SPINNER,
+  SNACK_MESSAGE
 } from "../actions";
 import Axios from "axios";
 
 const state = {
-  token: localStorage.getItem("user-token") || "",
+  hasToken: localStorage.getItem("user-token") || false,
   hasLoadedOnce: false
 };
 
 const getters = {
-  isAuthenticated: state => !!state.token,
-  authStatus: state => state.status
+  isAuthenticated: state => !!state.hasToken,
+};
+
+const attachUserToken = () => {
+  let str = localStorage.getItem('user-token');
+  if (str && str !== undefined) {
+    let tokens = JSON.parse(str);
+    window.axios.defaults.headers.common['Authorization'] = `${tokens.token_type} ${tokens.access_token}`;
+  }
+};
+
+const authErrorHandler = (commit, dispatch, err) => {
+  dispatch(HIDE_SPINNER);
+  commit(AUTH_ERROR, err);
+  localStorage.removeItem("user-token");
 };
 
 const actions = {
@@ -25,17 +43,24 @@ const actions = {
   }, user) => {
     // user: username, password
     return new Promise((resolve, reject) => {
-      commit(AUTH_REQUEST);
+      dispatch(SHOW_SPINNER, 'Sign you in...');
       axios.post("/api/v1/admin/oauth2/token", user)
-        .then(resp => {
-          localStorage.setItem("user-token", resp.token);
-          commit(AUTH_SUCCESS, resp);
-          dispatch(PROFILE_REQUEST);
-          resolve(resp);
+        .then(response => {
+          console.log('response', response)
+          if (response.code == 200) {
+            localStorage.setItem("user-token", JSON.stringify(response.data));
+            attachUserToken();
+            commit(AUTH_SUCCESS);
+            dispatch(PROFILE_REQUEST);
+            resolve(resp);
+          } else {
+            authErrorHandler(commit, dispatch, new Error(response.data.data.message));
+            reject(err);
+          }
+          dispatch(HIDE_SPINNER);
         })
         .catch(err => {
-          commit(AUTH_ERROR, err);
-          localStorage.removeItem("user-token");
+          authErrorHandler(commit, dispatch, err);
           reject(err);
         });
     });
@@ -45,23 +70,48 @@ const actions = {
   }) => {
     return new Promise(resolve => {
       commit(AUTH_LOGOUT);
+      console.log('auth logout');
       localStorage.removeItem("user-token");
       resolve();
+    });
+  },
+
+  [AXIOS_AUTH_INTERCEPTOR]: ({
+    commit,
+    dispatch
+  }, route) => {
+    attachUserToken();
+
+    window.axios.interceptors.response.use(response => {
+      let data = response.data;
+      if (data.code == 401) {
+        if (route.path !== "/admin/login") {
+          route.push("/admin/login");
+        }
+        return Promise.reject(data.message ? data.message : data.data.message);
+      }
+      return data;
+    }, error => {
+      if (error.response.status === 401) {
+        if (route.path !== "/admin/login") {
+          route.push("/admin/login");
+        }
+      }
+      return Promise.reject(error);
     });
   }
 };
 
 const mutations = {
-  [AUTH_REQUEST]: state => {},
-  [AUTH_SUCCESS]: (state, resp) => {
-    state.token = resp.token;
+  [AUTH_SUCCESS]: state => {
+    state.hasToken = true;
     state.hasLoadedOnce = true;
   },
   [AUTH_ERROR]: state => {
     state.hasLoadedOnce = true;
   },
   [AUTH_LOGOUT]: state => {
-    state.token = "";
+    state.hasToken = false;
   }
 };
 

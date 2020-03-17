@@ -6,8 +6,6 @@
     </router-view>
 @endsection
 
-
-
 @push('admin.tail')
 @php
 $logo = config(\Zento\StoreFront\Consts::LOGO);
@@ -22,11 +20,9 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   router: router,
-  data: {
-    component: null
-  },
   created() {
-      this.$store.dispatch('setThemeData', @json(['logo'=>$logo]));
+    this.$store.dispatch('SET_THEME_DATA', @json(['logo'=>$logo]));
+    this.$store.dispatch('AXIOS_AUTH_INTERCEPTOR', this.$route);
   }
 });
 </script>

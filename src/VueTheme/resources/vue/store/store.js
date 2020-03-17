@@ -126,8 +126,8 @@ export default new Vuex.Store({
             // this.dispatch('showSpinner', "Loading shopping cart")
             axios.get('/api/v1/cart').then(response => {
                 // this.dispatch('hideSpinner')
-                if (response.data && response.data.success) {
-                    commit('setCart', response.data.data)
+                if (response && response.success) {
+                    commit('setCart', response.data)
                 }
             });
         },
@@ -150,7 +150,7 @@ export default new Vuex.Store({
             var url = '/ajax/checkout/guest/details';
             return new Promise((resolve, reject) => {
                 axios.put(url, user).then(response => {
-                    commit('setUser', response.data.data)
+                    commit('setUser', response.data)
                     resolve(response);
                 }, error => {
                     reject(error);
@@ -165,8 +165,8 @@ export default new Vuex.Store({
             var url = `/api/v1/cart/shipping_address`;
             return new Promise((resolve, reject) => {
                 axios.put(url, address).then(response => {
-                    console.log('setCart', response.data)
-                    commit('setCart', response.data.data)
+                    console.log('setCart', response)
+                    commit('setCart', response.data)
                     resolve(response);
                 }, error => {
                     reject(error);
@@ -181,8 +181,8 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 this.dispatch('showSpinner', "Updating shopping cart")
                 axios.patch(url).then(response => {
-                    commit('setCart', response.data.data)
-                    resolve(response.data);
+                    commit('setCart', response.data)
+                    resolve(response);
                     this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
@@ -197,8 +197,8 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 this.dispatch('showSpinner', "Deleing shopping cart item")
                 axios.delete(url).then(response => {
-                    commit('setCart', response.data.data)
-                    resolve(response.data);
+                    commit('setCart', response.data)
+                    resolve(response);
                     this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
