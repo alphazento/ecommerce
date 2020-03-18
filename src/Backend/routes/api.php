@@ -9,7 +9,7 @@ Route::group(
         Route::get(
             '/dashboard/menus', 
             ['as' => 'admin.dashboard.menus', 'uses' => 'DashboardController@getMenus']
-        );
+        )->unshiftMiddleware('ignore_acl');
 
         Route::get(
             '/configs/menus', 

@@ -1,3 +1,4 @@
+import HomePage from "./pages/HomePage";
 import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
 import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
 import StoreDynamicAttributeSetPage from "./pages/store_dynamic_attribute_set/RoutePage";
@@ -41,7 +42,8 @@ export default {
     },
     routes: [{
             name: "store.home",
-            path: "/admin"
+            path: "/admin",
+            component: HomePage
         },
         {
             name: "store.configuration",

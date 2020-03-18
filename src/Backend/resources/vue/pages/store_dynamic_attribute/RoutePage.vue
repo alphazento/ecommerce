@@ -138,11 +138,11 @@ export default {
     },
 
     fetchDefines() {
-      this.$store.dispatch("showSpinner", "Fetching Defines...");
+      this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       axios
         .get("/api/v1/admin/configs/groups/tables/dynamic-attributes")
         .then(response => {
-          this.$store.dispatch("hideSpinner");
+          this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
             this.defines = response.data.table.items;
           }
@@ -151,7 +151,7 @@ export default {
 
     fetchDynamicAttributes(modelName) {
       this.model = modelName;
-      this.$store.dispatch("showSpinner", "Fetching Dynamic Attributes...");
+      this.$store.dispatch("SHOW_SPINNER", "Fetching Dynamic Attributes...");
       this.$store.dispatch("replaceBreadcrumbLastItem", {
         text: this.model,
         href: `${this.baseRoute}?model=${modelName}`
@@ -159,7 +159,7 @@ export default {
       axios
         .get(`/api/v1/admin/dynamic-attributes/models/${modelName}`)
         .then(response => {
-          this.$store.dispatch("hideSpinner");
+          this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
             this.data = response.data;
             this.newModelTemp = response.default;

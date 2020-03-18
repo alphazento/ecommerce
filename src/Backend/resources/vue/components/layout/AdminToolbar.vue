@@ -7,7 +7,7 @@
       :mini-variant.sync="mini"
       :permanent="drawer"
       class="fixed-position"
-      v-if="!!userProfile.is_guest"
+      v-if="!!userProfile.email"
     >
       <v-list-item>
         <v-list-item-avatar>

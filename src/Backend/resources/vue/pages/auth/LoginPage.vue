@@ -70,8 +70,9 @@ export default {
     },
     methods: {
         login() {
-            this.$store.dispatch(AUTH_REQUEST, { username: this.username, password: this.password }).then(() => {
+            this.$store.dispatch(AUTH_REQUEST, { username: this.username, password: this.password }).then(response => {
                 this.$router.push("/admin");
+                // console.log('resolve', response)
             }).catch(err => {
                 this.errorMessage = err;
             });

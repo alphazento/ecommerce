@@ -49,7 +49,7 @@ export default {
   methods: {
     fetchModelSchema(model) {
       if (model && model !== "") {
-        this.$store.dispatch("showSpinner", "Loading details");
+        this.$store.dispatch("SHOW_SPINNER", "Loading details");
         axios
           .get(
             `/api/v1/admin/configs/groups/${model}?withValue=${
@@ -57,7 +57,7 @@ export default {
             }`
           )
           .then(response => {
-            this.$store.dispatch("hideSpinner");
+            this.$store.dispatch("HIDE_SPINNER");
             if (response && response.success) {
               this.model_data = response.data;
               this.$emit("fetchSchema", this.model_data);

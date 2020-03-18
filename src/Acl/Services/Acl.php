@@ -23,7 +23,7 @@ class Acl implements AclInterface {
      * check by request
      */
     public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
-        if (ShareBucket::get('disable_acl_check')) {
+        if (ShareBucket::get('ignore_acl_check')) {
             return true;
         }
 

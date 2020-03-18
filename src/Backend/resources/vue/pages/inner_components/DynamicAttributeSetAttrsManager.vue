@@ -42,15 +42,15 @@ export default {
     },
     methods: {
         fetchModelAttributes() {
-            this.$store.dispatch("showSpinner", "Fetching attributes...");
+            this.$store.dispatch("SHOW_SPINNER", "Fetching attributes...");
             return axios
                 .get(`/api/v1/admin/dynamic-attributes/models/${this.model}`)
                 .then(response => {
-                    this.$store.dispatch("hideSpinner");
+                    this.$store.dispatch("HIDE_SPINNER");
                     if (response && response.success) {
                         this.attributes = response.data;
                     }
-                    this.$store.dispatch("hideSpinner");
+                    this.$store.dispatch("HIDE_SPINNER");
                     if (this.current_id) {
                         this.fetchAttributeSet();
                     }
@@ -79,7 +79,7 @@ export default {
                         });
                         this.attribute_checked_mapping = mapping;
                     }
-                    this.$store.dispatch("hideSpinner");
+                    this.$store.dispatch("HIDE_SPINNER");
                 });
         },
         valueChanged(id) {
@@ -87,9 +87,9 @@ export default {
             let method = this.attribute_checked_mapping[id].checked
                 ? "put"
                 : "delete";
-            this.$store.dispatch("showSpinner", "Updating...");
+            this.$store.dispatch("SHOW_SPINNER", "Updating...");
             axios[method](url).then(response => {
-                this.$store.dispatch("hideSpinner");
+                this.$store.dispatch("HIDE_SPINNER");
                 if (response.success) {
                     this.$store.dispatch(
                         "snackMessage",

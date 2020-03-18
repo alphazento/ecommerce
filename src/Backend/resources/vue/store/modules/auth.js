@@ -34,6 +34,7 @@ const authErrorHandler = (commit, dispatch, err) => {
   dispatch(HIDE_SPINNER);
   commit(AUTH_ERROR, err);
   localStorage.removeItem("user-token");
+  console.log('removeItem token 2');
 };
 
 const actions = {
@@ -46,18 +47,18 @@ const actions = {
       dispatch(SHOW_SPINNER, 'Sign you in...');
       axios.post("/api/v1/admin/oauth2/token", user)
         .then(response => {
-          console.log('response', response)
+          dispatch(HIDE_SPINNER);
           if (response.code == 200) {
             localStorage.setItem("user-token", JSON.stringify(response.data));
             attachUserToken();
             commit(AUTH_SUCCESS);
             dispatch(PROFILE_REQUEST);
-            resolve(resp);
+            resolve(response);
           } else {
-            authErrorHandler(commit, dispatch, new Error(response.data.data.message));
+            let err = new Error(response.data.data.message);
+            authErrorHandler(commit, dispatch, err);
             reject(err);
           }
-          dispatch(HIDE_SPINNER);
         })
         .catch(err => {
           authErrorHandler(commit, dispatch, err);
@@ -70,7 +71,7 @@ const actions = {
   }) => {
     return new Promise(resolve => {
       commit(AUTH_LOGOUT);
-      console.log('auth logout');
+      console.log('removeItem token 1');
       localStorage.removeItem("user-token");
       resolve();
     });

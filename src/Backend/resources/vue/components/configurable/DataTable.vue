@@ -112,13 +112,13 @@ export default {
   },
   methods: {
     fetchDefines() {
-      this.$store.dispatch("showSpinner", "Fetching Defines...");
+      this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       this.loading = true;
       axios
         .get(`/api/v1/admin/configs/groups/tables/${this.name}`)
         .then(response => {
           this.realfetchData();
-          // this.$store.dispatch("hideSpinner");
+          // this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
             this.defines = Object.assign(
               this.defines,
@@ -137,11 +137,11 @@ export default {
     realfetchData() {
       this.loading = true;
       var queryString = this.buildQuery(true);
-      this.$store.dispatch("showSpinner", "Loading data...");
+      this.$store.dispatch("SHOW_SPINNER", "Loading data...");
       axios
         .get(`/api/v1/admin/${this.dataApiUrl}?${queryString}`)
         .then(response => {
-          this.$store.dispatch("hideSpinner");
+          this.$store.dispatch("HIDE_SPINNER");
           if (response) {
             if(response.success) {
               this.pagination = response.data;

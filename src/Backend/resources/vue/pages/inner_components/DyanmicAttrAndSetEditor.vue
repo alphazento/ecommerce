@@ -73,14 +73,14 @@ export default {
       this.itemCopy[item.accessor] = item.value;
       let id = this.itemCopy.id;
       if (id > 0) {
-        this.$store.dispatch("showSpinner", "Saving data...");
+        this.$store.dispatch("SHOW_SPINNER", "Saving data...");
         let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
         axios
           .patch(`/api/v1/admin/${service}/${id}`, {
             attributes: this.itemCopy
           })
           .then(response => {
-            this.$store.dispatch("hideSpinner");
+            this.$store.dispatch("HIDE_SPINNER");
             if (response.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
@@ -92,14 +92,14 @@ export default {
       }
     },
     saveAttribute() {
-      this.$store.dispatch("showSpinner", "Saving data...");
+      this.$store.dispatch("SHOW_SPINNER", "Saving data...");
       let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
         axios
           .post(`/api/v1/admin/${service}`, {
             attributes: this.itemCopy
           })
           .then(response => {
-            this.$store.dispatch("hideSpinner");
+            this.$store.dispatch("HIDE_SPINNER");
             if (response.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");

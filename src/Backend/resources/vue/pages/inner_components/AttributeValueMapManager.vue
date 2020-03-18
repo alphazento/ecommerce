@@ -95,7 +95,7 @@ export default {
       return axios
           .get(`/api/v1/admin/dynamic-attributes/${this.id}/values`)
           .then(response => {
-            this.$store.dispatch("hideSpinner");
+            this.$store.dispatch("HIDE_SPINNER");
             if (response && response.success) {
               this.attribute = response.data;
             }

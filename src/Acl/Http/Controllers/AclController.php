@@ -78,24 +78,25 @@ class AclController extends ApiBaseController
     }
 
     /**
-     * Get all admin users including inactived users
+     * Get user by id
      *
-     * @response {[
-     *  'user0 details',
-     *  'user1 details',
-     * ]}
      */
     public function getUser() {
-        $id = Route::input('id');
-        if ($id == 'me') {
-            return $this->withData(Auth::user());
-        }
-        $model = $this->getUserModel();
-        if ($user = $model::find($id)) {
-            return $this->withData($user);
+        if ($id = Route::input('id')) {
+            $model = $this->getUserModel();
+            if ($user = $model::find($id)) {
+                return $this->withData($user);
+            }
         }
         return $this->error(404);
     }
+
+    /**
+     * Get current token's user details 
+     */
+    public function getMe() {
+        return $this->withData(Auth::user());
+    } 
 
     public function getUserPermissions() {
         $model = $this->getUserModel();

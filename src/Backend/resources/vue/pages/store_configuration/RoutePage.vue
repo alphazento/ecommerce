@@ -58,9 +58,9 @@ export default {
       }
     },
     fetchMenus() {
-      this.$store.dispatch("showSpinner", "Loading configurations");
+      this.$store.dispatch("SHOW_SPINNER", "Loading configurations");
       axios.get("/api/v1/admin/configs/menus").then(response => {
-        this.$store.dispatch("hideSpinner");
+        this.$store.dispatch("HIDE_SPINNER");
         if (response && response.success) {
           sessionStorage.setItem('config_menus', response.data);
           this.calcMenus();
@@ -77,14 +77,14 @@ export default {
     },
 
     configValueChanged(item) {
-      this.$store.dispatch("showSpinner", "Updating...");
+      this.$store.dispatch("SHOW_SPINNER", "Updating...");
       axios
         .post(`/api/v1/admin/configs/${item.accessor}`, {
           value: item.value,
           is_json: item.is_json
         })
         .then(response => {
-          this.$store.dispatch("hideSpinner");
+          this.$store.dispatch("HIDE_SPINNER");
         });
     },
 

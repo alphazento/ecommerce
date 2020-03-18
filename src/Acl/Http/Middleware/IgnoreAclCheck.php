@@ -5,7 +5,7 @@ namespace Zento\Acl\Http\Middleware;
 use Closure;
 use ShareBucket;
 
-class DisableAclCheck
+class IgnoreAclCheck
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class DisableAclCheck
      */
     public function handle($request, Closure $next, ...$extras)
     {
-        ShareBucket::put('disable_acl_check', true);
+        ShareBucket::put('ignore_acl_check', true);
         return $next($request);
     }
 }

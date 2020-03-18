@@ -14,7 +14,7 @@ var support = require('./._app.support');
 
 function routeGuard(to, from, next) {
     var isAuthenticated = false;
-    if (localStorage.getItem('LoggedUser')) {
+    if (localStorage.getItem('user-token')) {
         next(); // allow to enter route
     } else {
         next('/admin/login'); // go to '/login';
