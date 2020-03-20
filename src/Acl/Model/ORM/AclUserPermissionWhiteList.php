@@ -2,7 +2,7 @@
 
 namespace Zento\Acl\Model\ORM;
 
-class AclUserPermissionWhiteList extends AclBaseModel
+class AclWhiteList extends AclBaseModel
 {
     protected $fillable = [
         'user_id',

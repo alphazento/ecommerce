@@ -33,6 +33,7 @@ const attachUserToken = () => {
 const authErrorHandler = (commit, dispatch, err) => {
   dispatch(HIDE_SPINNER);
   commit(AUTH_ERROR, err);
+  dispatch(AUTH_LOGOUT);
   localStorage.removeItem("user-token");
   console.log('removeItem token 2');
 };
@@ -80,22 +81,30 @@ const actions = {
   [AXIOS_AUTH_INTERCEPTOR]: ({
     commit,
     dispatch
-  }, route) => {
+  }, router) => {
     attachUserToken();
 
     window.axios.interceptors.response.use(response => {
       let data = response.data;
+      var message = data.message ? data.message : data.data.message;
       if (data.code == 401) {
-        if (route.path !== "/admin/login") {
-          route.push("/admin/login");
+        let err = new Error(message);
+        if (!router.current || router.current.path !== "/admin/login") {
+          authErrorHandler(commit, dispatch, err);
+          router.push("/admin/login");
         }
-        return Promise.reject(data.message ? data.message : data.data.message);
+        return Promise.reject(err);
+      } else {
+        if (data.code == 403) {
+          dispatch(SNACK_MESSAGE, message);
+        }
       }
       return data;
     }, error => {
       if (error.response.status === 401) {
-        if (route.path !== "/admin/login") {
-          route.push("/admin/login");
+        if (!router.current || router.current.path !== "/admin/login") {
+          authErrorHandler(commit, dispatch, error);
+          router.push("/admin/login");
         }
       }
       return Promise.reject(error);

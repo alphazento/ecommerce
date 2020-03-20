@@ -18,17 +18,17 @@ class CreateAclUserPermissionWhiteListTable extends Migration
     {
         $builder = $this->getBuilder();
 
-        if (!$builder->hasTable('acl_user_permission_white_lists')) {
-            $builder->create('acl_user_permission_white_lists', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_white_lists')) {
+            $builder->create('acl_white_lists', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  //0=> admin, 1=>frontend
+                $table->string('scope', 16)->indxe();
                 $table->integer('user_id')->unsigned();
-                $table->integer('item_id')->unsigned();
+                $table->integer('route_id')->unsigned();
                 $table->timestamps();
 
-                $table->foreign('item_id')
+                $table->foreign('route_id')
                         ->references('id')
-                        ->on('alc_permission_items')
+                        ->on('acl_routes')
                         ->onDelete('cascade');
             });
         }
@@ -41,6 +41,6 @@ class CreateAclUserPermissionWhiteListTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('acl_user_permission_white_lists');
+        $this->getBuilder()->drop('acl_white_lists');
     }
 }

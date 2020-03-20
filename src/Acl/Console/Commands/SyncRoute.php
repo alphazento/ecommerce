@@ -8,11 +8,14 @@
 
 namespace Zento\Acl\Console\Commands;
 
+use Zento\Acl\Consts;
+use Zento\Acl\Model\ORM\AclRoute;
+
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zento\Acl\Model\ORM\AclPermissionItem;
-use Zento\Acl\Consts;
 
 class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 {
@@ -52,10 +55,37 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         if (empty($routes = $this->getRoutes())) {
             return $this->error("Your application doesn't have any routes matching the given criteria.");
         }
+        $routes = collect($routes)->filter(function($item) {
+            if (Str::startsWith($item['uri'], 'api/') || Str::startsWith($item['uri'], '/api/')) {
+                return true;
+            }
+        })->all();
 
         $this->convertToPermissionItems($routes);
         $this->displayRoutes($routes);
     }
+
+    /**
+     * Get the route information for a given route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @return array
+     */
+    protected function getRouteInformation(Route $route)
+    {
+        $info = parent::getRouteInformation($route);
+        $info['catalog'] = $route->catalog();
+        $info['scope'] = $route->scope();
+        return $info;
+    }
+
+    protected function getColumns() {
+        $columns = parent::getColumns();
+        $columns[] = 'catalog';
+        $columns[] = 'scope';
+        return $columns;
+    }
+
 
     protected function needPermission(array $route) {
         if ($middleware = ($route['middleware'] ?? false)) {
@@ -75,9 +105,9 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
             $methods = explode('|', $route['method']);
             foreach($methods as $method) {
                 if ($method != 'HEAD') {
-                    $item = AclPermissionItem::where('method', $method)->where('uri', $route['uri'])->first();
+                    $item = AclRoute::where('method', $method)->where('uri', $route['uri'])->first();
                     if (!$item) {
-                        $item = new AclPermissionItem([
+                        $item = new AclRoute([
                             'method' => $method,
                             'uri' => $route['uri'],
                             'removed' => 0,
@@ -85,28 +115,9 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                         ]);
                     }
                     if ($item) {
-                        $names = explode(':', $route['name']);
-                        $names_count = count($names);
-                        switch($names_count) {
-                            case 1:
-                            $item->groupname = 'other';
-                            $item->scope = Consts::GUEST_SCOPE;
-                            $item->name = $names[0];
-                            break;
-                            case 2:
-                            $item->groupname = $names[0];
-                            $item->scope = Consts::GUEST_SCOPE;
-                            $item->name = $names[1];
-                            break;
-
-                            default:
-                            $item->scope = $names[0] === 'admin' ? (Consts::ADMIN_SCOPE) : (Consts::FRONTEND_SCOPE);
-                            $item->groupname = $names[1];
-                            $item->name = $names[2];
-                            break;
-                        }
-                        // $item->groupname = count($names) > 1 ? $names[0] : 'other';
-                        // $item->name = count($names) > 1 ? $names[1] : $names[0];
+                        $item->name = $route['name'];
+                        $item->catalog = $route['catalog'];
+                        $item->scope = $route['scope'];
                         $item->removed = 0;
                         $item->save();
                         $ids[] = $item->id;

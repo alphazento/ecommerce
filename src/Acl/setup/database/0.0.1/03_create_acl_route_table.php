@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Zento\Acl\Consts;
 
-class CreateAclPermissionItemTable extends Migration
+class CreateAclRouteTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -18,11 +18,11 @@ class CreateAclPermissionItemTable extends Migration
     {
         $builder = $this->getBuilder();
 
-        if (!$builder->hasTable('acl_permission_items')) {
-            $builder->create('acl_permission_items', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_routes')) {
+            $builder->create('acl_routes', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  //0=> admin, 1=>frontend
-                $table->string('groupname', 255);
+                $table->string('scope', 16)->index();
+                $table->string('catalog', 255)->index();
                 $table->string('name', 255);
                 $table->string('method', 16);
                 $table->string('uri', 128);
@@ -36,7 +36,7 @@ class CreateAclPermissionItemTable extends Migration
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_permission_items')->insert([
                 [
                     'scope' => Consts::ADMIN_SCOPE,
-                    'groupname' => 'root',
+                    'group' => 'root',
                     'name' => 'Admin super permiision',
                     'method' => '*',
                     'uri' => '*',
@@ -53,6 +53,6 @@ class CreateAclPermissionItemTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('acl_permission_items');
+        $this->getBuilder()->drop('acl_routes');
     }
 }

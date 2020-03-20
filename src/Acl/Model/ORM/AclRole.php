@@ -2,7 +2,7 @@
 
 namespace Zento\Acl\Model\ORM;
 
-class AclUserGroup extends AclBaseModel
+class AclRole extends AclBaseModel
 {
     protected $fillable = [
         'scope',
@@ -17,7 +17,7 @@ class AclUserGroup extends AclBaseModel
      * @return Collection of AdminPermissionItem
      */
     public function permissions() {
-        return $this->hasManyThrough(AclPermissionItem::class, AclGroupPermission::class,
+        return $this->hasManyThrough(AclRoute::class, AclRoleRoute::class,
             'group_id',
             'id',
             'id',
@@ -26,6 +26,6 @@ class AclUserGroup extends AclBaseModel
     }
 
     public function groupusers() {
-        return $this->hasMany(AclGroupUserList::class, 'group_id', 'id');
+        return $this->hasMany(AclRoleUser::class, 'group_id', 'id');
     }
 }

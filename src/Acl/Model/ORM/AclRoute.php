@@ -4,7 +4,7 @@ namespace Zento\Acl\Model\ORM;
 
 use Illuminate\Routing\Route;
 
-class AclPermissionItem extends AclBaseModel
+class AclRoute extends AclBaseModel
 {
     private $_route;
     protected $fillable = [

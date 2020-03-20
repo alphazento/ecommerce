@@ -2,54 +2,66 @@
 import {
   SHOW_SPINNER,
   HIDE_SPINNER,
-  SNACK_MESSAGE
+  SNACK_MESSAGE,
+  HIDE_SNACK
 } from "../actions";
 
 const state = {
-  spinnerOverlay: {
+  spinner_ctl: {
     absolute: false,
     opacity: 0.76,
     overlay: false,
     text: "",
-    snack: false
+    snack_bar: false
   }
 };
 
 const getters = {
-  spinnerParameters: state => state.spinnerOverlay
+  spinnerCtl: state => state.spinner_ctl
 };
 
 const actions = {
   [SHOW_SPINNER]: ({
     commit
   }, text) => {
-    commit('controlSpinnerLayer', {
-      overlay: true,
-      snack: false,
-      text: text
-    });
+    commit(SHOW_SPINNER, text);
   },
   [HIDE_SPINNER]: ({
     commit
   }) => {
-    commit('controlSpinnerLayer', {
-      overlay: false
-    });
+    commit(HIDE_SPINNER);
   },
+
   [SNACK_MESSAGE]: ({
     commit
   }, text) => {
-    commit('controlSpinnerLayer', {
-      overlay: false,
-      snack: true,
-      text: text
-    });
+    commit(SNACK_MESSAGE, text);
+  },
+  [HIDE_SNACK]: ({
+    commit
+  }) => {
+    commit(HIDE_SNACK);
   }
 };
 
 const mutations = {
-  controlSpinnerLayer: (state, newValues) => {
-    Object.assign(state.spinnerOverlay, newValues);
+  [SHOW_SPINNER]: (state, text) => {
+    state.spinner_ctl.overlay = true;
+    state.spinner_ctl.text = text;
+  },
+
+  [HIDE_SPINNER]: (state) => {
+    state.spinner_ctl.overlay = false;
+  },
+
+  [SNACK_MESSAGE]: (state, text) => {
+    state.spinner_ctl.overlay = false;
+    state.spinner_ctl.text = text;
+    state.spinner_ctl.snack_bar = true;
+  },
+
+  [HIDE_SNACK]: (state) => {
+    state.spinner_ctl.snack_bar = false;
   }
 };
 

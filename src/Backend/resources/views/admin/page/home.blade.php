@@ -22,7 +22,7 @@ const app = new Vue({
   router: router,
   created() {
     this.$store.dispatch('SET_THEME_DATA', @json(['logo'=>$logo]));
-    this.$store.dispatch('AXIOS_AUTH_INTERCEPTOR', this.$route);
+    this.$store.dispatch('AXIOS_AUTH_INTERCEPTOR', this.$router);
   }
 });
 </script>

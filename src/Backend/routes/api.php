@@ -4,114 +4,107 @@ Route::group(
         'namespace' => '\Zento\Backend\Http\Controllers\Api',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin',
-        'as' => 'admin:system:'
+        'scope' => 'backend',
+        'group' => 'admin-system',
     ], function() {
         Route::get(
             '/dashboard/menus', 
-            ['as' => 'admin.dashboard.menus', 'uses' => 'DashboardController@getMenus']
+            'DashboardController@getMenus'
         )->unshiftMiddleware('ignore_acl');
 
         Route::get(
             '/configs/menus', 
-            ['as' => 'admin.configs.menus', 'uses' => 'ConfigurationController@getMenus']
+            'ConfigurationController@getMenus'
         );
 
         Route::get(
             '/configs/groups/{l0}/{l1}', 
-            ['as' => 'admin.configs.groups', 'uses' => 'ConfigurationController@getConfigGroups']
+            'ConfigurationController@getConfigGroups'
         );
-
-        // Route::get(
-        //     '/configs/values/{l0}/{l1}', 
-        //     ['as' => 'admin.configs.values', 'uses' => 'ConfigurationController@getGroupValues']
-        // );
 
         Route::post(
             '/configs/{key}', 
-            ['as' => 'admin.configs.set.value', 'uses' => 'ConfigurationController@setConfigValue']
+            'ConfigurationController@setConfigValue'
         );
 
         Route::get(
             '/dynamic-attributes/{id}', 
-            ['as' => 'admin.da.get.by.id', 'uses' => 'DAController@getAttribute']
+             'DAController@getAttribute'
         );
 
         Route::get(
             '/dynamic-attributes/models/{model}', 
-            ['as' => 'admin.da.get.by.model', 'uses' => 'DAController@getModelAttributes']
+            'DAController@getModelAttributes'
         );
 
         Route::post(
             '/dynamic-attributes', 
-            ['as' => 'admin.post.da', 'uses' => 'DAController@createAttribute']
+            'DAController@createAttribute'
         );
 
         Route::patch(
             '/dynamic-attributes/{id}', 
-            ['as' => 'admin.patch.da', 'uses' => 'DAController@updateAttribute']
+            'DAController@updateAttribute'
         );
 
 
         Route::get(
             '/dynamic-attributes/{id}/values', 
-            ['uses' => 'DAController@getAttributeValues']
+            'DAController@getAttributeValues'
         );
 
         Route::get(
             '/dynamic-attributes/{id}/sets', 
-            ['uses' => 'DAController@getAttributeBelongsSets']
+            'DAController@getAttributeBelongsSets'
         );
 
         Route::post(
             '/dynamic-attributes/{id}/values', 
-            ['uses' => 'DAController@getAttribute']
+            'DAController@getAttribute'
         );
 
         Route::patch(
-            '/dynamic-attributes/{id}/values/{m_id}', 
-            ['uses' => 'DAController@getAttribute']
+            '/dynamic-attributes/{id}/values/{m_id}',
+            'DAController@getAttribute'
         );
 
         Route::get(
             '/dynamic-attribute-sets/models/{model}', 
-            ['as' => 'admin.da_set.get.all', 'uses' => 'DAController@getModelAttributeSets']
+            'DAController@getModelAttributeSets'
         );
 
         Route::get(
             '/dynamic-attribute-sets/{id}', 
-            ['as' => 'admin.da_set.get', 'uses' => 'DAController@getAttributeSet']
+            'DAController@getAttributeSet'
         );
 
         Route::post(
             '/dynamic-attribute-sets', 
-            ['as' => 'admin.post.da_set', 'uses' => 'DAController@createAttributeSet']
+            'DAController@createAttributeSet'
         );
 
         Route::patch(
             '/dynamic-attribute-sets/{id}', 
-            ['as' => 'admin.patch.da_set', 'uses' => 'DAController@updateAttributeSet']
+            'DAController@updateAttributeSet'
         );
 
         Route::put(
             '/dynamic-attribute-sets/{attr_set_id}/attributes/{attr_id}', 
-            ['as' => 'admin.put.da.to.set', 'uses' => 'DAController@addAttributeToSet']
+            'DAController@addAttributeToSet'
         );
 
         Route::delete(
-            '/dynamic-attribute-sets/{attr_set_id}/attributes/{attr_id}', 
-            ['as' => 'admin.delete.da.from.set', 'uses' => 'DAController@deleteAttributeFromSet']
+            '/dynamic-attribute-sets/{attr_set_id}/attributes/{attr_id}',
+            'DAController@deleteAttributeFromSet'
         );
 
         Route::patch('/model/{model}/{id}', 
-            ['as' => 'admin.put.model', 'uses' => 'ModelController@updateModel']
+            'ModelController@updateModel'
         );
 
         Route::get(
             '/administrator', 
-            [
-                'as' => 'customer.getbyid', 
-                'uses' => '\Zento\Passport\Http\Controllers\ApiController@profile'
-            ]
+            '\Zento\Passport\Http\Controllers\ApiController@profile'
         );
 
         Route::post(

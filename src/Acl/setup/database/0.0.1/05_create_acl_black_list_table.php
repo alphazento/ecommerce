@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Zento\Acl\Consts;
 
-class CreateAclUserPermissionBlackListTable extends Migration
+class CreateAclBlackListTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -18,17 +18,17 @@ class CreateAclUserPermissionBlackListTable extends Migration
     {
         $builder = $this->getBuilder();
 
-        if (!$builder->hasTable('acl_user_permission_black_lists')) {
-            $builder->create('acl_user_permission_black_lists', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_black_lists')) {
+            $builder->create('acl_black_lists', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  //0=> admin, 1=>frontend
+                $table->string('scope', 16)->indxe();
                 $table->integer('user_id')->unsigned();
-                $table->integer('item_id')->unsigned();
+                $table->integer('route_id')->unsigned();
                 $table->timestamps();
 
-                $table->foreign('item_id')
+                $table->foreign('route_id')
                         ->references('id')
-                        ->on('acl_permission_items')
+                        ->on('acl_routes')
                         ->onDelete('cascade');
             });
         }
@@ -41,6 +41,6 @@ class CreateAclUserPermissionBlackListTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('acl_user_permission_black_lists');
+        $this->getBuilder()->drop('acl_black_lists');
     }
 }

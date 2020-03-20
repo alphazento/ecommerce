@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Acl;
+namespace Zento\Acl\Exceptions;
 
 class AclException extends \Illuminate\Auth\AuthenticationException
 {
@@ -11,7 +11,7 @@ class AclException extends \Illuminate\Auth\AuthenticationException
      * @param  array  $guards
      * @return void
      */
-    public function __construct($message = 'User authed, but permission denied.')
+    public function __construct($message = 'ACL Denied')
     {
         parent::__construct($message);
     }

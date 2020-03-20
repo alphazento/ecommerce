@@ -5,7 +5,7 @@ namespace Zento\Acl\Model\ORM;
 use Zento\Acl\Model\Auth\Customer;
 use Zento\Acl\Model\Auth\Administrator;
 
-class AclGroupUserList extends AclBaseModel
+class AclRoleUser extends AclBaseModel
 {
     protected $fillable = [
         'scope',

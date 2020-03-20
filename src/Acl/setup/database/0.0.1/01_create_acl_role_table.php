@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Zento\Acl\Consts;
 
-class CreateAclUserGroupTable extends Migration
+class CreateAclRoleTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);
@@ -18,10 +18,10 @@ class CreateAclUserGroupTable extends Migration
     public function up()
     {
         $builder = $this->getBuilder();
-        if (!$builder->hasTable('acl_user_groups')) {
-            $builder->create('acl_user_groups', function (Blueprint $table) {
+        if (!$builder->hasTable('acl_roles')) {
+            $builder->create('acl_roles', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  // Zento\Acl\Consts
+                $table->string('scope', 16)->index();  // Zento\Acl\Consts
                 $table->string('name', 128);
                 $table->string('description', 255)->default('');
                 $table->boolean('active')->default(1);
@@ -40,7 +40,7 @@ class CreateAclUserGroupTable extends Migration
                 [
                     'scope' => Consts::GUEST_SCOPE,
                     'name' => 'guest',
-                    'description' => 'Guest user group.',
+                    'description' => 'Guest user.',
                     'active' => 1
                 ]
             ]);
@@ -54,6 +54,6 @@ class CreateAclUserGroupTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('acl_user_groups');
+        $this->getBuilder()->drop('acl_roles');
     }
 }

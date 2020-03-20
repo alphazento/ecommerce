@@ -34,7 +34,7 @@ export default {
   },
   created() {
     this.calcMenus();
-    if (this.menus === undefined) {
+    if (!this.menus) {
       this.fetchMenus();
     }
     this.initBreadCrumbs();

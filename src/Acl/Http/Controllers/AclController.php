@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Validator;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\Acl\Model\Auth\Customer;
 use Zento\Acl\Model\Auth\Administrator;
-use Zento\Acl\Model\ORM\AclUserGroup;
-use Zento\Acl\Model\ORM\AclGroupUserList;
-use Zento\Acl\Model\ORM\AclPermissionItem;
-use Zento\Acl\Model\ORM\AclGroupPermission;
-use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
-use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
+use Zento\Acl\Model\ORM\AclRole;
+use Zento\Acl\Model\ORM\AclRoleUser;
+use Zento\Acl\Model\ORM\AclRoute;
+use Zento\Acl\Model\ORM\AclRoleRoute;
+use Zento\Acl\Model\ORM\AclWhiteList;
+use Zento\Acl\Model\ORM\AclBlackList;
 use Zento\Acl\Consts;
 
 class AclController extends ApiBaseController
@@ -126,13 +126,13 @@ class AclController extends ApiBaseController
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
+                $ids = AclRoute::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclWhiteList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $pids = array_diff($ids, $exists);
                 foreach($pids as $id) {
-                    AclUserPermissionWhiteList::create(['user_id'=>$user->id, 'item_id' => $id]);
+                    AclWhiteList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
-                AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->delete();
+                AclBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->delete();
                 return $this->success(201);
             }
             return $this->success();
@@ -144,13 +144,13 @@ class AclController extends ApiBaseController
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
+                $ids = AclRoute::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclBlackList::where('user_id', $user->id)->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $pids = array_diff($ids, $exists);
                 foreach($pids as $id) {
-                    AclUserPermissionBlackList::create(['user_id'=>$user->id, 'item_id' => $id]);
+                    AclBlackList::create(['user_id'=>$user->id, 'item_id' => $id]);
                 }
-                AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
                 return $this->success(201);
             }
             return $this->success();
@@ -163,7 +163,7 @@ class AclController extends ApiBaseController
         if ($user = $model::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                AclUserPermissionWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclWhiteList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
             return $this->success();
         }
@@ -176,7 +176,7 @@ class AclController extends ApiBaseController
         if ($user = $model::find(Route::input('uid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                AclUserPermissionBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
+                AclBlackList::where('user_id', $user->id)->whereIn('item_id', $pids)->delete();
             }
             return $this->success();
         }
@@ -200,11 +200,11 @@ class AclController extends ApiBaseController
      * ]}
      */
     public function groups() {
-        return $this->withData(AclUserGroup::whereIn('scope', $this->getScopes())->get());
+        return $this->withData(AclRole::whereIn('scope', $this->getScopes())->get());
     }
 
     public function getGroupPermissions() {
-        if ($group = AclUserGroup::find(Route::input('id'))) {
+        if ($group = AclRole::find(Route::input('id'))) {
             return $this->withData($group->permissions);
         }
         return $this->error(404);
@@ -218,7 +218,7 @@ class AclController extends ApiBaseController
     public function getGroupUsers() {
         $scope = Route::input('scope');
         $type = \Illuminate\Support\Str::plural($scope);
-        if ($group = AclUserGroup::with(['groupusers.' . $type])->where('id', Route::input('id'))->first()) {
+        if ($group = AclRole::with(['groupusers.' . $type])->where('id', Route::input('id'))->first()) {
             $data = [];
             foreach($group->groupusers ?? [] as $middle) {
                 if ($middle->{$type}) {
@@ -324,16 +324,16 @@ class AclController extends ApiBaseController
 
     public function addUsersToGroup() {
         $error = '';
-        if ($group = AclUserGroup::find(Route::input('id'))) {
+        if ($group = AclRole::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $model = $this->getUserModel();
                 $uids = $model::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists =  AclGroupUserList::where('scope', $this->getScope())
+                $exists =  AclRoleUser::where('scope', $this->getScope())
                     ->where('group_id', $group->id)
                     ->whereIn('user_id', $uids)->pluck('user_id')->toArray();
                 $uids = array_diff($uids, $exists);
                 foreach($uids as $id) {
-                    AclGroupUserList::create([
+                    AclRoleUser::create([
                         'scope' => $this->getScope(),
                         'user_id'=>$id, 
                         'group_id' => $group->id]);
@@ -347,10 +347,10 @@ class AclController extends ApiBaseController
     }
 
     public function removeUserFromGroup() {
-        if ($group = AclUserGroup::find(Route::input('group_id'))) {
+        if ($group = AclRole::find(Route::input('group_id'))) {
             if ($user_id = Route::input('user_id')) {
                 $user_ids = explode(',', $user_id);
-                AclGroupUserList::where('scope', $this->getScope())->whereIn('user_id', $user_ids)->delete();
+                AclRoleUser::where('scope', $this->getScope())->whereIn('user_id', $user_ids)->delete();
                 return $this->with('user_id', Route::input('user_id'));
             }
         }
@@ -360,10 +360,10 @@ class AclController extends ApiBaseController
     public function addGroup() {
         if ($name = Request::get('name', false)) {
             $scope = $this->getScope();
-            if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->first()) {
+            if (AclRole::where('scope', '=', $scope)->where('name', $name)->first()) {
                 return $this->error(400, sprintf('Group[%s] already exists.', $name));
             }
-            $group = new AclUserGroup([
+            $group = new AclRole([
                 'scope' => $scope, 
                 'name' => $name, 
                 'description' => Request::get('description', ''), 
@@ -379,9 +379,9 @@ class AclController extends ApiBaseController
     public function updateGroup() {
         if ($id = Route::input('id', false)) {
             $scope = $this->getScope();
-            if ($group = AclUserGroup::find($id)) {
+            if ($group = AclRole::find($id)) {
                 $name = Request::get('name', $group->name);
-                if (AclUserGroup::where('scope', '=', $scope)->where('name', $name)->where('id', '!=', $id)->first()) {
+                if (AclRole::where('scope', '=', $scope)->where('name', $name)->where('id', '!=', $id)->first()) {
                     return $this->error(400, sprintf('Group[%s] has been taken by other group.', $name));
                 }
                 $group->name = $name;
@@ -401,9 +401,9 @@ class AclController extends ApiBaseController
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $gids = AclUserGroup::where('scope',$this->getScope())->whereIn('id', $ids)->pluck('id')->toArray();
+                $gids = AclRole::where('scope',$this->getScope())->whereIn('id', $ids)->pluck('id')->toArray();
                 foreach($gids as $gid) {
-                    AclGroupUserList::create([
+                    AclRoleUser::create([
                         'scope' => $this->getScope(),
                         'user_id'=>$user->id, 'group_id' => $gid]);
                 }
@@ -416,18 +416,18 @@ class AclController extends ApiBaseController
     }
 
     public function getPermissions() {
-        return $this->withData(AclPermissionItem::where('active', 1)->get());
+        return $this->withData(AclRoute::where('active', 1)->get());
     }
 
     public function addGroupPermissions() {
-        if ($group = AclUserGroup::find(Route::input('id'))) {
+        if ($group = AclRole::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
-                $ids = AclPermissionItem::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists = AclGroupPermission::where('group_id', $group->id)
+                $ids = AclRoute::whereIn('id', $ids)->pluck('id')->toArray();
+                $exists = AclRoleRoute::where('group_id', $group->id)
                             ->whereIn('item_id', $ids)->pluck('item_id')->toArray();
                 $ids = array_diff($ids, $exists);
                 foreach($ids as $id) {
-                    AclGroupPermission::create([
+                    AclRoleRoute::create([
                         'scope' => $this->getScope(),
                         'item_id'=>$id, 
                         'group_id' => $group->id]);
@@ -439,10 +439,10 @@ class AclController extends ApiBaseController
     }
 
     public function removeGroupPermission() {
-        if ($group = AclUserGroup::find(Route::input('gid'))) {
+        if ($group = AclRole::find(Route::input('gid'))) {
             if ($pid = Route::input('pid')) {
                 $pids = explode(',', $pid);
-                AclGroupPermission::where('group_id', $group->id)->whereIn('item_id', $pids)->delete();
+                AclRoleRoute::where('group_id', $group->id)->whereIn('item_id', $pids)->delete();
                 return $this->success();
             }
         }

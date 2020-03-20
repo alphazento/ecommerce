@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-overlay
-      :absolute="spinnerParameters.absolute"
-      :opacity="spinnerParameters.opacity"
-      :value="spinnerParameters.overlay"
+      :absolute="spinnerCtl.absolute"
+      :opacity="spinnerCtl.opacity"
+      :value="spinnerCtl.overlay"
       z-index="99999"
     >
       <div class="text-center ma-12">
@@ -14,11 +14,11 @@
           color="light-blue"
         ></v-progress-circular>
       </div>
-      <div class="text-center ma-12">{{ spinnerParameters.text }}</div>
+      <div class="text-center ma-12">{{ spinnerCtl.text }}</div>
     </v-overlay>
 
     <v-snackbar :timeout="timeout" v-model="snackBar" multi-line top vertical>
-      {{ spinnerParameters.text }}
+      {{ spinnerCtl.text }}
       <v-btn dark text @click="snackBar = false">Close</v-btn>
     </v-snackbar>
   </div>
@@ -35,15 +35,13 @@ export default {
     timeout: 4000
   }),
   computed: {
-    ...mapGetters(["spinnerParameters"]),
+    ...mapGetters(["spinnerCtl"]),
     snackBar: {
       get() {
-        return this.spinnerParameters.snack;
+        return this.spinnerCtl.snack_bar;
       },
       set(value) {
-        let obj = spinnerParameters;
-        obj.snack = value;
-        this.$store.commit("controlSpinnerLayer", obj);
+        this.$store.commit("HIDE_SNACK");
       }
     }
   }

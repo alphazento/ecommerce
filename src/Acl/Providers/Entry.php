@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 
 use Zento\Passport\Passport;
 use Zento\Acl\Providers\Facades\Acl;
-use Zento\Acl\AclException;
+use Zento\Acl\Exceptions\AclException;
 
 class Entry extends ServiceProvider
 {
@@ -19,6 +19,9 @@ class Entry extends ServiceProvider
         $this->app->singleton('acl', function ($app) {
             return new \Zento\Acl\Services\Acl();
         });
+
+        $this->app->singleton('Illuminate\Contracts\Debug\ExceptionHandler',
+            '\Zento\Acl\Exceptions\ExceptionHandler');
 
         Passport::registerPostAuthcateHook(function($user, $request) {
             if (!Acl::checkRequest($request, $user)) {
