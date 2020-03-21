@@ -9,6 +9,7 @@ class AclRoute extends AclBaseModel
     private $_route;
     protected $fillable = [
         'scope',
+        'catalog',
         'method',
         'uri',
         'removed',

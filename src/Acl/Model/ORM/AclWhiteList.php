@@ -2,10 +2,10 @@
 
 namespace Zento\Acl\Model\ORM;
 
-class AclBlackList extends AclBaseModel
+class AclWhiteList extends AclBaseModel
 {
     protected $fillable = [
         'user_id',
-        'item_id'
+        'route_id'
     ];
 }

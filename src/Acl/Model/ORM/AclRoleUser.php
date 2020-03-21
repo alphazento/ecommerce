@@ -10,7 +10,7 @@ class AclRoleUser extends AclBaseModel
     protected $fillable = [
         'scope',
         'user_id',
-        'group_id'
+        'role_id'
     ];
 
     public function customers() {

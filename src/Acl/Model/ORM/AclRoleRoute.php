@@ -6,15 +6,15 @@ class AclRoleRoute extends AclBaseModel
 {
     protected $fillable = [
         'scope',
-        'group_id',
-        'item_id'
+        'role_id',
+        'route_id'
     ];
 
     public function group() {
-        return $this->belongsTo(AclRole::class, 'id', 'group_id');
+        return $this->belongsTo(AclRole::class, 'id', 'role_id');
     }
 
     public function permission() {
-        return $this->hasOne(AclRoute::class, 'id', 'item_id');
+        return $this->hasOne(AclRoute::class, 'id', 'route_id');
     }
 }

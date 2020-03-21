@@ -61,8 +61,8 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
             }
         })->all();
 
-        $this->convertToPermissionItems($routes);
-        $this->displayRoutes($routes);
+        $this->registerRoutes($routes);
+        // $this->displayRoutes($routes);
     }
 
     /**
@@ -94,7 +94,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         return false;
     }
 
-    protected function convertToPermissionItems(array $routes)
+    protected function registerRoutes(array $routes)
     {
         $ids = [1];
         $item = null;
@@ -115,7 +115,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                         ]);
                     }
                     if ($item) {
-                        $item->name = $route['name'];
+                        $item->name = $route['name'] ? $route['name'] : $route['uri'];
                         $item->catalog = $route['catalog'];
                         $item->scope = $route['scope'];
                         $item->removed = 0;

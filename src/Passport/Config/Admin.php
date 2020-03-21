@@ -14,10 +14,10 @@ class Admin extends AbstractAdminConfig {
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/passport'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'client',  [
-                'title' => 'Default Client',
+                'text'=> 'Default Client',
                 'items' => [
                     [
-                        'title' => 'Enable Passport Guest Token',
+                        'text'=> 'Enable Passport Guest Token',
                         'ui' => 'config-options-item',
                         'options' => [
                             [
@@ -28,17 +28,17 @@ class Admin extends AbstractAdminConfig {
                         'accessor' => Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT_GRANT_TYPE
                     ],
                     [
-                        'title' => 'Client ID',
+                        'text'=> 'Client ID',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT_ID
                     ],
                     [
-                        'title' => 'Client Secret',
+                        'text'=> 'Client Secret',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT_SECRET
                     ],
                     [
-                        'title' => 'Scope',
+                        'text'=> 'Scope',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT_SCOPE
                     ]

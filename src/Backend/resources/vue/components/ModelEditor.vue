@@ -2,7 +2,9 @@
   <div>
     <v-expansion-panels accordion multiple focusable>
       <v-expansion-panel v-for="(item, name) in model_data" :key="name">
-        <v-expansion-panel-header text-left>{{ item.title }}</v-expansion-panel-header>
+        <v-expansion-panel-header text-left>{{
+          item.text
+        }}</v-expansion-panel-header>
         <v-expansion-panel-content>
           <template v-for="(subItem, subName) in item.items">
             <v-list-item :key="subName">
@@ -12,7 +14,11 @@
                 </v-flex>
                 <v-flex md6>
                   <div class="component-container">
-                    <component :is="subItem.ui" v-bind="subItem" @valueChanged="configValueChanged"></component>
+                    <component
+                      :is="subItem.ui"
+                      v-bind="subItem"
+                      @valueChanged="configValueChanged"
+                    ></component>
                   </div>
                 </v-flex>
                 <v-flex md3>{{ subItem.description }}</v-flex>

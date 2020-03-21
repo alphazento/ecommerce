@@ -24,7 +24,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         $this->mappingProductDatatableDefines($groupTag, $groups);
         // $groups['tables/product'] = function($groupTag) {
         //     AdminConfigurationService::registerGroup($groupTag, 'table',  [
-        //         'title' => 'Product Editor Template Definition',
+        //         'text' => 'Product Editor Template Definition',
         //         'items' => [
         //             'headers' => [
         //                 [
@@ -58,24 +58,24 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function mappingCategoryModelDefines($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {
             $items[] = [
-                'title' => 'Category Name',
+                'text' => 'Category Name',
                 'ui' => 'config-text-item',
                 'accessor' => 'name'
             ];
             $items[] = [
-                'title' => 'Active',
+                'text' => 'Active',
                 'ui' => 'config-boolean-item',
                 'accessor' => 'active'
             ];
 
             $items[] = [
-                'title' => 'Position',
+                'text' => 'Position',
                 'ui' => 'config-text-item',
                 'accessor' => 'position'
             ];
 
             $items[] = [
-                'title' => 'Attribute Set',
+                'text' => 'Attribute Set',
                 'ui' => 'config-options-item',
                 'accessor' => 'attribute_set_id',
                 'options'  => $this->genAttributeSetOptions('categories')
@@ -94,7 +94,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $this->groupDynamicAttributes('categories', $itemsGroups, $items);
 
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Basic Settings',
+                'text' => 'Basic Settings',
                 'items' => $items
             ]);
 
@@ -102,7 +102,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 AdminConfigurationService::registerGroup($groupTag, 
                     $group, 
                     [
-                        'title' => $group,
+                        'text' => $group,
                         'items' => $items
                     ]);
             }
@@ -112,85 +112,85 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function mappingProductModelDefines($groupTag, &$groups) {
         $groups['catalog/product'] = function($groupTag) {
             $items[] = [
-                'title' => 'Name',
+                'text' => 'Name',
                 'ui' => 'config-text-item',
                 'accessor' => 'name'
             ];
             $items[] = [
-                'title' => 'Product Type',
+                'text' => 'Product Type',
                 'ui' => 'config-options-item',
                 'accessor' => 'model_type',
                 'options'  => $this->getProductModelTypsMapping('products')
             ];
             $items[] = [
-                'title' => 'Attribute Set',
+                'text' => 'Attribute Set',
                 'ui' => 'config-options-item',
                 'accessor' => 'attribute_set_id',
                 'options'  => $this->genAttributeSetOptions('products')
             ];
             $items[] = [
-                'title' => 'Active',
+                'text' => 'Active',
                 'ui' => 'config-boolean-item',
                 'accessor' => 'active'
             ];
 
             $items[] = [
-                'title' => 'Description',
+                'text' => 'Description',
                 'ui' => 'config-longtext-item',
                 'accessor' => 'description',
             ];
             
             // $itemsGroups = ['Price' => [], 'Search Engine Optimization'=>[]];
             // $itemsGroups['Price'][] = [
-            //     'title' => 'Price',
+            //     'text' => 'Price',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'price',
             // ];
 
             // $itemsGroups['Price'][] = [
-            //     'title' => 'RRP',
+            //     'text' => 'RRP',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'rrp',
             // ];
 
             // $itemsGroups['Price'][] = [
-            //     'title' => 'Cost',
+            //     'text' => 'Cost',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'cost',
             // ];
 
             // $itemsGroups['Price'][] = [
-            //     'title' => 'Special Price',
+            //     'text' => 'Special Price',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'special_price',
             // ];
 
             // $itemsGroups['Price'][] = [
-            //     'title' => 'Special From',
+            //     'text' => 'Special From',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'special_from',
             // ];
 
             // $itemsGroups['Price'][] = [
-            //     'title' => 'Special To',
+            //     'text' => 'Special To',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'special_to',
             // ];
 
             // $itemsGroups['Search Engine Optimization'][] = [
-            //     'title' => 'Meta Description',
+            //     'text' => 'Meta Description',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'meta_description',
             // ];
 
             // $itemsGroups['Search Engine Optimization'][] = [
-            //     'title' => 'Meta Title',
+            //     'text' => 'Meta Title',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'meta_description',
             // ];
 
             // $itemsGroups['Search Engine Optimization'][] = [
-            //     'title' => 'Meta Keyword',
+            //     'text' => 'Meta Keyword',
             //     'ui' => 'config-text-item',
             //     'accessor' => 'meta_keyword',
             // ];
@@ -198,7 +198,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $this->groupDynamicAttributes('products', $itemsGroups, $items);
 
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Basic Settings',
+                'text' => 'Basic Settings',
                 'items' => $items
             ]);
 
@@ -213,7 +213,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 AdminConfigurationService::registerGroup($groupTag, 
                     $group, 
                     [
-                        'title' => $group,
+                        'text' => $group,
                         'items' => $items
                     ]);
             }
@@ -223,7 +223,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function mappingCategoryDatatableDefines($groupTag, &$groups) {
         $groups['tables/category'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Category DataTable Template Definition',
+                'text' => 'Category DataTable Template Definition',
                 'items' => [
                     'headers' => [
                         [
@@ -257,7 +257,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function mappingProductDatatableDefines($groupTag, &$groups) {
         $groups['tables/product'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Product Table Definition',
+                'text' => 'Product Table Definition',
                 'items' => [
                     'headers' => [
                         [
@@ -390,7 +390,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function buildConfigItem($dynAttr) {
         $item = [
             'da_id' => $dynAttr->id,
-            'title' => empty($dynAttr->admin_label) ? $dynAttr->name : $dynAttr->admin_label,
+            'text' => empty($dynAttr->admin_label) ? $dynAttr->name : $dynAttr->admin_label,
             'ui' => empty($dynAttr->admin_component) ? 'config-text-item' : $dynAttr->admin_component,
             'accessor' => $dynAttr->name,
             'options'  => $this->mapOptions($dynAttr->options)

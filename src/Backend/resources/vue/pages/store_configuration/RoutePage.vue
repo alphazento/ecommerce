@@ -35,7 +35,7 @@ export default {
   created() {
     this.calcMenus();
     if (!this.menus) {
-      this.fetchMenus();
+      this.fetchConfigMenus();
     }
     this.initBreadCrumbs();
     this.handleRoute();
@@ -53,16 +53,16 @@ export default {
       });
     },
     calcMenus() {
-      if (sessionStorage.getItem('config_menus') !== undefined) {
-        this.menus = sessionStorage.getItem('config_menus');
+      if (sessionStorage.getItem("config_menus") !== undefined) {
+        this.menus = JSON.parse(sessionStorage.getItem("config_menus"));
       }
     },
-    fetchMenus() {
+    fetchConfigMenus() {
       this.$store.dispatch("SHOW_SPINNER", "Loading configurations");
-      axios.get("/api/v1/admin/configs/menus").then(response => {
+      axios.get("/api/v1/admin/configs/config-menus").then(response => {
         this.$store.dispatch("HIDE_SPINNER");
         if (response && response.success) {
-          sessionStorage.setItem('config_menus', response.data);
+          sessionStorage.setItem("config_menus", JSON.stringify(response.data));
           this.calcMenus();
         } else {
           this.model = "";

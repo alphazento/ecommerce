@@ -183,7 +183,7 @@ class AclController extends ApiBaseController
         return $this->error(404);
     }
 
-    public function getGroupsByUser() {
+    public function getUserRoles() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
             return $this->withData($user->groups);

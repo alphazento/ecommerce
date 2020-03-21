@@ -18,14 +18,14 @@ class AclRole extends AclBaseModel
      */
     public function permissions() {
         return $this->hasManyThrough(AclRoute::class, AclRoleRoute::class,
-            'group_id',
+            'role_id',
             'id',
             'id',
-            'item_id'
+            'route_id'
         );
     }
 
     public function groupusers() {
-        return $this->hasMany(AclRoleUser::class, 'group_id', 'id');
+        return $this->hasMany(AclRoleUser::class, 'role_id', 'id');
     }
 }

@@ -11,7 +11,7 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class ConfigurationController extends ApiBaseController
 {
-    public function getMenus() {
+    public function getConfigMenus() {
         $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
         foreach($enabledPackageConfigs ?? [] as $name => $packageConfig) {
             $namespace = (PackageManager::getNameSpace($name));

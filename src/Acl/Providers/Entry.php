@@ -25,8 +25,13 @@ class Entry extends ServiceProvider
 
         Passport::registerPostAuthcateHook(function($user, $request) {
             if (!Acl::checkRequest($request, $user)) {
-                throw new AclException();
+                // throw new AclException();
             }
         });
+
+        if ($this->app->runningInConsole()) {
+            \Illuminate\Routing\Route::mixin(new \Zento\Acl\Mixins\Routing\Route);
+            (new \Zento\Acl\Console\PackageEnableSubscriber())->subscribe();
+        }
     }
 }

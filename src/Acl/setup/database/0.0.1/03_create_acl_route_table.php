@@ -33,11 +33,11 @@ class CreateAclRouteTable extends Migration
                 $table->unique(['method', 'uri']);
             });
 
-            DB::connection(\Zento\Acl\Consts::DB)->table('acl_permission_items')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('acl_routes')->insert([
                 [
                     'scope' => Consts::ADMIN_SCOPE,
-                    'group' => 'root',
-                    'name' => 'Admin super permiision',
+                    'catalog' => 'root',
+                    'name' => 'Admin Root permiision',
                     'method' => '*',
                     'uri' => '*',
                     'description' => 'Admin Root permission.'

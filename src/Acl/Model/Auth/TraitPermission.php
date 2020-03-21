@@ -24,7 +24,7 @@ trait TraitPermission
             'user_id',
             'id',
             'id',
-            'item_id'
+            'route_id'
         )->where(with(new AclWhiteList)->getTable() . '.scope', '=', static::$scope);
     }
 
@@ -33,7 +33,7 @@ trait TraitPermission
             'user_id',
             'id',
             'id',
-            'item_id'
+            'route_id'
         )->where(with(new AclBlackList)->getTable() . '.scope', '=', static::$scope);
     }
 
@@ -42,7 +42,7 @@ trait TraitPermission
             'user_id',
             'id',
             'id',
-            'group_id'
+            'role_id'
         )->where(with(new AclRoleUser)->getTable() . '.scope', '=', static::$scope);
     }
 

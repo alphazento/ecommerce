@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Zento\Acl\Consts;
 
-class CreateAclUserPermissionWhiteListTable extends Migration
+class CreateAclWhiteListTable extends Migration
 {
     protected function getBuilder() {
         return Schema::connection(\Zento\Acl\Consts::DB);

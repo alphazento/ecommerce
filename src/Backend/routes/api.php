@@ -13,8 +13,8 @@ Route::group(
         )->unshiftMiddleware('ignore_acl');
 
         Route::get(
-            '/configs/menus', 
-            'ConfigurationController@getMenus'
+            '/configs/config-menus', 
+            'ConfigurationController@getConfigMenus'
         );
 
         Route::get(

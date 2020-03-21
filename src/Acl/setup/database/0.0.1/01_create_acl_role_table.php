@@ -30,16 +30,16 @@ class CreateAclRoleTable extends Migration
                 $table->unique(['scope', 'name']);
             });
 
-            DB::connection(\Zento\Acl\Consts::DB)->table('acl_user_groups')->insert([
+            DB::connection(\Zento\Acl\Consts::DB)->table('acl_roles')->insert([
                 [
                     'scope' => Consts::ADMIN_SCOPE,
                     'name' => 'root',
-                    'description' => 'Users in the group will have root permission. That means it can do anything.',
+                    'description' => 'Super Administrator',
                     'active' => 1
                 ],
                 [
                     'scope' => Consts::GUEST_SCOPE,
-                    'name' => 'guest',
+                    'name' => 'Guest',
                     'description' => 'Guest user.',
                     'active' => 1
                 ]
