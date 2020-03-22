@@ -44,6 +44,7 @@
                   v-bind="prepare_component_props(header, row)"
                   :value="row[header.value]"
                   v-on:proxyEvent="proxyEvent"
+                  v-on:valueChanged="dataChanged(row, $event)"
                 ></component>
               </td>
             </tr>
@@ -82,12 +83,13 @@ export default {
     dataApiUrl: String,
     useFilter: Boolean,
     serverSidePagination: Boolean,
-    filterConnectRoute: Boolean
+    filterConnectRoute: Boolean,
+    headers: Array
   },
   data() {
     return {
       defines: {
-        headers: [],
+        headers: this.headers !== undefined ? this.headers : [],
         primary_key: "id"
       },
       pagination: {
@@ -108,7 +110,11 @@ export default {
     if (this.filterConnectRoute) {
       this.convertRouteQuery();
     }
-    this.fetchDefines();
+    if (this.headers === undefined) {
+      this.fetchDefines();
+    } else {
+      this.fetchData();
+    }
   },
   methods: {
     fetchDefines() {
@@ -143,15 +149,15 @@ export default {
         .then(response => {
           this.$store.dispatch("HIDE_SPINNER");
           if (response) {
-            if(response.success) {
+            if (response.success) {
               this.pagination = response.data;
               this.selectedItems = [];
             } else {
               if (response.code == 404) {
-                this.pagination = {data:[]};
+                this.pagination = { data: [] };
               }
             }
-          } 
+          }
           this.loading = false;
         });
     },
@@ -159,8 +165,13 @@ export default {
     fetchData() {
       if (this.filterConnectRoute) {
         this.routeQuery = this.buildQuery(false);
+
         this.$router.push({ query: this.routeQuery }).catch(err => {
-          console.log(err);
+          if (err.name == "NavigationDuplicated") {
+            this.realfetchData();
+          } else {
+            console.log(err);
+          }
         });
       } else {
         this.realfetchData();
@@ -272,8 +283,14 @@ export default {
         this.$emit("selectedRowsChange", []);
       }
     },
+
     proxyEvent(event) {
-      this.$emit('proxyAction', event);
+      this.$emit("proxyAction", event);
+    },
+
+    dataChanged(raw, event) {
+      event._raw = raw;
+      this.$emit("dataChanged", event);
     }
   },
   watch: {

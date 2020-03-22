@@ -1,11 +1,12 @@
 <template>
   <v-layout>
     <v-flex md2>
-      <z-dynamic-attribute-model-navigator
+      <z-simple-model-navigator
         title="Attribute Sets"
+        :models="['Category', 'Product', 'Customer']"
         :model="model"
         @navToModel="navToModel"
-      ></z-dynamic-attribute-model-navigator>
+      ></z-simple-model-navigator>
     </v-flex>
 
     <v-flex md10>
@@ -59,12 +60,7 @@
                       <v-btn v-if="ci == 0" icon @click="editAttributeSet(row)" color="primary">
                         <v-icon>mdi-pencil-box-multiple-outline</v-icon>
                       </v-btn>
-                      <component
-                        :is="col.ui"
-                        v-bind="
-                                                    buildDynCompProps(col, row)
-                                                "
-                      ></component>
+                      <component :is="col.ui" v-bind="buildDynCompProps(col, row)"></component>
                     </td>
                   </tr>
                 </tbody>
@@ -149,7 +145,7 @@ export default {
     fetchDynamicAttributeSets(modelName) {
       this.model = modelName;
       this.$store.dispatch("SHOW_SPINNER", "Fetching Attribute Set...");
-      this.$store.dispatch("replaceBreadcrumbLastItem", {
+      this.$store.dispatch("REPLACE_BREADCRUMB_LAST_ITEM", {
         text: this.model,
         href: `${this.baseRoute}?model=${modelName}`
       });

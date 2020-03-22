@@ -14,6 +14,8 @@ export default {
         "z-image": "components/display/Image.vue",
         "z-boolean-chip": "components/display/BooleanChip.vue",
         "z-options-display": "components/display/Options.vue",
+        "z-simple-model-navigator": "components/display/SimpleModelNavigator.vue",
+
         "config-text-item": "components/configurable/Text.vue",
         "config-longtext-item": "components/configurable/LongText.vue",
         "config-boolean-item": "components/configurable/Switch.vue",
@@ -34,7 +36,6 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
-        "z-dynamic-attribute-model-navigator": "pages/inner_components/DnayamictAttributeModelNavigator.vue",
         "z-dynamic-attribute-and-set-editor": "pages/inner_components/DyanmicAttrAndSetEditor.vue",
         "z-dynamic-attribute-set-attrs-manager": "pages/inner_components/DynamicAttributeSetAttrsManager.vue",
         "z-dynamic-attribute-belongs-set-manager": "pages/inner_components/DynamicAttributeBlongsSetManager.vue",

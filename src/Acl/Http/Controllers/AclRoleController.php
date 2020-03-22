@@ -30,7 +30,25 @@ class AclRoleController extends ApiBaseController
      * ]}
      */
     public function roles() {
-        return $this->withData(AclRole::whereIn('scope', $this->getScopes())->get());
+        $filters = Request::only(['id', 'name', 'description', 'active']);
+        $collection = AclRole::whereIn('scope', $this->getScopes());
+        foreach($filters as $field => $value) {
+            switch($field) {
+                case 'id':
+                    $collection->where($field, $value);
+                    break;
+                case 'name':
+                case 'description':
+                    $collection->where($field, 'like', $value);
+                    break;
+                case 'active':
+                    $collection->where($field, '=', $value ? 1 : 0);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $this->withData($collection->paginate());
     }
 
     public function routes() {

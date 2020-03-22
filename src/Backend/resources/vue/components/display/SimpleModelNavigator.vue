@@ -13,11 +13,11 @@
 export default {
   props: {
     title: String,
+    models: Array,
     model: String
   },
   data() {
     return {
-      models: ["Category", "Product", "Customer"],
       current: this.model
     };
   },

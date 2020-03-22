@@ -16,7 +16,7 @@ export default {
       is_json: false,
       rules: {
         required: v => !!v || "Required Field.",
-        isNumber: v => !v || isNaN(v) || 'Please input only number',
+        isNumber: v => !v || isNaN(v) || "Please input only number",
         max255: v => !v || v.length <= 64 || "Max 64 characters"
       }
     };
@@ -34,7 +34,7 @@ export default {
           idx: this.idx
         };
         this.$emit("valueChanged", data);
-        if(data.rollback) {
+        if (data.rollback) {
           this.innerValue = this.oldVal;
         }
       }
