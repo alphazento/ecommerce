@@ -121,7 +121,7 @@ export default {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       this.loading = true;
       axios
-        .get(`/api/v1/admin/configs/groups/data-table-schema/${this.schemaKey}`)
+        .get(`/api/v1/admin/metadata/datatable-schemas/${this.schemaKey}`)
         .then(response => {
           this.realfetchData();
           // this.$store.dispatch("HIDE_SPINNER");

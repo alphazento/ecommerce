@@ -15,7 +15,7 @@ class Admin extends AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Website', 'StoreFront');
     }
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {}
 
     protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['website/storefront'] = function($groupTag) {
@@ -115,7 +115,7 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
     protected function getStorages() {
         if (!$this->storages) {

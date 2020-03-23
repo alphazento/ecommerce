@@ -15,7 +15,7 @@ class Admin extends AbstractAdminConfig {
     
     protected function _registerDynamicConfigItemMenus() {}
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {}
 
     protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['data-table-schema/orders'] = function($groupTag) {
@@ -82,7 +82,7 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
     protected function getOrderStatusOptions() {
         return [

@@ -20,7 +20,127 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function _registerDynamicConfigItemMenus() {
     }
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {
+        $data['category'] = function($pathTag) {
+            AdminConfigurationService::registerGroup($pathTag, 'headers', 
+            [
+                'headers' => [
+                    [
+                        'text' => 'ID',
+                        'ui' => 'z-label',
+                        'value' => 'id',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
+                    ],
+                    [
+                        'text' => 'SKU',
+                        'ui' => 'z-label',
+                        'value' => 'sku',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                    ],
+                    [
+                        'text' => 'Name',
+                        'ui' => 'z-label',
+                        'value' => 'name',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                    ]
+                ],
+                'primary_key' => 'id',
+            ]);
+        };
+
+        $data['product'] = function($pathTag) {
+            AdminConfigurationService::registerGroup($pathTag, 'product',  
+            [
+                'headers' => [
+                    [
+                        'text' => 'ID',
+                        'ui' => 'z-label',
+                        'value' => 'id',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
+                    ],
+                    [
+                        'text' => 'Sku',
+                        'ui' => 'z-label',
+                        'value' => 'sku',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                        'sortable' => false
+                    ],
+                    [
+                        'text' => 'Name',
+                        'ui' => 'z-label',
+                        'value' => 'name',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                        'sortable' => false
+                    ],
+                    [
+                        'text' => 'Product Model Type',
+                        'ui' => 'z-options-display',
+                        'value' => 'model_type',
+                        'options' => $this->getProductModelTypsMapping(),
+                        'filter_ui' => 'config-options-item',
+                        'filter_data_type' => 'string',
+                        'clearable' => true,
+                    ],
+                    [
+                        'text' => 'Visibility',
+                        'ui' => 'z-options-display',
+                        'value' => 'visibility',
+                        'options' => $this->getProductVisibilityOptions(),
+                        'filter_ui' => 'config-options-item',
+                        'clearable' => true,
+                    ],
+                    [
+                        'text' => 'Active',
+                        'ui' => 'z-boolean-chip',
+                        'value' => 'active',
+                        'filter_ui' => 'config-options-item',
+                        'options' => [
+                            ['label' => 'Active', 'value' => 1],
+                            ['label' => 'Unactive', 'value' => 0]
+                        ],
+                        'clearable' => true,
+                    ],
+                    // [
+                    //     'text' => 'Image',
+                    //     'ui' => 'config-image-uploader-item',
+                    //     'visibility' => 'public',
+                    //     'folder' => 'website',
+                    //     'accept' => 'image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/svg+xml',
+                    //     'fileType' => 'png,jpeg,jpg,bmp,gif,ico,svg',
+                    //     'value' => 'image'
+                    // ],
+                    [
+                        'text' => 'Image',
+                        'ui' => 'z-image',
+                        'value' => 'image',
+                        'maxWidth' => '150px'
+                    ],
+                    [
+                        'text' => 'Actions',
+                        'ui' => 'z-config-actions',
+                        'value' => '_none_',
+                        'options' => [
+                            [
+                                'label' => 'Edit',
+                                'value' => 'editProduct'
+                            ],
+                            [
+                                'label' => 'Delete',
+                                'value' => 'deleteProduct'
+                            ],
+                        ]
+                    ]
+                ],
+                'primary_key' => 'id',
+            ]);
+        };
+    }
 
     protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $this->mappingCategoryModelDefines($groupTag, $groups);
@@ -60,7 +180,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         // };
     }
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
     protected function mappingCategoryModelDefines($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {

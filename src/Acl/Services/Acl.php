@@ -23,8 +23,14 @@ class Acl implements AclInterface {
      * check by request
      */
     public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
-        if (ShareBucket::get('ignore_acl_check')) {
-            return true;
+        // if (ShareBucket::get('ignore_acl_check')) {
+        //     return true;
+        // }
+
+        if ($route = $request->route()) {
+            if (in_array($route->catalog, ['guest', 'NO-ACL'])) {
+                return true;
+            }
         }
 
         $user = $user ?? $this->getUser();

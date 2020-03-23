@@ -33,7 +33,7 @@ abstract class AbstractAdminConfig {
 
     final public function registerDataTableSchemas($dataTableName) {
         $items = [];
-        $this->_registerDataTableSchemas($dataTableName);
+        $this->_registerDataTableSchemas($items);
         foreach($items as $tag => $cb) {
             if ($dataTableName === strtolower($tag)) {
                 call_user_func($cb, $tag);
@@ -61,9 +61,9 @@ abstract class AbstractAdminConfig {
      */
     abstract protected function _registerDynamicConfigItemMenus();
 
-    abstract protected function _registerDataTableSchemas($dataTableName, &$groups);
+    abstract protected function _registerDataTableSchemas(&$data);
     
-    abstract protected function _registerModelDefines($dataTableName, &$groups);
+    abstract protected function _registerModelDefines(&$data);
 
     abstract protected function _registerDynamicConfigItemGroups($groupTag, &$groups);
 }

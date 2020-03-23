@@ -15,9 +15,9 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeInSet;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class DAController extends ApiBaseController
+class DynamicAttributeController extends ApiBaseController
 {
-    public function getAttribute(){
+    public function attribute(){
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::find($id)) {
                 return $this->withData($attr->toArray());
@@ -26,27 +26,8 @@ class DAController extends ApiBaseController
         return $this->error(404, 'Not found');
     }
 
-    public function getModelAttributes() {
-        $model = Str::plural(Route::input('model'));
-        return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
-            ->withData(DynamicAttribute::where('parent_table', $model)->get());
-    }
 
-    public function updateAttribute() {
-        $id = Route::input('id');
-
-        if ($model = DynamicAttribute::find($id)) {
-            $model->forceFill(Request::get('attributes'));
-            if (!$model->default_value) {
-                $model->default_value = '';
-            }
-            $model->save();
-            return $this->withData($model);
-        }
-        return $this->error(404, 'Item not found.');
-    }
-
-    public function createAttribute() {
+    public function store() {
         $data = Request::get('attributes');
         unset($data['id']);
         if (!($data['default_value'] ?? false)) {
@@ -81,7 +62,27 @@ class DAController extends ApiBaseController
         return $this->withData($model->toArray());
     }
 
-    public function getModelAttributeSets() {
+    public function update() {
+        $id = Route::input('id');
+
+        if ($model = DynamicAttribute::find($id)) {
+            $model->forceFill(Request::get('attributes'));
+            if (!$model->default_value) {
+                $model->default_value = '';
+            }
+            $model->save();
+            return $this->withData($model);
+        }
+        return $this->error(404, 'Item not found.');
+    }
+
+    public function attributesOfModel() {
+        $model = Str::plural(Route::input('model'));
+        return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
+            ->withData(DynamicAttribute::where('parent_table', $model)->get());
+    }
+
+    public function attributeSetsOfModel() {
         $model = Str::plural(Route::input('model'));
         $collection = DynamicAttributeSet::where('model', $model);
         if (Request::input('with_attributes')) {
@@ -91,7 +92,7 @@ class DAController extends ApiBaseController
             ->withData($collection->get());
     }
 
-    public function getAttributeSet() {
+    public function attributeSet() {
         $attr_set_id = Route::input('id');
         return $this->withData(DynamicAttributeSet::with('attributes')->find($attr_set_id));
     }
@@ -119,7 +120,7 @@ class DAController extends ApiBaseController
         }
     }
 
-    public function addAttributeToSet() {
+    public function addToSet() {
         $attr_set_id = Route::input('attr_set_id');
         $attr_id = Route::input('attr_id');
         $relationShip = new DynamicAttributeInSet();
@@ -129,7 +130,7 @@ class DAController extends ApiBaseController
         return $this->withData($relationShip);
     }
 
-    public function deleteAttributeFromSet() {
+    public function deleteFromSet() {
         $attr_set_id = Route::input('attr_set_id');
         $attr_id = Route::input('attr_id');
         DynamicAttributeInSet::where('attribute_set_id', $attr_set_id)
@@ -138,7 +139,7 @@ class DAController extends ApiBaseController
         return $this;
     }
 
-    public function getAttributeValues(){
+    public function values(){
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::with('options')->find($id)) {
                 return $this->withData($attr->toArray());
@@ -147,7 +148,7 @@ class DAController extends ApiBaseController
         return $this->error(404, 'Not found');
     }
 
-    public function getAttributeBelongsSets() {
+    public function belongsSets() {
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::with('sets')->find($id)) {
                 return $this->withData($attr->toArray());

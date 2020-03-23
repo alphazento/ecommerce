@@ -74,8 +74,8 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     protected function getRouteInformation(Route $route)
     {
         $info = parent::getRouteInformation($route);
-        $info['catalog'] = $route->catalog();
         $info['scope'] = $route->scope();
+        $info['catalog'] = $route->catalog();
         return $info;
     }
 

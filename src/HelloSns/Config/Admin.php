@@ -179,8 +179,8 @@ class Admin extends AbstractAdminConfig {
         // };
     }
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {}
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
 }

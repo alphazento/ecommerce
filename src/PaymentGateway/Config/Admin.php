@@ -14,8 +14,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
     protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {}
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {}
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
 }

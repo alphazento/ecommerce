@@ -13,9 +13,9 @@ class Admin extends AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Theme', 'VueTheme');
     }
 
-    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    protected function _registerDataTableSchemas(&$data) {}
 
-    protected function _registerModelDefines($dataTableName, &$groups){}
+    protected function _registerModelDefines(&$data){}
     
     protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['theme/vuetheme'] = function($groupTag) {

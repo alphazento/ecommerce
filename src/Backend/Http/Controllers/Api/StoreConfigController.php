@@ -9,44 +9,40 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
-class ConfigurationController extends ApiBaseController
+class StoreConfigController extends ApiBaseController
 {
+    use TraitHelper;
+
+    /**
+     * admin uri store-configurations side menus
+     */
     public function menus() {
-        $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
-        foreach($enabledPackageConfigs ?? [] as $name => $packageConfig) {
-            $namespace = (PackageManager::getNameSpace($name));
-            $className = sprintf('\\%s\\Config\\Admin', $namespace);
-            if (class_exists($className)) {
-                (new $className)->registerDynamicConfigItemMenus();
-            }
-        }
+        $this->traversePackages(function($className) {
+            (new $className)->registerDynamicConfigItemMenus();
+        });
         return $this->withData(AdminConfigurationService::getMenus());
     }
 
-    public function getConfigGroups() {
-        $key = '';
-        if ($enabledPackageConfigs = PackageManager::loadPackagesConfigs()) {
-            foreach($enabledPackageConfigs as $packageConfig) {
-                $namespace = (PackageManager::getNameSpace($packageConfig['name']));
-                $className = sprintf('\\%s\\Config\\Admin', $namespace);
-                if (class_exists($className)) {
-                    $key = (new $className)->registerDynamicConfigItemGroups(Route::input('l0'), Route::input('l1'));
-                }
-            }
-        }
+    /**
+     * config groups belongs to uri store-configurations side menu item
+     */
+    public function groups() {
+        $key = $this->traversePackages(function($className) {
+            return (new $className)->registerDynamicConfigItemGroups(Route::input('l0'), Route::input('l1'));
+        });
+
         if ($groups = AdminConfigurationService::getDetailGroup($key)) {
-            $withValue = Request::get('withValue');
-            return $this->getGroupValues($groups, $withValue);
+            return $this->getGroupValues($groups);
         } else {
-            return $this->error(404, 'group not found.');
+            return $this->error(404, 'config group not found.');
         }
     }
 
-    protected function getGroupValues(&$groups, $withValue) {
+    protected function getGroupValues(&$groups) {
         foreach($groups as $name => &$group) {
             if ($group['items'] ?? false) {
                 foreach($group['items'] as &$item) {
-                    if ($withValue && ($accessor = $item['accessor'] ?? false)) {
+                    if ($accessor = $item['accessor'] ?? false) {
                         $item['value'] = config($accessor);
                         if ($item['value'] === null && isset($item['defaultValue'])) {
                             $item['value'] = $item['defaultValue'];
@@ -57,7 +53,7 @@ class ConfigurationController extends ApiBaseController
             if ($group['subgroups'] ?? false) {
                 foreach($group['subgroups'] as &$subgroups) {
                     foreach($subgroups['items'] ?? [] as &$item) {
-                        if ($withValue && ($accessor = $item['accessor'] ?? false)) {
+                        if ($accessor = $item['accessor'] ?? false) {
                             $item['value'] = config($accessor);
                             if ($item['value'] === null && isset($item['defaultValue'])) {
                                 $item['value'] = $item['defaultValue'];
@@ -70,7 +66,10 @@ class ConfigurationController extends ApiBaseController
         return $this->withData($groups);
     }
 
-    public function setConfigValue() {
+    /**
+     * store configurable item value
+     */
+    public function store() {
         $key = Route::input('key');
         $value = Request::get('value');
         if (Request::get('is_json', false)) {
