@@ -28,14 +28,14 @@ class AdminDashboardService
     }
   }
 
-  public function registerL1MenuNode($parentName, $l1Name, $icon = null,  $url = null) {
+  public function registerLevel1MenuNode($parentName, $l1Name, $icon = null,  $url = null) {
     $key0 = strtolower(Str::slug($parentName));
     if (!isset($this->menus[$key0])) 
     {
       throw new \Exception(sprintf('Parent Menu %s not exists.', $parentName));
     }
 
-    if (!$this->hasL1MenuNode($key0, $l1Name))
+    if (!$this->hasLevel1MenuNode($key0, $l1Name))
     {
       $key1 = strtolower(Str::slug($l1Name));
       $this->menus[$key0]['items'][$key1] = [
@@ -46,7 +46,7 @@ class AdminDashboardService
     }
   }
 
-  protected function hasL1MenuNode($parentName, $l1Name) 
+  protected function hasLevel1MenuNode($parentName, $l1Name) 
   {
     $key0 = strtolower(Str::slug($parentName));
     if (!isset($this->menus[$key0])) {

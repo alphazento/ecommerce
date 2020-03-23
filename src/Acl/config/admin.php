@@ -9,19 +9,20 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 use Zento\Catalog\Model\ORM\Product;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerDashboardMenus() {
+    protected function _registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('API Access Control', 'mdi-warehouse');
-        AdminDashboardService::registerL1MenuNode('API Access Control', 'Backend', 
+        AdminDashboardService::registerLevel1MenuNode('API Access Control', 'Backend', 
             'mdi-sitemap', '/admin/acl/backend');
-        AdminDashboardService::registerL1MenuNode('API Access Control', 'Front-end', 
+        AdminDashboardService::registerLevel1MenuNode('API Access Control', 'Front-end', 
             'mdi-shape', '/admin/acl/front-end');
     }
 
-    protected function _registerGroups($groupTag, &$groups) {
-        $this->registerRoleDataTableSchema($groupTag, $groups);
-    }
+    /**
+     * register configuration menus
+     */
+    protected function _registerDynamicConfigItemMenus() {}
 
-    protected function registerRoleDataTableSchema($groupTag, &$groups) {
+    protected function _registerDataTableSchemas($groupTag, &$groups) {
         $func = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'text' => 'Front-end/Backend role data table schema',
@@ -68,4 +69,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         $groups['data-table-schema/administrator_Role'] = $func;
         $groups['data-table-schema/frontend_Role'] = $func;
     }
+
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
+    }
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
 }

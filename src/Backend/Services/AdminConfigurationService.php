@@ -81,7 +81,7 @@ class AdminConfigurationService extends AdminDashboardService
 
   protected function hasGroup($parentName, $l1Name, $groupName) 
   {
-    if ($this->hasL1MenuNode($parentName, $l1Name)) {
+    if ($this->hasLevel1MenuNode($parentName, $l1Name)) {
       $groups = $this->menus[$parentName][$l1Name]['groups'];
       return isset($l1Menu[$groupName]);
     }

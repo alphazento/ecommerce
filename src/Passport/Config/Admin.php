@@ -7,11 +7,13 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Passport\Consts;
 
 class Admin extends AbstractAdminConfig {
-    public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'Passport');
+    protected function _registerDashboardMenus() {}
+    
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'Passport');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['website/passport'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'client',  [
                 'text'=> 'Default Client',
@@ -46,4 +48,9 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
     }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
 }

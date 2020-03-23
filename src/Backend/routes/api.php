@@ -9,12 +9,12 @@ Route::group(
     ], function() {
         Route::get(
             '/dashboard/menus', 
-            'DashboardController@getMenus'
+            'DashboardController@menus'
         )->unshiftMiddleware('ignore_acl');
 
         Route::get(
             '/configs/config-menus', 
-            'ConfigurationController@getConfigMenus'
+            'ConfigurationController@menus'
         );
 
         Route::get(

@@ -6,11 +6,10 @@ use Zento\EWayPayment\Consts;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerDashboardMenus() {
+    protected function _registerDashboardMenus() {}
+    protected function _registerDynamicConfigItemMenus() {}
 
-    }
-
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['sales/paymentgateway'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'eWay',  [
                 'title' => 'eWay Transparent',
@@ -63,4 +62,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ]);
         };
     }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
 }

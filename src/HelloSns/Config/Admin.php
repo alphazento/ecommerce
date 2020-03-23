@@ -7,11 +7,13 @@ use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'HelloSns');
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'HelloSns');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['website/hellosns'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'frontend',  [
                 'title' => 'Front-end Panel use Hellosns',
@@ -176,4 +178,9 @@ class Admin extends AbstractAdminConfig {
         //     AdminConfigurationService::removeItemFromGroup($groupTag, 'table', 'Type');
         // };
     }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
 }

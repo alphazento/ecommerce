@@ -8,11 +8,16 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
     protected $storages;
-    public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Website', 'StoreFront');
+
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'StoreFront');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['website/storefront'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Store Basic Settings',
@@ -110,6 +115,8 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
     protected function getStorages() {
         if (!$this->storages) {
             $this->storages = [];

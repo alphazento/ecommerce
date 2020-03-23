@@ -6,25 +6,25 @@ use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerDashboardMenus() {
+    protected function _registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Store', 'mdi-store');
-        AdminDashboardService::registerL1MenuNode('Store', 'Configuration', 'mdi-settings', '/admin/store-configurations');
-        AdminDashboardService::registerL1MenuNode('Store', 'Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
-        AdminDashboardService::registerL1MenuNode('Store', 'Attribute Sets', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Configuration', 'mdi-settings', '/admin/store-configurations');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Attribute Sets', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
     }
 
-    public function registerConfigMenus() {
+    protected function _registerDynamicConfigItemMenus() {
         AdminConfigurationService::registerRootLevelMenuNode('Website');
         AdminConfigurationService::registerRootLevelMenuNode('Sales');
         AdminConfigurationService::registerRootLevelMenuNode('Checkout');
         AdminConfigurationService::registerRootLevelMenuNode('Third Party');
-        AdminConfigurationService::registerL1MenuNode('Website', 'Web');
-        AdminConfigurationService::registerL1MenuNode('Website', 'Admin');
-        AdminConfigurationService::registerL1MenuNode('Sales', 'Payment Gateway');
-        AdminConfigurationService::registerL1MenuNode('Sales', 'Email');
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'Web');
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'Admin');
+        AdminConfigurationService::registerLevel1MenuNode('Sales', 'Payment Gateway');
+        AdminConfigurationService::registerLevel1MenuNode('Sales', 'Email');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['website/admin'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'ip_restrict', [
                 'text' => 'Allow IPs',
@@ -269,4 +269,8 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
     }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+    
+    protected function _registerModelDefines($dataTableName, &$groups){}
 }

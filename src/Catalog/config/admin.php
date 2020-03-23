@@ -9,15 +9,20 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 use Zento\Catalog\Model\ORM\Product;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerDashboardMenus() {
+    protected function _registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Catalog', 'mdi-warehouse');
-        AdminDashboardService::registerL1MenuNode('Catalog', 'Category', 
+        AdminDashboardService::registerLevel1MenuNode('Catalog', 'Category', 
             'mdi-sitemap', '/admin/catalog/category');
-        AdminDashboardService::registerL1MenuNode('Catalog', 'Product', 
+        AdminDashboardService::registerLevel1MenuNode('Catalog', 'Product', 
             'mdi-shape', '/admin/catalog/product');
     }
 
-    protected function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemMenus() {
+    }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $this->mappingCategoryModelDefines($groupTag, $groups);
         $this->mappingProductModelDefines($groupTag, $groups);
         $this->mappingCategoryDatatableDefines($groupTag, $groups);
@@ -55,6 +60,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         // };
     }
 
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
     protected function mappingCategoryModelDefines($groupTag, &$groups) {
         $groups['catalog/category'] = function($groupTag) {
             $items[] = [

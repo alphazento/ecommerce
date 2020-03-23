@@ -7,13 +7,17 @@ use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerDashboardMenus() {
+    protected function _registerDashboardMenus() {
         AdminDashboardService::registerRootLevelMenuNode('Sales', 'mdi-store');
-        AdminDashboardService::registerL1MenuNode('Sales', 'Orders', 
+        AdminDashboardService::registerLevel1MenuNode('Sales', 'Orders', 
             'mdi-file-table-box-multiple', '/admin/sales_orders');
     }
+    
+    protected function _registerDynamicConfigItemMenus() {}
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['data-table-schema/orders'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Order Table Definition',
@@ -78,6 +82,8 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
     protected function getOrderStatusOptions() {
         return [
             [

@@ -9,12 +9,14 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Facades\ThemeManager;
 
 class Admin extends AbstractAdminConfig {
-    public function registerConfigMenus() {
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {
         AdminConfigurationService::registerRootLevelMenuNode('Theme');
-        AdminConfigurationService::registerL1MenuNode('Theme', 'Themes');
+        AdminConfigurationService::registerLevel1MenuNode('Theme', 'Themes');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['theme/themes'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'basic',  [
                 'title' => 'Basic Settings',
@@ -41,6 +43,10 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
     protected $themeOptions;
     protected function themes() {
         // 'options' => 

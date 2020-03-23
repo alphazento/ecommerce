@@ -11,13 +11,13 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class ConfigurationController extends ApiBaseController
 {
-    public function getConfigMenus() {
+    public function menus() {
         $enabledPackageConfigs = PackageManager::loadPackagesConfigs();
         foreach($enabledPackageConfigs ?? [] as $name => $packageConfig) {
             $namespace = (PackageManager::getNameSpace($name));
             $className = sprintf('\\%s\\Config\\Admin', $namespace);
             if (class_exists($className)) {
-                (new $className)->registerConfigMenus();
+                (new $className)->registerDynamicConfigItemMenus();
             }
         }
         return $this->withData(AdminConfigurationService::getMenus());
@@ -30,7 +30,7 @@ class ConfigurationController extends ApiBaseController
                 $namespace = (PackageManager::getNameSpace($packageConfig['name']));
                 $className = sprintf('\\%s\\Config\\Admin', $namespace);
                 if (class_exists($className)) {
-                    $key = (new $className)->registerGroups(Route::input('l0'), Route::input('l1'));
+                    $key = (new $className)->registerDynamicConfigItemGroups(Route::input('l0'), Route::input('l1'));
                 }
             }
         }

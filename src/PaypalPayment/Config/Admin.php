@@ -6,7 +6,12 @@ use Zento\PaypalPayment\Consts;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function _registerGroups($groupTag, &$groups) {
+    
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {}
+
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['sales/paymentgateway'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'paypalexpress',  [
                 'title' => 'PayPal Express',
@@ -65,4 +70,9 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             ]);
         };
     }
+
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
 }

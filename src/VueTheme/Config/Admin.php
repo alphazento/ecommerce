@@ -7,11 +7,17 @@ use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerConfigMenus() {
-        AdminConfigurationService::registerL1MenuNode('Theme', 'VueTheme');
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerLevel1MenuNode('Theme', 'VueTheme');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
+    protected function _registerDataTableSchemas($dataTableName, &$groups) {}
+
+    protected function _registerModelDefines($dataTableName, &$groups){}
+    
+    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
         $groups['theme/vuetheme'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'settings',  [
                 'title' => 'Basic Settings',
