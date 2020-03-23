@@ -22,7 +22,7 @@ class AclRoleController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Get all admin roles
+     * Get all roles
      *
      * @response {[
      *  'group0 details',
@@ -30,30 +30,13 @@ class AclRoleController extends ApiBaseController
      * ]}
      */
     public function roles() {
-        $filters = Request::only(['id', 'name', 'description', 'active']);
         $collection = AclRole::whereIn('scope', $this->getScopes());
-        foreach($filters as $field => $value) {
-            switch($field) {
-                case 'id':
-                    $collection->where($field, $value);
-                    break;
-                case 'name':
-                case 'description':
-                    $collection->where($field, 'like', $value);
-                    break;
-                case 'active':
-                    $collection->where($field, '=', $value ? 1 : 0);
-                    break;
-                default:
-                    break;
-            }
-        }
-        return $this->withData($collection->paginate());
+        return $this->withData($this->applyFilter($collection, ['id', 'name', 'description', 'active'])->paginate());
     }
 
     public function routes() {
         if ($role = AclRole::find(Route::input('id'))) {
-            return $this->withData($role->permissions);
+            return $this->withData($role->routes);
         }
         return $this->error(404);
     }

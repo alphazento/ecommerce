@@ -26,7 +26,7 @@ class Admin extends AbstractAdminConfig {
 
     public function _registerGroups($groupTag, &$groups) {
         $groups['website/admin'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'ip_restrict',  [
+            AdminConfigurationService::registerGroup($groupTag, 'ip_restrict', [
                 'text' => 'Allow IPs',
                 'items' => [
                     [
@@ -67,7 +67,7 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['tables/dynamic-attributes'] = function($groupTag) {
+        $groups['data-table-schema/dynamic-attributes'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'text' => 'Model Dynamic Attributes Editor Template Definition',
                 'items' => [
@@ -241,7 +241,7 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['tables/dynamic-attribute-sets'] = function($groupTag) {
+        $groups['data-table-schema/dynamic-attribute-sets'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'text' => 'Attribute Set Editor Template Definition',
                 'items' => [

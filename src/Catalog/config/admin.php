@@ -221,7 +221,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     }
 
     protected function mappingCategoryDatatableDefines($groupTag, &$groups) {
-        $groups['tables/category'] = function($groupTag) {
+        $groups['data-table-schema/category'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'text' => 'Category DataTable Template Definition',
                 'items' => [
@@ -255,7 +255,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     }
 
     protected function mappingProductDatatableDefines($groupTag, &$groups) {
-        $groups['tables/product'] = function($groupTag) {
+        $groups['data-table-schema/product'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'text' => 'Product Table Definition',
                 'items' => [

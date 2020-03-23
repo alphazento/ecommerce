@@ -102,9 +102,9 @@ export default {
   },
   methods: {
     fetchCategories() {
-      this.$store.dispatch("showSpinner", "Loading categories data");
+      this.$store.dispatch("SHOW_SPINNER", "Loading categories data");
       axios.get("/api/v1/admin/catalog/categories/tree").then(response => {
-        this.$store.dispatch("hideSpinner");
+        this.$store.dispatch("HIDE_SPINNER");
         if (response.success) {
           this.tree_conf = response.tree_conf;
           this.items[0].level =

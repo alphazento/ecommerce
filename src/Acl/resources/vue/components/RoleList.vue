@@ -1,12 +1,13 @@
 <template>
   <config-data-table
-    name="acl_role"
+    schemaKey="acl_role"
     :headers="headers"
     :data-api-url="uri"
     filter-connect-route
     use-filter
     server-side-pagination
     @dataChanged="dataChanged"
+    @proxyAction="proxyAction"
   ></config-data-table>
 </template>
 

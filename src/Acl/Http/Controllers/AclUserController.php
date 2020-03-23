@@ -50,7 +50,8 @@ class AclUserController extends ApiBaseController
      */
     public function users() {
         $model = $this->getUserModel();
-        return $this->withData($model::all());
+        $collection = $model::select('*');
+        return $this->withData($this->applyFilter($collection, ['id', 'firstname', 'lastname', 'email', 'active'])->paginate());
     }
 
     /**

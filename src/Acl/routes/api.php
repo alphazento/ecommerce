@@ -8,9 +8,9 @@ Route::group(
         'scope' => 'admin',
         'catalog' => 'acl-user-manager',
     ], function () {
-        Route::get('/me', 'AclUserController@getMe')->unshiftMiddleware('ignore_acl');
+        Route::get('/me', 'AclUserController@me')->unshiftMiddleware('ignore_acl');
         Route::get('/users', 'AclUserController@users');
-        Route::get('/users/{id}', 'AclUserController@getUser');
+        Route::get('/users/{id}', 'AclUserController@user');
 
         Route::post('/users', 'AclUserController@store');
         Route::patch('/users/{id}', 'AclUserController@update');

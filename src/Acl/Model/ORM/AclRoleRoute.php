@@ -10,11 +10,11 @@ class AclRoleRoute extends AclBaseModel
         'route_id'
     ];
 
-    public function group() {
+    public function role() {
         return $this->belongsTo(AclRole::class, 'id', 'role_id');
     }
 
-    public function permission() {
+    public function route() {
         return $this->hasOne(AclRoute::class, 'id', 'route_id');
     }
 }

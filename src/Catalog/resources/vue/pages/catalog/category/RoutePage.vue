@@ -66,7 +66,7 @@ export default {
     },
 
     propertyChange(event) {
-      this.$store.dispatch("showSpinner", "Saving Changes...");
+      this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
       axios
         .patch(
           `/api/v1/admin/catalog/categories/${event.model.id}/${event.preoperty}`,
@@ -76,27 +76,27 @@ export default {
         )
         .then(response => {
           if (response.success) {
-            this.$store.dispatch("snackMessage", "Updated.");
+            this.$store.dispatch("SNACK_MESSAGE", "Updated.");
           } else {
-            this.$store.dispatch("snackMessage", "Failed to update.");
+            this.$store.dispatch("SNACK_MESSAGE", "Failed to update.");
           }
         });
     },
 
     saveModel(model) {
-      this.$store.dispatch("showSpinner", "Saving Changes...");
+      this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
       axios.post("/api/v1/admin/catalog/categories", model).then(response => {
         if (response.success) {
           this.editItem = {
             isNew: false,
             model: response.data
           };
-          this.$store.dispatch("snackMessage", "New Category Created.");
+          this.$store.dispatch("SNACK_MESSAGE", "New Category Created.");
           this.categories_changes++;
         } else {
-          this.$store.dispatch("snackMessage", response.message);
+          this.$store.dispatch("SNACK_MESSAGE", response.message);
         }
-        this.$store.dispatch("hideSpinner");
+        this.$store.dispatch("HIDE_SPINNER");
       });
     }
   },

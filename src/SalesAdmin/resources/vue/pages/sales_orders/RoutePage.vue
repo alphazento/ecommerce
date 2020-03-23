@@ -13,7 +13,7 @@
       <v-btn :disabled="selectRows.length === 0" color="success">Print Invoice & Pack Slip</v-btn>
     </v-card-title>
     <config-data-table
-      name="orders"
+      schema-key="orders"
       data-api-url="sales/orders"
       :search="search"
       use-filter

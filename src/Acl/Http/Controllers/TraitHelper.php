@@ -3,6 +3,7 @@
 namespace Zento\Acl\Http\Controllers;
 
 use Route;
+use Request;
 use Zento\Acl\Consts;
 
 trait TraitHelper
@@ -50,5 +51,13 @@ trait TraitHelper
                 return [\Zento\Acl\Consts::GUEST_SCOPE];
         }
         return [\Zento\Acl\Consts::GUEST_SCOPE];
+    }
+
+    protected function applyFilter($collection, $filterAbles) {
+        $filters = Request::only($filterAbles);
+        foreach($filters as $field => $value) {
+            $collection->where($field, 'like', $value);
+        }
+        return $collection;
     }
 }

@@ -136,7 +136,7 @@ export default {
     fetchDefines() {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       axios
-        .get("/api/v1/admin/configs/groups/tables/dynamic-attributes")
+        .get("/api/v1/admin/configs/groups/data-table-schema/dynamic-attributes")
         .then(response => {
           this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {

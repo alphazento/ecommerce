@@ -17,5 +17,55 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             'mdi-shape', '/admin/acl/front-end');
     }
 
-    protected function _registerGroups($groupTag, &$groups) {}
+    protected function _registerGroups($groupTag, &$groups) {
+        $this->registerRoleDataTableSchema($groupTag, $groups);
+    }
+
+    protected function registerRoleDataTableSchema($groupTag, &$groups) {
+        $func = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'table',  [
+                'text' => 'Front-end/Backend role data table schema',
+                'items' => [
+                    'headers' => [
+                        [
+                            'text' => 'ID',
+                            'ui' => 'z-label',
+                            'value' => 'id',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true
+                        ],
+                        [
+                            'text' => 'Name',
+                            'ui' => 'z-label',
+                            'value' => 'name',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ],
+                        [
+                            'text' => 'Description',
+                            'ui' => 'z-label',
+                            'value' => 'description',
+                            'filter_ui' => 'config-text-item',
+                            'clearable' => true,
+                        ],
+                        [
+                            'text' => 'Actions',
+                            'ui' => 'z-config-actions',
+                            'value' => '_none_',
+                            'options' => [
+                                [
+                                    'label' => 'Edit',
+                                    'value' => 'editModel'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'primary_key' => 'id',
+                ]
+            ]);
+        };
+       
+        $groups['data-table-schema/administrator_Role'] = $func;
+        $groups['data-table-schema/frontend_Role'] = $func;
+    }
 }

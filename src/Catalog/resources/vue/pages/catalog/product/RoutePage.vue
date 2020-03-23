@@ -33,7 +33,7 @@
     <v-tab-item>
       <config-data-table
         :search="search"
-        name="product"
+        schema-key="product"
         data-api-url="catalog/search"
         filter-connect-route
         use-filter
@@ -89,7 +89,7 @@ export default {
       }
     },
     propertyChange(event) {
-      this.$store.dispatch("showSpinner", "Saving Changes...");
+      this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
       axios
         .patch(
           `/api/v1/admin/catalog/products/${event.model.id}/${event.preoperty}`,
@@ -100,18 +100,18 @@ export default {
         .then(response => {
           if (response.success) {
             Object.assign(this.editItem.model, response.data);
-            this.$store.dispatch("snackMessage", "Updated.");
+            this.$store.dispatch("SNACK_MESSAGE", "Updated.");
           } else {
-            this.$store.dispatch("snackMessage", "Failed to update.");
+            this.$store.dispatch("SNACK_MESSAGE", "Failed to update.");
           }
         });
     },
     saveModel(model) {
-      this.$store.dispatch("showSpinner", "Saving Changes...");
+      this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
       axios
         .post("/api/v1/admin/catalog/products", this.model)
         .then(response => {
-          this.$store.dispatch("hideSpinner");
+          this.$store.dispatch("HIDE_SPINNER");
         });
     },
     setDefaultAttributeSet(daset) {

@@ -78,18 +78,18 @@
 export default {
   props: {
     search: String,
-    name: String,
+    schemaKey: String,
     showSelect: false,
     dataApiUrl: String,
     useFilter: Boolean,
     serverSidePagination: Boolean,
     filterConnectRoute: Boolean,
-    headers: Array
+    headerDefines: Array
   },
   data() {
     return {
       defines: {
-        headers: this.headers !== undefined ? this.headers : [],
+        headers: this.headerDefines !== undefined ? this.headerDefines : [],
         primary_key: "id"
       },
       pagination: {
@@ -110,7 +110,7 @@ export default {
     if (this.filterConnectRoute) {
       this.convertRouteQuery();
     }
-    if (this.headers === undefined) {
+    if (this.headerDefines === undefined) {
       this.fetchDefines();
     } else {
       this.fetchData();
@@ -121,7 +121,7 @@ export default {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       this.loading = true;
       axios
-        .get(`/api/v1/admin/configs/groups/tables/${this.name}`)
+        .get(`/api/v1/admin/configs/groups/data-table-schema/${this.schemaKey}`)
         .then(response => {
           this.realfetchData();
           // this.$store.dispatch("HIDE_SPINNER");
