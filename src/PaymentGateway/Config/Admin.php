@@ -12,7 +12,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Sales', 'Payment Gateway');
     }
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {}
+    protected function _registerDynamicConfigItemGroups( &$data) {}
 
     protected function _registerDataTableSchemas(&$data) {}
 

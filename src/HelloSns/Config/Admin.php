@@ -13,18 +13,18 @@ class Admin extends AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Website', 'HelloSns');
     }
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['website/hellosns'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'frontend',  [
-                'title' => 'Front-end Panel use Hellosns',
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['website/hellosns'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'frontend'],  [
+                'text' => 'Front-end Panel use Hellosns',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ENABLED, 'frontend'),
                     ],
                     [
-                        'title' => 'Allow Services',
+                        'text' => 'Allow Services',
                         'ui' => 'config-multi-options-item',
                         'accessor' => sprintf(Consts::ALLOW_SERVICES, 'frontend'),
                         'options' => [
@@ -38,7 +38,7 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'title' => 'Response Type',
+                        'text' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'frontend'),
                         'options' => [
@@ -47,27 +47,27 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'title' => 'Use State Check',
+                        'text' => 'Use State Check',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::CHECK_STATE, 'frontend'),
                     ],
                     [
-                        'title' => 'Can create account if not same user exists',
+                        'text' => 'Can create account if not same user exists',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'frontend'),
                     ],
                 ]
             ]);
-            AdminConfigurationService::registerGroup($groupTag, 'backend',  [
-                'title' => 'Admin Panel use Hellosns',
+            AdminConfigurationService::registerGroup([$groupTag, 'backend'],  [
+                'text' => 'Admin Panel use Hellosns',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ENABLED, 'backend'),
                     ],
                     [
-                        'title' => 'Allow Services',
+                        'text' => 'Allow Services',
                         'ui' => 'config-multi-options-item',
                         'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
                         'options' => [
@@ -81,7 +81,7 @@ class Admin extends AbstractAdminConfig {
                         ]
                     ],
                     [
-                        'title' => 'Response Type',
+                        'text' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'backend'),
                         'options' => [
@@ -95,23 +95,23 @@ class Admin extends AbstractAdminConfig {
                     //     'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
                     // ],
                     [
-                        'title' => 'Use State Check',
+                        'text' => 'Use State Check',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::CHECK_STATE, 'backend'),
                     ],
                     [
-                        'title' => 'Can create account if user not exists',
+                        'text' => 'Can create account if user not exists',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'backend'),
                     ],
                 ]
             ]);
 
-            AdminConfigurationService::registerGroup($groupTag, 'services',  [
-                'title' => 'Social Media Login Services',
+            AdminConfigurationService::registerGroup([$groupTag, 'services'],  [
+                'text' => 'Social Media Login Services',
                 'items' => [
                     [
-                        'title' => 'Facebook',
+                        'text' => 'Facebook',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::FACEBOOK_SERVICE,
                         'schema' => [
@@ -121,7 +121,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                     ],
                     [
-                        'title' => 'Google',
+                        'text' => 'Google',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::GOOGLE_SERVICE,
                         'schema' => [
@@ -131,7 +131,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                     ],
                     [
-                        'title' => 'LinkedIn',
+                        'text' => 'LinkedIn',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::LINKEDIN_SERVICE,
                         'schema' => [
@@ -141,7 +141,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                     ],
                     [
-                        'title' => 'Github',
+                        'text' => 'Github',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::GITHUB_SERVICE,
                         'schema' => [
@@ -151,7 +151,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                     ],
                     [
-                        'title' => 'GitLab',
+                        'text' => 'GitLab',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::GITLAB_SERVICE,
                         'schema' => [
@@ -161,7 +161,7 @@ class Admin extends AbstractAdminConfig {
                         ],
                     ],
                     [
-                        'title' => 'Bitbucket',
+                        'text' => 'Bitbucket',
                         'ui' => 'config-json-item',
                         'accessor' => Consts::BITBUCKET_SERVICE,
                         'schema' => [
@@ -173,10 +173,6 @@ class Admin extends AbstractAdminConfig {
                 ]
             ]);
         };
-
-        // $groups['tables/dynamicattributes']  = function($groupTag) {
-        //     AdminConfigurationService::removeItemFromGroup($groupTag, 'table', 'Type');
-        // };
     }
 
     protected function _registerDataTableSchemas(&$data) {}

@@ -24,53 +24,51 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
     protected function _registerDataTableSchemas(&$data) {
         $func = function($pathTag) {
-            AdminConfigurationService::registerGroup($pathTag, 'table',  [
-                'text' => 'Front-end/Backend role data table schema',
-                'items' => [
-                    'headers' => [
-                        [
-                            'text' => 'ID',
-                            'ui' => 'z-label',
-                            'value' => 'id',
-                            'filter_ui' => 'config-text-item',
-                            'clearable' => true
-                        ],
-                        [
-                            'text' => 'Name',
-                            'ui' => 'z-label',
-                            'value' => 'name',
-                            'filter_ui' => 'config-text-item',
-                            'clearable' => true,
-                        ],
-                        [
-                            'text' => 'Description',
-                            'ui' => 'z-label',
-                            'value' => 'description',
-                            'filter_ui' => 'config-text-item',
-                            'clearable' => true,
-                        ],
-                        [
-                            'text' => 'Actions',
-                            'ui' => 'z-config-actions',
-                            'value' => '_none_',
-                            'options' => [
-                                [
-                                    'label' => 'Edit',
-                                    'value' => 'editModel'
-                                ]
+            AdminConfigurationService::registerGroup($pathTag, 
+            [
+                'headers' => [
+                    [
+                        'text' => 'ID',
+                        'ui' => 'z-label',
+                        'value' => 'id',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true
+                    ],
+                    [
+                        'text' => 'Name',
+                        'ui' => 'z-label',
+                        'value' => 'name',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                    ],
+                    [
+                        'text' => 'Description',
+                        'ui' => 'z-label',
+                        'value' => 'description',
+                        'filter_ui' => 'config-text-item',
+                        'clearable' => true,
+                    ],
+                    [
+                        'text' => 'Actions',
+                        'ui' => 'z-config-actions',
+                        'value' => '_none_',
+                        'options' => [
+                            [
+                                'label' => 'Edit',
+                                'value' => 'editModel'
                             ]
                         ]
-                    ],
-                    'primary_key' => 'id',
-                ]
+                    ]
+                ],
+                'primary_key' => 'id',
             ]);
         };
        
-        $data['frontend-role'] = $func;
-        $data['administrator-role'] = $func;
+        $data['frontend_role'] = $func;
+        $data['administrator_role'] = $func;
     }
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups( &$data) {
     }
 
     protected function _registerModelDefines(&$data){}

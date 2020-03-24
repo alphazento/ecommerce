@@ -6,18 +6,18 @@
           <v-expansion-panel-header text-left>{{ item.text }}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-list-item v-for="(subItem, subName) in item.items" :key="subName">
-              <a @click.stop="navToGroup(name, subName)">
-                {{
-                subItem.text
-                }}
-              </a>
+              <a @click.stop="navToGroup(name, subName)">{{ subItem.text }}</a>
             </v-list-item>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-flex>
     <v-flex md9>
-      <config-model-editor :model="model" @configValueChanged="configValueChanged"></config-model-editor>
+      <config-model-editor
+        :model="model"
+        model-define-from="configs/groups"
+        @configValueChanged="configValueChanged"
+      ></config-model-editor>
     </v-flex>
   </v-layout>
 </template>

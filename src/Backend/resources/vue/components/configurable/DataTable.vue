@@ -123,13 +123,10 @@ export default {
       axios
         .get(`/api/v1/admin/metadata/datatable-schemas/${this.schemaKey}`)
         .then(response => {
+          this.$store.dispatch("HIDE_SPINNER");
           this.realfetchData();
-          // this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
-            this.defines = Object.assign(
-              this.defines,
-              response.data.table.items
-            );
+            this.defines = Object.assign(this.defines, response.data);
 
             this.defines.headers.forEach(item => {
               if (item.filterable !== undefined && item.filterable) {

@@ -17,13 +17,13 @@ class Admin extends AbstractAdminConfig {
 
     protected function _registerDataTableSchemas(&$data) {}
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['website/storefront'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Store Basic Settings',
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['website/storefront'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'basic'],  [
+                'text' => 'Store Basic Settings',
                 'items' => [
                     [
-                        'title' => 'Logo',
+                        'text' => 'Logo',
                         'ui' => 'config-image-uploader-item',
                         'visibility' => 'public',
                         'folder' => 'website',
@@ -33,35 +33,35 @@ class Admin extends AbstractAdminConfig {
                         'maxWidth' => '150px',
                     ],
                     [
-                        'title' => 'Currency',
+                        'text' => 'Currency',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::CURRENCY
                     ],
                     [
-                        'title' => 'Assets Url Prefix',
+                        'text' => 'Assets Url Prefix',
                         'ui' => 'config-text-item',
                         'accessor' => Consts::ASSETS_URL_PREFIX
                     ]
                 ]
             ]);
 
-            AdminConfigurationService::registerGroup($groupTag, 'disks',  [
-                'title' => 'Storage',
+            AdminConfigurationService::registerGroup([$groupTag, 'disks'],  [
+                'text' => 'Storage',
                 'items' => [
                     [
-                        'title' => 'Private File Upload Storage',
+                        'text' => 'Private File Upload Storage',
                         'ui' => 'config-options-item',
                         'options' =>  $this->getStorages(),
                         'accessor' => Consts::PRIVATE_FILE_UPLOAD_STORAGE
                     ],
                     [
-                        'title' => 'Public File Upload Storage',
+                        'text' => 'Public File Upload Storage',
                         'ui' => 'config-options-item',
                         'options' =>  $this->getStorages(),
                         'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORAGE
                     ],
                     [
-                        'title' => 'Cloud Storage',
+                        'text' => 'Cloud Storage',
                         'ui' => 'config-options-item',
                         'options' =>  $this->getStorages(),
                         'accessor' => Consts::CLOUD_STORAGE
@@ -69,11 +69,11 @@ class Admin extends AbstractAdminConfig {
                 ]
             ]);
 
-            AdminConfigurationService::registerGroup($groupTag, 'fileupload',  [
-                'title' => 'File Upload',
+            AdminConfigurationService::registerGroup([$groupTag, 'fileupload'],  [
+                'text' => 'File Upload',
                 'items' => [
                     [
-                        'title' => 'Public File Upload Storage',
+                        'text' => 'Public File Upload Storage',
                         'ui' => 'config-options-item',
                         'options' => [
                             [
@@ -92,7 +92,7 @@ class Admin extends AbstractAdminConfig {
                         'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORE_STRATEGY
                     ],
                     [
-                        'title' => 'Private File Upload Public Storage',
+                        'text' => 'Private File Upload Public Storage',
                         'ui' => 'config-options-item',
                         'options' => [
                             [

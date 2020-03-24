@@ -21,8 +21,23 @@ class AdminMetaDataController extends ApiBaseController
         $this->traversePackages(function($className) use($tableName) {
             (new $className)->registerDataTableSchemas($tableName);
         });
-        if ($groups = AdminConfigurationService::getDetailGroup($tableName)) {
-            return $groups;
+        if ($data = AdminConfigurationService::getDetailGroup($tableName)) {
+            return $this->withData($data);
+        } else {
+            return $this->error(404, 'schema not found.');
+        }
+    }
+
+    /**
+     * get admin model defines
+     */
+    public function modelDefines() {
+        $model = Route::input('model');
+        $this->traversePackages(function($className) use($model) {
+            (new $className)->registerModelDefines($model);
+        });
+        if ($data = AdminConfigurationService::getDetailGroup($model)) {
+            return $this->withData($data);
         } else {
             return $this->error(404, 'schema not found.');
         }

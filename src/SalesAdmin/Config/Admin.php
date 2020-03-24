@@ -17,7 +17,7 @@ class Admin extends AbstractAdminConfig {
 
     protected function _registerDataTableSchemas(&$data) {}
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups( &$data) {
         $groups['data-table-schema/orders'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'table',  [
                 'title' => 'Order Table Definition',

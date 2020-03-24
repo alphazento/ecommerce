@@ -11,7 +11,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
 
     protected function _registerDynamicConfigItemMenus() {}
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
+    protected function _registerDynamicConfigItemGroups( &$data) {
         $groups['sales/paymentgateway'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'paypalexpress',  [
                 'title' => 'PayPal Express',

@@ -1,7 +1,9 @@
 <template>
   <v-card>
     <v-card-title :class="dirty ? 'error white--text' : 'deep-purple accent-4 white--text'">
-      <span v-if="item.id > 0">Attribute {{editFor}} [{{itemCopy.name}}] of {{itemCopy.parent_table}}</span>
+      <span
+        v-if="item.id > 0"
+      >Attribute {{editFor}} [{{itemCopy.name}}] of {{itemCopy.parent_table}}</span>
       <span v-else>New Attribute {{editFor}}</span>
       <v-spacer></v-spacer>
       <v-btn color="primary" fab dark large v-if="dirty" @click="saveAttribute">
@@ -9,11 +11,7 @@
       </v-btn>
     </v-card-title>
 
-    <config-model-editor
-      :model-data="modelData"
-      :with-value="false"
-      @configValueChanged="itemValueChanged"
-    ></config-model-editor>
+    <config-model-editor :model-data="modelData" @configValueChanged="itemValueChanged"></config-model-editor>
   </v-card>
 </template>
 
@@ -74,7 +72,10 @@ export default {
       let id = this.itemCopy.id;
       if (id > 0) {
         this.$store.dispatch("SHOW_SPINNER", "Saving data...");
-        let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
+        let service =
+          this.editFor === "Set"
+            ? "dynamic-attribute-sets"
+            : "dynamic-attributes";
         axios
           .patch(`/api/v1/admin/${service}/${id}`, {
             attributes: this.itemCopy
@@ -84,7 +85,7 @@ export default {
             if (response.success) {
               this.dirty = false;
               this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.$emit('itemUpdated', response.data);
+              this.$emit("itemUpdated", response.data);
             } else {
               this.$store.dispatch("snackMessage", response.message);
             }
@@ -93,21 +94,24 @@ export default {
     },
     saveAttribute() {
       this.$store.dispatch("SHOW_SPINNER", "Saving data...");
-      let service = this.editFor === "Set" ? "dynamic-attribute-sets" : "dynamic-attributes";
-        axios
-          .post(`/api/v1/admin/${service}`, {
-            attributes: this.itemCopy
-          })
-          .then(response => {
-            this.$store.dispatch("HIDE_SPINNER");
-            if (response.success) {
-              this.dirty = false;
-              this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
-              this.$emit('itemUpdated', response.data);
-            } else {
-              this.$store.dispatch("snackMessage", response.message);
-            }
-          });
+      let service =
+        this.editFor === "Set"
+          ? "dynamic-attribute-sets"
+          : "dynamic-attributes";
+      axios
+        .post(`/api/v1/admin/${service}`, {
+          attributes: this.itemCopy
+        })
+        .then(response => {
+          this.$store.dispatch("HIDE_SPINNER");
+          if (response.success) {
+            this.dirty = false;
+            this.$store.dispatch("snackMessage", "Dynamic Attribute Saved.");
+            this.$emit("itemUpdated", response.data);
+          } else {
+            this.$store.dispatch("snackMessage", response.message);
+          }
+        });
     }
   },
   mounted() {

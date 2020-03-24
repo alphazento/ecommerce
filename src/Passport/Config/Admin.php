@@ -13,9 +13,9 @@ class Admin extends AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Website', 'Passport');
     }
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['website/passport'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'client',  [
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['website/passport'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'client'],  [
                 'text'=> 'Default Client',
                 'items' => [
                     [

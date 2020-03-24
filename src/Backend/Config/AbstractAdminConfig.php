@@ -22,9 +22,9 @@ abstract class AbstractAdminConfig {
     final public function registerDynamicConfigItemGroups($level0, $level1) {
         $groupTag = strtolower(sprintf('%s/%s', $level0, $level1));
         $groups = [];
-        $this->_registerDynamicConfigItemGroups($groupTag, $groups);
+        $this->_registerDynamicConfigItemGroups($groups);
         foreach($groups as $tag => $cb) {
-            if ($groupTag === strtolower($tag)) {
+            if (strcasecmp($groupTag, $tag) == 0) {
                 call_user_func($cb, $groupTag);
             }
         }
@@ -35,7 +35,7 @@ abstract class AbstractAdminConfig {
         $items = [];
         $this->_registerDataTableSchemas($items);
         foreach($items as $tag => $cb) {
-            if ($dataTableName === strtolower($tag)) {
+            if (strcasecmp($dataTableName, $tag) == 0) {
                 call_user_func($cb, $tag);
             }
         }
@@ -43,7 +43,7 @@ abstract class AbstractAdminConfig {
 
     final public function registerModelDefines($modelName) {
         $items = [];
-        $this->_registerModelDefines($modelName);
+        $this->_registerModelDefines($items);
         foreach($items as $tag => $cb) {
             if ($modelName === strtolower($tag)) {
                 call_user_func($cb, $tag);
@@ -65,5 +65,5 @@ abstract class AbstractAdminConfig {
     
     abstract protected function _registerModelDefines(&$data);
 
-    abstract protected function _registerDynamicConfigItemGroups($groupTag, &$groups);
+    abstract protected function _registerDynamicConfigItemGroups( &$data);
 }

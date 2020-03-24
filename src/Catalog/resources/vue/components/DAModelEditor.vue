@@ -11,7 +11,6 @@
     <config-model-editor
       :model="modelName"
       :model-data="modelData"
-      :with-value="false"
       @fetchSchema="fetchSchema"
       @configValueChanged="itemValueChanged"
     ></config-model-editor>

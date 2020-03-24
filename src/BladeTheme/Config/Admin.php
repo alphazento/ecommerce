@@ -16,24 +16,24 @@ class Admin extends AbstractAdminConfig {
         AdminConfigurationService::registerLevel1MenuNode('Theme', 'Themes');
     }
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['theme/themes'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'basic',  [
-                'title' => 'Basic Settings',
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['theme/themes'] = function($key) {
+            AdminConfigurationService::registerGroup([$key, 'basic'],  [
+                'text' => 'Basic Settings',
                 'items' => [
                     [
-                        'title' => 'Enable Passport Guest Token(so can use api resources)',
+                        'text' => 'Enable Passport Guest Token(so can use api resources)',
                         'ui' => 'config-boolean-item',
                         'accessor' => Consts::WORK_WITH_PASSPORT_GUEST_TOKEN
                     ],
                     [
-                        'title' => 'Desktop Theme',
+                        'text' => 'Desktop Theme',
                         'ui' => 'config-options-item',
                         'options' => $this->themes(),
                         'accessor' => KernelConsts::CACHE_KEY_DESKTOP_THEME
                     ],
                     [
-                        'title' => 'Mobile Theme',
+                        'text' => 'Mobile Theme',
                         'ui' => 'config-options-item',
                         'options' => $this->themes(),
                         'accessor' => KernelConsts::CACHE_KEY_MOBILE_THEME

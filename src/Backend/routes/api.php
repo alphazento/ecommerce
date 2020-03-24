@@ -23,6 +23,12 @@ Route::group($configs,
             '/metadata/datatable-schemas/{table}', 
             'AdminMetaDataController@datatableSchema'
         );
+
+        Route::get(
+            '/metadata/models/{model}', 
+            'AdminMetaDataController@modelDefines'
+        )
+        ->where('model', '.*');
     }
 );
 

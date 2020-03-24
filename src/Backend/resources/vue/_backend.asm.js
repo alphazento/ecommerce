@@ -36,10 +36,10 @@ export default {
         "z-dialog-container": "components/DialogContainer.vue",
         "z-dialog-confirm-body": "components/dialogbody/Confirm.vue",
 
-        "z-dynamic-attribute-and-set-editor": "pages/inner_components/DyanmicAttrAndSetEditor.vue",
-        "z-dynamic-attribute-set-attrs-manager": "pages/inner_components/DynamicAttributeSetAttrsManager.vue",
-        "z-dynamic-attribute-belongs-set-manager": "pages/inner_components/DynamicAttributeBlongsSetManager.vue",
-        "z-dynamic-attribute-value-map-manager": "pages/inner_components/AttributeValueMapManager.vue"
+        "z-dyna-attr-and-set-editor": "pages/inner_components/DyanmicAttrAndSetEditor.vue",
+        "z-dyna-attri-set-attrs-manager": "pages/inner_components/DynamicAttributeSetAttrsManager.vue",
+        "z-dyna-attr-belongs-set-manager": "pages/inner_components/DynamicAttributeBlongsSetManager.vue",
+        "z-dyna-attr-value-map-manager": "pages/inner_components/AttributeValueMapManager.vue"
     },
     routes: [{
             name: "store.home",

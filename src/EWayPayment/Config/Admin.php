@@ -9,8 +9,8 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function _registerDashboardMenus() {}
     protected function _registerDynamicConfigItemMenus() {}
 
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['sales/paymentgateway'] = function($groupTag) {
+    protected function _registerDynamicConfigItemGroups( &$data) {
+        $data['sales/paymentgateway'] = function($groupTag) {
             AdminConfigurationService::registerGroup($groupTag, 'eWay',  [
                 'title' => 'eWay Transparent',
                 'items' => [

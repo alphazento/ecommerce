@@ -67,24 +67,24 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <z-dynamic-attribute-and-set-editor
+          <z-dyna-attr-and-set-editor
             :defines="defines"
             :item="selectedItem"
             :mode="editMode"
             @itemUpdated="itemUpdated"
-          ></z-dynamic-attribute-and-set-editor>
+          ></z-dyna-attr-and-set-editor>
 
-          <z-dynamic-attribute-belongs-set-manager
+          <z-dyna-attr-belongs-set-manager
             v-if="selectedItem && selectedItem.id > 0"
             :model="model"
             :id="selectedItem.id"
-          ></z-dynamic-attribute-belongs-set-manager>
+          ></z-dyna-attr-belongs-set-manager>
 
-          <z-dynamic-attribute-value-map-manager
+          <z-dyna-attr-value-map-manager
             v-if="selectedItem && selectedItem.with_value_map"
             :id="selectedItem.id"
             :is-swatch="!!selectedItem.swatch"
-          ></z-dynamic-attribute-value-map-manager>
+          ></z-dyna-attr-value-map-manager>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -140,7 +140,7 @@ export default {
         .then(response => {
           this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
-            this.defines = response.data.table.items;
+            this.defines = response.data;
           }
         });
     },

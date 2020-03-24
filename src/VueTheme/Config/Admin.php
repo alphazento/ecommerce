@@ -17,13 +17,13 @@ class Admin extends AbstractAdminConfig {
 
     protected function _registerModelDefines(&$data){}
     
-    protected function _registerDynamicConfigItemGroups($groupTag, &$groups) {
-        $groups['theme/vuetheme'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'settings',  [
-                'title' => 'Basic Settings',
+    protected function _registerDynamicConfigItemGroups( &$data) {
+        $data['theme/vuetheme'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'settings'], [
+                'text' => 'Basic Settings',
                 'items' => [
                     [
-                        'title' => 'Page Footer Data',
+                        'text' => 'Page Footer Data',
                         'ui' => 'config-json-item',
                         'schema' => [
                             'icons' => [

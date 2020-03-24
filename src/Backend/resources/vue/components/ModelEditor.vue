@@ -2,9 +2,11 @@
   <div>
     <v-expansion-panels accordion multiple focusable>
       <v-expansion-panel v-for="(item, name) in model_data" :key="name">
-        <v-expansion-panel-header text-left>{{
+        <v-expansion-panel-header text-left>
+          {{
           item.text
-        }}</v-expansion-panel-header>
+          }}
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <template v-for="(subItem, subName) in item.items">
             <v-list-item :key="subName">
@@ -14,11 +16,7 @@
                 </v-flex>
                 <v-flex md6>
                   <div class="component-container">
-                    <component
-                      :is="subItem.ui"
-                      v-bind="subItem"
-                      @valueChanged="configValueChanged"
-                    ></component>
+                    <component :is="subItem.ui" v-bind="subItem" @valueChanged="configValueChanged"></component>
                   </div>
                 </v-flex>
                 <v-flex md3>{{ subItem.description }}</v-flex>
@@ -37,9 +35,9 @@ export default {
   props: {
     model: String,
     modelData: Object,
-    withValue: {
-      type: Boolean,
-      default: true
+    modelDefineFrom: {
+      type: String,
+      default: "metadata/models"
     }
   },
   data() {
@@ -57,11 +55,7 @@ export default {
       if (model && model !== "") {
         this.$store.dispatch("SHOW_SPINNER", "Loading details");
         axios
-          .get(
-            `/api/v1/admin/configs/groups/${model}?withValue=${
-              this.withValue ? 1 : 0
-            }`
-          )
+          .get(`/api/v1/admin/${this.modelDefineFrom}/${model}`)
           .then(response => {
             this.$store.dispatch("HIDE_SPINNER");
             if (response && response.success) {
