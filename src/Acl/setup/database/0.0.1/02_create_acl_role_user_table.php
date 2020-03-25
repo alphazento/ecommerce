@@ -22,7 +22,7 @@ class CreateAclRoleUserTable extends Migration
         if (!$builder->hasTable('acl_role_users')) {
             $builder->create('acl_role_users', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('scope', 16)->index();  //0=> admin, 1=>frontend
+                $table->string('scope', 16)->index();
                 $table->integer('user_id')->unsigned();
                 $table->integer('role_id')->unsigned();
                 $table->timestamps();
@@ -36,7 +36,7 @@ class CreateAclRoleUserTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_role_users')->insert([
                 [
-                    'scope' => Consts::ADMIN_SCOPE,
+                    'scope' => Consts::BACKEND_SCOPE,
                     'user_id' => 1,
                     'role_id' => 1
                 ]

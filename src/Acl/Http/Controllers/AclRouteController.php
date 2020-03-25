@@ -22,6 +22,16 @@ class AclRouteController extends ApiBaseController
     use TraitHelper;
 
     public function routes() {
-        return $this->withData(AclRoute::where('active', 1)->get());
+        $collection = AclRoute::where('active', 1)
+            ->whereIn('scope', $this->getScopes())
+            ->orderBy('scope')
+            ->orderBy('catalog')
+            ->orderBy('method');
+        if ($from = Request::get('from')) {
+            if (in_array($from, ['role', 'user'])) {
+                $collection->whereNotIn('catalog', ['root', 'no-acl']);
+            }
+        }
+        return $this->withData($collection->get());
     }
 }

@@ -45,7 +45,7 @@ abstract class AbstractAdminConfig {
         $items = [];
         $this->_registerModelDefines($items);
         foreach($items as $tag => $cb) {
-            if ($modelName === strtolower($tag)) {
+            if (strcasecmp($modelName, $tag) == 0) {
                 call_user_func($cb, $tag);
             }
         }

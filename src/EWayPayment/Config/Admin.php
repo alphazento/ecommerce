@@ -15,7 +15,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'title' => 'eWay Transparent',
                 'items' => [
                     [
-                        'title' => 'Enabled In Frontend',
+                        'title' => 'Enabled In Front-end',
                         'ui' => 'config-boolean-item',
                         'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND
                     ],

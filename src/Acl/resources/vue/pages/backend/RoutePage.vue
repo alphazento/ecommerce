@@ -3,8 +3,8 @@
     <v-flex md2>
       <z-simple-model-navigator
         title="Backend ACL Management"
-        :models="['Role', 'User', 'Route']"
-        :model="modelName"
+        :models="['Role', 'User']"
+        :model="modelType"
         @navToModel="navToModel"
       ></z-simple-model-navigator>
     </v-flex>
@@ -21,7 +21,7 @@
             <v-list-item>
               <v-btn color="error" @click="newModel" v-if="!editTab">
                 <v-icon>mdi-plus-circle</v-icon>
-                New {{modelName}}
+                New {{modelType}}
               </v-btn>
             </v-list-item>
           </v-list>
@@ -29,34 +29,45 @@
 
         <v-tab>
           <v-icon left>mdi-lock</v-icon>
-          <span>Role Admin</span>
+          <span>{{modelType}} Admin</span>
         </v-tab>
         <v-tab v-if="editTab">
+          <v-icon left>mdi-lock</v-icon>
+          <span class="error" v-if="editItem.isNew">New {{modelType}}</span>
+          <span v-else>{{editItem.model.name}}</span>
+          <v-btn icon color="error" @click="closeEditTab">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-tab>
 
         <v-tab-item>
           <!-- <z-acl-role-list scope="administrator">
             :headers="headers"
-            </z-acl-role-list> -->
+          </z-acl-role-list>-->
+          <!-- filter-connect-route -->
+
           <config-data-table
             :schema-key="schemaKey"
             :data-api-url="uri"
-            filter-connect-route
             use-filter
             server-side-pagination
-            @dataChanged="dataChanged"
             @proxyAction="proxyAction"
           ></config-data-table>
         </v-tab-item>
         <v-tab-item>
           <z-dyna-attr-model-editor
-            :title="modelName"
-            :model-name="modelName"
+            :title="modelType"
+            :model-name="modelType"
             :edit-with="editItem"
             @propertyChange="propertyChange"
             @saveModel="saveModel"
           ></z-dyna-attr-model-editor>
-            <!-- @defaultAttributeSet="setDefaultAttributeSet" -->
+          <z-role-relationship-management
+            v-if="!editItem.isNew && modelType === 'Role'"
+            :scope="scope"
+            :model-id="editItem.model.id"
+            :model-name="editItem.model.name"
+          ></z-role-relationship-management>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -68,37 +79,38 @@ export default {
   data() {
     return {
       scope: "administrator",
-      modelName: "Role",
+      modelType: "Role",
       schemaKey: "",
       tab: "",
       editTab: false,
       editItem: null,
-      uri: '',
+      uri: ""
     };
   },
   created() {
     this.initData(false);
-    console.log(this.schemaKey);
   },
   methods: {
     initData(newModel) {
-        this.schemaKey = `${this.scope}_${this.modelName}`;
-        this.uri = `acl/${this.scope}/` + this.modelName.toLowerCase() + 's';
-        this.editItem = {
-          isNew: false,
-          model: {}
-        };
-        this.editTab = newModel;
+      const modelType = this.modelType.toLowerCase();
+      this.schemaKey = `${this.scope}_${modelType}`;
+      this.uri = `acl/${this.scope}/${modelType}s`;
+      this.editItem = {
+        isNew: newModel,
+        model: {}
+      };
+      this.editTab = newModel;
     },
-    navToModel(modelName) {
-      if (this.modelName != modelName) {
-        this.modelName = modelName;
+    navToModel(modelType) {
+      if (this.modelType != modelType) {
+        this.modelType = modelType;
         this.initData(false);
       }
     },
 
     newModel() {
       this.initData(true);
+      this.tab = 1;
     },
 
     dataChanged(event) {
@@ -116,22 +128,23 @@ export default {
 
     propertyChange(event) {
       this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
-      // axios
-      //   .patch(
-      //     `/api/v1/admin/catalog/products/${event.model.id}/${event.preoperty}`,
-      //     {
-      //       value: event.value
-      //     }
-      //   )
-      //   .then(response => {
-      //     if (response.success) {
-      //       Object.assign(this.editItem.model, response.data);
-      //       this.$store.dispatch("SNACK_MESSAGE", "Updated.");
-      //     } else {
-      //       this.$store.dispatch("SNACK_MESSAGE", "Failed to update.");
-      //     }
-      //   });
-          this.$store.dispatch("HIDE_SPINNER");
+      const modelType = this.modelType.toLowerCase();
+      axios
+        .patch(
+          `/api/v1/admin/acl/${this.scope}/${modelType}s/${event.model.id}`,
+          {
+            [event.preoperty]: event.value
+          }
+        )
+        .then(response => {
+          if (response.success) {
+            Object.assign(this.editItem.model, response.data);
+            this.$store.dispatch("SNACK_MESSAGE", "Updated.");
+          } else {
+            this.$store.dispatch("SNACK_MESSAGE", "Failed to update.");
+          }
+        });
+      this.$store.dispatch("HIDE_SPINNER");
     },
 
     proxyAction(event) {
@@ -148,13 +161,16 @@ export default {
 
     saveModel(model) {
       this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
+      const modelType = this.modelType.toLowerCase();
+      axios
+        .post(`/api/v1/admin/acl/${this.scope}/${modelType}s`, model)
+        .then(response => {
           this.$store.dispatch("HIDE_SPINNER");
-      // axios
-      //   .post("/api/v1/admin/catalog/products", this.model)
-      //   .then(response => {
-      //     this.$store.dispatch("HIDE_SPINNER");
-      //   });
+        });
     },
-  },
+    closeEditTab() {
+      this.editTab = false;
+    }
+  }
 };
 </script>

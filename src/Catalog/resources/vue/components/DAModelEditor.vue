@@ -92,7 +92,6 @@ export default {
     },
 
     modelChange(event, needConfirm) {
-      console.log("needConfirm && this.dirty", needConfirm, this.dirty);
       if (needConfirm && this.dirty) {
         this.confirm(event);
       } else {
@@ -123,7 +122,11 @@ export default {
     mergeModelData(data) {
       this.isNew = data.isNew;
       if (this.isNew) {
-        this.model = JSON.parse(JSON.stringify(this.newModel));
+        if (this.newModel) {
+          this.model = JSON.parse(JSON.stringify(this.newModel));
+        } else {
+          this.model = {};
+        }
       } else {
         this.model = JSON.parse(JSON.stringify(data.model));
       }
@@ -136,28 +139,30 @@ export default {
     },
 
     calcAvailableAttrsGroups() {
-      let defaultGroup = this.modelSchema._extra_.filter(item => {
-        return item.name.toLowerCase() === "default";
-      });
+      if (this.modelSchema._extra_) {
+        let defaultGroup = this.modelSchema._extra_.filter(item => {
+          return item.name.toLowerCase() === "default";
+        });
 
-      let defaultAttrIds = [];
-      defaultGroup.forEach(group => {
-        let ids = group.attributes.map(item => item.id);
-        this.availableAttrsGroups[group.id] = ids;
-        defaultAttrIds = defaultAttrIds.concat(ids);
-      });
-
-      this.availableAttrsGroups["default"] = defaultAttrIds;
-
-      this.modelSchema._extra_.forEach(group => {
-        if (group.name.toLowerCase() !== "default") {
+        let defaultAttrIds = [];
+        defaultGroup.forEach(group => {
           let ids = group.attributes.map(item => item.id);
-          ids = ids.concat(this.defaultAttrIds);
           this.availableAttrsGroups[group.id] = ids;
-        }
-      });
+          defaultAttrIds = defaultAttrIds.concat(ids);
+        });
 
-      this.$emit("defaultAttributeSet", defaultGroup);
+        this.availableAttrsGroups["default"] = defaultAttrIds;
+
+        this.modelSchema._extra_.forEach(group => {
+          if (group.name.toLowerCase() !== "default") {
+            let ids = group.attributes.map(item => item.id);
+            ids = ids.concat(this.defaultAttrIds);
+            this.availableAttrsGroups[group.id] = ids;
+          }
+        });
+
+        this.$emit("defaultAttributeSet", defaultGroup);
+      }
     },
 
     combineModel() {

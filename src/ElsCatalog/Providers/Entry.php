@@ -16,22 +16,22 @@ class Entry extends ServiceProvider
     public function register()
     {
         $this->app->singleton('category_service', function ($app) {
-            switch (ShareBucket::get('app_portal', 'frontend')) {
+            switch (ShareBucket::get('app_portal', 'front-end')) {
                 case 'admin':
                     return new ORMCategoryService();
                     break;
-                case 'frontend':
+                case 'front-end':
                     return new ElsCategoryService();
                     break;
             }
         });
 
         $this->app->singleton('catalogsearch_service', function ($service, $app) {
-            switch (ShareBucket::get('app_portal', 'frontend')) {
+            switch (ShareBucket::get('app_portal', 'front-end')) {
                 case 'admin':
                     return new ORMCatalogSearchService();
                     break;
-                case 'frontend':
+                case 'front-end':
                     return new ElsCatalogSearchService();
                     break;
             }

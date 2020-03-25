@@ -2,6 +2,7 @@
 
 namespace Zento\Acl\Http\Controllers;
 
+use DB;
 use Auth;
 use Route;
 use Request;
@@ -30,7 +31,9 @@ class AclRoleController extends ApiBaseController
      * ]}
      */
     public function roles() {
-        $collection = AclRole::whereIn('scope', $this->getScopes());
+        $scopes = $this->getScopes();
+        $scopes[] = Consts::GUEST_SCOPE;
+        $collection = AclRole::whereIn('scope', $scopes);
         return $this->withData($this->applyFilter($collection, ['id', 'name', 'description', 'active'])->paginate());
     }
 
@@ -49,7 +52,9 @@ class AclRoleController extends ApiBaseController
     public function users() {
         $scope = Route::input('scope');
         $type = \Illuminate\Support\Str::plural($scope);
-        if ($role = AclRole::with(['groupusers.' . $type])->where('id', Route::input('id'))->first()) {
+        if ($role = AclRole::with(['users.' . $type])
+            ->where('id', Route::input('id'))
+            ->first()) {
             $data = [];
             foreach($role->groupusers ?? [] as $middle) {
                 if ($middle->{$type}) {
@@ -61,20 +66,36 @@ class AclRoleController extends ApiBaseController
         return $this->error(404);
     }
 
+    public function userWithCandidate() {
+        $scope = Route::input('scope');
+        $type = \Illuminate\Support\Str::plural($scope);
+        $userClass = $this->getUserModel();
+        $joinTable = with(new AclRoleUser)->getTable();
+        $userTable = with(new $userClass)->getTable();
+        $pagnation = $userClass::leftJoin($joinTable, 
+            function ($join) use($joinTable, $userTable) {
+                $join->on(sprintf('%s.id', $userTable), '=', sprintf('%s.user_id', $joinTable))
+                    ->on(sprintf('%s.role_id', $joinTable), '=', DB::raw(Route::input('id')));
+            })
+            ->select(sprintf('%s.*', $userTable), sprintf('%s.role_id', $joinTable))
+            ->paginate(10);
+        return $this->withData($pagnation);
+    }
+
     public function storeUsers() {
         $error = '';
         if ($role = AclRole::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $model = $this->getUserModel();
                 $uids = $model::whereIn('id', $ids)->pluck('id')->toArray();
-                $exists =  AclRoleUser::where('scope', $this->getScope())
+                $exists = AclRoleUser::where('scope', $this->getScope())
                     ->where('role_id', $role->id)
                     ->whereIn('user_id', $uids)->pluck('user_id')->toArray();
                 $uids = array_diff($uids, $exists);
                 foreach($uids as $id) {
                     AclRoleUser::create([
                         'scope' => $this->getScope(),
-                        'user_id'=>$id, 
+                        'user_id'=> $id, 
                         'role_id' => $role->id]);
                 }
                 return $this->success(201);
@@ -100,7 +121,7 @@ class AclRoleController extends ApiBaseController
         if ($name = Request::get('name', false)) {
             $scope = $this->getScope();
             if (AclRole::where('scope', '=', $scope)->where('name', $name)->first()) {
-                return $this->error(400, sprintf('Group[%s] already exists.', $name));
+                return $this->error(400, sprintf('Role[%s] exists.', $name));
             }
             $role = new AclRole([
                 'scope' => $scope, 
@@ -139,8 +160,15 @@ class AclRoleController extends ApiBaseController
         if ($role = AclRole::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
                 $ids = AclRoute::whereIn('id', $ids)->pluck('id')->toArray();
+                AclRoleRoute::where('role_id', $role->id)
+                    ->whereNotIn('route_id', $ids)
+                    ->delete();
+
                 $exists = AclRoleRoute::where('role_id', $role->id)
-                            ->whereIn('route_id', $ids)->pluck('route_id')->toArray();
+                            ->whereIn('route_id', $ids)
+                            ->pluck('route_id')
+                            ->toArray();
+                
                 $ids = array_diff($ids, $exists);
                 foreach($ids as $id) {
                     AclRoleRoute::create([

@@ -5,6 +5,8 @@ namespace Zento\Acl\Http\Controllers;
 use Route;
 use Request;
 use Zento\Acl\Consts;
+use Zento\Acl\Model\Auth\Customer;
+use Zento\Acl\Model\Auth\Administrator;
 
 trait TraitHelper
 {
@@ -27,7 +29,7 @@ trait TraitHelper
         $scope = Route::input('scope');
         switch($scope) {
             case 'administrator':
-                return Consts::ADMIN_SCOPE;
+                return Consts::BACKEND_SCOPE;
             case 'customer':
                 return Consts::FRONTEND_SCOPE;
             case 'all':
@@ -42,11 +44,11 @@ trait TraitHelper
         $scope = Route::input('scope');
         switch($scope) {
             case 'administrator':
-                return [Consts::ADMIN_SCOPE, Consts::BOTH_SCOPE];
+                return [Consts::BACKEND_SCOPE, Consts::BOTH_SCOPE];
             case 'customer':
                 return [Consts::FRONTEND_SCOPE, Consts::BOTH_SCOPE];
             case 'all':
-                return [Consts::GUEST_SCOPE, Consts::FRONTEND_SCOPE, Consts::ADMIN_SCOPE, Consts::BOTH_SCOPE];
+                return [Consts::GUEST_SCOPE, Consts::FRONTEND_SCOPE, Consts::BACKEND_SCOPE, Consts::BOTH_SCOPE];
             default:
                 return [\Zento\Acl\Consts::GUEST_SCOPE];
         }

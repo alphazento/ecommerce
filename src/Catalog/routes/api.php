@@ -1,5 +1,5 @@
 <?php
-//frontend
+//front-end
 Route::group(
     [
         'prefix' => '/api/v1/catalog',

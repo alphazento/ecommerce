@@ -4,7 +4,7 @@ $configs = [
     'middleware' => ['backend', 'auth:api'],
     'prefix' => '/api/v1/admin',
     'scope' => 'backend',
-    'catalog' => 'NO-ACL',
+    'catalog' => 'no-acl',
 ];
 
 Route::group($configs, 

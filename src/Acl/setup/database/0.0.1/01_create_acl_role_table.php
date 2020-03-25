@@ -32,7 +32,7 @@ class CreateAclRoleTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_roles')->insert([
                 [
-                    'scope' => Consts::ADMIN_SCOPE,
+                    'scope' => Consts::BACKEND_SCOPE,
                     'name' => 'root',
                     'description' => 'Super Administrator',
                     'active' => 1

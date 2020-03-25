@@ -15,13 +15,10 @@ class Admin extends AbstractAdminConfig {
     
     protected function _registerDynamicConfigItemMenus() {}
 
-    protected function _registerDataTableSchemas(&$data) {}
-
-    protected function _registerDynamicConfigItemGroups( &$data) {
-        $groups['data-table-schema/orders'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'table',  [
-                'title' => 'Order Table Definition',
-                'items' => [
+    protected function _registerDataTableSchemas(&$data) {
+        $data['orders'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 
+            [
                     'headers' => [
                         [
                             'text' => 'ID/Order Number',
@@ -78,8 +75,12 @@ class Admin extends AbstractAdminConfig {
                     ],
                     'primary_key' => 'id',
                 ]
-            ]);
+            );
         };
+    }
+
+    protected function _registerDynamicConfigItemGroups( &$data) {
+       
     }
 
     protected function _registerModelDefines(&$data){}

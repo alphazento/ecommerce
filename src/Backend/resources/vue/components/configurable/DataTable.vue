@@ -117,14 +117,16 @@ export default {
     }
   },
   methods: {
-    fetchDefines() {
+    fetchDefines(noData) {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       this.loading = true;
       axios
         .get(`/api/v1/admin/metadata/datatable-schemas/${this.schemaKey}`)
         .then(response => {
           this.$store.dispatch("HIDE_SPINNER");
-          this.realfetchData();
+          if (!noData) {
+            this.realfetchData();
+          }
           if (response && response.success) {
             this.defines = Object.assign(this.defines, response.data);
 
@@ -294,6 +296,20 @@ export default {
     $route() {
       this.realfetchData();
       // this.convertRouteQuery();
+    },
+    schemaKey(nV, oV) {
+      if (nV != oV) {
+        this.fetchDefines(true);
+      }
+    },
+    dataApiUrl(nV, oV) {
+      if (this.serverSidePagination && nV != oV) {
+        this.filters = {
+          page: 1,
+          per_page: 15
+        };
+        this.fetchData();
+      }
     }
   }
 };

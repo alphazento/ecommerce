@@ -35,12 +35,12 @@ class CreateAclRouteTable extends Migration
 
             DB::connection(\Zento\Acl\Consts::DB)->table('acl_routes')->insert([
                 [
-                    'scope' => Consts::ADMIN_SCOPE,
+                    'scope' => Consts::BACKEND_SCOPE,
                     'catalog' => 'root',
-                    'name' => 'Admin Root permiision',
+                    'name' => 'Wildcard routes. For root only',
                     'method' => '*',
                     'uri' => '*',
-                    'description' => 'Admin Root permission.'
+                    'description' => 'Wildcard routes. For root only.'
                 ]
             ]);
         }

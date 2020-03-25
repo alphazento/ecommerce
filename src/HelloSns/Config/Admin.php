@@ -15,18 +15,18 @@ class Admin extends AbstractAdminConfig {
 
     protected function _registerDynamicConfigItemGroups(&$data) {
         $data['website/hellosns'] = function($groupTag) {
-            AdminConfigurationService::registerGroup([$groupTag, 'frontend'],  [
+            AdminConfigurationService::registerGroup([$groupTag, 'front-end'],  [
                 'text' => 'Front-end Panel use Hellosns',
                 'items' => [
                     [
                         'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::ENABLED, 'frontend'),
+                        'accessor' => sprintf(Consts::ENABLED, 'front-end'),
                     ],
                     [
                         'text' => 'Allow Services',
                         'ui' => 'config-multi-options-item',
-                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'frontend'),
+                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'front-end'),
                         'options' => [
                             ['label' => 'Facebook', 'value'=>'facebook'],
                             ['label' => 'Google', 'value'=>'google'],
@@ -40,7 +40,7 @@ class Admin extends AbstractAdminConfig {
                     [
                         'text' => 'Response Type',
                         'ui' => 'config-options-item',
-                        'accessor' => sprintf(Consts::RESPONSE_TYPE, 'frontend'),
+                        'accessor' => sprintf(Consts::RESPONSE_TYPE, 'front-end'),
                         'options' => [
                             ['label' => 'code', 'value'=>'code'],
                             ['label' => 'token', 'value'=>'token']
@@ -49,12 +49,12 @@ class Admin extends AbstractAdminConfig {
                     [
                         'text' => 'Use State Check',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::CHECK_STATE, 'frontend'),
+                        'accessor' => sprintf(Consts::CHECK_STATE, 'front-end'),
                     ],
                     [
                         'text' => 'Can create account if not same user exists',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'frontend'),
+                        'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'front-end'),
                     ],
                 ]
             ]);

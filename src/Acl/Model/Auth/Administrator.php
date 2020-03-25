@@ -13,5 +13,5 @@ namespace Zento\Acl\Model\Auth;
 class Administrator extends \Zento\Backend\Model\ORM\Administrator implements AclUserInterface
 {
     use TraitPermission;
-    static $scope = \Zento\Acl\Consts::ADMIN_SCOPE;
+    static $scope = \Zento\Acl\Consts::BACKEND_SCOPE;
 }

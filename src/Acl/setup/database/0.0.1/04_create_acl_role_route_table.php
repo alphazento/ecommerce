@@ -21,7 +21,7 @@ class CreateAclRoleRouteTable extends Migration
         if (!$builder->hasTable('acl_role_routes')) {
             $builder->create('acl_role_routes', function (Blueprint $table) {
                 $table->increments('id');
-                $table->smallInteger('scope');  //0=> admin, 1=>frontend
+                $table->string('scope', 16);
                 $table->integer('role_id')->unsigned();
                 $table->integer('route_id')->unsigned();
                 $table->timestamps();

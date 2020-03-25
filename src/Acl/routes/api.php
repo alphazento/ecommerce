@@ -53,13 +53,14 @@ Route::group(
         Route::post('/roles', 'AclRoleController@store');
         Route::patch('/roles/{id}', 'AclRoleController@update');
 
-        Route::get('/roles/{id}/routes', 'AclController@routes');
-        Route::post('/roles/{id}/routes', 'AclController@storeRoutes');
-        Route::delete('/roles/{id}/routes/{route_id}', 'AclController@deleteRoute');
+        Route::get('/roles/{id}/routes', 'AclRoleController@routes');
+        Route::post('/roles/{id}/routes', 'AclRoleController@storeRoutes');
+        Route::delete('/roles/{id}/routes/{route_id}', 'AclRoleController@deleteRoute');
 
-        Route::get('/roles/{id}/users', 'AclController@users');
-        Route::post('/roles/{id}/users', 'AclController@storeUsers');
-        Route::delete('/roles/{id}/users/{user_id}', 'AclController@deleteUser');
+        Route::get('/roles/{id}/users', 'AclRoleController@users');
+        Route::get('/roles/{id}/users-with-candidates', 'AclRoleController@userWithCandidate');
+        Route::post('/roles/{id}/users', 'AclRoleController@storeUsers');
+        Route::delete('/roles/{id}/users/{user_id}', 'AclRoleController@deleteUser');
     }
 );
 

@@ -2,11 +2,7 @@
   <div>
     <v-expansion-panels accordion multiple focusable>
       <v-expansion-panel v-for="(item, name) in model_data" :key="name">
-        <v-expansion-panel-header text-left>
-          {{
-          item.text
-          }}
-        </v-expansion-panel-header>
+        <v-expansion-panel-header text-left>{{ item.text }}</v-expansion-panel-header>
         <v-expansion-panel-content>
           <template v-for="(subItem, subName) in item.items">
             <v-list-item :key="subName">

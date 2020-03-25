@@ -43,8 +43,8 @@
     </v-tab-item>
     <v-tab-item>
       <z-dyna-attr-model-editor
-        :title="'product'"
-        :model-name="'catalog/product'"
+        title="product"
+        model-name="catalog/product"
         :edit-with="editItem"
         @propertyChange="propertyChange"
         @defaultAttributeSet="setDefaultAttributeSet"
@@ -108,11 +108,9 @@ export default {
     },
     saveModel(model) {
       this.$store.dispatch("SHOW_SPINNER", "Saving Changes...");
-      axios
-        .post("/api/v1/admin/catalog/products", this.model)
-        .then(response => {
-          this.$store.dispatch("HIDE_SPINNER");
-        });
+      axios.post("/api/v1/admin/catalog/products", model).then(response => {
+        this.$store.dispatch("HIDE_SPINNER");
+      });
     },
     setDefaultAttributeSet(daset) {
       this.defaultAttributeSet = daset;

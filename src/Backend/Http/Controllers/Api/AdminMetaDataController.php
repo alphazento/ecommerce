@@ -39,7 +39,7 @@ class AdminMetaDataController extends ApiBaseController
         if ($data = AdminConfigurationService::getDetailGroup($model)) {
             return $this->withData($data);
         } else {
-            return $this->error(404, 'schema not found.');
+            return $this->error(404, 'model definition not found.');
         }
     }
 }

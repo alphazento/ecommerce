@@ -28,7 +28,7 @@ class Acl implements AclInterface {
         // }
 
         if ($route = $request->route()) {
-            if (in_array($route->catalog, ['guest', 'NO-ACL'])) {
+            if (in_array($route->catalog, ['no-acl'])) {
                 return true;
             }
         }

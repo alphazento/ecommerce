@@ -7,8 +7,6 @@ use Route;
 use Request;
 use Illuminate\Support\Facades\Validator;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Zento\Acl\Model\Auth\Customer;
-use Zento\Acl\Model\Auth\Administrator;
 use Zento\Acl\Model\ORM\AclRole;
 use Zento\Acl\Model\ORM\AclRoleUser;
 use Zento\Acl\Model\ORM\AclRoute;
