@@ -11,7 +11,7 @@ return [
             "\\Zento\\Acl\\Console\\Commands\\AdministratorPassword"
         ],
         "providers" => [
-            "\\Zento\\Acl\\Providers\\Entry"
+            "\\Zento\\Acl\\Providers\\Entry",
         ],
         "listeners"=>  [
         ],

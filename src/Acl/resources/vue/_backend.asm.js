@@ -5,6 +5,7 @@ export default {
         "z-acl-role-list": "components/RoleList.vue",
         "z-route-assign-management": "components/RouteAssignView.vue",
         "z-role-relationship-management": "components/RoleRelationShipManagement.vue",
+        "z-user-relationship-management": "components/UserRelationShipManagement.vue",
         'z-role-users-management': "components/RoleUserManagement.vue",
     },
     routes: [{

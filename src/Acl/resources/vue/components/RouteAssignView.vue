@@ -39,6 +39,10 @@ export default {
   props: {
     scope: String,
     modelType: String,
+    routeType: {
+      type: String,
+      default: "routes"
+    },
     modelId: String | Number
   },
   data() {
@@ -59,7 +63,7 @@ export default {
     initData() {
       var modelType = this.modelType.toLowerCase();
       this.all_routes_uri = `/api/v1/admin/acl/${this.scope}/routes?from=${modelType}`;
-      this.current_model_routes_uri = `/api/v1/admin/acl/${this.scope}/${modelType}s/${this.modelId}/routes`;
+      this.current_model_routes_uri = `/api/v1/admin/acl/${this.scope}/${modelType}s/${this.modelId}/${this.routeType}`;
     },
     fetchAllRoutes() {
       this.$store.dispatch("SHOW_SPINNER", "Loading routes...");

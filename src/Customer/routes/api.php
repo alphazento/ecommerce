@@ -4,7 +4,8 @@ Route::group(
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['cors', 'auth:api'],
-        'as' => "api:user:"
+        'scope' => 'backend',
+        'catalog' => 'no-acl',
     ], function () {
     Route::get(
         '/{customer_id}', 
@@ -61,7 +62,7 @@ Route::group(
     [
         'prefix' => '/api/v1',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        // 'middleware' => ['cors', 'auth:api'],
+        'middleware' => ['cors'],
     ], function () {
     Route::get(
         '/countries', 
@@ -74,7 +75,9 @@ Route::group(
     [
         'prefix' => '/api/v1/admin/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
-        'middleware' => ['cors', 'backend'],
+        'middleware' => ['cors', 'backend', 'auth:api'],
+        'scope' => 'backend',
+        'catalog' => 'Customer',
     ], function () {
     //admin only
     Route::patch(

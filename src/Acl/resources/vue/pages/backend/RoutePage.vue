@@ -19,7 +19,7 @@
           </template>
           <v-list class="grey lighten-3">
             <v-list-item>
-              <v-btn color="error" @click="newModel" v-if="!editTab">
+              <v-btn color="error" @click="newModel">
                 <v-icon>mdi-plus-circle</v-icon>
                 New {{modelType}}
               </v-btn>
@@ -28,24 +28,18 @@
         </v-menu>
 
         <v-tab>
-          <v-icon left>mdi-lock</v-icon>
+          <v-icon left>mdi-expand-all</v-icon>
           <span>{{modelType}} Admin</span>
         </v-tab>
-        <v-tab v-if="editTab">
-          <v-icon left>mdi-lock</v-icon>
-          <span class="error" v-if="editItem.isNew">New {{modelType}}</span>
-          <span v-else>{{editItem.model.name}}</span>
+        <v-tab v-if="editTab" :class="{'pink lighten-4':editItem.isNew}">
+          <v-icon left>mdi-pencil</v-icon>
+          <span>{{tabName}}</span>
           <v-btn icon color="error" @click="closeEditTab">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-tab>
 
         <v-tab-item>
-          <!-- <z-acl-role-list scope="administrator">
-            :headers="headers"
-          </z-acl-role-list>-->
-          <!-- filter-connect-route -->
-
           <config-data-table
             :schema-key="schemaKey"
             :data-api-url="uri"
@@ -68,6 +62,12 @@
             :model-id="editItem.model.id"
             :model-name="editItem.model.name"
           ></z-role-relationship-management>
+          <z-user-relationship-management
+            v-if="!editItem.isNew && modelType === 'User'"
+            :scope="scope"
+            :model-id="editItem.model.id"
+            :model-name="editItem.model.name"
+          ></z-user-relationship-management>
         </v-tab-item>
       </v-tabs>
     </v-flex>
@@ -109,7 +109,9 @@ export default {
     },
 
     newModel() {
-      this.initData(true);
+      if (!this.editItem.isNew) {
+        this.initData(true);
+      }
       this.tab = 1;
     },
 
@@ -170,6 +172,19 @@ export default {
     },
     closeEditTab() {
       this.editTab = false;
+    }
+  },
+  computed: {
+    tabName() {
+      if (this.editItem.isNew) {
+        return `New ${this.modelType}`;
+      }
+
+      if (this.modelType == "User") {
+        return `${this.editItem.model.firstname} ${this.editItem.model.lastname} `;
+      } else {
+        return this.editItem.model.name;
+      }
     }
   }
 };

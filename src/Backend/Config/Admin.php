@@ -2,6 +2,7 @@
 
 namespace Zento\Backend\Config;
 
+use Zento\Acl\Providers\Facades\Acl;
 use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 

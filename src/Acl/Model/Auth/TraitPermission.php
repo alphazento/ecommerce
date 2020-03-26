@@ -18,8 +18,8 @@ use Zento\Acl\Model\ORM\AclRoleUser;
 
 trait TraitPermission
 {
-    private $_permissions;
-    public function permissionwhitelist() {
+    private $_routes;
+    public function whiteRoutes() {
         return $this->hasManyThrough(AclRoute::class, AclWhiteList::class,
             'user_id',
             'id',
@@ -28,7 +28,7 @@ trait TraitPermission
         )->where(with(new AclWhiteList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function permissionblacklist() {
+    public function blackRoutes() {
         return $this->hasManyThrough(AclRoute::class, AclBlackList::class,
             'user_id',
             'id',
@@ -37,7 +37,7 @@ trait TraitPermission
         )->where(with(new AclBlackList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function groups() {
+    public function roles() {
         return $this->hasManyThrough(AclRole::class, AclRoleUser::class,
             'user_id',
             'id',
@@ -46,18 +46,18 @@ trait TraitPermission
         )->where(with(new AclRoleUser)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function permissions() {
-        if (!$this->_permissions) {
-            $this->_permissions = [];
-            foreach($this->groups ?? [] as $group) {
-                foreach($group->permissions ?? [] as $item) {
-                    if (!$this->objectInArray($item, $this->_permissions, 'id')) {
-                        $this->_permissions[] = $item;
+    public function routes() {
+        if (!$this->_routes) {
+            $this->_routes = [];
+            foreach($this->roles ?? [] as $role) {
+                foreach($role->routes ?? [] as $item) {
+                    if (!$this->objectInArray($item, $this->_routes, 'id')) {
+                        $this->_routes[] = $item;
                     }
                 }
             }
         }
-        return $this->_permissions;
+        return $this->_routes;
     }
 
     private function objectInArray($needdle, &$array, $key) {

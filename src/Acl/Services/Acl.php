@@ -2,48 +2,66 @@
 
 namespace Zento\Acl\Services;
 
-use Store;
 use Auth;
+use Store;
 use Request;
 use ShareBucket;
 
 use Zento\Acl\Model\Auth\GuestUser;
 use Zento\Acl\Model\Auth\AclUserInterface;
+use Zento\Acl\Model\ORM\AclRoute;
 
 class Acl implements AclInterface {
-    protected $user;
-    protected function getUser() {
-        if (!$this->user) {
-            $this->user = Auth::guard('api')->user() ?? new GuestUser();
+    protected function matchAclRoutes(\Illuminate\Http\Request $request) {
+        if ($route = $request->route()) {
+            return AclRoute::where('uri', $route->uri)
+                ->whereIn('method', $route->methods)
+                ->where('active', 1)
+                ->first();
         }
-        return $this->user;
+        return null;
     }
+
+    protected $userIsRoots = [];
 
     /**
      * check by request
      */
     public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
-        // if (ShareBucket::get('ignore_acl_check')) {
-        //     return true;
-        // }
-
         if ($route = $request->route()) {
             if (in_array($route->catalog, ['no-acl'])) {
                 return true;
             }
         }
+        
+        if ($user = $user ?? $request->user) {
+            if ($this->isRootUser($user)) {
+                return true;
+            }
 
-        $user = $user ?? $this->getUser();
-        if ($this->inBlackList($request, $user)) {
-            return false;
+            if ($route = $this->matchAclRoutes($request)) {
+                if ($route->inBlackList($user->id)) {
+                    return true;
+                }
+                if ($route->inBlackList($user->id)) {
+                    return false;
+                }
+                if ($route->inRolesRoutes($user->id)) {
+                    return true;
+                }
+            }
         }
+        return false;
+    }
 
-        if ($this->inWhiteList($request, $user)) {
-            return true;
-        }
-
-        if ($this->matchGroupPermission($request, $user)) {
-            return true;
+    public function isRootUser($user) {
+        if ($user) {
+            if (isset($this->userIsRoots[$user->id])) {
+                return true;
+            }
+            $exists = $user->roles()->where('name', 'root')->exists();
+            $this->userIsRoots[$user->id] = $exists;
+            return $exists;
         }
         return false;
     }
@@ -52,66 +70,17 @@ class Acl implements AclInterface {
         return $this->checkRequest(Request::create($uri, strtoupper($method)), $user);
     }
 
-    protected function inWhiteList(\Illuminate\Http\Request $request, AclUserInterface $user) {
-        foreach ($user->permissionwhitelist ?? [] as $permission) {
-            if ($permission && $permission->test($request)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected function inBlackList(\Illuminate\Http\Request $request, AclUserInterface $user) {
-        foreach ($user->permissionblacklist ?? [] as $permission) {
-            if ($permission && $permission->test($request)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected function matchGroupPermission(\Illuminate\Http\Request $request, AclUserInterface $user) {
-        foreach($user->groups ?? [] as $group) {
-            foreach ($group->permissions ?? [] as $permission) {
-                if ($permission && $permission->test($request)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-
-    public function grant($uri, $method, $user) {
-
-    }
-
-    public function flush($uri, $user) {
-
-    }
-
     /**
-     * add to user's white list
-     *
-     * @param string $uri
-     * @param string $method
-     * @param $user
-     * @return void
+     * admin pannel UX
      */
-    public function addToWhiteList($uri, $method, $user) {
+    public function allowUX($uiItem, $desc = null) {
+        if ($this->isRootUser($user)) {
+            return true;
+        }
 
-    }
-
-    /**
-     * add to user's black list
-     *
-     * @param string $uri
-     * @param string $method
-     * @param $user
-     * @return void
-     */
-    public function addToBlackList($uri, $method, $user) {
-
+        if ($user = Auth::user()) {
+            return true;
+        }
+        return false;
     }
 }

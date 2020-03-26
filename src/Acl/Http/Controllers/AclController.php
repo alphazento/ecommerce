@@ -109,7 +109,7 @@ class AclController extends ApiBaseController
     public function getUserWhitePermissions() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return $this->withData($user->permissionwhitelist);
+            return $this->withData($user->whiteRoutes);
         }
         return $this->error(404);
     }

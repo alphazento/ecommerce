@@ -15,6 +15,7 @@ class AclRoute extends AclBaseModel
         'removed',
         'active'
     ];
+
     protected function getRoute($method) {
         if (!$this->_route) {
             $this->_route = new Route($method, $this->uri, []);
@@ -34,5 +35,25 @@ class AclRoute extends AclBaseModel
             $this->method = $request->method();
         }
         return $this->getRoute(strtoupper($this->method))->matches($request);
+    }
+
+    public function inWhiteList($userId) {
+        return AclWhiteList::where('user_id', $userId)->where('route_id', $this->id)->exists();
+    }
+
+    public function inBlackList($userId) {
+        return AclBlackList::where('user_id', $userId)->where('route_id', $this->id)->exists();
+    }
+
+    public function inRolesRoutes($userId) {
+        $roleUserTable = with(new AclRoleUser)->getTable();
+        $roleRouteTable = with(new AclRoleRoute)->getTable();
+        return AclRoleRoute::join(
+                $roleUserTable, 
+                sprintf('%s.role_id', $roleUserTable), '=', sprintf('%s.role_id', $roleRouteTable)
+            )
+            ->where('route_id', $this->id)
+            ->where('user_id', $userId)
+            ->exists();
     }
 }

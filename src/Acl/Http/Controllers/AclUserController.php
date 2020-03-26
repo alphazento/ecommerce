@@ -152,18 +152,18 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
-    public function whiteroutes() {
+    public function whiteRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return $this->withData($user->permissionwhitelist);
+            return $this->withData($user->whiteRoutes);
         }
         return $this->error(404);
     }
 
-    public function blackroutes() {
+    public function blackRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
-            return $this->withData($user->permissionblacklist);
+            return $this->withData($user->blackRoutes);
         }
         return $this->error(404);
     }

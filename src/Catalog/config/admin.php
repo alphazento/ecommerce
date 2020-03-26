@@ -7,6 +7,7 @@ use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet;
 use Zento\Catalog\Model\ORM\Product;
+use Zento\Acl\Providers\Facades\Acl;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
     protected function _registerDashboardMenus() {

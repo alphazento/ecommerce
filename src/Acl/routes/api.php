@@ -5,8 +5,8 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'admin',
-        'catalog' => 'acl-user-manager',
+        'scope' => 'backend',
+        'catalog' => 'acl-user',
     ], function () {
         Route::get('/me', 'AclUserController@me')->unshiftMiddleware('ignore_acl');
         Route::get('/users', 'AclUserController@users');
@@ -20,23 +20,23 @@ Route::group(
         Route::delete('/users/{uid}/roles/{gid}', 'AclUserController@delGroupByUser');
 
         Route::get('/users/{id}/routes', 'AclUserController@routes');
-        Route::get('/users/{id}/whiteroutes', 'AclController@whiteroutes');
-        Route::get('/users/{id}/blackroutes', 'AclController@blackroutes');
+        Route::get('/users/{id}/whiteroutes', 'AclUserController@whiteRoutes');
+        Route::get('/users/{id}/blackroutes', 'AclUserController@blackRoutes');
 
         Route::post('/users/{id}/whiteroutes',
-            'AclController@storeWhiteRoutes'
+            'AclUserController@storeWhiteRoutes'
         );
 
         Route::post('/users/{id}/blackroutes',
-            'AclController@storeBlackRoutes'
+            'AclUserController@storeBlackRoutes'
         );
 
         Route::delete('/users/{id}/whiteroutes/{route_id}',
-            'AclController@deleteWhiteRoute'
+            'AclUserController@deleteWhiteRoute'
         );
 
         Route::delete('/users/{id}/blackroutes/{route_id}',
-            'AclController@deleteBlackRoute'
+            'AclUserController@deleteBlackRoute'
         );
     }
 );
@@ -46,8 +46,8 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'admin',
-        'catalog' => 'acl-role-manager',
+        'scope' => 'backend',
+        'catalog' => 'acl-role',
     ], function() {
         Route::get('/roles', 'AclRoleController@roles');
         Route::post('/roles', 'AclRoleController@store');
@@ -69,8 +69,8 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'admin',
-        'catalog' => 'acl-route-manager',
+        'scope' => 'backend',
+        'catalog' => 'acl-route',
     ], function() {
         Route::get('/routes', 'AclRouteController@routes');
     }

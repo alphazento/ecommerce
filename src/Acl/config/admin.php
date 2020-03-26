@@ -2,6 +2,7 @@
 
 namespace Zento\Acl\Config;
 
+use Zento\Acl\Providers\Facades\Acl;
 use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;

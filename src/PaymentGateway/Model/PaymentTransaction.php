@@ -39,8 +39,8 @@ class PaymentTransaction extends \Illuminate\Database\Eloquent\Model implements 
         ];
         $transaction = new static($data);
         $payId = $transaction->genPayId();
-        if ($exits = static::where('pay_id', '=', $payId)->first()) {
-            return $exits;
+        if (static::where('pay_id', '=', $payId)->exists()) {
+            return true;
         }
         $transaction->quote = json_encode($quote->toArray()); 
         $transaction->pay_id = $payId; 

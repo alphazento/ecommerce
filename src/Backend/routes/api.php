@@ -152,9 +152,7 @@ Route::group(
     [
         'prefix' => '/api/v1/admin/oauth2',
         'namespace' => '\Zento\Passport\Http\Controllers',
-        'middleware' => ['backend', 'cors'],
-        'scope' => 'backend',
-        'catalog' => 'guest',
+        'middleware' => ['backend', 'cors']
     ], function () {
     Route::post('/token',  'ApiController@issueToken');
 });
