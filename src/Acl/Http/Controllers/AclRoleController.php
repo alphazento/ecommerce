@@ -32,7 +32,6 @@ class AclRoleController extends ApiBaseController
      */
     public function roles() {
         $scopes = $this->getScopes();
-        $scopes[] = Consts::GUEST_SCOPE;
         $collection = AclRole::whereIn('scope', $scopes);
         return $this->withData($this->applyFilter($collection, ['id', 'name', 'description', 'active'])->paginate());
     }

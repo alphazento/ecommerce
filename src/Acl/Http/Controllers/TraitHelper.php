@@ -34,10 +34,8 @@ trait TraitHelper
                 return Consts::FRONTEND_SCOPE;
             case 'all':
                 return Consts::BOTH_SCOPE;
-            default:
-                return Consts::GUEST_SCOPE;
         }
-        return Consts::GUEST_SCOPE;
+        return '';
     }
 
     protected function getScopes() {
@@ -47,12 +45,8 @@ trait TraitHelper
                 return [Consts::BACKEND_SCOPE, Consts::BOTH_SCOPE];
             case 'customer':
                 return [Consts::FRONTEND_SCOPE, Consts::BOTH_SCOPE];
-            case 'all':
-                return [Consts::GUEST_SCOPE, Consts::FRONTEND_SCOPE, Consts::BACKEND_SCOPE, Consts::BOTH_SCOPE];
-            default:
-                return [\Zento\Acl\Consts::GUEST_SCOPE];
         }
-        return [\Zento\Acl\Consts::GUEST_SCOPE];
+        return [];
     }
 
     protected function applyFilter($collection, $filterAbles) {

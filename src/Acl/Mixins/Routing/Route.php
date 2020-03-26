@@ -3,9 +3,9 @@
 namespace Zento\Acl\Mixins\Routing;
 
 class Route {
-    public function catalog() {
+    public function acl() {
         return function() {
-            return $this->action['catalog'] ?? 'guest';
+            return $this->action['acl'] ?? false;
         };
     }
 

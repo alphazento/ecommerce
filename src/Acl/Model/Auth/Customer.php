@@ -15,8 +15,4 @@ class Customer extends \Zento\Customer\Model\ORM\Customer implements AclUserInte
     use TraitPermission;
 
     static $scope = \Zento\Acl\Consts::FRONTEND_SCOPE;
-
-    public function acl($request) {
-        // not check
-    }
 }

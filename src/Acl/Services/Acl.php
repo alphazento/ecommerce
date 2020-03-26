@@ -29,12 +29,17 @@ class Acl implements AclInterface {
      */
     public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
         if ($route = $request->route()) {
-            if (in_array($route->catalog, ['no-acl'])) {
+            $acl = $route->action['acl'] ?? 'false';
+            if (!$acl || $acl === 'false') {
                 return true;
             }
         }
         
         if ($user = $user ?? $request->user) {
+            if ($user->guest()) {
+                return false;
+            }
+
             if ($this->isRootUser($user)) {
                 return true;
             }

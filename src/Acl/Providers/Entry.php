@@ -2,17 +2,18 @@
 
 namespace Zento\Acl\Providers;
 
-use Request;
-use Route;
 use Auth;
 
 use Zento\Passport\Passport;
 use Zento\Acl\Providers\Facades\Acl;
 use Zento\Acl\Exceptions\AclException;
 use Zento\Acl\Policies\DashboardUxPolicy;
+use Zento\Acl\Policies\ApiAccessControlPolicy;
 use Zento\Backend\Services\AdminDashboardService;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
 class Entry extends AuthServiceProvider
@@ -24,6 +25,7 @@ class Entry extends AuthServiceProvider
      */
     protected $policies = [
         AdminDashboardService::class => DashboardUxPolicy::class,
+        Request::class => ApiAccessControlPolicy::class,
     ];
 
     public function register() {
@@ -34,14 +36,9 @@ class Entry extends AuthServiceProvider
         $this->app->singleton('Illuminate\Contracts\Debug\ExceptionHandler',
             '\Zento\Acl\Exceptions\ExceptionHandler');
 
-        Passport::registerPostAuthcateHook(function($user, $request) {
-            if (!Acl::checkRequest($request, $user)) {
-                throw new AclException();
-            }
-        });
 
         if ($this->app->runningInConsole()) {
-            \Illuminate\Routing\Route::mixin(new \Zento\Acl\Mixins\Routing\Route);
+            Route::mixin(new \Zento\Acl\Mixins\Routing\Route);
             (new \Zento\Acl\Console\PackageEnableSubscriber())->subscribe();
         }
     }

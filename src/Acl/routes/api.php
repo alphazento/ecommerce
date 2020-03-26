@@ -6,7 +6,7 @@ Route::group(
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
         'scope' => 'backend',
-        'catalog' => 'acl-user',
+        'acl' => 'ACL User'
     ], function () {
         Route::get('/me', 'AclUserController@me')->unshiftMiddleware('ignore_acl');
         Route::get('/users', 'AclUserController@users');

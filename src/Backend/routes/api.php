@@ -3,8 +3,7 @@ $configs = [
     'namespace' => '\Zento\Backend\Http\Controllers\Api',
     'middleware' => ['backend', 'auth:api'],
     'prefix' => '/api/v1/admin',
-    'scope' => 'backend',
-    'catalog' => 'no-acl',
+    'acl' => false,
 ];
 
 Route::group($configs, 

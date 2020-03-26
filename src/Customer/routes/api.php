@@ -4,8 +4,7 @@ Route::group(
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['cors', 'auth:api'],
-        'scope' => 'backend',
-        'catalog' => 'no-acl',
+        'acl' => false
     ], function () {
     Route::get(
         '/{customer_id}', 
@@ -77,7 +76,7 @@ Route::group(
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['cors', 'backend', 'auth:api'],
         'scope' => 'backend',
-        'catalog' => 'Customer',
+        'acl' => 'Customer',
     ], function () {
     //admin only
     Route::patch(

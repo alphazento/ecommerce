@@ -36,12 +36,6 @@ class CreateAclRoleTable extends Migration
                     'name' => 'root',
                     'description' => 'Super Administrator',
                     'active' => 1
-                ],
-                [
-                    'scope' => Consts::GUEST_SCOPE,
-                    'name' => 'Guest',
-                    'description' => 'Guest user.',
-                    'active' => 1
                 ]
             ]);
         }

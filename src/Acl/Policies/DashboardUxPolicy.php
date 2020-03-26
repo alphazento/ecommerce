@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DashboardUxPolicy extends \Zento\Backend\Policies\DashboardUxPolicy
 {
-    public function showMenu(User $administrator, 
+    public function showMenu(User $user, 
         AdminDashboardService $dashBoardService, 
         $menuPaths = []) 
     {

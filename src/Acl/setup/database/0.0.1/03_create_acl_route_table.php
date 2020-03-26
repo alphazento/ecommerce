@@ -32,17 +32,6 @@ class CreateAclRouteTable extends Migration
                 $table->timestamps();
                 $table->unique(['method', 'uri']);
             });
-
-            DB::connection(\Zento\Acl\Consts::DB)->table('acl_routes')->insert([
-                [
-                    'scope' => Consts::BACKEND_SCOPE,
-                    'catalog' => 'root',
-                    'name' => 'Wildcard routes. For root only',
-                    'method' => '*',
-                    'uri' => '*',
-                    'description' => 'Wildcard routes. For root only.'
-                ]
-            ]);
         }
     }
 

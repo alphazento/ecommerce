@@ -17,7 +17,7 @@ use Zento\Acl\Model\ORM\AclRole;
  */
 class GuestUser implements AclUserInterface
 {
-    static $scope = \Zento\Acl\Consts::GUEST_SCOPE;
+    static $scope = \Zento\Acl\Consts::BOTH_SCOPE;
 
     public $_roles = null;
     public function whiteRoutes() {
@@ -33,20 +33,10 @@ class GuestUser implements AclUserInterface
     }
 
     public function roles() {
-        if (!$this->_roles) {
-            $this->_roles = AclRole::where('name', '=', 'guest')->get();
-        }
-        return $this->_roles;
+        return null;
     }
 
     public function __get($key) {
-        switch($key) {
-            case 'whiteRoutes':
-            case 'blackRoutes':
-                return null;
-            case 'roles':
-                return $this->roles();
-        }
         return null;
     }
 }
