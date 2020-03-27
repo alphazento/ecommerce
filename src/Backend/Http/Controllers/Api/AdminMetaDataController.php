@@ -14,7 +14,21 @@ class AdminMetaDataController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * get admin datatable components defines
+     * retrieve dashboard datatable component's schema defines
+     * @group Dashboard
+     * @authenticated
+     * @urlParam model required The table name
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":{
+     * "headers":[
+     * {"text":"ID",
+     * "ui":"z-label",
+     * "value":"id",
+     * "filter_ui":"config-text-item",
+     * "clearable":true
+     * }],
+     * "primary_key":"id"}
+     * }
      */
     public function datatableSchema() {
         $tableName = Route::input('table');
@@ -29,7 +43,15 @@ class AdminMetaDataController extends ApiBaseController
     }
 
     /**
-     * get admin model defines
+     * retrieve dashboard model-editor component's model's defines
+     * @group Dashboard
+     * @authenticated
+     * @urlParam model required The model name
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":{"basic":{"text":"group title",
+     * "items":[{"text":"Name","ui":"config-text-item","accessor":"name"},
+     * {"text":"Description","ui":"config-text-item","accessor":"description"},
+     * {"text":"Active","ui":"config-boolean-item","accessor":"active"}]}}}
      */
     public function modelDefines() {
         $model = Route::input('model');

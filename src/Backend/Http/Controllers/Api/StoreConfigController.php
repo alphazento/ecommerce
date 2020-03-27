@@ -14,7 +14,9 @@ class StoreConfigController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * admin uri store-configurations side menus
+     * retrieve dashboard uri store-configurations side menus
+     * @authenticated
+     * @group Store Configuration
      */
     public function menus() {
         $this->traversePackages(function($className) {
@@ -24,7 +26,11 @@ class StoreConfigController extends ApiBaseController
     }
 
     /**
-     * config groups belongs to uri store-configurations side menu item
+     * retrieve config groups belongs to uri store-configurations side menu item
+     * @authenticated
+     * @group Store Configuration
+     * @urlParam l0 required Level0 Store Configuration Access Key
+     * @urlParam l1 required Level1 Store Configuration Access Key
      */
     public function groups() {
         $key = $this->traversePackages(function($className) {
@@ -68,6 +74,10 @@ class StoreConfigController extends ApiBaseController
 
     /**
      * store configurable item value
+     * @authenticated
+     * @group Store Configuration
+     * @urlParam key Configuration Item Access key
+     * @queryParam value Configuration Item new value
      */
     public function store() {
         $key = Route::input('key');

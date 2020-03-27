@@ -22,12 +22,12 @@ class CreateAclRouteTable extends Migration
             $builder->create('acl_routes', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('scope', 16)->index();
-                $table->string('catalog', 255)->index();
-                $table->string('name', 255);
+                $table->string('group', 255)->index();
                 $table->string('method', 16);
                 $table->string('uri', 128);
-                $table->boolean('removed')->default(0);
+                $table->boolean('acl')->default(1);
                 $table->boolean('active')->default(1);
+                $table->boolean('deleted')->default(0);
                 $table->string('description', 255)->default('');
                 $table->timestamps();
                 $table->unique(['method', 'uri']);

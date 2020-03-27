@@ -8,4 +8,5 @@ abstract class Consts {
     const FRONTEND_SCOPE = 'front-end';
     const BACKEND_SCOPE = 'backend';
     const BOTH_SCOPE = 'both';
+    const UNDEFINED_SCOPE = 'undefined';
 }

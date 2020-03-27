@@ -5,8 +5,6 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'backend',
-        'acl' => 'ACL User'
     ], function () {
         Route::get('/me', 'AclUserController@me')->unshiftMiddleware('ignore_acl');
         Route::get('/users', 'AclUserController@users');
@@ -19,7 +17,6 @@ Route::group(
         Route::post('/users/{id}/roles', 'AclUserController@storeRoles');
         Route::delete('/users/{uid}/roles/{gid}', 'AclUserController@delGroupByUser');
 
-        Route::get('/users/{id}/routes', 'AclUserController@routes');
         Route::get('/users/{id}/whiteroutes', 'AclUserController@whiteRoutes');
         Route::get('/users/{id}/blackroutes', 'AclUserController@blackRoutes');
 
@@ -46,8 +43,6 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'backend',
-        'catalog' => 'acl-role',
     ], function() {
         Route::get('/roles', 'AclRoleController@roles');
         Route::post('/roles', 'AclRoleController@store');
@@ -69,8 +64,6 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-        'scope' => 'backend',
-        'catalog' => 'acl-route',
     ], function() {
         Route::get('/routes', 'AclRouteController@routes');
     }

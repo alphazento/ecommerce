@@ -27,7 +27,8 @@
           <v-icon>{{ open ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
         </template>
         <template v-slot:label="{ item }">
-          <span>{{item.method}}:{{item.name}}</span>
+          <span v-if="item.name">{{item.name}}</span>
+          <span v-else>{{item.method}}:{{item.uri}}</span>
         </template>
       </v-treeview>
     </v-card-text>
@@ -94,14 +95,14 @@ export default {
       const dataset = {};
       var index = 0;
       routes.forEach(item => {
-        if (dataset[item.catalog] === undefined) {
-          dataset[item.catalog] = {
+        if (dataset[item.acl] === undefined) {
+          dataset[item.acl] = {
             id: `c${index}`,
-            name: item.catalog,
+            name: item.acl,
             children: []
           };
         }
-        dataset[item.catalog].children.push(item);
+        dataset[item.acl].children.push(item);
         index++;
       });
       return Object.values(dataset);

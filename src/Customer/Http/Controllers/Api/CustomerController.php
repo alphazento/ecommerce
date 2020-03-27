@@ -32,7 +32,6 @@ class CustomerController extends ApiBaseController
         }
       });
     }
-
     public function activateCustomer() {
       return $this->tapAcl(function() {
         if ($customer = $this->_retrieveCustomer()){

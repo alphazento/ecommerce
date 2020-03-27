@@ -5,7 +5,6 @@ Route::group(
         'prefix' => '/api/v1/catalog',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         'middleware' => ['cors', 'guesttoken', 'auth:api'],
-        'acl' => false
     ], function () {
         Route::get(
             '/categories/tree', 
@@ -35,8 +34,6 @@ Route::group(
         'prefix' => '/api/v1/admin/catalog',
         'namespace' => '\Zento\Catalog\Http\Controllers\Api',
         'middleware' => ['backend', 'auth:api'],
-        'scope' => 'backend',
-        'acl' => 'Catalog',
     ], function () {
         Route::get(
             '/categories', 

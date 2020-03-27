@@ -75,13 +75,13 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     {
         $info = parent::getRouteInformation($route);
         $info['scope'] = $route->scope();
-        $info['catalog'] = $route->catalog();
+        $info['acl'] = $route->acl() ?: 'false';
         return $info;
     }
 
     protected function getColumns() {
         $columns = parent::getColumns();
-        $columns[] = 'catalog';
+        $columns[] = 'acl';
         $columns[] = 'scope';
         return $columns;
     }
@@ -110,15 +110,14 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                         $item = new AclRoute([
                             'method' => $method,
                             'uri' => $route['uri'],
-                            'removed' => 0,
+                            'deleted' => 0,
                             'active' => 1
                         ]);
                     }
                     if ($item) {
-                        $item->name = $route['name'] ? $route['name'] : $route['uri'];
-                        $item->catalog = $route['catalog'];
+                        $item->acl = $route['acl'];
                         $item->scope = $route['scope'];
-                        $item->removed = 0;
+                        $item->deleted = 0;
                         $item->save();
                         $ids[] = $item->id;
                     }
@@ -129,7 +128,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
             $item->getConnection()
                 ->table($item->getTable())
                 ->whereNotIn('id', $ids)
-                ->update(['removed' => 1]);
+                ->update(['deleted' => 1]);
         }
     }
 }

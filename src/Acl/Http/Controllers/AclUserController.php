@@ -19,14 +19,26 @@ class AclUserController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Get current token's user details 
+     * Retrieve login user details
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":{}
+     * }
      */
     public function me() {
         return $this->withData(Auth::user());
     } 
 
     /**
-     * Get user by id
+     * Retrieve user details
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number user's id
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":{}}
      */
     public function user() {
         if ($id = Route::input('id')) {
@@ -39,9 +51,18 @@ class AclUserController extends ApiBaseController
     }
 
     /**
-     * Get all admin users including inactived users
-     *
-     * @response {[
+     * Retrieve all administrator/customers(accept filter)
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @queryParam id user's id filter
+     * @queryParam firstname user's firstname filter
+     * @queryParam lastname user's lastname filter
+     * @queryParam email user's email filter
+     * @queryParam active user's active filter
+     * @queryParam page pagination filter
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
      *  'user0 details',
      *  'user1 details',
      * ]}
@@ -126,7 +147,8 @@ class AclUserController extends ApiBaseController
 
     /**
      * set config key value pair by input key value pair items
-     *
+     * @authenticated
+     * @group ACL Management
      * @bodyParam key0 string required The first key value pair
      * @bodyParam key2 string required The second key value pair
      * @response {
@@ -144,14 +166,18 @@ class AclUserController extends ApiBaseController
         return $this->error();
     }
 
-    public function routes() {
-        $model = $this->getUserModel();
-        if ($user = $model::find(Route::input('id'))) {
-            return $this->withData($user->permissions());
-        }
-        return $this->error(404);
-    }
-
+    /**
+     * Retrieves user's white list routes
+     * @authenticated
+     * @group ACL Management
+     * @urlParam id required number the user's id
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     *  'route0 details',
+     *  'route1 details',
+     * ]}
+     */
     public function whiteRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -160,6 +186,18 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * Retrieves user's black list routes
+     * @authenticated
+     * @group ACL Management
+     * @urlParam id required number the user's id
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     *  'route0 details',
+     *  'route1 details',
+     * ]}
+     */
     public function blackRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {

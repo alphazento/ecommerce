@@ -13,6 +13,14 @@ class DashboardController extends ApiBaseController
 {
     use TraitHelper;
 
+    /**
+     * retrieve dashboard menus
+     * @group Dashboard
+     * @authenticated
+     * @response { "success":true,"code":200,"locale":"en","message":"",
+     * "data": {"store":{"text":"Store","url":null,"icon":"mdi-store","items":{}}}
+     * }
+     */
     public function menus() {
         $this->traversePackages(function($className) {
             (new $className)->registerDashboardMenus();

@@ -21,15 +21,28 @@ class AclRouteController extends ApiBaseController
 {
     use TraitHelper;
 
+    /**
+     * Retrieve all routes in a scope
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @queryParam from options of ['role', 'user', '', 'routes']
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     * 'routes details',
+     * 'role1 details'
+     * ]}
+     */
     public function routes() {
         $collection = AclRoute::where('active', 1)
+            ->where('deleted', 0)
             ->whereIn('scope', $this->getScopes())
             ->orderBy('scope')
-            ->orderBy('catalog')
+            ->orderBy('acl')
             ->orderBy('method');
         if ($from = Request::get('from')) {
             if (in_array($from, ['role', 'user'])) {
-                $collection->whereNotIn('catalog', ['root', 'no-acl']);
+                $collection->whereNotIn('acl', ['false']);
             }
         }
         return $this->withData($collection->get());

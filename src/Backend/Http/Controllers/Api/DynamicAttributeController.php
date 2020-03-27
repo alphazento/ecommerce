@@ -17,6 +17,34 @@ use Illuminate\Support\Str;
 
 class DynamicAttributeController extends ApiBaseController
 {
+    /**
+     * retrieve a dynamic attribute's details
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number The ID of the dynamic attribute.
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":{
+     * "parent_table": "",
+     * "name": "",
+     * "front_label": "",
+     * "front_group": "",
+     * "front_component": "",
+     * "admin_label": "",
+     * "admin_group": "",
+     * "admin_component": "",
+     * "attribute_table": "",
+     * "attribute_type": "",
+     * "default_value": "",
+     * "single": true,
+     * "with_value_map": false,
+     * "swatch": false,
+     * "searchable": false,
+     * "sort": 0,
+     * "active": true,
+     * "created_at": "",
+     * "updated_at": "",
+     * }
+     */
     public function attribute(){
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::find($id)) {
@@ -27,6 +55,33 @@ class DynamicAttributeController extends ApiBaseController
     }
 
 
+    /**
+     * store a dynamic attribute's details
+     * @group Dynamic Attribute
+     * @authenticated
+     * @response {"success":true,"code":201,"locale":"en","message":"",
+     * "data":{
+     * "parent_table": "",
+     * "name": "",
+     * "front_label": "",
+     * "front_group": "",
+     * "front_component": "",
+     * "admin_label": "",
+     * "admin_group": "",
+     * "admin_component": "",
+     * "attribute_table": "",
+     * "attribute_type": "",
+     * "default_value": "",
+     * "single": true,
+     * "with_value_map": false,
+     * "swatch": false,
+     * "searchable": false,
+     * "sort": 0,
+     * "active": true,
+     * "created_at": "",
+     * "updated_at": "",
+     * }
+     */
     public function store() {
         $data = Request::get('attributes');
         unset($data['id']);
@@ -62,6 +117,35 @@ class DynamicAttributeController extends ApiBaseController
         return $this->withData($model->toArray());
     }
 
+    /**
+     * update a dynamic attribute's details
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number The ID of the dynamic attribute.
+     * @bodyParam attributes required Json formated dynamic attribute object
+     * @response {"success":true,"code":201,"locale":"en","message":"",
+     * "data":{
+     * "parent_table": "",
+     * "name": "",
+     * "front_label": "",
+     * "front_group": "",
+     * "front_component": "",
+     * "admin_label": "",
+     * "admin_group": "",
+     * "admin_component": "",
+     * "attribute_table": "",
+     * "attribute_type": "",
+     * "default_value": "",
+     * "single": true,
+     * "with_value_map": false,
+     * "swatch": false,
+     * "searchable": false,
+     * "sort": 0,
+     * "active": true,
+     * "created_at": "",
+     * "updated_at": "",
+     * }
+     */
     public function update() {
         $id = Route::input('id');
 
@@ -76,12 +160,28 @@ class DynamicAttributeController extends ApiBaseController
         return $this->error(404, 'Item not found.');
     }
 
+    /**
+     * retrieve dynamic attributes of a Model
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam model required The model name
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute']
+     */
     public function attributesOfModel() {
         $model = Str::plural(Route::input('model'));
         return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
             ->withData(DynamicAttribute::where('parent_table', $model)->get());
     }
 
+    /**
+     * retrieve dynamic attribute set of a Model
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam model required The model name
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet']
+     */
     public function attributeSetsOfModel() {
         $model = Str::plural(Route::input('model'));
         $collection = DynamicAttributeSet::where('model', $model);
@@ -92,14 +192,30 @@ class DynamicAttributeController extends ApiBaseController
             ->withData($collection->get());
     }
 
+    /**
+     * Retrieves a dynamic attribute set
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number The ID of the dynamic attribute.
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet']
+     */
     public function attributeSet() {
         $attr_set_id = Route::input('id');
         return $this->withData(DynamicAttributeSet::with('attributes')->find($attr_set_id));
     }
 
+    /**
+     * update a dynamic attribute set's detail
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number The ID of the dynamic attribute set.
+     * @bodyParam attributes.name string the dynamic attribute set's name
+     * @bodyParam attributes.description string the dynamic attribute set's description
+     * @bodyParam attributes.active boolean the dynamic attribute set's active
+     */
     public function updateAttributeSet() {
         $id = Route::input('id');
-
         if ($model = DynamicAttributeSet::find($id)) {
             $data = Arr::only(Request::get('attributes'), ['name', 'description', 'active']);
             $model->fill($data);
@@ -109,6 +225,11 @@ class DynamicAttributeController extends ApiBaseController
         return $this->error(404, 'Item not found.');
     }
 
+    /**
+     * create a dynamic attribute set
+     * @group Dynamic Attribute
+     * @authenticated
+     */
     public function createAttributeSet() {
         $data = Request::get('attributes');
         unset($data['id']);
@@ -120,6 +241,11 @@ class DynamicAttributeController extends ApiBaseController
         }
     }
 
+    /**
+     * add a dynamic attribute to a set
+     * @group Dynamic Attribute
+     * @authenticated
+     */
     public function addToSet() {
         $attr_set_id = Route::input('attr_set_id');
         $attr_id = Route::input('attr_id');
@@ -130,6 +256,11 @@ class DynamicAttributeController extends ApiBaseController
         return $this->withData($relationShip);
     }
 
+    /**
+     * remove a dynamic attribute from a set
+     * @group Dynamic Attribute
+     * @authenticated
+     */
     public function deleteFromSet() {
         $attr_set_id = Route::input('attr_set_id');
         $attr_id = Route::input('attr_id');
@@ -139,6 +270,12 @@ class DynamicAttributeController extends ApiBaseController
         return $this;
     }
 
+    /**
+     * retrieve a dynamic attribute's map values when its value can has a value mapping
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number dynamic attribute's ID
+     */
     public function values(){
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::with('options')->find($id)) {
@@ -148,6 +285,12 @@ class DynamicAttributeController extends ApiBaseController
         return $this->error(404, 'Not found');
     }
 
+    /**
+     * retrieve a dynamic attribute set which the attribute belongs to
+     * @group Dynamic Attribute
+     * @authenticated
+     * @urlParam id required number dynamic attribute's ID
+     */
     public function belongsSets() {
         if ($id = Route::input('id')) {
             if ($attr = DynamicAttribute::with('sets')->find($id)) {

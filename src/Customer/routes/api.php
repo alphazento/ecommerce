@@ -4,7 +4,6 @@ Route::group(
         'prefix' => '/api/v1/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['cors', 'auth:api'],
-        'acl' => false
     ], function () {
     Route::get(
         '/{customer_id}', 
@@ -75,14 +74,12 @@ Route::group(
         'prefix' => '/api/v1/admin/customers',
         'namespace' => '\Zento\Customer\Http\Controllers\Api',
         'middleware' => ['cors', 'backend', 'auth:api'],
-        'scope' => 'backend',
-        'acl' => 'Customer',
     ], function () {
     //admin only
-    Route::patch(
-        '/{customer_id}/activate', 
-        ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
-    );
+    // Route::put(
+    //     '/{customer_id}/status/{active}', 
+    //     ['as' => 'customer.activate', 'uses' => 'CustomerController@activateCustomer']
+    // );
 
     Route::delete(
         '/{customer_id}/addresses/{id}', 

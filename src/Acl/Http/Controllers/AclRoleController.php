@@ -23,11 +23,14 @@ class AclRoleController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Get all roles
-     *
-     * @response {[
-     *  'group0 details',
-     *  'group1 details',
+     * Retrieve all roles in a scope
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     * 'role0 details',
+     * 'role1 details'
      * ]}
      */
     public function roles() {
@@ -36,6 +39,17 @@ class AclRoleController extends ApiBaseController
         return $this->withData($this->applyFilter($collection, ['id', 'name', 'description', 'active'])->paginate());
     }
 
+     /**
+     * Retrieve all routes which the role can access
+     * @authenticated
+     * @group ACL Management
+     * @urlParam id required number the role's ID
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     * 'route0 details',
+     * 'route1 details'
+     * ]}
+     */
     public function routes() {
         if ($role = AclRole::find(Route::input('id'))) {
             return $this->withData($role->routes);
@@ -44,9 +58,16 @@ class AclRoleController extends ApiBaseController
     }
 
     /**
-     * Get a roles's all users
-     *
-     * @return Array User
+     * Retrieve all users belongs to the role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     * 'user0 details',
+     * 'user1 details'
+     * ]}
      */
     public function users() {
         $scope = Route::input('scope');
@@ -65,6 +86,18 @@ class AclRoleController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * Retrieve all users belongs to the role first and then with users not belongs to the roles
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @response {"success":true,"code":200,"locale":"en","message":"",
+     * "data":[
+     * 'user0 details',
+     * 'user1 details'
+     * ]}
+     */
     public function userWithCandidate() {
         $scope = Route::input('scope');
         $type = \Illuminate\Support\Str::plural($scope);
@@ -81,6 +114,14 @@ class AclRoleController extends ApiBaseController
         return $this->withData($pagnation);
     }
 
+    /**
+     * Assign users to the role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @bodyParam ids required users' ID
+     */
     public function storeUsers() {
         $error = '';
         if ($role = AclRole::find(Route::input('id'))) {
@@ -105,6 +146,14 @@ class AclRoleController extends ApiBaseController
         return $this->error(400, $error);
     }
 
+    /**
+     * De-assign users from the role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @bodyParam user_id required users' ID
+     */
     public function deleteUser() {
         if ($role = AclRole::find(Route::input('id'))) {
             if ($user_id = Route::input('user_id')) {
@@ -116,6 +165,13 @@ class AclRoleController extends ApiBaseController
         return $this->error();
     }
 
+    /**
+     * Create a new role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @queryParam name required new role's name
+     */
     public function store() {
         if ($name = Request::get('name', false)) {
             $scope = $this->getScope();
@@ -123,7 +179,7 @@ class AclRoleController extends ApiBaseController
                 return $this->error(400, sprintf('Role[%s] exists.', $name));
             }
             $role = new AclRole([
-                'scope' => $scope, 
+                'scope' => $scope,
                 'name' => $name, 
                 'description' => Request::get('description', ''), 
                 'active' => Request::get('active', 1)
@@ -135,6 +191,14 @@ class AclRoleController extends ApiBaseController
         }
     }
 
+    /**
+     * Update role's details
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @queryParam name required role's name
+     */
     public function update() {
         if ($id = Route::input('id', false)) {
             $scope = $this->getScope();
@@ -155,6 +219,14 @@ class AclRoleController extends ApiBaseController
         }
     }
 
+    /**
+     * Assign users to the role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam id required number the role's ID
+     * @bodyParam ids required route's IDs
+     */
     public function storeRoutes() {
         if ($role = AclRole::find(Route::input('id'))) {
             if ($ids = Request::get('ids')) {
@@ -181,6 +253,13 @@ class AclRoleController extends ApiBaseController
         return $this->error();
     }
 
+    /**
+     * De-assign routes from the role
+     * @authenticated
+     * @group ACL Management
+     * @urlParam id required number the role's ID
+     * @bodyParam user_id required route's IDs
+     */
     public function deleteRoutes() {
         if ($role = AclRole::find(Route::input('id'))) {
             if ($route_id = Route::input('route_id')) {

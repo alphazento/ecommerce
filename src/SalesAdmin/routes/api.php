@@ -4,8 +4,6 @@ Route::group(
         'prefix' => '/api/v1/admin/sales',
         'namespace' => '\Zento\SalesAdmin\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
-        'scope' => 'backend',
-        'acl' => 'Sales',
     ], function () {
     Route::get(
         '/orders', 
