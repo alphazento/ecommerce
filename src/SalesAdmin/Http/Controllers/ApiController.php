@@ -21,17 +21,33 @@ class ApiController extends ApiBaseController
       parent::__construct();
     }
 
+    /**
+     * fetch/filter sales orders
+     * @group Sales
+     */
     function getOrders(SalesOrderFilter $filters) {
       $filters->mixin(new \Zento\SalesAdmin\Model\Filters\MixFilter);
       $orders = SalesOrder::filter($filters)->paginate();
       return $this->withData($orders);
     }
 
+    /**
+     * retrieve an order by id
+     * @group Sales
+     * @urlParam id required number order id
+     */
     function getOrder() {
       $order = SalesOrder::where('id', Route::input('id'))->first();
       return $this->withData($orders);
     }
 
+    /**
+     * update an order's status
+     * @group Sales
+     * @urlParam id required number order id
+     * @urlParam status_id required number order's new status' id
+     * @bodyParam comment number comment
+     */
     function setOrderStatus() {
       if ($order = SalesOrder::where('id', Route::input('id'))->first()) {
         $status_id = Route::input('status_id');
@@ -56,6 +72,10 @@ class ApiController extends ApiBaseController
       return $this->error(422, 'Not able to update order status');
     }
 
+    /**
+     * add an admin note
+     * @group Sales
+     */
     function addAdminNote() {
       $order_id = Request::get('order_id');
       $comment = Request::get('comment');
@@ -69,4 +89,22 @@ class ApiController extends ApiBaseController
       ]);
       return $this->withData($item);
     }
+
+    function getOrderStatuses() {
+
+    }
+
+    function holdOrder() {
+
+    }
+
+    function unholdOrder() {
+
+    }
+
+    function getComments(){
+
+    }
+
+    function setComments() {}
 }

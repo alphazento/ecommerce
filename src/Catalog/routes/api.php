@@ -60,11 +60,6 @@ Route::group(
             ['as' => 'category.values', 'uses' => 'CategoryController@categoryValues']
         );
 
-        Route::get(
-            '/categories/{id}/values/Catalog/Category', 
-            ['as' => 'category.values', 'uses' => 'CategoryController@categoryValues']
-        );
-
         Route::post(
             '/categories', 
             ['as' => 'post.category', 'uses' => 'CategoryController@newCategory']

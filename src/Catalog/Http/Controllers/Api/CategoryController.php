@@ -13,12 +13,21 @@ use Illuminate\Support\Arr;
 
 class CategoryController extends ApiBaseController
 {
+    /**
+     * list category tree
+     * @group Catalog
+     */
     public function categoriesTree() {
         $all = Request::get('all', false);
         $tree = CategoryService::tree(!$all);
         return $this->with('tree_conf',CategoryService::treeConfigs())->withData($tree);
     }
 
+    /**
+     * retrieve specified categories by IDs
+     * @group Catalog
+     * @urlParam ids required string category IDs
+     */
     public function categories() {
         $ids = explode('/', Route::input('ids'));
         $ids = array_unique($ids);
@@ -30,18 +39,11 @@ class CategoryController extends ApiBaseController
     }
 
     /**
-     * used for admin
-     * co-work with react config components
-     *
-     * @return void
+     * set category's attribute's value
+     * @group Catalog
+     * @urlParam attribute required string Attribute name
+     * @bodyParam value required string Attribute value
      */
-    public function categoryValues() {
-        $id = Route::input('id');
-        $category = CategoryService::getCategoryById($id);
-        \zento_assert($category);
-        return $this->withData($category);
-    }
-
     public function setAttribute() {
         if ($id = Route::input('id')) {
             if ($category = CategoryService::getCategoryById($id)) {
@@ -55,6 +57,10 @@ class CategoryController extends ApiBaseController
         return $this->error(420)->with($attribute, $value);
     }
 
+    /**
+     * store a new category
+     * @group Catalog
+     */
     public function newCategory() {
         $data = Request::all();
         unset($data['id']);
@@ -75,6 +81,13 @@ class CategoryController extends ApiBaseController
         return $this->withData($category);
     }
 
+    /**
+     * get products belongs a category
+     * @group Catalog
+     * @urlParam id required category id
+     * @queryParam page number pagination's page
+     * @queryParam per_page number pagination's per_page
+     */
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);

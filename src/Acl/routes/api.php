@@ -15,7 +15,7 @@ Route::group(
         Route::delete('/users/{id}', 'AclUserController@delete');
         Route::get('/users/{id}/roles', 'AclUserController@roles');
         Route::post('/users/{id}/roles', 'AclUserController@storeRoles');
-        Route::delete('/users/{uid}/roles/{gid}', 'AclUserController@delGroupByUser');
+        // Route::delete('/users/{uid}/roles/{role_id}', 'AclUserController@delGroupByUser');
 
         Route::get('/users/{id}/whiteroutes', 'AclUserController@whiteRoutes');
         Route::get('/users/{id}/blackroutes', 'AclUserController@blackRoutes');
@@ -50,7 +50,7 @@ Route::group(
 
         Route::get('/roles/{id}/routes', 'AclRoleController@routes');
         Route::post('/roles/{id}/routes', 'AclRoleController@storeRoutes');
-        Route::delete('/roles/{id}/routes/{route_id}', 'AclRoleController@deleteRoute');
+        Route::delete('/roles/{id}/routes/{route_id}', 'AclRoleController@deleteRoutes');
 
         Route::get('/roles/{id}/users', 'AclRoleController@users');
         Route::get('/roles/{id}/users-with-candidates', 'AclRoleController@userWithCandidate');

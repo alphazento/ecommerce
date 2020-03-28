@@ -11,6 +11,14 @@ use Illuminate\Support\Str;
 
 class StorageFileFinder extends ApiBaseController
 {
+    /**
+     * find specified files in specified folder
+     * @group FileFinder
+     * @urlParam visibility required string availabe values ['public', 'private']
+     * @urlParam folder string find in specified folder
+     * @bodyParam type required string find file type
+     * @bodyParam text required string find file name
+     */
     public function findFiles() {
         $visibility = Route::input('visibility');
         $folder = Route::input('folder', '');

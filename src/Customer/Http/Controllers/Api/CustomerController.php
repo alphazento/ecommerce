@@ -15,53 +15,26 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class CustomerController extends ApiBaseController
 {
-    protected function isMe() {
-      return Route::input('customer_id') === 'me';
-    }
-
     protected function _retrieveCustomer() {
-      return $this->isMe() ? Auth::user() : Customer::find(Route::input('customer_id'));
+      return Auth::user();
     }
 
-    public function getCustomer() {
-      return $this->tapAcl(function() {
-        if ($customer = $this->_retrieveCustomer()){
-          return $this->withData($customer);
-        } else {
-          return $this->error(404);
-        }
-      });
-    }
-    public function activateCustomer() {
-      return $this->tapAcl(function() {
-        if ($customer = $this->_retrieveCustomer()){
-          if (CustomerService::activate($customer)) {
-              return $this->success();
-          } else {
-            return $this->error(400);
-          }
-        } else {
-          return $this->error(404);
-        }
-      });
+    /**
+     * Get current customer
+     * @group Customer
+     */
+    public function me() {
+        return $this->withData(Auth::user());
     }
 
-    public function deactivateCustomer() {
-      return $this->tapAcl(function() {
-        if ($customer = $this->_retrieveCustomer()){
-          if (CustomerService::deactivate($customer)) {
-            return $this->success();
-          } else {
-            return $this->error(400);
-          }
-        } else {
-          return $this->error(404);
-        }
-      });
-    }
-
-    public function setMyPassword() {
-      Request::validate(['old_password'=>"string|max:8", 'new_password'=>"string|max:8"]);
+    /**
+     * Set current customer's password
+     * @group Customer
+     * @queryParam old_password required old password min 8
+     * @queryParam new_password required new password min 8
+     */
+    public function setPassword() {
+      Request::validate(['old_password'=>"string|min:8", 'new_password'=>"string|min:8"]);
 
       if (CustomerService::changePassword(Auth::user(), Request::get('old_password'), Request::get('new_password'))) {
           return $this->success();
@@ -70,23 +43,30 @@ class CustomerController extends ApiBaseController
       }
     }
 
-    public function setCustomerPassword() {
-      return $this->tapAcl(function() {
-        Request::validate(['password'=>"string|max:8"]);
-        if ($customer = Customer::find(Route::input('customer_id'))) {
-          if (CustomerService::setPassword(Auth::user(), Request::get('password'))) {
-            return $this->success();
-          } else {
-            return $this->error(400);
-          }
-        } else {
-          return $this->error(404);
+    /**
+     * update customer's details, except email and password
+     * @group Customer
+     * @urlParam required string customer_id
+     * @bodyParam required Json customer's attributes
+     */
+    public function update() {
+      if ($customer = $this->_retrieveCustomer()){
+        $attrs = Request::except(['email', 'password']);
+        foreach($attrs as $key => $value) {
+          $customer->{$key} = $value;
         }
-      });
+        $customer->save();
+        return $this->withData($customer);
+      } else {
+        return $this->error(404);
+      }
     }
 
+     /**
+     * add address
+     * @group Customer
+     */
     public function addAddress() {
-      return $this->tapAcl(function() {
         Request::validate([
           'name'=>"required|string|max:255",
           'company'=>"string|max:255|nullable",
@@ -105,54 +85,54 @@ class CustomerController extends ApiBaseController
           }
         }
         return $this->error();
-      });
     }
 
+    /**
+     * get current user all address
+     * @group Customer
+     */
     public function getAddresses() {
-      return $this->tapAcl(function() {
-          if ($collection = CustomerService::getCustomerAddresses($this->isMe() ? Auth::user()->id : Route::input('customer_id'))) {
-            return $this->withData($collection);
-          } else {
-            return $this->success(200, 'no address found.');
-          }
-      });
+        if ($collection = CustomerService::getCustomerAddresses(Auth::user()->id)) {
+          return $this->withData($collection);
+        } else {
+          return $this->success(200, 'no address found.');
+        }
     }
 
+    /**
+     * get address by id
+     * @group Customer
+     */
     public function getAddress() {
-      return $this->tapAcl(function() {
-        if ($address = CustomerService::getCustomerAddress($this->isMe() ? Auth::user()->id : Route::input('customer_id'), Route::input('address_id'))) {
+        if ($address = CustomerService::getCustomerAddress(Auth::user()->id,
+           Route::input('address_id'))) {
           return $this->withData($address);
         } else {
           return $this->success(200, 'no address found.');
         }
-      });
     }
 
+    /**
+     * set current user default billing address
+     * @group Customer
+     */
     public function setDefaultBillingAddress() {
-      return $this->tapAcl(function() {
         if (CustomerService::setDefaultBillingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
           return $this->success();
         } else {
           return $this->error(400, 'Fail to set default billing address');
         }
-      });
     }
 
+    /**
+     * set current user default shipping address
+     * @group Customer
+     */
     public function setDefaultShippingAddress() {
-      return $this->tapAcl(function() {
         if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
           return $this->success();
         } else {
           return $this->error(400, 'Fail to set default billing address');
         }
-      });
-    }
-
-    protected function tapAcl(\Closure $callbak) {
-      if (Auth::user()->crossUserAcl($this->isMe())) {
-          return \call_user_func($callbak);
-      } else {
-          return $this->error(400, 'ACL limit');
-      }
     }
 }

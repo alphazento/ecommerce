@@ -11,11 +11,20 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 
 class ProductController extends ApiBaseController
 {
+    /**
+     * retrieve product by id
+     * @group Catalog
+     * @urlParam id required product id
+     */
     public function product() {
         $product = ProductService::getProductById(Route::input('id'));
         return $this->withData($product);
     }
 
+    /**
+     * create a new product 
+     * @group Catalog
+     */
     public function create() {
         $data = Request::all();
         $product = ProductService::newInstanceBaseTypeId($data['model_type']);
@@ -33,6 +42,12 @@ class ProductController extends ApiBaseController
         dd($product);
     }
 
+    /**
+     * update a product's attribute's value
+     * @group Catalog
+     * @urlParam attribute required string Attribute name
+     * @bodyParam value required string Attribute value
+     */
     public function setAttribute() {
         if ($id = Route::input('id')) {
             if ($product = ProductService::getProductById($id)) {

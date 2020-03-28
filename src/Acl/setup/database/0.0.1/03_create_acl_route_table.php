@@ -25,7 +25,7 @@ class CreateAclRouteTable extends Migration
                 $table->string('group', 255)->index();
                 $table->string('method', 16);
                 $table->string('uri', 128);
-                $table->boolean('acl')->default(1);
+                $table->boolean('acl')->default(1); //value set from code
                 $table->boolean('active')->default(1);
                 $table->boolean('deleted')->default(0);
                 $table->string('description', 255)->default('');

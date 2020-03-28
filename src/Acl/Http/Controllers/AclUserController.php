@@ -123,6 +123,11 @@ class AclUserController extends ApiBaseController
         return $this->withData($user);
     }
 
+    /**
+     * update user's details
+     * @group ACL Management
+     * @urlParam id required number user's id
+     */
     public function update() {
         $id = Route::input('id');
         $params = Request::get('data');
@@ -206,6 +211,12 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * add route to user's white list
+     * @group ACL Management
+     * @urlParam id required number user's id
+     * @bodyParam route_ids required number routes' ids
+     */
     public function storeWhiteRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -224,6 +235,12 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * add route to user's black list
+     * @group ACL Management
+     * @urlParam id required number user's id
+     * @bodyParam route_ids required number routes' ids
+     */
     public function storeBlackRoutes() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -242,6 +259,12 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * delete route from user's white list
+     * @group ACL Management
+     * @urlParam id required number user's id
+     * @bodyParam route_ids required number routes' ids
+     */
     public function deleteWhiteRoute() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -254,6 +277,12 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * delete route from user's black list
+     * @group ACL Management
+     * @urlParam id required number user's id
+     * @bodyParam route_ids required number routes' ids
+     */
     public function deleteBlackRoute() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -266,6 +295,11 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * retrieve user's all roles
+     * @group ACL Management
+     * @urlParam id required number user's id
+     */
     public function roles() {
         $model = $this->getUserModel();
         if ($user = $model::find(Route::input('id'))) {
@@ -274,6 +308,12 @@ class AclUserController extends ApiBaseController
         return $this->error(404);
     }
 
+    /**
+     * save user's roles
+     * @group ACL Management
+     * @urlParam id required number user's id
+     * @bodyParam ids required array role's ids
+     */
     public function storeRoles() {
         $error = '';
         $model = $this->getUserModel();

@@ -46,24 +46,10 @@ Route::group(
         'namespace' => '\Zento\BladeTheme\Http\Controllers',
         'middleware' => ['web']
     ], function () {
-        Route::get(
-            'categories/{id}', 
-            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categoryProducts']
-        );
-    
-        Route::get(
-            'products/{id}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
-        );
-
-        Route::get(
-            'products/{id}/categories/{category_ids}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
-        );
-        Route::get(
-            'search', 
-            ['as' =>'web.get.search', 'uses' => 'CatalogController@search']
-        );
+        Route::get('categories/{id}', 'CatalogController@categoryProducts');
+        Route::get('products/{id}', 'CatalogController@product');
+        Route::get('products/{id}/categories/{category_ids}', 'CatalogController@product');
+        Route::get('search', 'CatalogController@search');
     });
 
 Route::group(
@@ -72,21 +58,8 @@ Route::group(
         'namespace' => '\Zento\BladeTheme\Http\Controllers',
         'middleware' => ['web'],
     ], function () {
-        Route::get('/', [
-            'as' =>'web.get.cart', 'uses' => 'ShoppingCartController@index'
-        ]);
-
-        Route::post('/add_product/{pid}', [
-            'as' => 'web.post.cart.add.product', 'uses' => 'ShoppingCartController@addItem'
-        ]);
-
-        Route::post('/delete_item/{item_id}', [
-            'as' => 'web.post.cart.delete.item', 'uses' => 'ShoppingCartController@deleteItem'
-        ]);
-
-        Route::post('/update_item_qty/{pid}', [
-            'as' => 'web.post.cart.update.itemqty', 'uses' => 'ShoppingCartController@deleteItemQty'
-        ]);
+        Route::get('/', 'ShoppingCartController@index');
+        Route::post('/products/{pid}', 'ShoppingCartController@addItem');
     }
 );
 
@@ -96,21 +69,10 @@ Route::group(
         'namespace' => '\Zento\BladeTheme\Http\Controllers',
         'middleware' => ['web'],
     ], function () {
-        Route::get('/', [
-            'as' =>'ajax.get.cart', 'uses' => 'ShoppingCartController@cartPage'
-        ]);
-
-        Route::post('/add_product/{pid}', [
-            'as' => 'ajax.post.cart.add.product', 'uses' => 'ShoppingCartController@addItem'
-        ]);
-
-        Route::post('/delete_item/{item_id}', [
-            'as' => 'ajax.post.cart.delete.item', 'uses' => 'ShoppingCartController@deleteItem'
-        ]);
-
-        Route::post('/update_item_qty/{pid}', [
-            'as' => 'ajax.post.cart.update.itemqty', 'uses' => 'ShoppingCartController@deleteItemQty'
-        ]);
+        Route::get('/', 'ShoppingCartController@index');
+        Route::post('/products/{pid}', 'ShoppingCartController@addItem');
+        Route::delete('/items/{item_id}', 'ShoppingCartController@deleteItem');
+        Route::put('/items/{pid}/qty/{qty}', 'ShoppingCartController@updateItemQty');
     }
 );
 
@@ -120,13 +82,8 @@ Route::group(
         'namespace' => '\Zento\BladeTheme\Http\Controllers',
         'middleware' => ['web'],
     ], function () {
-        Route::get('/', [
-            'as' =>'web.get.checkout', 'uses' => 'CheckoutController@index'
-        ]);
-
-        Route::get('/success', [
-            'as' => 'web.checkout.success', 'uses' => 'CheckoutController@success'
-        ]);
+        Route::get('/', 'CheckoutController@index');
+        Route::get('/success', 'CheckoutController@success');
     }
 );
 
@@ -136,10 +93,7 @@ Route::group(
         'namespace' => '\Zento\Checkout\Http\Controllers',
         'middleware' => ['web'],
     ], function () {
-        Route::put(
-            '/guest/details',
-            ['as' => 'ajax.checkout.put.guest', 'uses' => 'ApiController@putGuestDetails']
-        );
+        Route::put('/guest/details', 'ApiController@putGuestDetails');
     }
 );
 
@@ -151,8 +105,6 @@ Route::group(
         'middleware' => ['web'],
     ], function () {
         Route::post(
-            '/orders', 
-            ['as' => 'ajax.post.orders', 'uses' => 'SalesController@createOrder']
-        );
+            '/orders', 'SalesController@createOrder');
     }
 );

@@ -11,24 +11,25 @@ Route::group(
     );
     
     Route::get(
-        '/orders/:id', 
-        ['as' => 'orders.get', 'uses' => 'ApiController@getOrder']
+        '/orders/statuses', 
+        ['as' => 'orders.getstatuses', 'uses' => 'ApiController@getOrderStatuses']
     );
 
     Route::get(
-        '/orders/:id/statuses', 
-        ['as' => 'orders.getstatuses', 'uses' => 'ApiController@getOrderStatuses']
+        '/orders/{id}', 
+        ['as' => 'orders.get', 'uses' => 'ApiController@getOrder']
     );
+
 
     Route::post(
         '/orders/{id}/status/{status_id}', 
         ['as' => 'orders.put.status', 'uses' => 'ApiController@setOrderStatus']
     );
 
-    Route::post(
-        '/orders/:id/emails', 
-        ['as' => 'orders.setemails', 'uses' => 'ApiController@setOrderEmails']
-    );
+    // Route::post(
+    //     '/orders/:id/emails', 
+    //     ['as' => 'orders.setemails', 'uses' => 'ApiController@setOrderEmails']
+    // );
 
     Route::post(
         '/orders/:id/hold', 
@@ -45,10 +46,7 @@ Route::group(
         ['as' => 'orders.getcomments', 'uses' => 'ApiController@getComments']
     );
 
-    Route::post(
-        '/orders/:id/comments', 
-        ['as' => 'orders.setcomments', 'uses' => 'ApiController@setComments']
-    );
+    Route::post('/orders/:id/comments', 'ApiController@setComments');
 
     Route::post(
         '/notes', 

@@ -17,6 +17,7 @@ class DashboardController extends ApiBaseController
      * retrieve dashboard menus
      * @group Dashboard
      * @authenticated
+     * @no_acl
      * @response { "success":true,"code":200,"locale":"en","message":"",
      * "data": {"store":{"text":"Store","url":null,"icon":"mdi-store","items":{}}}
      * }

@@ -12,6 +12,12 @@ use Illuminate\Support\Str;
 
 class FileUploadController extends ApiBaseController
 {
+    /**
+     * upload file to specified folder
+     * @group FileFinder
+     * @urlParam visibility required string  availabe values ['public', 'private']
+     * @urlParam folder string find in specified folder
+     */
     public function uploadFile(Request $request) {
         if(!$request->hasFile('file0')) {   
             return $this->error(422, 'upload file not found');
