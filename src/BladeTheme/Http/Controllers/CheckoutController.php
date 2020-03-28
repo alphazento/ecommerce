@@ -20,7 +20,7 @@ class CheckoutController extends \App\Http\Controllers\Controller
             [
                 'consts' => compact('paymentmethods')
             ]
-        )->breadcrumb(route('web.get.checkout'), 'Checkout')
+        )->breadcrumb(route('checkout.page'), 'Checkout')
         ->view('page.checkout.index', compact('cart'));
     }
     

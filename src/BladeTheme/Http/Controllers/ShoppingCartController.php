@@ -28,7 +28,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         } else {
             $cart = null;
         }
-        return BladeTheme::breadcrumb(route('web.get.cart'), 'Shopping Cart')
+        return BladeTheme::breadcrumb(route('cart.page'), 'Shopping Cart')
             ->view('page.shoppingcart', compact('cart'));
     }
 
@@ -51,7 +51,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         
         if ($protocal === 'web') {
             if($resp->success) {
-                return redirect()->route('web.get.cart')
+                return redirect()->route('cart.page')
                     ->withMessage('Product has been added to Shopping Cart.');
             } else {
                 return Redirect::back()->withErrors([$resp->message]);
@@ -73,7 +73,7 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
 
             if ($protocal === 'web') {
                 if ($resp->success) {
-                    return redirect()->route('web.get.cart')
+                    return redirect()->route('cart.page')
                         ->withMessage('Product has been added to Shopping Cart.');
                 } else {
                     return Redirect::back()->withErrors([$resp->message]);
