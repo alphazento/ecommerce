@@ -25,7 +25,7 @@ class SalesService
     if ($transaction = PaymentTransaction::where('pay_id', '=', $pay_id)->first()) {
         $quote = $transaction->quote;
         if ($order = $transaction->order) {
-          // return $order;
+          return $order;
         }
         $quote = $transaction->quote;
         $customer_id = $quote->customer_id;

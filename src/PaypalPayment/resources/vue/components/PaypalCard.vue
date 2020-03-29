@@ -39,14 +39,14 @@ export default {
         .then(response => {
           axios
             .post("/ajax/sales/orders", {
-              pay_id: response.data.data.payment_transaction.pay_id
+              pay_id: response.data.payment_transaction.pay_id
             })
             .then(response => {
-              if (response.data.success) {
+              if (response.success) {
                 this.$store.dispatch("showSpinner", "Order placed");
-                window.location.href = '/checkout/success';
+                window.location.href = "/checkout/success";
               } else {
-                this.$store.dispatch("showSpinner", response.data.message);
+                this.$store.dispatch("showSpinner", response.message);
               }
             });
         });
