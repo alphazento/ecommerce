@@ -7,7 +7,7 @@ Route::group(
     ], function () {
         Route::put(
             '/guest/details',
-            ['as' => 'api.checkout.put.guest-details', 'uses' => 'ApiController@putGuestDetails']
+            'ApiController@storeGuestDetails'
         );
     }
 );

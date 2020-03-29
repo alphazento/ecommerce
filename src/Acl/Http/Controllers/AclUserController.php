@@ -74,8 +74,8 @@ class AclUserController extends ApiBaseController
     }
 
     /**
-     * Get config values by input keys
-     *
+     * create a new user 
+     * @group ACL Management
      * @bodyParam keys string required The configs keys string(seperated by ;).
      * @response {
      *  "key0": "value0",

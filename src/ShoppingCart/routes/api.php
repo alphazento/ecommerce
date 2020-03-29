@@ -11,7 +11,7 @@ Route::group(
         Route::delete('/', 'ShoppingCartController@delete');
         Route::post('/items', 'ShoppingCartController@addItem');
         Route::post('/items/{item_id}', 'ShoppingCartController@deleteItem');
-        Route::post('/items/{item_id}/quantity/{quantity}', 'ShoppingCartController@updateItemQuantity');
+        Route::patch('/items/{item_id}/quantity/{quantity}', 'ShoppingCartController@updateItemQuantity');
 
         Route::post('/email', 'ShoppingCartController@updateEmail');
         Route::get('/coupon', 'ShoppingCartController@getCoupon');

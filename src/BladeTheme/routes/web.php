@@ -1,5 +1,7 @@
 <?php
-    //general route for a website
+    /**
+     * general route for a website
+     */
     Route::group(
         [
             'prefix' => '/',
@@ -39,6 +41,9 @@
         );
     });
 
+    /**
+     * catalog pages
+     */
     Route::group(
         [
             'prefix' => '/',
@@ -67,6 +72,9 @@
         }
     );
 
+    /**
+     * web checkout pages
+     */
     Route::group(
         [
             'prefix' => '/checkout',
@@ -78,17 +86,23 @@
         }
     );
 
+    /**
+     * ajax checkout support pages 
+     */
     Route::group(
         [
             'prefix' => '/ajax/checkout',
             'namespace' => '\Zento\Checkout\Http\Controllers',
             'middleware' => ['web'],
         ], function () {
-            Route::put('/guest/details', 'ApiController@putGuestDetails');
+            Route::put('/guest/details', 'ApiController@storeGuestDetails');
         }
     );
 
 
+    /**
+     * ajax sales 
+     */
     Route::group(
         [
             'prefix' => '/ajax/sales',

@@ -14,6 +14,10 @@ class CatalogController extends Controller
     use TraitThemeRouteOverwritable;
     protected $allCategories;
 
+    /**
+     * Render a specified category page
+     * @group Web Pages
+     */
     public function categoryProducts() {
         if ($category_id = Route::input('id')) {
             if ($category = \Zento\Catalog\Model\ORM\Category::thinMode()->find($category_id)) {
@@ -42,6 +46,10 @@ class CatalogController extends Controller
         return view('page.404');
     }
 
+    /**
+     * Render a specified product page
+     * @group Web Pages
+     */
     public function product() {
         if ($productId = Route::input('id')) {
             $resp = BladeTheme::requestInnerApi('GET', 
@@ -99,6 +107,10 @@ class CatalogController extends Controller
         }
     }
 
+    /**
+     * Render search result page
+     * @group Web Pages
+     */
     public function search() {
         $request = Request::instance();
         $query = Str::after($request->getRequestUri(), $request->path());

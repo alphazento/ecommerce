@@ -147,9 +147,8 @@ export default new Vuex.Store({
         postGuestUser({
             commit
         }, user) {
-            var url = '/ajax/checkout/guest/details';
             return new Promise((resolve, reject) => {
-                axios.put(url, user).then(response => {
+                axios.put('/ajax/checkout/guest/details', user).then(response => {
                     commit('setUser', response.data)
                     resolve(response);
                 }, error => {

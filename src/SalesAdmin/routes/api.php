@@ -26,27 +26,22 @@ Route::group(
         ['as' => 'orders.put.status', 'uses' => 'ApiController@setOrderStatus']
     );
 
-    // Route::post(
-    //     '/orders/:id/emails', 
-    //     ['as' => 'orders.setemails', 'uses' => 'ApiController@setOrderEmails']
-    // );
-
     Route::post(
-        '/orders/:id/hold', 
+        '/orders/{id}/hold', 
         ['as' => 'orders.hold', 'uses' => 'ApiController@holdOrder']
     );
 
     Route::post(
-        '/orders/:id/unhold', 
+        '/orders/{id}/unhold', 
         ['as' => 'orders.hold', 'uses' => 'ApiController@unholdOrder']
     );
 
     Route::get(
-        '/orders/:id/comments', 
+        '/orders/{id}/comments', 
         ['as' => 'orders.getcomments', 'uses' => 'ApiController@getComments']
     );
 
-    Route::post('/orders/:id/comments', 'ApiController@setComments');
+    Route::post('/orders/{id}/comments', 'ApiController@setComments');
 
     Route::post(
         '/notes', 

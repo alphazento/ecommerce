@@ -23,7 +23,7 @@ class ApiController extends ApiBaseController
 
     /**
      * fetch/filter sales orders
-     * @group Sales
+     * @group Admin Sales
      */
     function getOrders(SalesOrderFilter $filters) {
       $filters->mixin(new \Zento\SalesAdmin\Model\Filters\MixFilter);
@@ -33,7 +33,7 @@ class ApiController extends ApiBaseController
 
     /**
      * retrieve an order by id
-     * @group Sales
+     * @group Admin Sales
      * @urlParam id required number order id
      */
     function getOrder() {
@@ -43,7 +43,7 @@ class ApiController extends ApiBaseController
 
     /**
      * update an order's status
-     * @group Sales
+     * @group Admin Sales
      * @urlParam id required number order id
      * @urlParam status_id required number order's new status' id
      * @bodyParam comment number comment
@@ -74,7 +74,7 @@ class ApiController extends ApiBaseController
 
     /**
      * add an admin note
-     * @group Sales
+     * @group Admin Sales
      */
     function addAdminNote() {
       $order_id = Request::get('order_id');
@@ -90,21 +90,36 @@ class ApiController extends ApiBaseController
       return $this->withData($item);
     }
 
+    /**
+     * @group Admin Sales
+     */
     function getOrderStatuses() {
 
     }
 
+    /**
+     * @group Admin Sales
+     */
     function holdOrder() {
 
     }
 
+    /**
+     * @group Admin Sales
+     */
     function unholdOrder() {
 
     }
 
+    /**
+     * @group Admin Sales
+     */
     function getComments(){
 
     }
 
+    /**
+     * @group Admin Sales
+     */
     function setComments() {}
 }

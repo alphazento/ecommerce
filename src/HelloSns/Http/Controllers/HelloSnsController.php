@@ -33,6 +33,11 @@ class HelloSnsController extends ApiBaseController
         return $this->error(422, 'Invalid parameters.');
     }
 
+    /**
+     * account connect between sns and this site
+     * @group HelloSns
+     * @queryParam authResponse required string authorize response from SNS
+     */
     public function tokenAccountConnect(Request $request) {
         return $this->accountConnect($request, 'token');
     }
