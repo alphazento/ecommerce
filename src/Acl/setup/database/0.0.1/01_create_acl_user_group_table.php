@@ -34,13 +34,13 @@ class CreateAclUserGroupTable extends Migration
                 [
                     'scope' => Consts::ADMIN_SCOPE,
                     'name' => 'root',
-                    'description' => 'Users in the group will have root permission. That means it can do anything.',
+                    'description' => 'Super Administrator.',
                     'active' => 1
                 ],
                 [
                     'scope' => Consts::GUEST_SCOPE,
                     'name' => 'guest',
-                    'description' => 'Guest user group.',
+                    'description' => 'Guest user',
                     'active' => 1
                 ]
             ]);
