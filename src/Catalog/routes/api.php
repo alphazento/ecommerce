@@ -12,9 +12,8 @@ Route::group(
         );
 
         Route::get(
-            '/categories/{ids}/',
-            ['as' => 'category', 'uses' => 'CategoryController@categories']
-        )->where('ids', '([\d\/]+)?');
+            '/categories/{ids}', 'CategoryController@categories'
+        )->where('ids', '([\d,]+)?');
 
         Route::get(
             '/categories/{id}/products',
@@ -36,14 +35,8 @@ Route::group(
         'middleware' => ['backend', 'auth:api'],
     ], function () {
         Route::get(
-            '/categories', 
-            ['as' => 'admin.get.categories', 'uses' => 'CategoryController@categories']
-        );
-        
-        Route::get(
-            '/categories/{ids}/',
-            ['as' => 'admin.get.category', 'uses' => 'CategoryController@categories']
-        )->where('ids', '([\d\/]+)?');
+            '/categories/{ids}', 'CategoryController@categories'
+        )->where('ids', '([\d,]+)?');
 
         Route::get(
             '/categories/tree', 
@@ -53,11 +46,6 @@ Route::group(
         Route::get(
             '/categories/{id}/products',
             ['as' => 'admin.category.products', 'uses' => 'CategoryController@productsOfCategory']
-        );
-
-        Route::get(
-            '/categories/{id}/values', 
-            ['as' => 'category.values', 'uses' => 'CategoryController@categoryValues']
         );
 
         Route::post(

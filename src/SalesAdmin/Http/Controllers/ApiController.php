@@ -32,7 +32,7 @@ class ApiController extends ApiBaseController
     }
 
     /**
-     * retrieve an order by id
+     * Retrieves an order by id
      * @group Admin Sales
      * @urlParam id required number order id
      */

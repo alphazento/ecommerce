@@ -14,7 +14,7 @@ class StoreConfigController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * retrieve dashboard uri store-configurations side menus
+     * Retrieves dashboard uri store-configurations side menus
      * @authenticated
      * @group Store Configuration
      */
@@ -26,7 +26,7 @@ class StoreConfigController extends ApiBaseController
     }
 
     /**
-     * retrieve config groups belongs to uri store-configurations side menu item
+     * Retrieves config groups belongs to uri store-configurations side menu item
      * @authenticated
      * @group Store Configuration
      * @urlParam l0 required Level0 Store Configuration Access Key

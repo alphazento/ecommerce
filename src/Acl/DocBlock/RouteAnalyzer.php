@@ -70,7 +70,7 @@ class RouteAnalyzer
         }
     }
     
-    protected function getClassAndMethodNames(Route $route)
+    public function getClassAndMethodNames(Route $route)
     {
         $action = $route->getAction();
 

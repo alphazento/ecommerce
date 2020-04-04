@@ -38,7 +38,7 @@ class Entry extends AuthServiceProvider
 
 
         if ($this->app->runningInConsole()) {
-            Route::mixin(new \Zento\Acl\Mixins\Routing\Route);
+            // Route::mixin(new \Zento\Acl\Mixins\Routing\Route);
             (new \Zento\Acl\Console\PackageEnableSubscriber())->subscribe();
         }
     }

@@ -13,7 +13,9 @@
         "alphazento/zento": "dev-master"
     },
     "autoload": {
-        "psr-4": {},
+        "psr-4": {
+            "Zento\\PaypalPayment\\": ""
+        },
         "files": []
     },
     "minimum-stability": "dev",

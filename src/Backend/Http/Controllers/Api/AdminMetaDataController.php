@@ -14,7 +14,7 @@ class AdminMetaDataController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * retrieve dashboard datatable component's schema defines
+     * Retrieves dashboard datatable component's schema defines
      * @group Dashboard
      * @authenticated
      * @urlParam model required The table name
@@ -43,7 +43,7 @@ class AdminMetaDataController extends ApiBaseController
     }
 
     /**
-     * retrieve dashboard model-editor component's model's defines
+     * Retrieves dashboard model-editor component's model's defines
      * @group Dashboard
      * @authenticated
      * @urlParam model required The model name

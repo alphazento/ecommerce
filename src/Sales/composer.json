@@ -12,7 +12,9 @@
         "alphazento/zento": "dev-master"
     },
     "autoload": {
-        "psr-4": {},
+        "psr-4": {
+            "Zento\\Sales\\": ""
+        },
         "files": []
     },
     "minimum-stability": "dev",

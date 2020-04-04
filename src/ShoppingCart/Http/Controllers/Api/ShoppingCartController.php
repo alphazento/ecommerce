@@ -22,7 +22,7 @@ class ShoppingCartController extends ApiBaseController
     use TraitShoppingCartHelper;
 
     /**
-     * retrieve current user's shopping cart
+     * Retrieves current user's shopping cart
      * @group Shopping Cart
      */
     public function getCart() {

@@ -18,13 +18,14 @@ class CustomerAdminController extends ApiBaseController
     /**
      * Get current customer
      * @group Customer
+     * @responseModel \Zento\Customer\Model\ORM\Customer
      */
     public function me() {
         return $this->withData(Auth::user());
     }
 
     /**
-     * 
+     * @responseModel \Zento\Customer\Model\ORM\Customer
      */
     public function getCustomer() {
       return $this->tapAcl(function() {
@@ -79,6 +80,7 @@ class CustomerAdminController extends ApiBaseController
      * @group customer
      * @urlParam required string customer_id
      * @bodyParam required Json customer's attributes
+     * @responseModel \Zento\Customer\Model\ORM\Customer
      */
     public function update() {
       return $this->tapAcl(function() {
@@ -95,6 +97,10 @@ class CustomerAdminController extends ApiBaseController
       });
     }
 
+    /**
+     * set customer's password
+     * @group Customer
+     */
     public function setCustomerPassword() {
       return $this->tapAcl(function() {
         Request::validate(['password'=>"string|max:8"]);
@@ -110,6 +116,11 @@ class CustomerAdminController extends ApiBaseController
       });
     }
 
+    /**
+     * add address to a customer
+     * @group Customer
+     * @responseModel 201 \Zento\Customer\Model\ORM\CustomerAddress
+     */
     public function addAddress() {
       return $this->tapAcl(function() {
         Request::validate([
@@ -133,6 +144,11 @@ class CustomerAdminController extends ApiBaseController
       });
     }
 
+    /**
+     * get all address of a customer
+     * @group Customer
+     * @responseCollection \Zento\Customer\Model\ORM\CustomerAddress
+     */
     public function getAddresses() {
       return $this->tapAcl(function() {
           if ($collection = CustomerService::getCustomerAddresses($this->isMe() ? Auth::user()->id : Route::input('customer_id'))) {
@@ -143,16 +159,25 @@ class CustomerAdminController extends ApiBaseController
       });
     }
 
+    /**
+     * get an address of a customer
+     * @group Customer
+     * @responseCollection \Zento\Customer\Model\ORM\CustomerAddress
+     * @responseErr0r 404
+     */
     public function getAddress() {
       return $this->tapAcl(function() {
         if ($address = CustomerService::getCustomerAddress($this->isMe() ? Auth::user()->id : Route::input('customer_id'), Route::input('address_id'))) {
           return $this->withData($address);
         } else {
-          return $this->success(200, 'no address found.');
+          return $this->error(404, 'Not found.');
         }
       });
     }
 
+    /**
+     * @group Customer
+     */
     public function setDefaultBillingAddress() {
       return $this->tapAcl(function() {
         if (CustomerService::setDefaultBillingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
@@ -163,6 +188,9 @@ class CustomerAdminController extends ApiBaseController
       });
     }
 
+    /**
+     * @group Customer
+     */
     public function setDefaultShippingAddress() {
       return $this->tapAcl(function() {
         if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {

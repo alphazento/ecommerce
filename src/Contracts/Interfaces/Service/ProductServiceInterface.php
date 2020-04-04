@@ -5,7 +5,7 @@ namespace Zento\Contracts\Interfaces\Service;
 interface ProductServiceInterface
 {
     /**
-     * Retrieve a user by their unique identifier.
+     * Retrieves a user by their unique identifier.
      *
      * @param  mixed  $identifier
      * @return \Zento\Contracts\Interfaces\Catalog\IProduct|null
@@ -13,7 +13,7 @@ interface ProductServiceInterface
     public function getProductById($id);
 
     /**
-     * Retrieve a user by their unique identifier and "remember me" token.
+     * Retrieves a user by their unique identifier and "remember me" token.
      *
      * @param  mixed   $identifier
      * @return \Zento\Contracts\Interfaces\Catalog\IProduct|null
@@ -22,7 +22,7 @@ interface ProductServiceInterface
 
 
     /**
-     * Retrieve products by their unique identifiers.
+     * Retrieves products by their unique identifiers.
      *
      * @param  array  $identifiers
      * @return \Illuminate\Database\Eloquent\Collection|null
@@ -30,7 +30,7 @@ interface ProductServiceInterface
     public function getProductsByIds(array $ids);
 
     /**
-     * Retrieve products by their unique skus.
+     * Retrieves products by their unique skus.
      *
      * @param  array  $identifiers
      * @return \Illuminate\Database\Eloquent\Collection|null

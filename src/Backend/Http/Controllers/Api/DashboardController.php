@@ -14,13 +14,11 @@ class DashboardController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * retrieve dashboard menus
+     * Retrieves dashboard menus
      * @group Dashboard
      * @authenticated
      * @no_acl
-     * @response { "success":true,"code":200,"locale":"en","message":"",
-     * "data": {"store":{"text":"Store","url":null,"icon":"mdi-store","items":{}}}
-     * }
+     * @responsewith \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute
      */
     public function menus() {
         $this->traversePackages(function($className) {

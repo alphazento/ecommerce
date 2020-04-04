@@ -5,16 +5,13 @@ $configs = [
     'prefix' => '/api/v1/admin',
 ];
 
+
+
 Route::group($configs, 
     function() {
         Route::get(
             '/dashboard/menus', 
             'DashboardController@menus'
-        );
-
-        Route::get(
-            '/administrator', 
-            '\Zento\Passport\Http\Controllers\ApiController@profile'
         );
 
         Route::get(
@@ -153,4 +150,6 @@ Route::group(
         'middleware' => ['backend', 'cors']
     ], function () {
     Route::post('/token',  'ApiController@issueToken');
+    Route::post('/refresh', 'ApiController@refreshToken');
+    Route::get('/profile', 'ApiController@profile')->middleware('auth:api');
 });

@@ -6,7 +6,6 @@ Route::group(
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
     ], function () {
-        Route::get('/me', 'AclUserController@me')->unshiftMiddleware('ignore_acl');
         Route::get('/users', 'AclUserController@users');
         Route::get('/users/{id}', 'AclUserController@user');
 
@@ -53,7 +52,7 @@ Route::group(
         Route::delete('/roles/{id}/routes/{route_id}', 'AclRoleController@deleteRoutes');
 
         Route::get('/roles/{id}/users', 'AclRoleController@users');
-        Route::get('/roles/{id}/users-with-candidates', 'AclRoleController@userWithCandidate');
+        Route::get('/roles/{id}/users-with-candidates', 'AclRoleController@usersWithCandidates');
         Route::post('/roles/{id}/users', 'AclRoleController@storeUsers');
         Route::delete('/roles/{id}/users/{user_id}', 'AclRoleController@deleteUser');
     }

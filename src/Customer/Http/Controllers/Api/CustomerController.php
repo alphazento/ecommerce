@@ -22,6 +22,7 @@ class CustomerController extends ApiBaseController
     /**
      * Get current customer
      * @group Customer
+     * @responseModel \Zento\Customer\Model\ORM\Customer
      */
     public function me() {
         return $this->withData(Auth::user());
@@ -48,6 +49,7 @@ class CustomerController extends ApiBaseController
      * @group Customer
      * @urlParam required string customer_id
      * @bodyParam required Json customer's attributes
+     * @responseModel \Zento\Customer\Model\ORM\Customer
      */
     public function update() {
       if ($customer = $this->_retrieveCustomer()){

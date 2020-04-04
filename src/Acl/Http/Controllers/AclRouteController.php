@@ -22,10 +22,10 @@ class AclRouteController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Retrieve all routes in a scope
+     * Retrieves all routes in a scope
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @queryParam from options of ['role', 'user', '', 'routes']
      * @response {"success":true,"code":200,"locale":"en","message":"",
      * "data":[

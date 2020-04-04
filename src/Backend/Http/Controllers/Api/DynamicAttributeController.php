@@ -17,33 +17,24 @@ use Illuminate\Support\Str;
 
 class DynamicAttributeController extends ApiBaseController
 {
+    CONST SUPPORTED_MODELS = [
+        'product' => Product::Class,
+        'category' => Category::Class,
+        'customer' => Customer::Class,
+
+        'products' => Category::Class,
+        'categories' => Category::Class,
+        'customers' => Customer::Class,
+    ];
+
+    CONST UNSUPPORTED_MODEL_ERROR = 'Unsupported parent model';
+
     /**
-     * retrieve a dynamic attribute's details
+     * Retrieves a dynamic attribute's details
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam id required number The ID of the dynamic attribute.
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":{
-     * "parent_table": "",
-     * "name": "",
-     * "front_label": "",
-     * "front_group": "",
-     * "front_component": "",
-     * "admin_label": "",
-     * "admin_group": "",
-     * "admin_component": "",
-     * "attribute_table": "",
-     * "attribute_type": "",
-     * "default_value": "",
-     * "single": true,
-     * "with_value_map": false,
-     * "swatch": false,
-     * "searchable": false,
-     * "sort": 0,
-     * "active": true,
-     * "created_at": "",
-     * "updated_at": "",
-     * }
+     * @responseModel \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute
      */
     public function attribute(){
         if ($id = Route::input('id')) {
@@ -59,28 +50,8 @@ class DynamicAttributeController extends ApiBaseController
      * store a dynamic attribute's details
      * @group Dynamic Attribute
      * @authenticated
-     * @response {"success":true,"code":201,"locale":"en","message":"",
-     * "data":{
-     * "parent_table": "",
-     * "name": "",
-     * "front_label": "",
-     * "front_group": "",
-     * "front_component": "",
-     * "admin_label": "",
-     * "admin_group": "",
-     * "admin_component": "",
-     * "attribute_table": "",
-     * "attribute_type": "",
-     * "default_value": "",
-     * "single": true,
-     * "with_value_map": false,
-     * "swatch": false,
-     * "searchable": false,
-     * "sort": 0,
-     * "active": true,
-     * "created_at": "",
-     * "updated_at": "",
-     * }
+     * @responseModel 201 \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute
+     * @responseError 400, Unsupported parent model
      */
     public function store() {
         $data = Request::get('attributes');
@@ -90,19 +61,10 @@ class DynamicAttributeController extends ApiBaseController
         }
 
         $model = null;
-        switch(strtolower($data['parent_table'])) {
-            case 'categories':
-                $model = new Category();
-            break;
-            case 'products':
-                $model = new Product();
-            break;
-            case 'customers':
-                $model = new Customer();
-            break;
-        }
-        if (!$model) {
-            throw new \Exception('Unkonw parent model ' . $data['parent_table']);
+        if ($className = (static::SUPPORTED_MODELS[strtolower($data['parent_table'])] ?? false)) {
+            $model = new $className();
+        } else {
+            return $this->error(400, self::UNSUPPORTED_MODEL_ERROR);
         }
 
         list($attrId, $tableName) = DanamicAttributeFactory::createRelationShipORM($model,
@@ -118,33 +80,12 @@ class DynamicAttributeController extends ApiBaseController
     }
 
     /**
-     * update a dynamic attribute's details
+     * Update a dynamic attribute's details
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam id required number The ID of the dynamic attribute.
      * @bodyParam attributes required Json formated dynamic attribute object
-     * @response {"success":true,"code":201,"locale":"en","message":"",
-     * "data":{
-     * "parent_table": "",
-     * "name": "",
-     * "front_label": "",
-     * "front_group": "",
-     * "front_component": "",
-     * "admin_label": "",
-     * "admin_group": "",
-     * "admin_component": "",
-     * "attribute_table": "",
-     * "attribute_type": "",
-     * "default_value": "",
-     * "single": true,
-     * "with_value_map": false,
-     * "swatch": false,
-     * "searchable": false,
-     * "sort": 0,
-     * "active": true,
-     * "created_at": "",
-     * "updated_at": "",
-     * }
+     * @responseModel \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute
      */
     public function update() {
         $id = Route::input('id');
@@ -157,39 +98,45 @@ class DynamicAttributeController extends ApiBaseController
             $model->save();
             return $this->withData($model);
         }
-        return $this->error(404, 'Item not found.');
+        return $this->error(404, 'Not found.');
     }
 
     /**
-     * retrieve dynamic attributes of a Model
+     * Retrieves dynamic attributes of a Model
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam model required The model name
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute']
+     * @responseCollection \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute
+     * @responseError 400, Unsupported parent model
      */
     public function attributesOfModel() {
         $model = Str::plural(Route::input('model'));
-        return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
-            ->withData(DynamicAttribute::where('parent_table', $model)->get());
+        if (static::SUPPORTED_MODELS[strtolower($model)] ?? false) {
+            return $this->with('default', with(new DynamicAttribute)->defaultDynAttr($model))
+                ->withData(DynamicAttribute::where('parent_table', $model)->get());
+        }
+        return $this->error(400, self::UNSUPPORTED_MODEL_ERROR);
     }
 
     /**
-     * retrieve dynamic attribute set of a Model
+     * Retrieves dynamic attribute set of a Model
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam model required The model name
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet']
+     * @responseCollection \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet
+     * @responseError 400, Unsupported parent model
      */
     public function attributeSetsOfModel() {
         $model = Str::plural(Route::input('model'));
-        $collection = DynamicAttributeSet::where('model', $model);
-        if (Request::input('with_attributes')) {
-            $collection->with('attributes');
+        if (static::SUPPORTED_MODELS[strtolower($model)] ?? false) {
+            $collection = DynamicAttributeSet::where('model', $model);
+            if (Request::input('with_attributes')) {
+                $collection->with('attributes');
+            }
+            return $this->with('default', with(new DynamicAttributeSet)->defaultDynAttr($model))
+                ->withData($collection->get());
         }
-        return $this->with('default', with(new DynamicAttributeSet)->defaultDynAttr($model))
-            ->withData($collection->get());
+        return $this->error(400, self::UNSUPPORTED_MODEL_ERROR);
     }
 
     /**
@@ -197,12 +144,15 @@ class DynamicAttributeController extends ApiBaseController
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam id required number The ID of the dynamic attribute.
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":['Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet']
+     * @responseModel \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet
+     * @responseError 400, Unsupported parent model
      */
     public function attributeSet() {
         $attr_set_id = Route::input('id');
-        return $this->withData(DynamicAttributeSet::with('attributes')->find($attr_set_id));
+        if ($attrSet = DynamicAttributeSet::with('attributes')->find($attr_set_id)) {
+            return $this->withData($attrSet);
+        }
+        return $this->error(404, 'Not found.');
     }
 
     /**
@@ -213,6 +163,7 @@ class DynamicAttributeController extends ApiBaseController
      * @bodyParam attributes.name string the dynamic attribute set's name
      * @bodyParam attributes.description string the dynamic attribute set's description
      * @bodyParam attributes.active boolean the dynamic attribute set's active
+     * @responseModel \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet
      */
     public function updateAttributeSet() {
         $id = Route::input('id');
@@ -222,29 +173,35 @@ class DynamicAttributeController extends ApiBaseController
             $model->save();
             return $this->withData($model);
         }
-        return $this->error(404, 'Item not found.');
+        return $this->error(404, 'Not found.');
     }
 
     /**
      * create a dynamic attribute set
      * @group Dynamic Attribute
      * @authenticated
+     * @responseModel 201 \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeSet
      */
     public function createAttributeSet() {
         $data = Request::get('attributes');
         unset($data['id']);
-        try {
-            $model = DynamicAttributeSet::create($data);
-            return $this->withData($model);
-        } catch(\Exception $e) {
-            return $this->error(400, $e->getMessage());
+        $model = $data['model'] ?? 'false';
+        if (static::SUPPORTED_MODELS[strtolower($model)] ?? false) {
+            try {
+                $daSet = DynamicAttributeSet::create($data);
+                return $this->withData($daSet)->success(201);
+            } catch(\Exception $e) {
+                return $this->error(400, $e->getMessage());
+            }
         }
+        return $this->error(400, self::UNSUPPORTED_MODEL_ERROR);
     }
 
     /**
      * add a dynamic attribute to a set
      * @group Dynamic Attribute
      * @authenticated
+     * @responseModel 201 \Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttributeInSet
      */
     public function addToSet() {
         $attr_set_id = Route::input('attr_set_id');
@@ -257,7 +214,7 @@ class DynamicAttributeController extends ApiBaseController
     }
 
     /**
-     * remove a dynamic attribute from a set
+     * Remove a dynamic attribute from a set
      * @group Dynamic Attribute
      * @authenticated
      */
@@ -271,7 +228,7 @@ class DynamicAttributeController extends ApiBaseController
     }
 
     /**
-     * retrieve a dynamic attribute's map values when its value can has a value mapping
+     * Retrieves a dynamic attribute's map values when its value can has a value mapping
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam id required number dynamic attribute's ID
@@ -286,7 +243,7 @@ class DynamicAttributeController extends ApiBaseController
     }
 
     /**
-     * retrieve a dynamic attribute set which the attribute belongs to
+     * Retrieves a dynamic attribute set which the attribute belongs to
      * @group Dynamic Attribute
      * @authenticated
      * @urlParam id required number dynamic attribute's ID

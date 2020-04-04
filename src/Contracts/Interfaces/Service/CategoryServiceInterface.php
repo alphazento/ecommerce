@@ -6,7 +6,7 @@ use Zento\Contracts\Interfaces\Catalog\ICategory;
 interface CategoryServiceInterface
 {
     /**
-     * Retrieve a category by their unique identifier.
+     * Retrieves a category by their unique identifier.
      *
      * @param  mixed  $identifier
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
@@ -16,14 +16,14 @@ interface CategoryServiceInterface
     public function getCategoriesByLevel($level, $activeOnly = true,  $parent_id = -1);
 
     /**
-     * Retrieve root category of the store
+     * Retrieves root category of the store
      *
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
      */
     public function root();
 
     /**
-     * Retrieve category tree from root
+     * Retrieves category tree from root
      *
      * @return void
      */

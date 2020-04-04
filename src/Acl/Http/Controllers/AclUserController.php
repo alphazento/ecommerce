@@ -19,26 +19,12 @@ class AclUserController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Retrieve login user details
+     * Retrieves user details
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":{}
-     * }
-     */
-    public function me() {
-        return $this->withData(Auth::user());
-    } 
-
-    /**
-     * Retrieve user details
-     * @authenticated
-     * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @urlParam id required number user's id
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":{}}
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @urlParam id required number user's id Example:1
+     * @responseModel \Zento\Acl\Model\Auth\Administrator
      */
     public function user() {
         if ($id = Route::input('id')) {
@@ -51,21 +37,17 @@ class AclUserController extends ApiBaseController
     }
 
     /**
-     * Retrieve all administrator/customers(accept filter)
+     * Retrieves all administrator/customers(accept filter)
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @queryParam id user's id filter
      * @queryParam firstname user's firstname filter
      * @queryParam lastname user's lastname filter
      * @queryParam email user's email filter
      * @queryParam active user's active filter
      * @queryParam page pagination filter
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     *  'user0 details',
-     *  'user1 details',
-     * ]}
+     * @responseCollectionPagination \Zento\Acl\Model\Auth\Administrator
      */
     public function users() {
         $model = $this->getUserModel();
@@ -76,17 +58,19 @@ class AclUserController extends ApiBaseController
     /**
      * create a new user 
      * @group ACL Management
-     * @bodyParam keys string required The configs keys string(seperated by ;).
-     * @response {
-     *  "key0": "value0",
-     *  "key1": "value1"
-     * }
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @bodyParam email string required
+     * @bodyParam name string required
+     * @bodyParam password string required
+     * @responseModel 201 \Zento\Acl\Model\Auth\Administrator
      */
     public function store() {
-        $data = Request::only('email', 'name');
+        $data = Request::only('email', 'name', 'password');
         $validator = Validator::make($data, [
             'email' => 'required|max:255|email',
             'name' => 'required|max:255',
+            'password' => 'required|max:16|min:8',
+            'confirm_password' => 'required|max:16|min:8'
         ]);
 
         if ($validator->fails()) {
@@ -94,27 +78,14 @@ class AclUserController extends ApiBaseController
         }
 
         $password = Request::get('password', '');
-        if ($password != Request::get('password', '')) {
+        if ($password != Request::get('confirm_password', '')) {
             return $this->error(400, 'password and confirm password not match.');
         }
 
         $model = $this->getUserModel();
-        if ($id = Request::get('id', false)) {
-            $user = $model::find($id);
-            $user->name = $data['name'];
-        } else {
-            $validator = Validator::make(['password' => $password], [
-                'password' => 'required|max:16|min:8'
-            ]);
-            if ($validator->fails()) {
-                return $this->error(400, json_encode($validator->errors()));
-            }
-            if ($model::where('email', $data['email'])->exists()) {
-                return $this->error(400, $data['email'] . ' has exists');
-            }
-            $user = new $model($data);
+        if ($model::where('email', $data['email'])->exists()) {
+            return $this->error(400, $data['email'] . ' has exists');
         }
-
         if (!empty($password)) {
             $user->password = $user->encryptPassword($password);
         }
@@ -126,7 +97,10 @@ class AclUserController extends ApiBaseController
     /**
      * update user's details
      * @group ACL Management
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @urlParam id required number user's id
+     * @responseModel 200 \Zento\Acl\Model\Auth\Administrator
+     * @responseError 400
      */
     public function update() {
         $id = Route::input('id');
@@ -147,19 +121,14 @@ class AclUserController extends ApiBaseController
             $params['id'] = $id;
             return $this->withData($params);
         }
-        return $this->error()->withData($pa);
+        return $this->error(400)->withData($params);
     }
 
     /**
      * set config key value pair by input key value pair items
      * @authenticated
      * @group ACL Management
-     * @bodyParam key0 string required The first key value pair
-     * @bodyParam key2 string required The second key value pair
-     * @response {
-     *  "key0": "value0",
-     *  "key1": "value1"
-     * }
+     * @urlParam id number required user id to delete
      */
     public function delete() {
         $id = Route::input('id');
@@ -175,13 +144,9 @@ class AclUserController extends ApiBaseController
      * Retrieves user's white list routes
      * @authenticated
      * @group ACL Management
-     * @urlParam id required number the user's id
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     *  'route0 details',
-     *  'route1 details',
-     * ]}
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @urlParam id required number the user's id Example:1
+     * @responseCollection \Zento\Acl\Model\ORM\AclWhiteList
      */
     public function whiteRoutes() {
         $model = $this->getUserModel();
@@ -195,13 +160,9 @@ class AclUserController extends ApiBaseController
      * Retrieves user's black list routes
      * @authenticated
      * @group ACL Management
-     * @urlParam id required number the user's id
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     *  'route0 details',
-     *  'route1 details',
-     * ]}
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @urlParam id required number the user's id Example:1
+     * @responseCollection \Zento\Acl\Model\ORM\AclBlackList
      */
     public function blackRoutes() {
         $model = $this->getUserModel();
@@ -296,7 +257,7 @@ class AclUserController extends ApiBaseController
     }
 
     /**
-     * retrieve user's all roles
+     * Retrieves user's all roles
      * @group ACL Management
      * @urlParam id required number user's id
      */

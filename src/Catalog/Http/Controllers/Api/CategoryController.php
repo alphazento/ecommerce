@@ -24,12 +24,12 @@ class CategoryController extends ApiBaseController
     }
 
     /**
-     * retrieve specified categories by IDs
+     * Retrieves specified categories by IDs
      * @group Catalog
-     * @urlParam ids required string category IDs
+     * @urlParam ids required string category IDs Example:3,4
      */
     public function categories() {
-        $ids = explode('/', Route::input('ids'));
+        $ids = explode(',', Route::input('ids'));
         $ids = array_unique($ids);
         $categories = [];
         foreach($ids as $id) {
@@ -60,6 +60,7 @@ class CategoryController extends ApiBaseController
     /**
      * store a new category
      * @group Catalog
+     * @responseModel \Zento\Catalog\Model\ORM\Category
      */
     public function newCategory() {
         $data = Request::all();
@@ -87,6 +88,7 @@ class CategoryController extends ApiBaseController
      * @urlParam id required category id
      * @queryParam page number pagination's page
      * @queryParam per_page number pagination's per_page
+     * @responseCollectionPagination \Zento\Catalog\Model\ORM\Product
      */
     public function productsOfCategory() {
         $category = CategoryService::getCategoryById(Route::input('id'));

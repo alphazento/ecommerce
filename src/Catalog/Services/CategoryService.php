@@ -22,7 +22,7 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
     }
 
     /**
-     * Retrieve a user by their unique identifier.
+     * Retrieves a user by their unique identifier.
      *
      * @param  mixed  $identifier
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null

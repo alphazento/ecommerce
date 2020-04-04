@@ -23,15 +23,11 @@ class AclRoleController extends ApiBaseController
     use TraitHelper;
 
     /**
-     * Retrieve all roles in a scope
+     * Retrieves all roles in a scope
      * @authenticated
      * @group ACL Management
      * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     * 'role0 details',
-     * 'role1 details'
-     * ]}
+     * @responseCollectionPagination \Zento\Acl\Model\ORM\AclRole
      */
     public function roles() {
         $scopes = $this->getScopes();
@@ -40,15 +36,11 @@ class AclRoleController extends ApiBaseController
     }
 
      /**
-     * Retrieve all routes which the role can access
+     * Retrieves all routes which the role can access
      * @authenticated
      * @group ACL Management
-     * @urlParam id required number the role's ID
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     * 'route0 details',
-     * 'route1 details'
-     * ]}
+     * @urlParam id required number the role's ID 
+     * @responseCollection \Zento\Acl\Model\ORM\AclRole
      */
     public function routes() {
         if ($role = AclRole::find(Route::input('id'))) {
@@ -58,16 +50,11 @@ class AclRoleController extends ApiBaseController
     }
 
     /**
-     * Retrieve all users belongs to the role
+     * Retrieves all users belongs to the role
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @urlParam id required number the role's ID
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     * 'user0 details',
-     * 'user1 details'
-     * ]}
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @urlParam id required number the role's ID Example:1
      */
     public function users() {
         $scope = Route::input('scope');
@@ -87,18 +74,13 @@ class AclRoleController extends ApiBaseController
     }
 
     /**
-     * Retrieve all users belongs to the role first and then with users not belongs to the roles
+     * Retrieves all users belongs to the role and also users not belongs to the roles
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
-     * @urlParam id required number the role's ID
-     * @response {"success":true,"code":200,"locale":"en","message":"",
-     * "data":[
-     * 'user0 details',
-     * 'user1 details'
-     * ]}
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
+     * @urlParam id required number the role's ID Example:1
      */
-    public function userWithCandidate() {
+    public function usersWithCandidates() {
         $scope = Route::input('scope');
         $type = \Illuminate\Support\Str::plural($scope);
         $userClass = $this->getUserModel();
@@ -118,7 +100,7 @@ class AclRoleController extends ApiBaseController
      * Assign users to the role
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @urlParam id required number the role's ID
      * @bodyParam ids required users' ID
      */
@@ -150,7 +132,7 @@ class AclRoleController extends ApiBaseController
      * De-assign users from the role
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @urlParam id required number the role's ID
      * @bodyParam user_id required users' ID
      */
@@ -169,7 +151,7 @@ class AclRoleController extends ApiBaseController
      * Create a new role
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @queryParam name required new role's name
      */
     public function store() {
@@ -195,7 +177,7 @@ class AclRoleController extends ApiBaseController
      * Update role's details
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @urlParam id required number the role's ID
      * @queryParam name required role's name
      */
@@ -223,7 +205,7 @@ class AclRoleController extends ApiBaseController
      * Assign users to the role
      * @authenticated
      * @group ACL Management
-     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend
+     * @urlParam scope required options of ['administrator', 'customer']. Indicate backend or frontend. Example:administrator
      * @urlParam id required number the role's ID
      * @bodyParam ids required route's IDs
      */

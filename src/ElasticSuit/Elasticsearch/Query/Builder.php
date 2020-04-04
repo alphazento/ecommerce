@@ -81,7 +81,7 @@ class Builder extends \Illuminate\Database\Query\Builder
 
 
     /**
-     * Retrieve the "count" result of the query.
+     * Retrieves the "count" result of the query.
      *
      * @param  string  $columns
      * @return int

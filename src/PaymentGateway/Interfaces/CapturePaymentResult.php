@@ -16,9 +16,9 @@ class CapturePaymentResult
    */
   public function __construct($method_name, $ext_transaction_id, $amount, $payment_req_data) {
     $this->data['method_name'] = $method_name;
-    $this->data['payment_req_data'] = $payment_req_data;
     $this->data['ext_transaction_id'] = $ext_transaction_id;
     $this->data['amount'] = $amount;
+    $this->data['payment_req_data'] = $payment_req_data;
   }
 
   /**

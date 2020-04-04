@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="344" max-height="400">
-    <v-card-text>{{cart.items_quantity}} Items</v-card-text>
+    <v-card-text>{{ cart.items_quantity }} Items</v-card-text>
 
     <v-container class="limit-height">
       <v-list-item two-line v-for="(item, idx) in cart.items" :key="idx">
@@ -9,10 +9,13 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="headline mb-1">
-            {{ item.name }} * {{item.quantity}}
-            <cart-item-options-variation :product="item.product" :options="item.options"></cart-item-options-variation>
+            {{ item.name }} * {{ item.quantity }}
+            <cart-item-options-variation
+              :product="item.product"
+              :options="item.options"
+            ></cart-item-options-variation>
           </v-list-item-title>
-          <v-list-item-subtitle>${{item.row_price}}</v-list-item-subtitle>
+          <v-list-item-subtitle>${{ item.row_price }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-container>
@@ -20,7 +23,12 @@
     <v-card-actions>
       <v-layout text-center>
         <v-flex md6 xs6>
-          <v-btn color="blue-grey" class="ma-2 white--text" :href="'/shoppingcart'">View Cart</v-btn>
+          <v-btn
+            color="blue-grey"
+            class="ma-2 white--text"
+            :href="'/shoppingcart'"
+            >View Cart</v-btn
+          >
         </v-flex>
         <v-flex md6 xs6>
           <v-btn color="info" class="ma-2" :href="'/checkout'">Checkout</v-btn>

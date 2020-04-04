@@ -17,7 +17,7 @@ class AddressController extends ApiBaseController
     /**
      * list coutries and their states
      * @group Utility
-     * @queryParam active_for required ['backend', 'frontend']
+     * @queryParam active_for required ['backend', 'frontend'] Example:frontend
      */
     public function countryAndStates() {
       $isBackend = Request::get('active_for') === 'backend';

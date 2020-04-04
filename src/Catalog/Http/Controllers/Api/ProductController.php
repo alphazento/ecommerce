@@ -12,9 +12,9 @@ use Zento\Kernel\Facades\DanamicAttributeFactory;
 class ProductController extends ApiBaseController
 {
     /**
-     * retrieve product by id
+     * Retrieves product by id
      * @group Catalog
-     * @urlParam id required product id
+     * @urlParam id required number product id Example:1
      */
     public function product() {
         $product = ProductService::getProductById(Route::input('id'));
@@ -24,6 +24,7 @@ class ProductController extends ApiBaseController
     /**
      * create a new product 
      * @group Catalog
+     * @responseModel \Zento\Catalog\Model\ORM\Product
      */
     public function create() {
         $data = Request::all();
@@ -39,7 +40,7 @@ class ProductController extends ApiBaseController
             $product->{$attribute} = $value;
         }
         $product->update();
-        dd($product);
+        return $this->withData($product->toArray());
     }
 
     /**
