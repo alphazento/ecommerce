@@ -3,48 +3,20 @@
     "description": "A zento ecommerce framework base on Laravel",
     "keywords": ["laravel", "alphazento", "ecommerce"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yongcheng Chen",
-            "email": "yongcheng.chen@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yongcheng Chen",
+        "email": "yongcheng.chen@live.com"
+    }],
     "require": {
         "php": ">=7.0",
-        "alphazento/zento": "dev-master"
+        "alphazento/zento": "v1.0.0"
     },
     "autoload": {
         "psr-4": {
             "Zento\\": "src/"
         },
-        "files": [
-        ]
+        "files": []
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        },
-        "laravel": {
-            "aliases": {
-            },
-            "zento": {
-                "Zento_PaymentGateway":{
-                    "version" : "0.0.1",
-                    "commands" : [
-                    ]
-                },
-		        "Zento_Catalog":{
-                    "version" : "0.0.1",
-                    "commands" : [
-                        "\\Zento\\M2Data\\Console\\Commands\\M2Migrate"
-                    ],
-                    "providers": [
-                        "\\Zento\\Catalog\\Providers\\Entry"
-                    ]
-                }
-            }
-        }
-    }
+    "prefer-stable": true
 }
