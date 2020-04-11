@@ -15,7 +15,7 @@
         "psr-4": {
             "Zento\\": "src/"
         },
-        "files": []
+        "exclude-from-classmap": ["src/**/Config", "src/**/config"]
     },
     "minimum-stability": "dev",
     "prefer-stable": true
