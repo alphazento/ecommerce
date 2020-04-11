@@ -12,7 +12,7 @@ namespace Zento\Backend\Console\Commands;
 
 use Zento\Kernel\Facades\PackageManager;
 
-class BuildApp extends \Zento\Kernel\PackageManager\Console\Commands\Base
+class BuildZentoAdmin extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.

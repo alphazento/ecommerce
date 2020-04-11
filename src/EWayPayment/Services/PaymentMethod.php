@@ -10,7 +10,7 @@ use Zento\PaymentGateway\Model\PaymentTransaction;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\ROModel\ROShoppingCart;
 
-class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
+class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod {
     public function getCode() {
         return 'ewaypayment';
     }

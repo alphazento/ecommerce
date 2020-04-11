@@ -2,7 +2,7 @@
 
 namespace Zento\ElsCatalog\Model\ORM;
 
-class Product1 extends \Zento\Catalog\Model\ORM\Product
+class Product extends \Zento\Catalog\Model\ORM\Product
 {
    /**
      * all its categories
