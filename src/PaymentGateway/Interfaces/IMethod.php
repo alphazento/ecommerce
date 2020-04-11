@@ -1,7 +1,7 @@
 <?php
 namespace Zento\PaymentGateway\Interfaces;
 
-interface Method {
+interface IMethod {
     public function getCode();
     public function getTitle();
 

@@ -31,7 +31,7 @@ class PaymentGateway {
      * get payment method
      *
      * @param string $serviceName
-     * @return \Zento\PaymentGateway\Interfaces\Method
+     * @return \Zento\PaymentGateway\Interfaces\IMethod
      */
     public function getMethod($serviceName) {
         $serviceName = strtolower($serviceName);
@@ -52,7 +52,7 @@ class PaymentGateway {
      * @param mixed $user
      * @param mixed $shippingAddress
      * @param string $clientType
-     * @return array \Zento\PaymentGateway\Interfaces\Method
+     * @return array \Zento\PaymentGateway\Interfaces\IMethod
      */
     public function estimate($quote, $user, $shippingAddress, $clientType = 'web') {
         $availables = [];

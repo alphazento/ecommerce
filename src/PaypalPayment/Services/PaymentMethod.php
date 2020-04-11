@@ -11,7 +11,7 @@ use Zento\Contracts\ROModel\ROShoppingCart;
 use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
 
-class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
+class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod {
     public function getCode() {
         return 'paypalexpress';
     }
