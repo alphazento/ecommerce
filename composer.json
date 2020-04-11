@@ -9,7 +9,7 @@
     }],
     "require": {
         "php": ">=7.0",
-        "alphazento/zento": "v1.0.0"
+        "alphazento/zento": ">=1.0"
     },
     "autoload": {
         "psr-4": {
