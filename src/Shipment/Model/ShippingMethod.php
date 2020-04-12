@@ -7,7 +7,7 @@ use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\IAddress;
 use Zento\Contracts\Shipment\EstimateResult;;
 
-abstract class ShippingMethod implements \Zento\Contracts\Shipment\IMethod
+abstract class ShippingMethod implements \Zento\Contracts\Interfaces\Shipment\IMethod
 {
   protected $uqiue_method_name;
   protected $extraAttributes = [];

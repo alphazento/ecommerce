@@ -12,7 +12,7 @@ class ShipmentService
 {
   protected $methods = [];
   protected $methodInited = false;
-  public function registerMethod($code, \Zento\Contracts\Shipment\IMethod $method) {
+  public function registerMethod($code, \Zento\Contracts\Interfaces\Shipment\IMethod $method) {
     $this->methods[$code] = $method;
   }
 
