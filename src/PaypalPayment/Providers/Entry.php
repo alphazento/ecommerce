@@ -9,7 +9,7 @@ use Zento\PaypalPayment\Services\PaymentMethod;
 
 class Entry extends ServiceProvider
 {
-    public function register()
+    public function boot()
     {
         PaymentGateway::registerMethod("paypalexpress", function() {
             return new PaymentMethod();
