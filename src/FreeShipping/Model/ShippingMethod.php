@@ -2,7 +2,7 @@
 
 namespace Zento\FreeShipping\Model;
 
-use Zento\Contracts\Shipment\EstimateResult;
+use Zento\Contracts\Interfaces\Shipment\EstimateResult;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\IAddress;
 

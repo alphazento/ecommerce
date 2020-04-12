@@ -6,7 +6,7 @@ use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\IAddress;
-use Zento\Contracts\Shipment\EstimateResult;;
+use Zento\Contracts\Interfaces\Shipment\EstimateResult;
 
 class ShipmentService 
 {

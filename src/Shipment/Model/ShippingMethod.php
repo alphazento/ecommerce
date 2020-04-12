@@ -5,8 +5,7 @@ namespace Zento\Shipment\Model;
 use Config;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\IAddress;
-// use Zento\Contracts\Shipment\EstimateResult;
-use Zento\Contracts\Interfaces\Shipment\EstimateResult
+use Zento\Contracts\Interfaces\Shipment\EstimateResult;
 
 abstract class ShippingMethod implements \Zento\Contracts\Interfaces\Shipment\IMethod
 {
