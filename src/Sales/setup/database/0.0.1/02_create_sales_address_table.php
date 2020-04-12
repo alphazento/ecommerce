@@ -26,10 +26,6 @@ class CreateSalesAddressTable extends Migration
             $table->string('phone', 32)->nullable();
             $table->string('hash', 32)->unique();
             $table->timestamps();
-
-            $table->foreign('customer_id')
-                ->references('id')
-                ->on('customers');
         });
     }
 
