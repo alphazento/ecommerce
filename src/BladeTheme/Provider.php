@@ -22,10 +22,10 @@ class Provider extends ServiceProvider
 
         if (!$this->app->runningInConsole()) {
             $this->app->singleton('view', function($app) {
-                $paths = ThemeManager::getViewPaths();
                 $factory = new ViewFactory($app);
-                $factory->getFinder()->setPaths($paths);
                 ThemeManager::changeViewFactory($factory);
+                $paths = ThemeManager::getViewPaths();
+                $factory->getFinder()->setPaths($paths);
                 (new DirectiveExtend())->inject($factory);
                 return $factory->addViewProcessor(new BladeViewEnhance());
             });

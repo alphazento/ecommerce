@@ -17,7 +17,6 @@ class Provider extends ServiceProvider
         ThemeManager::whenSetTheme('Zento_VueTheme', function($app) {
             \Zento\BladeTheme\Http\Controllers\CatalogController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\CatalogController';
             \Zento\BladeTheme\Http\Controllers\GeneralController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\GeneralController';
-            \Zento\BladeTheme\Services\BladeTheme::mixin(new \Baicy\DesktopTheme\Mixins\BladeTheme);
 
             $viewLocation = sprintf('%s/notifications', PackageManager::packageViewsPath('Zento_VueTheme'));
             $app['view']->addNamespace('notifications', $viewLocation);
