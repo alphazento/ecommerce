@@ -18,7 +18,7 @@ class PackageEnableSubscriber
             'Illuminate\Console\Events\CommandFinished',
             function ($event) {
                 if ($event->command == 'package:enable') {
-                    Artisan::call('acl:sync');
+                    // Artisan::call('acl:sync');
                 }
             }
         );

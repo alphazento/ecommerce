@@ -11,15 +11,15 @@ namespace Zento\BladeTheme\Console\Commands;
 use PackageManager;
 use Illuminate\Support\Str;
 
-class PrepareVueTheme extends \Zento\Kernel\PackageManager\Console\Commands\Base
+class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'vuetheme:prepare';
-    protected $description = 'prepare vue theme';
+    protected $signature = 'vueblade:prepare';
+    protected $description = 'prepare vue blade theme/package';
 
     protected $aliases = [];
     protected $mix = [];
