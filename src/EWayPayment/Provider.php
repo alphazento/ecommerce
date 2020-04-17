@@ -9,7 +9,7 @@ use Zento\EWayPayment\Services\PaymentMethod;
 
 class Provider extends ServiceProvider
 {
-    public function register()
+    public function boot()
     {
         PaymentGateway::registerMethod("ewaypayment", function() {
             return new PaymentMethod();
