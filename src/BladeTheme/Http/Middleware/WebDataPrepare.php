@@ -34,10 +34,8 @@ class WebDataPrepare
     }
 
     protected function prepareApiGuestToken($user) {
-        if (config(Consts::WORK_WITH_PASSPORT_GUEST_TOKEN)) {
-            $apiGuestToken = BladeTheme::getApiGuestToken($user);
-            BladeTheme::addGlobalViewData(compact('apiGuestToken'));
-            return $apiGuestToken;
-        }
+        $apiGuestToken = config(Consts::WORK_WITH_PASSPORT_GUEST_TOKEN) ? BladeTheme::getApiGuestToken($user) : null;
+        BladeTheme::addGlobalViewData(compact('apiGuestToken'));
+        return $apiGuestToken;
     }
 }
