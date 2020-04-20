@@ -34,7 +34,10 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
     protected $themeType = 'frontstore';
 
+    protected $basePath = '';
+
     public function handle() {
+        $this->basePath = base_path();
         $packageConfigs = PackageManager::loadPackagesConfigs();
         PackageManager::rebuildPackages();
         foreach($packageConfigs ?? [] as $name => $packageConfig) {
@@ -120,7 +123,11 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->mergedPackages[$packageName] = true;
         if ($file = PackageManager::packagePath($packageName, ['resources', 'vue'])) {
             if (file_exists($file)) {
-                $aliasValue = substr($file, strlen(base_path()) + 1);
+                if (Str::startsWith($file, $this->basePath)) {
+                    $aliasValue = substr($file, strlen($this->basePath) + 1);
+                } else {
+                    $aliasValue = $file;
+                }
                 $this->aliases[$packageName] = $aliasValue;
                 if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_.js'])) {
                     if (file_exists($file)) {
