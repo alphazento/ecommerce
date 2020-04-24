@@ -21,9 +21,11 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
         'sort_by'
     ];
 
-    public $_richData_ = [
-        'children'
-    ];
+    public function getRichDataDefines() {
+        return [
+           'children'
+        ];
+    }
 
     public function getTableFields() {
         return $this->fillable;

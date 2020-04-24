@@ -34,13 +34,16 @@
           <p class="title blue--text">{{ product.name }}</p>
           <br />
           <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
-          <span class="title">${{ product.prices.price }}</span>
+          <span class="title">${{ product.price.price }}</span>
           &nbsp;
-          <del class>${{ product.prices.rrp }}</del>
+          <del class>${{ product.price.rrp }}</del>
         </div>
       </v-card-title>
       <v-card-actions class="text-center">
-        <product-variations-block :product="product" @productElementsUpdated="productElementsUpdated"></product-variations-block>
+        <product-variations-block
+          :product="product"
+          @productElementsUpdated="productElementsUpdated"
+        ></product-variations-block>
       </v-card-actions>
       <!-- <v-card-actions>
           <v-btn large rounded depressed class="mx-auto add-cart-btn" >ADD TO CART</v-btn>
@@ -64,7 +67,7 @@ export default {
       color: "grey lighten-2",
       variationElements: {
         images: [],
-        priceRange: [this.product.prices.price, this.product.prices.price]
+        priceRange: [this.product.price.price, this.product.price.price]
       }
     };
   },

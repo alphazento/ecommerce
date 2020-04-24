@@ -7,15 +7,17 @@ use Zento\Kernel\Booster\Database\Eloquent\QueryFilter;
 
 class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
 {
-    public $_richData_ = [
-        'payments',
-        'status_history',
-        'customer',
-        'shipments',
-        'admin_comments.administrator',
-        'products',
-        'items'
-    ];
+    public function getRichDataDefines() {
+        return  [
+            'payments',
+            'status_history',
+            'customer',
+            'shipments',
+            'admin_comments.administrator',
+            'products',
+            'items'
+        ];
+    }
 
     public function customer() {
        return $this->hasOne(Customer::class, 'id', 'customer_id');

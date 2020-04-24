@@ -2,10 +2,12 @@
 
 namespace Zento\Catalog\Model\ORM;
 
+use Auth;
+use ShareBucket;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 
 class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
@@ -20,10 +22,16 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         'downloadable' => '\Zento\Catalog\Model\ORM\Product',
     ];
 
-    public $_richData_ = [
-        'prices',
-        'special_price'
-    ];
+    public function getRichDataDefines() {
+        if (ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL) === 'admin') {
+            return [
+                'prices',
+                'special_price'
+            ];
+        } else {
+            return ['price'];
+        }
+    } 
 
     protected $fillable = [
         'name',
@@ -49,12 +57,25 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         return true;
     }
 
-    public function prices() {
-        return $this->hasOne(ProductPrice::class, 'product_id');
+    /**
+     * if frontend it will only get this price
+     */
+    public function price() {
+        $groupId = Auth::user()->group_id ?? 0;
+        return $this->hasOne(ProductPrice::class, 'product_id')
+            ->whereIn('customer_group_id', [$groupId, 0])
+            ->orderBy('customer_group_id', 'desc');
     }
 
-    public function special_price() {
-        return $this->hasOne(ProductSpecialPrice::class, 'product_id');
+    /**
+     * admin portal support customer groups
+     */
+    public function prices() {
+        return $this->hasMany(ProductPrice::class, 'product_id');
+    }
+
+    public function special_prices() {
+        return $this->hasMany(ProductSpecialPrice::class, 'product_id');
     }
 
     /**
@@ -117,11 +138,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     }
 
     public function getPriceAttribute() {
-        return $this->prices->price ?? 0;
-    }
-
-    public function getPrice() {
-        return $this->prices->price ?? 0;
+        return $this->price->price ?? 0;
     }
 
     public static function assignExtraRelation($products) {

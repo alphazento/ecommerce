@@ -79,7 +79,7 @@ export default {
           });
         }
       });
-      // reduced.sort((a, b) => (a.prices.price > b.prices.price ? 1 : -1));
+      // reduced.sort((a, b) => (a.price.price > b.price.price ? 1 : -1));
       this.availables = reduced;
     },
     calc() {
@@ -100,11 +100,9 @@ export default {
         return item;
       });
 
-      this.availables.sort((a, b) =>
-        a.prices.price > b.prices.price ? 1 : -1
-      );
-      let priceFrom = this.availables[0].prices.price;
-      let priceTo = this.availables[this.availables.length - 1].prices.price;
+      this.availables.sort((a, b) => (a.price.price > b.price.price ? 1 : -1));
+      let priceFrom = this.availables[0].price.price;
+      let priceTo = this.availables[this.availables.length - 1].price.price;
       this.priceRange = [priceFrom];
       if (priceTo > priceFrom) {
         this.priceRange.push(priceTo);

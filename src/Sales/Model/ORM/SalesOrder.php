@@ -28,9 +28,6 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
         'tax_amount'
     ];
     
-    public $_richData_ = [
-    ];
-
     public function payments() {
         return $this->hasMany(PaymentTransaction::class, 'order_id');
     }

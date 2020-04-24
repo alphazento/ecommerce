@@ -19,10 +19,12 @@ class Customer extends \Zento\Passport\Model\User
         'is_guest'
     ];
 
-    public $_richData_ = [
-        'default_billing_address',
-        'default_shipping_address'
-    ];
+    public function getRichDataDefines() {
+        return [
+            'default_billing_address',
+            'default_shipping_address'
+        ];
+    }
 
     public function default_billing_address() {
         return $this->hasOne(CustomerAddress::class, 'id', 'default_billing_address_id');

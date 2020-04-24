@@ -43,6 +43,7 @@
             consts: @json($consts)
         },
         created() {
+            console.log('data', this.$data)
             this.$store.dispatch('setConsts', this.consts);
             this.$store.dispatch('setUser', this.user);
         }

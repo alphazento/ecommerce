@@ -16,9 +16,9 @@
           <p class="title blue--text">{{ product.name }}</p>
           <br />
           <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
-          <span class="title">${{ product.prices.price }}</span>
+          <span class="title">${{ product.price.price }}</span>
           &nbsp
-          <del class>${{ product.prices.rrp }}</del>
+          <del class>${{ product.price.rrp }}</del>
         </div>
       </v-card-title>
     </v-card>

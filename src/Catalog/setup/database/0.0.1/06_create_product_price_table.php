@@ -15,8 +15,9 @@ class CreateProductPriceTable extends Migration
         Schema::create('product_prices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product_id')->unsigned();
-            $table->decimal('cost', 8, 2)->nullable()->default(0);
-            $table->decimal('rrp', 8, 2)->nullable()->default(0);
+            //support different customer gorup with different price
+            //0 as default group
+            $table->integer('customer_group_id')->unsigned()->default(0);
             $table->decimal('price', 8, 2)->default(0);
             $table->decimal('discount', 8, 2)->default(0);
             $table->timestamps();

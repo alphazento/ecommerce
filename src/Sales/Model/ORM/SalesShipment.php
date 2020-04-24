@@ -10,11 +10,14 @@ class SalesShipment extends \Illuminate\Database\Eloquent\Model
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
     protected $fillable = ['order_id'];
-    public $_richData_ = [
-        'address',
-        // 'carrier',
-        // 'method',
-    ];
+    
+    public function getRichDataDefines() {
+        return  [
+            'address',
+            // 'carrier',
+            // 'method',
+        ];
+    }
 
     public function address() {
         return $this->hasOne(SalesAddress::class, 'id', 'sales_address_id');

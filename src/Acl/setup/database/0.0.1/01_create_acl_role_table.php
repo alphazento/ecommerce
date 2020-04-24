@@ -34,7 +34,7 @@ class CreateAclRoleTable extends Migration
                 [
                     'scope' => Consts::BACKEND_SCOPE,
                     'name' => 'root',
-                    'description' => 'Super Administrator.',
+                    'description' => 'Super Administrator',
                     'active' => 1
                 ]
             ]);
