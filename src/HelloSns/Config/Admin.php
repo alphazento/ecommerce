@@ -4,59 +4,84 @@ namespace Zento\HelloSns\Config;
 
 use Zento\HelloSns\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerL1MenuNode('Website', 'HelloSns', 'HelloSns');
+    protected function _registerDashboardMenus() {}
+
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'HelloSns');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
-        $groups['website/hellosns'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'frontend',  [
-                'title' => 'Front-end Panel use Hellosns',
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['website/hellosns'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'front-end'],  [
+                'text' => 'Front-end Panel use Hellosns',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::ENABLED, 'frontend'),
+                        'accessor' => sprintf(Consts::ENABLED, 'front-end'),
                     ],
                     [
-                        'title' => 'Response Type',
+                        'text' => 'Allow Services',
+                        'ui' => 'config-multi-options-item',
+                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'front-end'),
+                        'options' => [
+                            ['label' => 'Facebook', 'value'=>'facebook'],
+                            ['label' => 'Google', 'value'=>'google'],
+                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
+                            ['label' => 'Twitter', 'value'=>'twitter'],
+                            ['label' => 'Github', 'value'=>'github'],
+                            ['label' => 'Gitlab', 'value'=>'gitlab'],
+                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
+                        ]
+                    ],
+                    [
+                        'text' => 'Response Type',
                         'ui' => 'config-options-item',
-                        'accessor' => sprintf(Consts::RESPONSE_TYPE, 'frontend'),
+                        'accessor' => sprintf(Consts::RESPONSE_TYPE, 'front-end'),
                         'options' => [
                             ['label' => 'code', 'value'=>'code'],
                             ['label' => 'token', 'value'=>'token']
                         ]
                     ],
-                    // [
-                    //     'title' => 'Allow Services',
-                    //     'ui' => 'config-options-item',
-                    //     'accessor' => sprintf(Consts::ALLOW_SERVICES, 'frontend'),
-                    // ],
                     [
-                        'title' => 'Use State Check',
+                        'text' => 'Use State Check',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::CHECK_STATE, 'frontend'),
+                        'accessor' => sprintf(Consts::CHECK_STATE, 'front-end'),
                     ],
                     [
-                        'title' => 'Can create account if not same user exists',
+                        'text' => 'Can create account if not same user exists',
                         'ui' => 'config-boolean-item',
-                        'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'frontend'),
+                        'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'front-end'),
                     ],
                 ]
             ]);
-            AdminService::registerGroup($groupTag, 'backend',  [
-                'title' => 'Admin Panel use Hellosns',
+            AdminConfigurationService::registerGroup([$groupTag, 'backend'],  [
+                'text' => 'Admin Panel use Hellosns',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ENABLED, 'backend'),
                     ],
                     [
-                        'title' => 'Response Type',
+                        'text' => 'Allow Services',
+                        'ui' => 'config-multi-options-item',
+                        'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
+                        'options' => [
+                            ['label' => 'Facebook', 'value'=>'facebook'],
+                            ['label' => 'Google', 'value'=>'google'],
+                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
+                            ['label' => 'Twitter', 'value'=>'twitter'],
+                            ['label' => 'Github', 'value'=>'github'],
+                            ['label' => 'Gitlab', 'value'=>'gitlab'],
+                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
+                        ]
+                    ],
+                    [
+                        'text' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'backend'),
                         'options' => [
@@ -70,17 +95,88 @@ class Admin extends AbstractAdminConfig {
                     //     'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
                     // ],
                     [
-                        'title' => 'Use State Check',
+                        'text' => 'Use State Check',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::CHECK_STATE, 'backend'),
                     ],
                     [
-                        'title' => 'Can create account if user not exists',
+                        'text' => 'Can create account if user not exists',
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'backend'),
                     ],
                 ]
             ]);
+
+            AdminConfigurationService::registerGroup([$groupTag, 'services'],  [
+                'text' => 'Social Media Login Services',
+                'items' => [
+                    [
+                        'text' => 'Facebook',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::FACEBOOK_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'text' => 'Google',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GOOGLE_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'text' => 'LinkedIn',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::LINKEDIN_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'text' => 'Github',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GITHUB_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'text' => 'GitLab',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::GITLAB_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                    [
+                        'text' => 'Bitbucket',
+                        'ui' => 'config-json-item',
+                        'accessor' => Consts::BITBUCKET_SERVICE,
+                        'schema' => [
+                            "client_id" => "config-text-item",
+                            "client_secret" => "config-text-item",
+                            "redirect" => "config-text-item"
+                        ],
+                    ],
+                ]
+            ]);
         };
     }
+
+    protected function _registerDataTableSchemas(&$data) {}
+
+    protected function _registerModelDefines(&$data){}
+    
 }

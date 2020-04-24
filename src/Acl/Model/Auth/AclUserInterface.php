@@ -12,11 +12,11 @@ namespace Zento\Acl\Model\Auth;
 
 interface AclUserInterface
 {
-    public function permissions();
+    public function routes();
 
-    public function permissionwhitelist();
+    public function whiteRoutes();
 
-    public function permissionblacklist();
+    public function blackRoutes();
 
-    public function groups();
+    public function roles();
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Contracts\Shipment;
+namespace Zento\Contracts\Interfaces\Shipment;
 
 class EstimateResult extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\AssertAbleInterface 
 {

@@ -19,6 +19,10 @@ class ShipmentController extends ApiBaseController
 {
     use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
 
+    /**
+     * estimate shipping methods for a shopping cart
+     * @group Shipment
+     */
     public function estimateShippingMethods() {
         return $this->tapCart(function($cart) {
             if ($params = Request::get('shipping_address')) {

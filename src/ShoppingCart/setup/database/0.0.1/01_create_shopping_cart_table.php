@@ -14,7 +14,8 @@ class CreateShoppingCartTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email', 255)->nullable();
+            $table->string('uuid', 40)->index();
+            $table->string('customer_id', 36)->index();
             $table->integer('store_id')->unsigned()->default(0);
             $table->string('customer_id', 36)->index();
             $table->tinyInteger('mode')->default(0); //0:guest, 1:customer, 2:admin

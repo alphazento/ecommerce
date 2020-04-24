@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class Product extends SimpleProduct
 {
     const REQUIRE_OPTION_KEY = 'actual_pid';  //actual product id
-    const TYPE_ID = "configurable";
+    const MODEL_TYPE = "configurable";
 
     /**
      * all configurable products
@@ -25,7 +25,7 @@ class Product extends SimpleProduct
 
     public static function assignExtraRelation($products) {
         // $reduced = array_filter($products, function($product) {
-        //     return $product->type_id === self::TYPE_ID;
+        //     return $product->model_type === self::MODEL_TYPE;
         // });
         // $ids = array_map(function($product) {
         //     return $product->id;

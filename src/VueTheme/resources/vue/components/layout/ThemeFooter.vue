@@ -57,6 +57,6 @@ import { faFacebook, faTwitter, faLinkedin, faInstagram, faWeibo, faWeixin, faGo
 export default {
   data: () => {
     return window.themeData.footer;
-  }
+  },
 }
 </script>

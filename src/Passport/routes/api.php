@@ -9,10 +9,10 @@
             'namespace' => '\Zento\Passport\Http\Controllers',
             'middleware' => ['cors']
         ], function () {
-        Route::post(
-            '/token/guest', 
-            ['as' => 'oauth.token.guest', 'uses' => 'ApiController@guestToken']
-        )->unshiftMiddleware('guesttoken:normal');
+        // Route::post(
+        //     '/token/guest', 
+        //     ['as' => 'oauth.token.guest', 'uses' => 'ApiController@guestToken']
+        // )->unshiftMiddleware('guesttoken:normal');
     
         Route::post(
             '/token', 
@@ -37,5 +37,5 @@
         Route::get(
             '/profile', 
             ['as' => 'oauth.profile', 'uses' => 'ApiController@profile']
-        );
+        )->middleware('auth:api');
     });

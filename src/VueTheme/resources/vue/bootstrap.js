@@ -44,6 +44,10 @@ if (apiguesttoken) {
     console.error('api-guest-token not found');
 }
 
+window.axios.interceptors.response.use(resoponse => {
+    return resoponse.data;
+});
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

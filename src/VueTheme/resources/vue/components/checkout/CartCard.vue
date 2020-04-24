@@ -3,7 +3,7 @@
     <v-card class="mx-auto" fill-width>
       <v-list-item two-line v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar tile size="80">
-          <v-img :src="getProductImageUrl(item.product)"></v-img>
+          <v-img :src="item.product.image" eager></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-container>
@@ -19,7 +19,7 @@
             <v-layout row>
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">
-                <qty-select :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></qty-select>
+                <quantity-selector :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></quantity-selector>
               </v-flex>
               <v-flex md5 xs5 class="v-middle text-right">${{item.row_price}}</v-flex>
             </v-layout>

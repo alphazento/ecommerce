@@ -10,43 +10,33 @@
 
 namespace Zento\Acl\Model\Auth;
 
-use Zento\Acl\Model\AdminGroup;
+use Zento\Acl\Model\ORM\AclRole;
 
 /**
  * Guest user can get gust group permission
  */
 class GuestUser implements AclUserInterface
 {
-    static $scope = \Zento\Acl\Consts::GUEST_SCOPE;
+    static $scope = \Zento\Acl\Consts::BOTH_SCOPE;
 
-    public $_groups = null;
-    public function permissionwhitelist() {
+    public $_roles = null;
+    public function whiteRoutes() {
         return null;
     }
 
-    public function permissionblacklist() {
+    public function blackRoutes() {
         return null;
     }
 
-    public function permissions() {
+    public function routes() {
         return null;
     }
 
-    public function groups() {
-        if (!$this->_groups) {
-            $this->_groups = AdminGroup::where('name', '=', 'guest')->get();
-        }
-        return $this->_groups;
+    public function roles() {
+        return null;
     }
 
     public function __get($key) {
-        switch($key) {
-            case 'permissionwhitelist':
-            case 'permissionblacklist':
-                return null;
-            case 'groups':
-                return $this->groups();
-        }
         return null;
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <v-select
         class="limit-width"
-        :items="options"
+        :items="compOptions"
         item-text="label"
         item-value="value"
         required
@@ -11,8 +11,22 @@
 </template>
 
 <script>
-import BaseLabel from "./Label";
+import BaseConfig from "./Base";
 export default {
-    extends: BaseLabel
+    extends: BaseConfig,
+    props: {
+        clearable: Boolean
+    },
+    computed: {
+        compOptions() {
+            if (this.clearable) {
+                let options = this.options;
+                options.unshift({label: '(clear)', value: null});
+                return options;
+            } else {
+                return this.options;
+            }
+        }
+    }
 };
 </script>

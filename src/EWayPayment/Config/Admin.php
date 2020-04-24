@@ -2,28 +2,32 @@
 
 namespace Zento\EwayPayment\Config;
 
-use Zento\Backend\Providers\Facades\AdminService;
+use Zento\EWayPayment\Consts;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
-    }
+    protected function _registerDashboardMenus() {}
+    protected function _registerDynamicConfigItemMenus() {}
 
-    public function _registerGroups($groupTag, &$groups) {
-        $groups['Sales/PaymentGateway'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'eWay',  [
+    protected function _registerDynamicConfigItemGroups( &$data) {
+        $data['sales/paymentgateway'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'eWay',  [
                 'title' => 'eWay Transparent',
                 'items' => [
                     [
-                        'title' => 'Enabled In Frontend',
+                        'title' => 'Enabled In Front-end',
                         'ui' => 'config-boolean-item',
-                        'accessor' => 'paymentgateway.eway.frontend.enabled'
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
                         'ui' => 'config-boolean-item',
-                        'accessor' => 'paymentgateway.eway.admin.enabled'
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_BACKEND
+                    ],
+                    [
+                        'title' => 'Display Title',
+                        'ui' => 'config-text-item',
+                        'accessor' => Consts::CONFIG_KEY_TITLE
                     ],
                     [
                         'title' => 'Mode',
@@ -32,30 +36,35 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             ['value' => 'sandbox', 'label' => 'Sandbox'], 
                             ['value' => 'production', 'label' => 'Production']
                         ],
-                        'accessor' => 'paymentgateway.eway.mode'
+                        'accessor' => Consts::PAYMENT_GATEWAY_EWAY_MODE
                     ],
                     [
                         'title' => 'Sandbox ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.sandbox.client_id'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_CLIENT_ID_BY_MODE, 'sandbox')
                     ],
                     [
                         'title' => 'Sandbox Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.sandbox.secret'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_SECRET_BY_MODE, 'sandbox')
                     ],
                     [
                         'title' => 'Production ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.production.client_id'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_CLIENT_ID_BY_MODE, 'production')
                     ],
                     [
                         'title' => 'Production Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => 'paymentgateway.eway.production.secret'
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_EWAY_SECRET_BY_MODE, 'production')
                     ]
                 ]
             ]);
         };
     }
+
+    protected function _registerDataTableSchemas(&$data) {}
+
+    protected function _registerModelDefines(&$data){}
+    
 }

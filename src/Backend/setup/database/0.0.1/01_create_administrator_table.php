@@ -17,7 +17,7 @@ class CreateAdministratorTable extends Migration
             $table->string('name', 255);
             $table->string('email', 255);//->unique();
             $table->string('password', 255);
-            $table->boolean('is_active')->default(1);
+            $table->boolean('active')->default(1);
             $table->timestamp('lock_expires')->nullable();
             $table->timestamps();
         });

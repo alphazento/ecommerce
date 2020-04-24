@@ -22,7 +22,7 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
     }
 
     /**
-     * Retrieve a user by their unique identifier.
+     * Retrieves a user by their unique identifier.
      *
      * @param  mixed  $identifier
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
@@ -121,6 +121,13 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
 			$tree = $this->getCategoriesByLevel($this->treeLevelFrom, $activeOnly);
 		}
 		return $tree;
+    }
+
+    public function treeConfigs() {
+        return [
+            'level_from' => $this->treeLevelFrom,
+            'level_to'=> $this->treeMaxLevel + $this->treeLevelFrom - 1,
+        ];
     }
     
     /**

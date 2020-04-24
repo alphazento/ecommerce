@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class Product extends SimpleProduct
 {
-    const TYPE_ID = "downloadable";
+    const MODEL_TYPE = "downloadable";
 
     public function shippable() {
         return false;

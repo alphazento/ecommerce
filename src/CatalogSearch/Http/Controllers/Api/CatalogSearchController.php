@@ -11,10 +11,19 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class CatalogSearchController extends ApiBaseController
 {
+    /**
+     * execute a general catalog search or under a specified category from storefront
+     * @group Catalog Search
+     * @urlParam id number specified category id
+     */
     public function search() {
         return $this->_search();
     }
 
+    /**
+     * execute a catalog search from admin
+     * @group Catalog Search
+     */
     public function adminSearch() {
         DanamicAttributeFactory::withoutMappedValue(false);
         return $this->_search('admin', false);

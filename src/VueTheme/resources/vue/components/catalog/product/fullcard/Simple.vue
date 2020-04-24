@@ -1,78 +1,75 @@
 <template>
-    <v-layout row>
-        <v-flex md5 xs12>
-            <v-img max-width="400px" :src="getProductImageUrl(product)"></v-img>
-        </v-flex>
-        <v-flex md7 xs12>
-            <h1 class="display-2 text-uppercase">
-                {{ product.desc.name }}
-            </h1>
-            <br/>
-            <p v-html="product.desc.description"/>
-            <!-- <product-tab
-                :description="product.desc.description"
-                :flex="'md9 xs12'"
-            ></product-tab> -->
-            <v-content>
-                <v-layout row>
-                    <v-flex md1 xs1></v-flex>
-                    <v-flex md6 xs6>
-                        <div class="display-1" style="color:#F44336;">
-                            ${{ product.prices.price }}
-                        </div>
-                    </v-flex>
-                </v-layout>
-                <v-form
-                    :action="`/shoppingcart/add_product/${product.id}`"
-                    method="POST"
-                >
-                    <v-layout row>
-                        <v-flex md1 xs1></v-flex>
-                        <v-flex md6 xs6 v-if="canShowQutity">
-                            <qty-select
-                                :max="20"
-                                v-model="selectedQty"
-                            ></qty-select>
-                        </v-flex>
-                        <input type="hidden" name="qty" v-model="selectedQty" />
-                        <v-flex md5 xs5>
-                            <v-btn
-                                depressed
-                                large
-                                class="btn__addtocart"
-                                type="submit"
-                                >Add to Cart</v-btn
-                            >
-                        </v-flex>
-                    </v-layout>
-                </v-form>
-            </v-content>
-        </v-flex>
-    </v-layout>
+  <v-layout row>
+    <v-flex md7 xs12>
+      <v-card flat>
+        <h1 class="display-2 text-uppercase text-center">
+          {{ product.name }}
+        </h1>
+        <v-card-text>
+          <v-img
+            max-width="600px"
+            style="margin-left: auto;margin-right: auto;"
+            :src="product.image"
+            eager
+          ></v-img>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+    <v-flex md5 xs12>
+      <v-form method="POST" action="`/shoppingcart/products/${product.id}`">
+        <v-card flat>
+          <v-card-text class="font-weight-bold ">
+            <v-layout row>
+              <slot name="price" v-bind:product="product">
+                <div class="display-1" style="color:#F44336;">
+                  ${{ product.prices.price }}
+                </div>
+              </slot>
+            </v-layout>
+            <v-layout row>
+              <slot name="description" v-bind:product="product">
+                <p v-html="product.short_description" />
+              </slot>
+            </v-layout>
+          </v-card-text>
+
+          <v-card-actions>
+            <input type="hidden" name="qty" v-model="selectedQty" />
+            <quantity-selector
+              :max="20"
+              v-model="selectedQty"
+            ></quantity-selector>
+            <v-btn depressed large type="submit" class="btn__addtocart">
+              Add to Cart
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-var mixin = require("../../../../mixin/catalogpollyfill");
 export default {
-    mixins: [mixin.default],
-    props: {
-        product: {
-            type: Object
-        },
-        tabs: {
-            type: Object
-        },
-        showQutity: {
-            type: Boolean
-        }
+  props: {
+    product: {
+      type: Object
     },
-    data() {
-        return {
-            selectedQty: 1,
-            canShowQutity: this.showQutity ? true : false,
-            qtys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            model: "tab-physic"
-        };
+    tabs: {
+      type: Object
+    },
+    showQutity: {
+      type: Boolean
     }
+  },
+  data() {
+    return {
+      selectedQty: 1,
+      canShowQutity: this.showQutity ? true : false,
+      canShowQutity: true,
+      qtys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      model: "tab-physic"
+    };
+  }
 };
 </script>

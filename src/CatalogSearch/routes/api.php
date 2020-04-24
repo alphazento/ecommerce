@@ -10,7 +10,7 @@ Route::group(
             ['as' => 'catalog.search', 'uses' => 'CatalogSearchController@search']
         );
         Route::get(
-            '/catalog/categories/{id}', 
+            '/catalog/search/categories/{id}', 
             ['as' => 'catalog.category.search', 'uses' => 'CatalogSearchController@search']
         );
 });

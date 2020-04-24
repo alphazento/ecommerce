@@ -10,54 +10,54 @@
 
 namespace Zento\Acl\Model\Auth;
 
-use Zento\Acl\Model\ORM\AclPermissionItem;
-use Zento\Acl\Model\ORM\AclUserPermissionWhiteList;
-use Zento\Acl\Model\ORM\AclUserPermissionBlackList;
-use Zento\Acl\Model\ORM\AclUserGroup;
-use Zento\Acl\Model\ORM\AclGroupUserList;
+use Zento\Acl\Model\ORM\AclRoute;
+use Zento\Acl\Model\ORM\AclWhiteList;
+use Zento\Acl\Model\ORM\AclBlackList;
+use Zento\Acl\Model\ORM\AclRole;
+use Zento\Acl\Model\ORM\AclRoleUser;
 
 trait TraitPermission
 {
-    private $_permissions;
-    public function permissionwhitelist() {
-        return $this->hasManyThrough(AclPermissionItem::class, AclUserPermissionWhiteList::class,
+    private $_routes;
+    public function whiteRoutes() {
+        return $this->hasManyThrough(AclRoute::class, AclWhiteList::class,
             'user_id',
             'id',
             'id',
-            'item_id'
-        )->where(with(new AclUserPermissionWhiteList)->getTable() . '.scope', '=', static::$scope);
+            'route_id'
+        )->where(with(new AclWhiteList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function permissionblacklist() {
-        return $this->hasManyThrough(AclPermissionItem::class, AclUserPermissionBlackList::class,
+    public function blackRoutes() {
+        return $this->hasManyThrough(AclRoute::class, AclBlackList::class,
             'user_id',
             'id',
             'id',
-            'item_id'
-        )->where(with(new AclUserPermissionBlackList)->getTable() . '.scope', '=', static::$scope);
+            'route_id'
+        )->where(with(new AclBlackList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function groups() {
-        return $this->hasManyThrough(AclUserGroup::class, AclGroupUserList::class,
+    public function roles() {
+        return $this->hasManyThrough(AclRole::class, AclRoleUser::class,
             'user_id',
             'id',
             'id',
-            'group_id'
-        )->where(with(new AclGroupUserList)->getTable() . '.scope', '=', static::$scope);
+            'role_id'
+        )->where(with(new AclRoleUser)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function permissions() {
-        if (!$this->_permissions) {
-            $this->_permissions = [];
-            foreach($this->groups ?? [] as $group) {
-                foreach($group->permissions ?? [] as $item) {
-                    if (!$this->objectInArray($item, $this->_permissions, 'id')) {
-                        $this->_permissions[] = $item;
+    public function routes() {
+        if (!$this->_routes) {
+            $this->_routes = [];
+            foreach($this->roles ?? [] as $role) {
+                foreach($role->routes ?? [] as $item) {
+                    if (!$this->objectInArray($item, $this->_routes, 'id')) {
+                        $this->_routes[] = $item;
                     }
                 }
             }
         }
-        return $this->_permissions;
+        return $this->_routes;
     }
 
     private function objectInArray($needdle, &$array, $key) {

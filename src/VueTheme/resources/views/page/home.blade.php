@@ -1,7 +1,7 @@
 @extends('layout.frame', ['nav_page' => 'home'])
 
 @push('head')
-    <title>Home page</title>
+    <title>Home | Alphazento</title>
 @endpush
 
 @section('pagecontent')

@@ -11,15 +11,26 @@ class SalesShipment extends \Illuminate\Database\Eloquent\Model
 
     protected $fillable = ['order_id'];
     public $_richData_ = [
-        'billing_address',
-        'shipping_address',
+        'address',
+        // 'carrier',
+        // 'method',
     ];
 
-    public function billing_address() {
-        return $this->hasOne(SalesAddress::class, 'billing_address_id');
+    public function address() {
+        return $this->hasOne(SalesAddress::class, 'id', 'sales_address_id');
     }
 
-    public function shipping_address() {
-        return $this->hasOne(SalesAddress::class, 'shipping_address_id');
+    public function customer() {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
+    public function carrier() {
+        // shipping_carrier_id
+        return $this->hasOne(ShipmentCarrier::class, 'id', 'carrier_id');
+    }
+
+    public function method() {
+        // shipping_method_id
+        return $this->hasOne(ShipmentMethod::class,  'id', 'method_id');
     }
 }

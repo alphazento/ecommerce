@@ -78,11 +78,11 @@ class User extends Authenticatable
         return $isMe;
     }
 
-    public function acl($request) {
-        (new \Zento\Passport\Passport)->callPostAuthcateHooks($this, $request);
-    }
-
     public function guest() {
         return false;
+    }
+
+    public function isApi() {
+        return true;
     }
 }

@@ -10,46 +10,40 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
     protected $fillable = [
-        'order_number',
-        'is_backorder',
-        'invoice_no',
         'store_id',
+        'order_number',
+        'invoice_id',
         'status_id',
-        'coupon_code',
+        'hold_before_status_id',
+        'amend_from',
+        'resend_from',
+        'is_backorder',
         'customer_id',
-        'guest_checkout', #$cart->customer->isGuest(),
-        'ext_customer_id',
-        'ext_order_id',
         'customer_note',
-        'applied_rule_ids',
-        'remote_ip' ,
-        'total_item_qty',
-        'payment_transaction_id' ,
-        'total_amount_include_tax' ,
-        'base_currency_code' ,
-        'order_currency_code',
-        'base_to_order_currency_rate'
+        'is_guest',
+        'remote_ip',
+        'active',
+        'subtotal',
+        'total',
+        'tax_amount'
     ];
     
     public $_richData_ = [
-        'payment',
-        'status',
-        'status_history',
     ];
 
-    public function payment() {
-        return $this->hasOne(SalesOrderPayment::class, 'order_id');
+    public function payments() {
+        return $this->hasMany(PaymentTransaction::class, 'order_id');
     }
 
-    public function shipment() {
-        return $this->hasOne(SalesShipment::class, 'order_id');
+    public function shipments() {
+        return $this->hasMany(SalesShipment::class, 'order_id');
     }
 
-    public function status() {
-        return $this->hasOne(SalesOrderStatus::class, 'id');
+    public function products() {
+        return $this->hasMany(SalesOrderProduct::class, 'order_id');
     }
 
-    public function status_history() {
-        return $this->hasMany(SalesOrderStatusHistory::class, 'order_id');
+    public function items() {
+        return $this->hasMany(SalesOrderItem::class, 'order_id');
     }
 }

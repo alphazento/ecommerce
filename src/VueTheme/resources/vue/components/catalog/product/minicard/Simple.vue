@@ -2,7 +2,7 @@
   <v-hover v-slot:default="{ hover }">
     <v-card class="mx-auto">
       <a :href="getProductUrl(product)">
-        <v-img :src="getProductImageUrl(product)" height="280px" contain>
+        <v-img :src="product.image" height="280px" contain eager>
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox></v-flex>
@@ -13,7 +13,7 @@
 
       <v-card-title>
         <div class="mx-5">
-          <p class="title blue--text">{{ product.desc.name }}</p>
+          <p class="title blue--text">{{ product.name }}</p>
           <br />
           <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
           <span class="title">${{ product.prices.price }}</span>

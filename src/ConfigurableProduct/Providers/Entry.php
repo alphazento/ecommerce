@@ -10,7 +10,7 @@ use Zento\ConfigurableProduct\Model\ORM\Product as ConfigurableProduct;
 class Entry extends \Illuminate\Support\ServiceProvider
 {
     public function boot() {
-        ConfigurableProduct::registerType(ConfigurableProduct::TYPE_ID, ConfigurableProduct::class);
+        ConfigurableProduct::registerType(ConfigurableProduct::MODEL_TYPE, ConfigurableProduct::class);
         $callback = function($items) {
             if (ConfigurableProduct::isRichMode()) {
                 ConfigurableProduct::assignExtraRelation($items);

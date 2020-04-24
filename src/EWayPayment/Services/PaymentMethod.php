@@ -10,7 +10,7 @@ use Zento\PaymentGateway\Model\PaymentTransaction;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\ROModel\ROShoppingCart;
 
-class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
+class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod {
     public function getCode() {
         return 'ewaypayment';
     }
@@ -20,7 +20,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function canOrder() {
-        return config('ewaypayment.title');
+        return true;
     }
 
     public function canAuthorize(){
@@ -48,23 +48,23 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
     }
 
     public function canUseAtFront() {
-        return config('paymentgateway.eway.frontend.enabled');
+        return config(Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND);
     }
 
     public function canUseAtAdmin() {
-        return config('paymentgateway.eway.admin.enabled');
+        return config(Consts::CONFIG_KEY_ENABLE_FOR_BACKEND);
     }
 
     public function canUseCheckout() {
-        return config('ewaypayment.can.usecheckout');
+        return true;
     }
 
     public function canEdit() {
-        return config('ewaypayment.can.edit');
+        return true;
     }
 
     public function canFetchTransactionInfo() {
-        return config('ewaypayment.can.fetchtransactioninfo');
+        return true;
     }
 
     public function canUseForCountry($country) {
@@ -119,32 +119,6 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\Method {
             case 'web':
                 return $this;
                 break;
-            case 'reactjs':
-                return $this->prepareForReactjs();
-                break;
         }
-    }
-
-    protected function prepareForReactjs() {
-        return [
-            "name" => $this->getCode(),
-            "title" => $this->getTitle(),
-            "withCards" =>true,
-            // "html" => 
-            // "img" => 
-            "js" => [
-                "depends"=> [
-                        [
-                            "namespaces" => ["eWAYUtils", "eWAY"],
-                            "src" => "https://secure.ewaypayments.com/scripts/eWAY.min.js"
-                        ]
-                    ],
-                    "entry" => "http://alphazento.local.test/js/eway2.js?v="  . time()
-            ],
-            'params' => [
-                'prepare_url' => "/payment/prepare/" . $this->getCode(),
-                'capture_url' => "/payment/capture/" . $this->getCode()
-            ]
-        ];
     }
 }

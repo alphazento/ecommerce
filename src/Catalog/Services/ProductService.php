@@ -5,9 +5,9 @@ namespace Zento\Catalog\Services;
 use DB;
 use Store;
 use Closure;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Catalog\Model\ORM\Product;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServiceInterface
 {
@@ -24,7 +24,6 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
 
     public function getProductBySku($sku) {
         return $this->singleProductExtraRelation(Product::where('sku', $sku)->first());
-
     }
 
     public function getProductsByIds(array $ids) {
@@ -59,8 +58,8 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
 
     public function getProductSwatches() {
         $attributes = DynamicAttribute::with(['options'])
-            ->where('swatch_type', '>', '0')
-            ->where('enabled', 1)
+            ->where('swatch', 1)
+            ->where('active', 1)
             ->get();
         
         $results = [];
@@ -69,15 +68,15 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
             foreach($attr->options as $option) {
                 $options[$option->value] = $option->swatch_value;
             }
-            $results[$attr->attribute_name] = $options;
+            $results[$attr->name] = $options;
         }
         return $results;
     }
 
     public function getProductSearchables() {
-        return DynamicAttribute::where('is_search_layer', '>', '0')
-            ->where('enabled', 1)
-            ->pluck('attribute_name')
+        return DynamicAttribute::where('searchable', '>', '0')
+            ->where('active', 1)
+            ->pluck('name')
             ->toArray();
     }
 

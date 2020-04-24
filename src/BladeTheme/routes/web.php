@@ -1,148 +1,98 @@
 <?php
-
-//general route for a website
-Route::group(
-    [
-        'prefix' => '/',
-        'namespace' => '\Zento\BladeTheme\Http\Controllers',
-        'middleware' => ['web']
-    ], function () {
-    Route::get(
-        '/', 
-        ['as' =>'home', 'uses' => 'GeneralController@home']
-    );
-
-    Route::get(
-        'home', 
-        ['as' =>'home', 'uses' => 'GeneralController@home']
-    );
-
-    Route::get(
-        'about-us', 
-        ['as' =>'web.get.aboutus', 'uses' => 'GeneralController@aboutUs']
-    );
-    
-    Route::get(
-        'contact-us', 
-        ['as' =>'web.get.contactus', 'uses' => 'GeneralController@contactUs']
-    );
-    Route::get(
-        'news', 
-        ['as' =>'web.get.news', 'uses' => 'GeneralController@news']
-    );
-    Route::get(
-        'privacy', 
-        ['as' =>'web.get.privacy', 'uses' => 'GeneralController@privacy']
-    );
-    Route::get(
-        'terms-conditions', 
-        ['as' =>'web.get.terms', 'uses' => 'GeneralController@terms']
-    );
-});
-
-Route::group(
-    [
-        'prefix' => '/',
-        'namespace' => '\Zento\BladeTheme\Http\Controllers',
-        'middleware' => ['web']
-    ], function () {
+    /**
+     * general route for a website
+     */
+    Route::group(
+        [
+            'prefix' => '/',
+            'namespace' => '\Zento\BladeTheme\Http\Controllers',
+            'middleware' => ['web']
+        ], function () {
         Route::get(
-            'categories/{id}', 
-            ['as' =>'web.get.category.products', 'uses' => 'CatalogController@categoryProducts']
-        );
-    
-        Route::get(
-            'products/{id}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+            '/', 
+            ['as' =>'home', 'uses' => 'GeneralController@home']
         );
 
+        Route::get('home', 'GeneralController@home');
+
         Route::get(
-            'products/{id}/categories/{category_ids}', 
-            ['as' =>'web.get.product', 'uses' => 'CatalogController@product']
+            'about-us', 
+            ['as' =>'aboutus.page', 'uses' => 'GeneralController@aboutUs']
+        );
+        
+        Route::get(
+            'contact-us', 
+            ['as' =>'contactus.page', 'uses' => 'GeneralController@contactUs']
         );
         Route::get(
-            'search', 
-            ['as' =>'web.get.search', 'uses' => 'CatalogController@search']
+            'news', 
+            ['as' =>'news.page', 'uses' => 'GeneralController@news']
+        );
+        Route::get(
+            'privacy', 
+            ['as' =>'privacy.page', 'uses' => 'GeneralController@privacy']
+        );
+        Route::get(
+            'terms-conditions', 
+            ['as' =>'terms.page', 'uses' => 'GeneralController@terms']
         );
     });
 
-Route::group(
-    [
-        'prefix' => '/shoppingcart',
-        'namespace' => '\Zento\BladeTheme\Http\Controllers',
-        'middleware' => ['web'],
-    ], function () {
-        Route::get('/', [
-            'as' =>'web.get.cart', 'uses' => 'ShoppingCartController@index'
-        ]);
+    /**
+     * catalog pages
+     */
+    Route::group(
+        [
+            'namespace' => '\Zento\BladeTheme\Http\Controllers',
+            'middleware' => ['web']
+        ], function () {
+            Route::get('/categories/{id}', 'CatalogController@categoryProducts');
+            Route::get('/products/{id}', 'CatalogController@product');
+            Route::get('/products/{id}/categories/{category_ids}', 'CatalogController@product');
+            Route::get('/search', 'CatalogController@search');
+        }
+    );
 
-        Route::post('/add_product/{pid}', [
-            'as' => 'web.post.cart.add.product', 'uses' => 'ShoppingCartController@addItem'
-        ]);
 
-        Route::post('/delete_item/{item_id}', [
-            'as' => 'web.post.cart.delete.item', 'uses' => 'ShoppingCartController@deleteItem'
-        ]);
+    /**
+     * shopping cart
+     */
+    Route::group(
+        [
+            'prefix' => '/shoppingcart',
+            'namespace' => '\Zento\BladeTheme\Http\Controllers',
+            'middleware' => ['web'],
+        ], function () {
+            Route::get('/', ['as' => 'cart.page', 'uses' => 'ShoppingCartController@index']);
+            Route::post('/products/{pid}', 'ShoppingCartController@addItem');
+        }
+    );
 
-        Route::post('/update_item_qty/{pid}', [
-            'as' => 'web.post.cart.update.itemqty', 'uses' => 'ShoppingCartController@deleteItemQty'
-        ]);
-    }
-);
+    /**
+     * web checkout pages
+     */
+    Route::group(
+        [
+            'prefix' => '/checkout',
+            'namespace' => '\Zento\BladeTheme\Http\Controllers',
+            'middleware' => ['web'],
+        ], function () {
+            Route::get('/', ['as' => 'checkout.page', 'uses' => 'CheckoutController@index']);
+            Route::get('/success', 'CheckoutController@success');
+        }
+    );
 
-Route::group(
-    [
-        'prefix' => '/{protocal}/shoppingcart',
-        'namespace' => '\Zento\BladeTheme\Http\Controllers',
-        'middleware' => ['web'],
-    ], function () {
-        Route::get('/', [
-            'as' =>'ajax.get.cart', 'uses' => 'ShoppingCartController@cartPage'
-        ]);
-
-        Route::post('/add_product/{pid}', [
-            'as' => 'ajax.post.cart.add.product', 'uses' => 'ShoppingCartController@addItem'
-        ]);
-
-        Route::post('/delete_item/{item_id}', [
-            'as' => 'ajax.post.cart.delete.item', 'uses' => 'ShoppingCartController@deleteItem'
-        ]);
-
-        Route::post('/update_item_qty/{pid}', [
-            'as' => 'ajax.post.cart.update.itemqty', 'uses' => 'ShoppingCartController@deleteItemQty'
-        ]);
-    }
-);
-
-Route::group(
-    [
-        'prefix' => '/checkout',
-        'namespace' => '\Zento\BladeTheme\Http\Controllers',
-        'middleware' => ['web'],
-    ], function () {
-        Route::get('/', [
-            'as' =>'web.get.checkout', 'uses' => 'CheckoutController@index'
-        ]);
-
-        Route::post('/checkout/process', [
-            'as' => 'web.post.checkout.process', 'uses' => 'CheckoutController@process'
-        ]);
-
-        Route::post('/checkout/success', [
-            'as' => 'web.post.cart.add.product', 'uses' => 'CheckoutController@success'
-        ]);
-    }
-);
-
-Route::group(
-    [
-        'prefix' => '/ajax/checkout',
-        'namespace' => '\Zento\Checkout\Http\Controllers',
-        'middleware' => ['web'],
-    ], function () {
-        Route::put(
-            '/guest/details',
-            ['as' => 'ajax.checkout.put.guest', 'uses' => 'ApiController@putGuestDetails']
-        );
-    }
-);
+    /**
+     * ajax checkout support pages 
+     */
+    Route::group(
+        [
+            'prefix' => '/ajax',
+            'middleware' => ['web'],
+        ], function () {
+            Route::put('/checkout/guest/details', 
+                '\Zento\Checkout\Http\Controllers\ApiController@storeGuestDetails');
+            Route::post('/sales/orders', 
+                '\Zento\Sales\Http\Controllers\Api\SalesController@createOrder');
+        }
+    );

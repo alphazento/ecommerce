@@ -31,7 +31,7 @@ class PaymentGateway {
      * get payment method
      *
      * @param string $serviceName
-     * @return \Zento\PaymentGateway\Interfaces\Method
+     * @return \Zento\PaymentGateway\Interfaces\IMethod
      */
     public function getMethod($serviceName) {
         $serviceName = strtolower($serviceName);
@@ -52,7 +52,7 @@ class PaymentGateway {
      * @param mixed $user
      * @param mixed $shippingAddress
      * @param string $clientType
-     * @return array \Zento\PaymentGateway\Interfaces\Method
+     * @return array \Zento\PaymentGateway\Interfaces\IMethod
      */
     public function estimate($quote, $user, $shippingAddress, $clientType = 'web') {
         $availables = [];
@@ -119,12 +119,12 @@ class PaymentGateway {
     }
 
     public function capturePayment(string $methodName, array $params) {
-        if (!isset($params['shopping_cart'])) {
+        if (!isset($params['quote'])) {
             return [false, ['messages'=>['Parameter error.']]];
         }
         $errorMessage = 'Payment method not support by server.';
         if ($method = $this->getMethod($methodName)) {
-            $shoppingCart = new ROShoppingCart($params['shopping_cart']);
+            $shoppingCart = new ROShoppingCart($params['quote']);
             \zento_assert($shoppingCart);
             if ($result = (new BeforeCapturePayment($methodName, $shoppingCart))->fireUntil()) {
                 if ($result->isSuccess())

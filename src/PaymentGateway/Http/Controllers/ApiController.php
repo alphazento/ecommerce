@@ -11,6 +11,10 @@ use Zento\Contracts\ROModel\ROShoppingCart;
 class ApiController extends ApiBaseController {
     use \Zento\ShoppingCart\Http\Controllers\Api\TraitShoppingCartHelper;
 
+    /**
+     * estimate a payment for a shopping cart
+     * @group Payment
+     */
     public function estimate() {
         $client = Route::input('client');
         $client = 'reactjs';
@@ -37,7 +41,7 @@ class ApiController extends ApiBaseController {
     /**
      * capture or validate caputred payment
      * if you want to create order directlly in this method, it wll call create order
-     *
+     * @group Payment
      * @return void
      */
     public function capture() {

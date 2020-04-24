@@ -10,7 +10,7 @@ Route::group(
         ['as' => 'orders.create', 'uses' => 'SalesController@createOrder']
     );
 
-    Route::patch( '/orders/{id}', 
-        ['as' => 'orders.update', 'uses' => 'SalesController@updateOrder']
-    );
+    // Route::patch( '/orders/{id}', 
+    //     ['as' => 'orders.update', 'uses' => 'SalesController@updateOrder']
+    // );
 });

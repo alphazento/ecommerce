@@ -21,7 +21,7 @@ class CreateCustomerTable extends Migration
             $table->string('email_hash', 32)->index();
             $table->string('password', 255);
             $table->string('remember_token', 255)->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->boolean('active')->default(1);
             $table->boolean('is_guest')->default(0);
             $table->integer('created_from_portal')->default(0);
             $table->string('prefix', 40)->nullable();

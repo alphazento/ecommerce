@@ -17,15 +17,16 @@ use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 class ApiController extends ApiBaseController
 {
     use TraitShoppingCartHelper;
+    
     /**
-     * only for guest user
-     *
+     * store guest details when support guest checkout 
+     * @group Checkout
      * @return void
      */
-    public function putGuestDetails() {
+    public function storeGuestDetails() {
         $details = Request::all();
         $user = Auth::user();
-        
+
         $id = $details['id'] ?? 0;
         unset($details['id']);
 

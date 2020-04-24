@@ -9,13 +9,24 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
  
+    protected $fillable = [
+        'name',
+        'attribute_set_id',
+        'parent_id',
+        'path',
+        'position',
+        'level',
+        'children_count',
+        'active',
+        'sort_by'
+    ];
+
     public $_richData_ = [
-        'desc',
         'children'
     ];
 
-    public function desc() {
-        return $this->hasOne(CategoryDescription::class, 'category_id');
+    public function getTableFields() {
+        return $this->fillable;
     }
 
     public function children() {
@@ -35,7 +46,6 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     public function parents() {
         $instance = $this->newRelatedInstance(Category::class);
         return (new HasManyInAggregatedField($instance->newQuery(), $this, $instance->getTable() . '.id',  'path'))
-            ->with('desc')
             ->orderBy('level')
             ->whereInAggregatedField(function($field) {
                 $data = explode('/', $field);
@@ -52,22 +62,14 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
     }
     
     /**
-     * Scope a query to only include active users.
+     * Scope a query to only include active.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query, $activeOnly = true)
     {
-        return $query->whereIn('is_active', $activeOnly ? [1]:[0,1]);
-    }
-
-    public function getNameAttribute() {
-        return $this->desc->name ?? '';
-    }
-
-    public function getDescriptionAttribute() {
-        return $this->desc->description ?? '';
+        return $query->whereIn('active', $activeOnly ? [1]:[0,1]);
     }
 
     public function getUrlAttribute() {

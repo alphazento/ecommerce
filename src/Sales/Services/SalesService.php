@@ -3,83 +3,74 @@
 namespace Zento\Sales\Services;
 
 use DB;
+use Request;
+use ShareBucket;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Zento\Customer\Model\ORM\Customer;
 use Zento\Sales\Model\ORM\SalesOrder;
 use Zento\Sales\Model\ORM\SalesAddress;
 use Zento\Sales\Model\ORM\SalesShipment;
+use Zento\Sales\Model\ORM\SalesOrderProduct;
+use Zento\Sales\Model\ORM\SalesOrderItem;
 use Zento\Sales\Model\OrderNumberGenerator;
 use Zento\Sales\Model\ORM\SalesOrderStatus;
+use Zento\Sales\Model\ORM\PaymentTransaction;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
-use Zento\PaymentGateway\Model\PaymentTransaction;
 
 class SalesService
 {
-  public function placeOrder(string $pay_id, $guest_checkout = true, $customer_note = '', $client_ip = null) 
+  public function placeOrder(string $pay_id, $is_backorder = false) 
   {
     if ($transaction = PaymentTransaction::where('pay_id', '=', $pay_id)->first()) {
+        $quote = $transaction->quote;
         if ($order = $transaction->order) {
-          if (!$order->active) {
-            $order = null;
-          }
+          return $order;
         }
-
-        $order = $order ? $order : SalesOrder::create([
+        $quote = $transaction->quote;
+        $customer_id = $quote->customer_id;
+        $is_guest = 0;
+        if (empty($customer_id)) {
+          $customer = Customer::findOrCreateByEmail($quote->email);
+          $customer_id = $customer->id;
+          $is_guest = 1;
+        }
+        $order = SalesOrder::create([
+          'store_id' => ShareBucket::get('store_id', 0),
           'order_number' => app(OrderNumberGenerator::class)->generate(0),
-          'is_backorder' => 0,
-          'invoice_no' => 0,
-          'store_id' => 0,
+          'invoice_id' => 0,
           'status_id' => SalesOrderStatus::PENDING,
-          'guest_checkout' => $guest_checkout ? 1 : 0,
-          'customer_note' => $customer_note,
-          'remote_ip' => $client_ip,
-          'payment_transaction_id' => $transaction->id
-        ]);
+          'is_backorder' => $is_backorder,
+          // 'amend_from',
+          // 'resend_from',
+          'customer_id' => $customer_id,
+          'customer_note' => '',
+          'is_guest' => $is_guest,
+          'remote_ip' => $quote->client_ip ?? Request::ip(),
+          'subtotal' => $quote->subtotal,
+          'total' => $quote->total,
+          'tax_amount' => $quote->tax_amount,
+          ]);
+        $transaction->update(['order_id' => $order->id]);
+        $address = SalesAddress::createFromCart($quote);
+        $this->createShipmentRecord($order->id, $customer_id, $address ? $address->id : 0);
+
+        SalesOrderProduct::recordProductsFromOrderQuote($order->id, $quote);
+        SalesOrderItem::recordItemsFromOrderQuote($order->id, $quote);
+        return $order;
     }
-      // $cartBillingAddress = $cart->billing_address ? $cart->billing_address : $cart->shipping_address;
-      // $billing_address = new SalesAddress($cartBillingAddress->getAttributes());
-      // $billing_address->id = null;
-      // $billing_address->save();
-
-      // if ($cart->ship_to_billingaddesss) {
-      //   $shipping_address = $billing_address;
-      // } else {
-      //   $shipping_address = new SalesAddress($cart->shipping_address->getAttributes());
-      //   $shipping_address->id = null;
-      //   $shipping_address->save();
-      // }
-
-      // $shipment = SalesShipment::create([
-      //   'order_id' => $order->id,
-      //   'customer_id' => $cart->customer_id,
-      //   'shipment_status' => 0,
-      //   'shipping_address_id' => $shipping_address->id,
-      //   'billing_address_id' => $billing_address->id,
-      //   'shipping_method' => 0,
-      //   'shipping_carrier' => 0,
-      //   'shipment_instruction' => 0,
-      //   'total_weight' => 0,
-      //   'total_qty' => $cart->items_quantity,
-      // ]);
-
-      // $shipment->save();
-      return $order;
+    return null;
   }
 
-  protected function createShipmentRecord($ordeId, $shoppingCart) {
+  protected function createShipmentRecord($orde_id, $customer_id, $address_id) {
     $shipment = new SalesShipment();
-    $shipment->order_id = $ordeId;
-    $shipment->customer_id = $shoppingCart['customer_id'];
-    $shipment->shipment_status = 0;
-    $shipment->shipping_address_id = $this->createSalesAddressRecord($shoppingCart['shipping_address']);
-    //    $shipment->billing_address_id = $this->storeSalesAddress($shoppingCart['shipping_address']); //ship_to_billingaddesss
-    $shipment->shipping_method = '';
-    // $shipment->shipping_carrier = $shipping_carrier;
+    $shipment->order_id = $orde_id;
+    $shipment->sales_address_id = $address_id;
+    $shipment->shipment_status_id = 0;
+    $shipment->shipping_carrier_id = 0;
+    $shipment->shipping_method_id = 0;
     $shipment->shipment_instruction = '';
-    // $table->decimal('total_weight', 12, 4)->nullable();
-    // $table->decimal('total_qty', 12, 4)->nullable();
-    // $table->boolean('can_ship_partially')->default(0);
-    // $table->smallInteger('can_ship_partially_item')->unsigned()->nullable();
     $shipment->save();
   }
+
 }

@@ -7,4 +7,4 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.vStore = require('./store/store.js');
 
-require('./._app.dev');
+require('./._app.support');

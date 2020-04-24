@@ -20,18 +20,42 @@ use Zento\Kernel\Http\Controllers\ApiBaseController;
 class ShoppingCartController extends ApiBaseController
 {
     use TraitShoppingCartHelper;
+
+    /**
+     * Retrieves current user's shopping cart
+     * @group Shopping Cart
+     */
     public function getCart() {
         return $this->tapCart(function($cart) {
             return $this->withData($cart);
         });
     }
 
-    public function createCart() {
+    /**
+     * create a new shopping cart for current user
+     * @group Shopping Cart
+     */
+    public function create() {
         $cart = ShoppingCartService::createCart();
         $cart ? $this->success(201) : $this->error();
         return $this->withData($cart);
     }
 
+    /**
+     * delete current shopping cart of current user 
+     * @group Shopping Cart
+     */
+    public function delete() {
+        return $this->tapCart(function($cart) {
+            $cart->delete();
+            return $this;
+        });
+    }
+
+    /**
+     * add Item to shopping cart
+     * @group Shopping Cart
+     */
     public function addItem(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
             if ($item = ShoppingCartService::addProduct($cart, 
@@ -46,6 +70,10 @@ class ShoppingCartController extends ApiBaseController
         }, true);
     }
 
+    /**
+     * update a shopping cart item's quantity
+     * @group Shopping Cart
+     */
     public function updateItemQuantity() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::updateItemQuantity($cart, Route::input('item_id'), Route::input('quantity'))) {
@@ -56,6 +84,10 @@ class ShoppingCartController extends ApiBaseController
         }, true);
     }
 
+    /**
+     * delete a shopping cart item
+     * @group Shopping Cart
+     */
     public function deleteItem() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::deleteItem($cart, Route::input('item_id'))) {
@@ -66,10 +98,18 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * update shopping cart item
+     * @group Shopping Cart
+     */
     public function updateItem() {
         ShoppingCartService::updateItem();
     }
 
+    /**
+     * try to apply coupon code for a shopping cart
+     * @group Shopping Cart
+     */
     public function putCoupon() {
         return $this->tapCart(function($cart) {
             if (ShoppingCartService::addCoupon($cart, Route::input('coupon'))) {
@@ -80,14 +120,26 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * try to get current coupon code from a shopping cart
+     * @group Shopping Cart
+     */
     public function getCoupon() {
         ShoppingCartService::addCoupon();
     }
 
+    /**
+     * cancel a coupon
+     * @group Shopping Cart
+     */
     public function deleteCoupon() {
         ShoppingCartService::deleteCoupon();
     }
 
+    /**
+     * set current shopping cart's billing address
+     * @group Shopping Cart
+     */
     public function setBillingAddress(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
@@ -96,6 +148,10 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * set current shopping cart's shipping address
+     * @group Shopping Cart
+     */
     public function setShippingAddress(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
@@ -104,6 +160,10 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * merge a shopping cart to anohter shopping cart
+     * @group Shopping Cart
+     */
     public function mergeCart() {
         return $this->tapCart(function($cart) {
             if ($to_cart = ShoppingCartService::cart(Route::input('to_cart_guid'))) {
@@ -116,10 +176,18 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * get current shopping cart's customer details
+     * @group Shopping Cart
+     */
     public function getCustomer() {
 
     }
 
+    /**
+     * attach a customer to a shopping cart
+     * @group Shopping Cart
+     */
     public function setCustomer(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
             if ($cart->mode == 0) {
@@ -133,6 +201,10 @@ class ShoppingCartController extends ApiBaseController
         });
     }
 
+    /**
+     * update a shopping cart's email address
+     * @group Shopping Cart
+     */
     public function updateEmail(Request $request) {
         return $this->tapCart(function($cart) use ($request) {
             $cart->email = $request->get('email');

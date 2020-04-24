@@ -8,6 +8,7 @@
               v-model="addressData.name"
               label="Receiver Full Name"
               @change="addressChanged"
+              :rules="[rules.required, rules.max255]"
             ></v-text-field>
           </v-flex>
 
@@ -16,30 +17,32 @@
               v-model="addressData.phone"
               label="Receiver Phone Number"
               @change="addressChanged"
+              :rules="[rules.required, rules.maxPhone]"
             ></v-text-field>
           </v-flex>
 
           <v-flex md6 xs12>
             <google-address-autocomplete
-                id="map"
-                classname="form-control"
-                placeholder="Start typing your address..."
-                v-on:placechanged="getAddressData"
-                country="au"
-                :address="addressText"
-                :rules="addressRules"
-            >
-            </google-address-autocomplete>
+              id="map"
+              class="form-control"
+              placeholder="Start typing your address..."
+              v-on:placechanged="googleAddressDataChanged"
+              country="au"
+              :address="addressText"
+              :rules="addressRules"
+              allow-manual-input
+              @manualAddressChanged="onManualAddressChange"
+            ></google-address-autocomplete>
           </v-flex>
 
           <v-flex md6 xs12>
             <v-text-field
               v-model="addressData.company"
-              :rules="nameRules"
+              :rules="[rules.max128]"
               label="Company Name(Optional)"
               @change="addressChanged"
             ></v-text-field>
-          </v-flex>          
+          </v-flex>
         </v-layout>
       </v-container>
     </v-card>
@@ -49,7 +52,7 @@
 
 <script>
 //https://github.com/olefirenko/vue-google-autocomplete#correct-usage-of-the-types-parameter
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
   props: {
     step: {
@@ -68,27 +71,28 @@ export default {
 
   data() {
     return {
-      addressData: this.address ? this.address : {
-        name: this.fullname ? this.fullname : '',
-        company: '',
-        address1: '',
-        address2: '',
-        city: '',
-        country: '',
-        postal_code: '',
-        state: '',
-        phone: ''
-      },
+      addressData: this.address
+        ? this.address
+        : {
+            name: this.fullname ? this.fullname : "",
+            company: "",
+            address1: "",
+            address2: "",
+            city: "",
+            country: "",
+            postal_code: "",
+            state: "",
+            phone: ""
+          },
       dataChanged: false,
       valid: false,
-      addressRules: [
-        v => !!v || "Address is required"
-      ],
-      nameRules: [
-        v =>
-          !v || (v && v.length <= 255) ||
-          "Company Name must be less than 255 characters"
-      ]
+      addressRules: [v => !!v || "Address is required"],
+      rules: {
+        required: v => !!v || "Required Field.",
+        max128: v => !v || v.length <= 128 || "Max 128 characters",
+        max255: v => !v || v.length <= 64 || "Max 64 characters",
+        maxPhone: v => !v || v.length <= 15 || "Max 15 characters",
+      }
     };
   },
 
@@ -96,11 +100,16 @@ export default {
     childMessage() {
       if (this.$refs.checkout_address_form.validate()) {
         if (this.dataChanged) {
-          this.$store.dispatch('setShippingAddress',  this.addressData).then(response => {
-            this.$emit("childMessage", this.step);
-          }, error => {
-              console.error("Got nothing from server. Prompt user to check internet connection and try again")
-          })
+          this.$store.dispatch("setShippingAddress", this.addressData).then(
+            response => {
+              this.$emit("childMessage", this.step);
+            },
+            error => {
+              console.error(
+                "Got nothing from server. Prompt user to check internet connection and try again"
+              );
+            }
+          );
         } else {
           this.$emit("childMessage", this.step);
         }
@@ -109,9 +118,12 @@ export default {
     addressChanged() {
       this.dataChanged = true;
     },
-    getAddressData(googleAddress, placeResultData, id) {
+    onManualAddressChange(address) {
+      this.addressData = Object.assign({}, address);
+    },
+    googleAddressDataChanged(googleAddress, placeResultData, id) {
       this.convertGoogleAddressToAddress(googleAddress);
-      this.addressChanged = true;
+      this.addressChanged();
     },
     convertGoogleAddressToAddress(googleAddress) {
       this.addressData.city = googleAddress.locality;
@@ -132,18 +144,19 @@ export default {
       if (address) {
         return `${address.address1} ${address.address2} ${address.city} ${address.state} ${address.postal_code}, ${address.country}`;
       } else {
-        return '';
+        return "";
       }
     }
   },
 
   components: { VueGoogleAutocomplete },
-  watch: { 
-      fullname: function(newVal, oldVal) { // watch it
-        if ('' === this.addressData.name) {
-          this.addressData.name = newVal;
-        }
+  watch: {
+    fullname: function(newVal, oldVal) {
+      // watch it
+      if ("" === this.addressData.name) {
+        this.addressData.name = newVal;
       }
     }
+  }
 };
 </script>

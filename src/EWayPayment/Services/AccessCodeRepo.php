@@ -4,14 +4,16 @@ namespace Zento\EWayPayment\Services;
 
 use Session;
 use Closure;
+use Request;
+
+use Zento\EWayPayment\Consts;
+use eWayAPI;
 use Eway\Rapid;
 use Eway\Rapid\Client;
 use Eway\Rapid\Enum\ApiMethod;
 use Eway\Rapid\Model\Response\AbstractResponse;
 use Eway\Rapid\Enum\TransactionType;
 use Eway\Rapid\Validator\ClassValidator;
-use eWayAPI;
-use Request;
 use Carbon\Carbon;
 
 class AccessCodeRepo {
@@ -29,10 +31,10 @@ class AccessCodeRepo {
 
     protected function getApiClient() {
         if (!$this->ewayApi) {
-            $mode = config('paymentgateway.eway.mode', 'sandbox');
+            $mode = config(Consts::PAYMENT_GATEWAY_EWAY_MODE, 'sandbox');
             $this->ewayApi = Rapid::createClient(
-                config(sprintf('paymentgateway.eway.%s.client_id', $mode)),
-                config(sprintf('paymentgateway.eway.%s.secret', $mode)),
+                config(sprintf(Consts::PAYMENT_GATEWAY_EWAY_CLIENT_ID_BY_MODE, $mode)),
+                config(sprintf(Consts::PAYMENT_GATEWAY_EWAY_SECRET_BY_MODE, $mode)),
                 $mode,
                 app('log')
             );
@@ -51,7 +53,7 @@ class AccessCodeRepo {
             'State' => $shippingAddress['state'],
             'PostalCode' =>$shippingAddress['postal_code'],
             'Country' => 'AU',
-            'IsActive'=> $shippingAddress['is_active'],
+            'Active'=> $shippingAddress['active'],
             'Email'=> $shoppingCart['email'],
             'Phone' => $shippingAddress['phone'],
             'Mobile' => $shippingAddress['phone'],

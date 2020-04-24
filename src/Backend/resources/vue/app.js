@@ -7,31 +7,34 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
-window.VueRouter = VueRouter;
 window.vStore = require('./store/store.js');
 window.Vue.use(VueRouter);
 
-import StoreConfigurationPage from "./pages/store_configuration/RoutePage";
-import StoreDynamicAttributePage from "./pages/store_dynamic_attribute/RoutePage";
-import SalesOrdersPage from "./pages/sales_orders/RoutePage";
+var support = require('./._app.support');
 
-window.router = new VueRouter({
-    mode: 'history',
-    routes: [{
-            name: "store.configuration",
-            path: "/admin/store-configurations",
-            component: StoreConfigurationPage
-        },
-        {
-            name: "store.dynamic_attributes",
-            path: "/admin/store-dynamic-attributes",
-            component: StoreDynamicAttributePage
-        },
-        {
-            name: "sales.orders",
-            path: "/admin/sales_orders",
-            component: SalesOrdersPage
-        }
-    ]
-});
-require('./._app.dev');
+function routeGuard(to, from, next) {
+    var isAuthenticated = false;
+    if (localStorage.getItem('user-token')) {
+        next(); // allow to enter route
+    } else {
+        next('/admin/login'); // go to '/login';
+    }
+}
+
+import LoginPage from "./pages/auth/LoginPage";
+
+if (support.default.routes && support.default.routes.length > 0) {
+    support.default.routes.forEach(route => {
+        route.beforeEnter = routeGuard;
+    });
+    support.default.routes.push({
+        name: "store.auth.login",
+        path: "/admin/login",
+        component: LoginPage
+    });
+
+    window.router = new VueRouter({
+        mode: 'history',
+        routes: support.default.routes
+    });
+}

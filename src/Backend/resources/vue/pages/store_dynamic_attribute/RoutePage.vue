@@ -1,244 +1,217 @@
 <template>
-    <v-layout>
-        <v-dialog v-model="dialog" max-width="960">
-            <dynamic-attribute-edit-dialogbody
-                :defines="defines"
-                :item="selectedItem"
-                :mode="dialogMode"
-                @close="closeDialog"
-            >
-            </dynamic-attribute-edit-dialogbody>
-        </v-dialog>
+  <v-layout>
+    <v-flex md2>
+      <z-simple-model-navigator
+        title="Attributes"
+        :models="['Category', 'Product', 'Customer']"
+        :model="model"
+        @navToModel="navToModel"
+      ></z-simple-model-navigator>
+    </v-flex>
+    <v-flex md10>
+      <v-tabs v-model="tab" v-if="!!model">
+        <v-menu bottom right>
+          <template v-slot:activator="{ on }">
+            <v-btn text class="align-self-center mr-4" v-on="on">
+              more
+              <v-icon right>mdi-menu-down</v-icon>
+            </v-btn>
+          </template>
+          <v-list class="grey lighten-3">
+            <v-list-item>
+              <v-btn color="error" @click="newAttribute" v-if="editMode != 'new' || !editorTab">
+                <v-icon>mdi-plus-circle</v-icon>New Attribute
+              </v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
 
-        <v-flex md2>
-            <v-expansion-panels v-model="pannel" accordion multiple mandatory>
-                <v-expansion-panel>
-                    <v-expansion-panel-header text-left>
-                        Dynamic Attributes
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-list-item>
-                            <a @click.stop="navToGroup('categories')">
-                                Category Model
-                            </a>
-                        </v-list-item>
-                        <v-list-item>
-                            <a @click.stop="navToGroup('products')">
-                                Product Model
-                            </a>
-                        </v-list-item>
-                        <v-list-item>
-                            <a @click.stop="navToGroup('customers')">
-                                Customer Model
-                            </a>
-                        </v-list-item>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-expansion-panels>
-        </v-flex>
-        <v-flex md10>
-            <v-card v-if="!!group">
-                <v-card-title>
-                    <span class="text-uppercase">{{ label }} </span>
-                    <v-btn icon color="error" @click="newAttribute">
-                        <v-icon>mdi-plus-circle</v-icon>
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-search"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-card-title>
-                <v-data-table :headers="defines" :items="data" :search="search">
-                    <template v-slot:item.attribute_name="{ item }">
-                        <v-btn icon @click="editAttribute(item)">
-                            <v-icon>mdi-settings</v-icon>
-                            {{ item.attribute_name }}
-                        </v-btn>
-                    </template>
-                    <template v-slot:item.enabled="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.enabled"
-                            :color="item.enabled ? 'success' : 'error'"
-                        >
-                            {{ item.enabled ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
-                    <template v-slot:item.single="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.single"
-                            :color="item.single ? 'success' : 'error'"
-                        >
-                            {{ item.single ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
+        <v-tab>
+          <v-icon left>mdi-lock</v-icon>
+          <span>All Attributes of {{ model }}</span>
+        </v-tab>
+        <v-tab v-if="editorTab">
+          <v-icon left>mdi-lock</v-icon>
+          <span class="error" v-if="editMode == 'new'">New Attribute</span>
+          <span v-else>{{ selectedItem.name }}</span>
+          <v-btn icon color="error" @click="closeEditorTab">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-tab>
 
-                    <template v-slot:item.with_value_map="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.with_value_map"
-                            :color="item.with_value_map ? 'success' : 'error'"
-                        >
-                            {{ item.with_value_map ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
+        <v-tab-item>
+          <v-card v-if="!!model">
+            <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table :headers="defines" :items="data" :search="search">
+              <template v-slot:body="{ headers, items }">
+                <tbody>
+                  <tr class="text-start" v-for="(row, i) of items" :key="i">
+                    <td v-for="(col, ci) of headers" :key="ci">
+                      <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
+                        <v-icon>mdi-pencil-box-multiple-outline</v-icon>
+                      </v-btn>
+                      <component :is="col.ui" v-bind="buildDynCompProps(col, row)"></component>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <z-dyna-attr-and-set-editor
+            :defines="defines"
+            :item="selectedItem"
+            :mode="editMode"
+            @itemUpdated="itemUpdated"
+          ></z-dyna-attr-and-set-editor>
 
-                    <template v-slot:item.is_search_layer="{ item }">
-                        <v-chip
-                            filter
-                            :input-value="item.is_search_layer"
-                            :color="item.is_search_layer ? 'success' : 'error'"
-                        >
-                            {{ item.is_search_layer ? "Yes" : "No" }}
-                        </v-chip>
-                    </template>
-                </v-data-table>
-            </v-card>
-            <v-container v-if="!group">
-                <span color="error">Please select Model first</span>
-            </v-container>
-        </v-flex>
-    </v-layout>
+          <z-dyna-attr-belongs-set-manager
+            v-if="selectedItem && selectedItem.id > 0"
+            :model="model"
+            :id="selectedItem.id"
+          ></z-dyna-attr-belongs-set-manager>
+
+          <z-dyna-attr-value-map-manager
+            v-if="selectedItem && selectedItem.with_value_map"
+            :id="selectedItem.id"
+            :is-swatch="!!selectedItem.swatch"
+          ></z-dyna-attr-value-map-manager>
+        </v-tab-item>
+      </v-tabs>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            dialog: false,
-            filter: true,
-            search: "",
-            baseRoute: "/admin/store-dynamic-attributes",
-            defines: [],
-            data: [],
-            group: "",
-            label: "Attributes",
-            selectedItem: null,
-            dialogMode: "new",
-            pannel: [0]
-        };
+  data() {
+    return {
+      search: "",
+      baseRoute: "/admin/store-dynamic-attributes",
+      defines: [],
+      data: [],
+      newModelTemp: {},
+      model: "",
+      selectedItem: null,
+      editMode: "new",
+      tab: 0,
+      editorTab: false
+    };
+  },
+  created() {
+    this.fetchDefines();
+    this.initBreadCrumbs();
+    this.handleRoute();
+  },
+  methods: {
+    initBreadCrumbs() {
+      this.$store.dispatch("CLEAR_BREADCRUMBS", null);
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
+        text: "Store Dyanmic Attributes",
+        href: this.baseRoute
+      });
+      this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
+        text: "All",
+        href: this.baseRoute
+      });
     },
-    created() {
-        this.fetchDefines();
-        this.initBreadCrumbs();
-        this.handleRoute();
+
+    navToModel(model) {
+      if (this.model !== model) {
+        this.editorTab = false;
+        this.search = "";
+      }
+      this.$router.push({ query: { model: `${model}` } }).catch(err => {});
     },
-    methods: {
-        initBreadCrumbs() {
-            this.$store.dispatch("clearBreadcrumbs", null);
-            this.$store.dispatch("addBreadcrumbItem", {
-                text: "Store Dyanmic Attributes",
-                href: this.baseRoute
-            });
-            this.$store.dispatch("addBreadcrumbItem", {
-                text: "All",
-                href: this.baseRoute
-            });
-        },
 
-        navToGroup(group) {
-            this.$router.push({ query: { group: `${group}` } });
-        },
-
-        fetchDefines() {
-            this.$store.dispatch("showSpinner", "Fetching Defines...");
-            axios
-                .get("/api/v1/admin/configs/groups/tables/dynamicattributes")
-                .then(response => {
-                    this.$store.dispatch("hideSpinner");
-                    if (response.data && response.data.success) {
-                        this.defines = response.data.data.table.items;
-                        console.log("defines", this.defines);
-                    }
-                });
-        },
-
-        fetchDynamicAttributes(groupName) {
-            this.group = groupName;
-            switch (groupName) {
-                case "categories":
-                    this.label = "Category Model";
-                    break;
-                case "products":
-                    this.label = "Product Model";
-                    break;
-                case "customers":
-                    this.label = "Customer Model";
-                    break;
-            }
-            this.$store.dispatch(
-                "showSpinner",
-                "Fetching Dynamic Attributes..."
-            );
-            this.$store.dispatch("replaceBreadcrumbLastItem", {
-                text: this.group,
-                href: `${this.baseRoute}?group=${groupName}`
-            });
-            axios
-                .get(`/api/v1/admin/dynamicattributes/${groupName}`)
-                .then(response => {
-                    this.$store.dispatch("hideSpinner");
-                    if (response.data && response.data.success) {
-                        this.data = response.data.data;
-                        console.log("data", this.data);
-                    }
-                });
-        },
-
-        configValueChanged(item) {
-            this.$store.dispatch("showSpinner", "Updating...");
-            axios
-                .post(`/api/v1/admin/configs/${item.accessor}`, {
-                    value: item.value
-                })
-                .then(response => {
-                    this.$store.dispatch("hideSpinner");
-                });
-        },
-
-        handleRoute() {
-            if (this.$route.query["group"] !== undefined) {
-                this.fetchDynamicAttributes(this.$route.query["group"]);
-            }
-        },
-
-        editAttribute(item) {
-            this.selectedItem = item;
-            this.dialogMode = "edit";
-            this.dialog = true;
-        },
-        newAttribute() {
-            this.dialogMode = "edit";
-            this.selectedItem = {
-                parent_table: this.parent_table,
-                id: 0
-            };
-            this.dialog = true;
-        },
-
-        closeDialog(ignore) {
-            this.dialog = false;
-        }
+    fetchDefines() {
+      this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
+      axios
+        .get("/api/v1/admin/metadata/datatable-schemas/dynamic-attributes")
+        .then(response => {
+          this.$store.dispatch("HIDE_SPINNER");
+          if (response && response.success) {
+            this.defines = response.data;
+          }
+        });
     },
-    watch: {
-        $route() {
-            this.handleRoute();
-        }
+
+    fetchDynamicAttributes(modelName) {
+      this.model = modelName;
+      this.$store.dispatch("SHOW_SPINNER", "Fetching Dynamic Attributes...");
+      this.$store.dispatch("REPLACE_BREADCRUMB_LAST_ITEM", {
+        text: this.model,
+        href: `${this.baseRoute}?model=${modelName}`
+      });
+      axios
+        .get(`/api/v1/admin/dynamic-attributes/models/${modelName}`)
+        .then(response => {
+          this.$store.dispatch("HIDE_SPINNER");
+          if (response && response.success) {
+            this.data = response.data;
+            this.newModelTemp = response.default;
+          }
+        });
+    },
+
+    handleRoute() {
+      if (this.$route.query["model"] !== undefined) {
+        this.fetchDynamicAttributes(this.$route.query["model"]);
+      }
+    },
+
+    editAttribute(item) {
+      this.selectedItem = item;
+      this.editMode = "edit";
+      this.editorTab = true;
+      this.tab = 1;
+    },
+    newAttribute() {
+      this.editMode = "new";
+      this.selectedItem = JSON.parse(JSON.stringify(this.newModelTemp));
+      this.selectedItem.id = 0;
+      this.editorTab = true;
+      this.tab = 1;
+    },
+
+    closeEditorTab() {
+      this.editorTab = false;
+    },
+
+    buildDynCompProps(columDefines, rowItem) {
+      var data = Object.assign({}, columDefines);
+      data.value = rowItem[columDefines.value];
+      data.accessor = columDefines.value;
+      return data;
+    },
+    itemUpdated(item) {
+      console.log("itemUpdated", item);
+      Object.assign(this.selectedItem, item);
     }
+  },
+  watch: {
+    $route() {
+      this.handleRoute();
+    }
+  }
 };
 </script>
 
 <style scoped>
 .v-middle {
-    margin-top: auto;
-    margin-bottom: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .bottom-line {
-    border-bottom: 1px solid grey;
+  border-bottom: 1px solid grey;
 }
 </style>

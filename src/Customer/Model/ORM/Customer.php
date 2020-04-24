@@ -2,6 +2,7 @@
 
 namespace Zento\Customer\Model\ORM;
 
+use ShareBucket;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 
@@ -31,33 +32,27 @@ class Customer extends \Zento\Passport\Model\User
         return $this->hasOne(CustomerAddress::class, 'id', 'default_shipping_address_id');
     }
 
-    public static function findDummyCustomer($uuid) {
-        $email = 'dm'. $uuid;
-        return static::where('email', $email)->first();
-    }
-    
-    public static function requestDummyCustomer($uuid) {
-        $password = Str::random(8);
-
-        $email_hash = md5('dm'. $uuid);
-        if ($dummy = static::where('email_hash', $email_hash)->first()) {
-            $dummy->password = bcrypt($password);
-            $dummy->save();
-        } else {
-            $dummy = static::create([
+    public static function findOrCreateByEmail($email, $name = null) {
+        $customer = static::where('email', $email)->first();
+        if (!$customer) {
+            $name = $name ? $name : $email;
+            $customer = static::create([
                 'group_id' => 0,
-                'store_id' => 0,
-                'name' => 'Guest',
-                'email' => '',
-                'email_hash' => $email_hash,
-                'password' => bcrypt($password),
+                'store_id' => ShareBucket::get('store_id', 0),
+                'name' => $name,
+                'email' => $email,
+                'password' => bcrypt(Str::random(12)),
                 'is_guest' => 1
             ]);
         }
-        return [$dummy, $password];
+        return $customer;
     }
 
     public function guest() {
         return $this->is_guest;
+    }
+
+    public function isApi() {
+        return false;
     }
 }

@@ -2,32 +2,41 @@
 
 namespace Zento\Backend\Config;
 
-use Zento\Backend\Providers\Facades\AdminService;
-use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
+use Zento\Acl\Providers\Facades\Acl;
+use Zento\Backend\Providers\Facades\AdminDashboardService;
+use Zento\Backend\Providers\Facades\AdminConfigurationService;
 
 class Admin extends AbstractAdminConfig {
-    public function registerMenus() {
-        AdminService::registerRootLevelMenuNode('Website', 'Website');
-        AdminService::registerRootLevelMenuNode('Sales', 'Sales');
-        AdminService::registerRootLevelMenuNode('Checkout', 'Checkout');
-        AdminService::registerL1MenuNode('Website', 'Web', 'Web');
-        AdminService::registerL1MenuNode('Website', 'Admin', 'Admin');
-        AdminService::registerL1MenuNode('Sales', 'PaymentGateway', 'Payment Gateway');
-        AdminService::registerL1MenuNode('Sales', 'Email', 'Email');
+    protected function _registerDashboardMenus() {
+        AdminDashboardService::registerRootLevelMenuNode('Store', 'mdi-store');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Configuration', 'mdi-settings', '/admin/store-configurations');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Attributes', 'mdi-code-braces', '/admin/store-dynamic-attributes');
+        AdminDashboardService::registerLevel1MenuNode('Store', 'Attribute Sets', 'mdi-contain', '/admin/store-dynamic-attribute-sets');
     }
 
-    public function _registerGroups($groupTag, &$groups) {
-        $groups['website/admin'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'ip_restrict',  [
-                'title' => 'Allow IPs',
+    protected function _registerDynamicConfigItemMenus() {
+        AdminConfigurationService::registerRootLevelMenuNode('Website');
+        AdminConfigurationService::registerRootLevelMenuNode('Sales');
+        AdminConfigurationService::registerRootLevelMenuNode('Checkout');
+        AdminConfigurationService::registerRootLevelMenuNode('Third Party');
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'Web');
+        AdminConfigurationService::registerLevel1MenuNode('Website', 'Admin');
+        AdminConfigurationService::registerLevel1MenuNode('Sales', 'Payment Gateway');
+        AdminConfigurationService::registerLevel1MenuNode('Sales', 'Email');
+    }
+
+    protected function _registerDynamicConfigItemGroups(&$data) {
+        $data['website/admin'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'ip_restrict'], [
+                'text' => 'Allow IPs',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-text-item',
                         'accessor' => 'admin.ip_restrict.eanbled'
                     ],
                     [
-                        'title' => 'Admin URL',
+                        'text' => 'Admin URL',
                         'ui' => 'config-text-item',
                         'accessor' => 'admin.admin_url'
                     ],
@@ -35,154 +44,230 @@ class Admin extends AbstractAdminConfig {
             ]);
         };
 
-        $groups['website/web'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'base',  [
-                'title' => 'Basic Settings',
+        $data['website/web'] = function($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'base'],  [
+                'text' => 'Basic Settings',
                 'items' => [
                     [
-                        'title' => 'Base URL',
+                        'text' => 'Base URL',
                         'ui' => 'config-text-item',
                         'accessor' => 'website.web.base_url'
-                    ],
-                    [
-                        'title' => 'Test Item',
-                        'ui' => 'config-boolean-item',
-                        'accessor' => 'website.web.test.eanbled'
                     ],
                 ]
             ]);
 
-            AdminService::registerGroup($groupTag, 'url_rewrite',  [
-                'title' => 'Allow Url Rewrite',
+            AdminConfigurationService::registerGroup([$groupTag, 'url_rewrite'],  [
+                'text' => 'Allow Url Rewrite',
                 'items' => [
                     [
-                        'title' => 'Enabled',
+                        'text' => 'Enabled',
                         'ui' => 'config-boolean-item',
                         'accessor' => 'website.web.url_rewrite.eanbled'
                     ]
                 ]
             ]);
         };
+    }
 
-        $groups['tables/dynamicattributes'] = function($groupTag) {
-            AdminService::registerGroup($groupTag, 'table',  [
-                'title' => 'Table Definition',
-                'items' => [
-                    [
-                        'text' => 'Name',
-                        'ui' => 'config-text-item',
-                        'value' => 'attribute_name'
-                    ],
-                    [
-                        'text' => 'Type',
-                        'ui' => 'config-options-item',
-                        'value' => 'attribute_type',
-                        'editable' => true,
-                        'options' => [
-                            [
-                                'value' => 'integer',
-                                'label' => 'Int'
-                            ],
-                            [
-                                'value' => 'varchar',
-                                'label' => 'varchar'
-                            ],
+    protected function _registerDataTableSchemas(&$data) {
+        $data['dynamic-attributes'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag,  
+            [
+                [
+                    'text' => 'Name',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',  //for edit
+                    'value' => 'name'
+                ],
+                [
+                    'text' => 'Type',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-options-item',
+                    'value' => 'attribute_type',
+                    'editable' => false,
+                    'options' => [
+                        [
+                            'value' => 'integer',
+                            'label' => 'integer'
+                        ],
+                        [
+                            'value' => 'varchar',
+                            'label' => 'varchar(255)'
+                        ],
+                        [
+                            'value' => 'text',
+                            'label' => 'text'
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Front Label',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'front_label',
+                    'editable' => true,
+                ],
+                [
+                    'text' => 'Front Component',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-options-item',
+                    'value' => 'front_component',
+                    'editable' => true,
+                    'options' => [
+                        [
+                            'label' => 'text/html/vue',
+                            'value' => 'z-html-block',
+                        ],
+                        [
+                            'label' => 'markdown',
+                            'value' => 'z-markdown',
                         ]
-                    ],
-                    [
-                        'text' => 'Front Label',
-                        'ui' => 'config-text-item',
-                        'value' => 'label',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Admin Label',
-                        'ui' => 'config-text-item',
-                        'value' => 'admin_label',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Admin Group',
-                        'ui' => 'config-text-item',
-                        'value' => 'admin_group',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Admin Component',
-                        'ui' => 'config-options-item',
-                        'value' => 'admin_component',
-                        'editable' => true,
-                        'options' => [
-                            [
-                                'value' => 'Text',
-                                'label' => 'Text'
-                            ],
-                            [
-                                'value' => 'LongText',
-                                'label' => 'LongText'
-                            ],
-                            [
-                                'value' => 'SelectBox',
-                                'label' => 'SelectBox'
-                            ],
-                            [
-                                'value' => 'MultiSelectBox',
-                                'label' => 'MultiSelectBox'
-                            ],
-                            [
-                                'value' => 'Switch',
-                                'label' => 'Switch'
-                            ],
-                            [
-                                'value' => 'Image',
-                                'label' => 'Image'
-                            ],
-                        ]
-                    ],
-                    [
-                        'text' => 'Default Value',
-                        'ui' => 'config-text-item',
-                        'value' => 'default_value',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Enabled',
-                        'ui' => 'config-boolean-item',
-                        'value' => 'enabled',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Single',
-                        'value' => 'single',
-                        'ui' => 'config-boolean-item',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Swatch',
-                        'value' => 'swatch_type',
-                        'ui' => 'config-boolean-item',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Value Map',
-                        'value' => 'with_value_map',
-                        'ui' => 'config-boolean-item',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Is Search Layer',
-                        'value' => 'is_search_layer',
-                        'ui' => 'config-boolean-item',
-                        'editable' => true
-                    ],
-                    [
-                        'text' => 'Search Layer Sort',
-                        'value' => 'search_layer_sort',
-                        'ui' => 'config-text-item',
-                        'editable' => true
-                    ],
+                    ]
+                ],
+                [
+                    'text' => 'Front Group/Tab',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'front_group',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Admin Label',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'admin_label',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Admin Group',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'admin_group',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Admin Component',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-options-item',
+                    'value' => 'admin_component',
+                    'editable' => true,
+                    'options' => [
+                        [
+                            'value' => 'config-text-item',
+                            'label' => 'config-text-item'
+                        ],
+                        [
+                            'value' => 'config-longtext-item',
+                            'label' => 'config-longtext-item',
+                        ],
+                        [
+                            'value' => 'config-options-item',
+                            'label' => 'config-options-item',
+                        ],
+                        [
+                            'value' => 'config-multi-options-item',
+                            'label' => 'config-multi-options-item',
+                        ],
+                        [
+                            'value' => 'config-boolean-item',
+                            'label' => 'config-boolean-item',
+                        ],
+                        [
+                            'value' => 'config-date-item',
+                            'label' => 'config-date-item',
+                        ],
+                        [
+                            'value' => 'config-image-uploader-item',
+                            'label' => 'config-image-uploader-item',
+                        ],
+                        [
+                            'value' => 'z-vue-editor',
+                            'label' => 'z-vue-editor',
+                        ],
+                        [
+                            'value' => 'z-markdown-editor',
+                            'label' => 'z-markdown-editor',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Default Value',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'default_value',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Active',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'active',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Single',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'single',
+                    'editable' => false   //only new item is editable
+                ],
+                [
+                    'text' => 'Swatch',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'swatch',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Value Map',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'with_value_map',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Searchable',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'searchable',
+                    'editable' => true
+                ],
+                [
+                    'text' => 'Sort',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',
+                    'value' => 'sort',
+                    'editable' => true
+                ]
+            ]);
+        };
+
+        $data['dynamic-attribute-sets'] = function($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag,  
+            [
+                [
+                    'text' => 'Name',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-text-item',  //for edit
+                    'value' => 'name'
+                ],
+                [
+                    'text' => 'Description',
+                    'ui' => 'z-label',
+                    'edit_ui' => 'config-longtext-item',
+                    'value' => 'description',
+                    'editable' => true,
+                ],
+                [
+                    'text' => 'Active',
+                    'ui' => 'z-boolean-chip',
+                    'edit_ui' => 'config-boolean-item',
+                    'value' => 'active',
+                    'editable' => true,
                 ]
             ]);
         };
     }
+
+    protected function _registerModelDefines(&$data){}
 }

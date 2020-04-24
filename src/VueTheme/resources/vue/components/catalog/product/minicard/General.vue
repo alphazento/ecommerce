@@ -3,14 +3,15 @@
         <v-card class="mx-auto">
             <a :href="getProductUrl(product)">
                 <v-img
-                    :src="getProductImageUrl(product)"
+                    :src="product.image"
                     height="280px"
                     contain
+                    eager
                 ></v-img>
             </a>
             <v-card-title class="title">
                 <v-container>
-                    <p class="mt-4 text-left">{{ product.desc.name }}</p>
+                    <p class="mt-4 text-left">{{ product.name }}</p>
                     <p
                         class="ma-0 subheading body-1 font-weight-bold text-left"
                     >

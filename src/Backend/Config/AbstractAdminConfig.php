@@ -3,17 +3,67 @@
 namespace Zento\Backend\Config;
 
 abstract class AbstractAdminConfig {
-    abstract public function registerMenus();
-    public function registerGroups($l0name, $l1name) {
-        $groupTag = strtolower(sprintf('%s/%s', $l0name, $l1name));
+    /**
+     * register admin panel dashboard menus
+     */
+    final public function registerDashboardMenus() {
+        $this->_registerDashboardMenus();
+    }
+    /**
+     * register configuration item menus (for admin panel uri:  /store/configuration)
+     */
+    final public function registerDynamicConfigItemMenus() {
+        $this->_registerDynamicConfigItemMenus();
+    }
+
+    /**
+     * register configuration item group(for admin panel uri:  /store/configuration)
+     */
+    final public function registerDynamicConfigItemGroups($level0, $level1) {
+        $groupTag = strtolower(sprintf('%s/%s', $level0, $level1));
         $groups = [];
-        $this->_registerGroups($groupTag, $groups);
-        foreach($groups as $l0l1name => $cb) {
-            if ($groupTag === strtolower($l0l1name)) {
+        $this->_registerDynamicConfigItemGroups($groups);
+        foreach($groups as $tag => $cb) {
+            if (strcasecmp($groupTag, $tag) == 0) {
                 call_user_func($cb, $groupTag);
             }
         }
         return $groupTag;
     }
-    abstract protected function _registerGroups($groupTag, &$groups);
+
+    final public function registerDataTableSchemas($dataTableName) {
+        $items = [];
+        $this->_registerDataTableSchemas($items);
+        foreach($items as $tag => $cb) {
+            if (strcasecmp($dataTableName, $tag) == 0) {
+                call_user_func($cb, $tag);
+            }
+        }
+    }
+
+    final public function registerModelDefines($modelName) {
+        $items = [];
+        $this->_registerModelDefines($items);
+        foreach($items as $tag => $cb) {
+            if (strcasecmp($modelName, $tag) == 0) {
+                call_user_func($cb, $tag);
+            }
+        }
+    }
+
+    /**
+     * register dashboard menus
+     */
+    abstract protected function _registerDashboardMenus();
+
+    /**
+     * register configuration menus
+     */
+    abstract protected function _registerDynamicConfigItemMenus();
+
+    abstract protected function _registerDataTableSchemas(&$data);
+    
+    abstract protected function _registerModelDefines(&$data);
+
+    abstract protected function _registerDynamicConfigItemGroups( &$data);
 }

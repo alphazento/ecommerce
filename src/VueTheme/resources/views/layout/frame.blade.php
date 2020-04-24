@@ -4,13 +4,19 @@
     @include('layout.head')
 </head>
 
+<script src=@asset("zento_vuetheme/js/" . ($appjs ?? 'app.js')) type="text/javascript"></script>
+<script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
+<script>
+    window.themeData = @json($themeData); 
+</script>
+
 <body>
 <div id="app" >
     <v-app>
         <v-content>
             <theme-manager></theme-manager>
             <v-container>
-                <theme-toolbar :logo="'@asset("/baicy_desktoptheme/image/logo.png")'" >
+                <theme-toolbar>
                     <template v-slot:breadcrumbs>
                         @if ($nav_page !== 'home')
                             @include('widget.breadcrumbs')
@@ -32,15 +38,7 @@
         </v-content>
     </v-app>
 </div>
-@php 
-$appjs = $appjs ?? 'app.js';
-@endphp
 
-<script src=@asset("zento_vuetheme/js/" . $appjs) type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script>
-    window.themeData = @json($themeData); 
-</script>
 @stack('tail')
 </body>
 </html>

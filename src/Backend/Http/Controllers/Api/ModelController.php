@@ -10,6 +10,12 @@ use Zento\Catalog\Providers\Facades\CategoryService;
 
 class ModelController extends ApiBaseController
 {
+    /**
+     * update a model which has dynamic attribute
+     * @group Dynamic Attribute
+     * @urlParam id required number model's id
+     * @urlParam model required string model's type
+     */
     public function updateModel() {
         $id = Route::input('id');
         $modelName = Route::input('model');

@@ -6,13 +6,13 @@ use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
 use Zento\Contracts\Interfaces\IAddress;
-use Zento\Contracts\Shipment\EstimateResult;;
+use Zento\Contracts\Interfaces\Shipment\EstimateResult;
 
 class ShipmentService 
 {
   protected $methods = [];
   protected $methodInited = false;
-  public function registerMethod($code, \Zento\Contracts\Shipment\Method $method) {
+  public function registerMethod($code, \Zento\Contracts\Interfaces\Shipment\IMethod $method) {
     $this->methods[$code] = $method;
   }
 

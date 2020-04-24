@@ -11,10 +11,9 @@
                     <v-layout class="row">
                         <v-flex md6 xs8>
                             <h1>
-                                {{pageData.title}}
+                                {{ pageData.title }}
                             </h1>
-                            <div v-html="pageData.description">
-                            </div>
+                            <div v-html="pageData.description"></div>
                         </v-flex>
                         <v-flex md6 class="d-none d-md-block">
                             <sort-control></sort-control>
@@ -58,7 +57,7 @@
                     :dataset="searchResult"
                     :flex="'md4 xs6'"
                 ></product-grid>
-                <a-pagination></a-pagination>
+                <z-pagination></z-pagination>
             </v-flex>
         </v-layout>
     </v-container>

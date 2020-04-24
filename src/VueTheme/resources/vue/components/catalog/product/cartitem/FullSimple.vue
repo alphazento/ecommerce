@@ -11,7 +11,7 @@
       <a :href="product_url">Keep Shopping {{ item.name }}</a>
     </v-flex>
     <v-flex class="v-middle" md2 xs3>
-      <qty-select :max="20" v-if="quantitive" v-model="item.quantity" v-on:change="quantityChange"></qty-select>
+      <quantity-selector :max="20" v-if="quantitive" v-model="item.quantity" v-on:change="quantityChange"></quantity-selector>
     </v-flex>
     <v-flex class="v-middle text-right" md2 xs2>${{ item.row_price }}</v-flex>
     <v-flex md1 xs0></v-flex>

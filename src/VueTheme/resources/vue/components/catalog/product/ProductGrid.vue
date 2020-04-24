@@ -30,7 +30,7 @@ export default {
       if (this.gerneralMode) {
         // return "mini-simple-product-card";
       }
-      switch (product.type_id) {
+      switch (product.model_type) {
         case "simple":
         case "downloadable":
           return "mini-simple-product-card";
@@ -46,7 +46,7 @@ export default {
     }
     // navPage(page) {
     //   axios.get(this.apiUrl + "?page=" + page).then(response => {
-    //     this.pagiData = response.data.data.products;
+    //     this.pagiData = response.data.products;
     //   });
     // }
   }

@@ -5,10 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCategoryProductTable extends Migration
 {
-    protected function getBuilder() {
-        return Schema::getInstance();
-    }
-
     /**
      * Run the migrations.
      *
@@ -16,7 +12,7 @@ class CreateCategoryProductTable extends Migration
      */
     public function up()
     {
-        $this->getBuilder()->create('category_products', function (Blueprint $table) {
+        Schema::create('category_products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned();
             $table->integer('product_id')->unsigned();
@@ -33,6 +29,6 @@ class CreateCategoryProductTable extends Migration
      */
     public function down()
     {
-        $this->getBuilder()->drop('category_products');
+        Schema::drop('category_products');
     }
 }

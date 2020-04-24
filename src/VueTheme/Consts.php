@@ -3,7 +3,6 @@
 namespace Zento\VueTheme;
 
 abstract class Consts {
-    const FOOTER_CONFIG_KEY = 'vuetheme.footer';
+    const CONFIG_KEY_FOOTER_DATA = 'vuetheme.footer.data';
     const NAV_DRAWER_CONFIG_KEY = 'vuetheme.nav_drawer';
-    const LOGO_CONFIG_KEY = 'vuetheme.nav_drawer';
 }

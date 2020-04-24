@@ -8,11 +8,16 @@
 
 namespace Zento\Acl\Console\Commands;
 
-use Illuminate\Routing\Router;
+use Psy\Util\Docblock;
+use ReflectionClass;
+use Zento\Acl\Consts;
+use Zento\Acl\Model\ORM\AclRoute;
+use Zento\Acl\DocBlock\RouteAnalyzer;
+
+use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zento\Acl\Model\ORM\AclPermissionItem;
-use Zento\Acl\Consts;
 
 class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 {
@@ -24,6 +29,11 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     protected $signature = 'acl:sync';
 
     protected $description = 'convert api route to permission';
+
+    /**
+     * @var RouteAnalyzer
+     */
+    protected $analyzer;
 
     public static function register($serviceProvider, $appContainer = null) {
         $class = static::class;
@@ -49,13 +59,41 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     }
 
     public function handle() {
+        $this->analyzer = new RouteAnalyzer();
         if (empty($routes = $this->getRoutes())) {
             return $this->error("Your application doesn't have any routes matching the given criteria.");
         }
+        // $routes = collect($routes)->filter(function($item) {
+        //     if (Str::startsWith($item['uri'], 'api/') || Str::startsWith($item['uri'], '/api/')) {
+        //         return true;
+        //     }
+        // })->all();
 
-        $this->convertToPermissionItems($routes);
-        $this->displayRoutes($routes);
+        $this->registerRoutes($routes);
+        // $this->displayRoutes($routes);
     }
+
+    /**
+     * Get the route information for a given route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @return array
+     */
+    protected function getRouteInformation(Route $route)
+    {
+        $info = parent::getRouteInformation($route);
+        $info['methods'] = $route->methods();
+        $info['acl_attrs'] = $this->analyzer->analyze($route);
+        return $info;
+    }
+
+    protected function getColumns() {
+        $columns = parent::getColumns();
+        $columns[] = 'methods';
+        $columns[] = 'acl_attrs';
+        return $columns;
+    }
+
 
     protected function needPermission(array $route) {
         if ($middleware = ($route['middleware'] ?? false)) {
@@ -64,7 +102,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         return false;
     }
 
-    protected function convertToPermissionItems(array $routes)
+    protected function registerRoutes(array $routes)
     {
         $ids = [1];
         $item = null;
@@ -72,53 +110,37 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
             if (!$this->needPermission($route)){
                 continue;
             }
-            $methods = explode('|', $route['method']);
-            foreach($methods as $method) {
-                if ($method != 'HEAD') {
-                    $item = AclPermissionItem::where('method', $method)->where('uri', $route['uri'])->first();
-                    if (!$item) {
-                        $item = new AclPermissionItem([
-                            'method' => $method,
-                            'uri' => $route['uri'],
-                            'removed' => 0,
-                            'active' => 1
-                        ]);
-                    }
-                    if ($item) {
-                        $names = explode(':', $route['name']);
-                        $names_count = count($names);
-                        switch($names_count) {
-                            case 1:
-                            $item->groupname = 'other';
-                            $item->scope = Consts::GUEST_SCOPE;
-                            $item->name = $names[0];
-                            break;
-                            case 2:
-                            $item->groupname = $names[0];
-                            $item->scope = Consts::GUEST_SCOPE;
-                            $item->name = $names[1];
-                            break;
-
-                            default:
-                            $item->scope = $names[0] === 'admin' ? (Consts::ADMIN_SCOPE) : (Consts::FRONTEND_SCOPE);
-                            $item->groupname = $names[1];
-                            $item->name = $names[2];
-                            break;
+            if ($acl_attrs = $route['acl_attrs']) {
+                $methods = array_diff($route['methods'], ['HEAD']);
+                foreach($methods as $method) {
+                    if ($method != 'HEAD') {
+                        $item = AclRoute::where('method', $method)->where('uri', $route['uri'])->first();
+                        if (!$item) {
+                            $acl_attrs['deleted'] = 0;
+                            $acl_attrs['active'] = 1;
+                            $acl_attrs['uri'] = $route['uri'];
+                            $acl_attrs['method'] = $method;
+                            $item = new AclRoute($acl_attrs);
                         }
-                        // $item->groupname = count($names) > 1 ? $names[0] : 'other';
-                        // $item->name = count($names) > 1 ? $names[1] : $names[0];
-                        $item->removed = 0;
-                        $item->save();
-                        $ids[] = $item->id;
+                        if ($item) {
+                            $item->scope = $acl_attrs['scope'];
+                            $item->group = $acl_attrs['group'];
+                            $item->acl = $acl_attrs['acl'];
+                            $item->description = $acl_attrs['description'];
+                            $item->deleted = 0;
+                            $item->save();
+                            $ids[] = $item->id;
+                        }
                     }
                 }
             }
+            
         }
         if ($item) {
             $item->getConnection()
                 ->table($item->getTable())
                 ->whereNotIn('id', $ids)
-                ->update(['removed' => 1]);
+                ->update(['deleted' => 1]);
         }
     }
 }

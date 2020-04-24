@@ -9,7 +9,8 @@
 namespace Zento\Acl\Console\Commands;
 
 use Auth;
-use Zento\Acl\Model\Auth\User;
+use Zento\Acl\Model\Auth\Administrator;
+use Illuminate\Support\Facades\Hash;
 
 class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -18,7 +19,7 @@ class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Command
      *
      * @var string
      */
-    protected $signature = 'acl:userpw {email : email address} {password : password}';
+    protected $signature = 'acl:password {email : email address} {password : password}';
 
     protected $description = 'Change a admin user password.';
 
@@ -31,11 +32,11 @@ class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Command
             return;
         }
 
-        $user = User::where('email', $email)->first();
+        $user = Administrator::where('email', $email)->first();
         if (!$user) {
             $this->error(sprintf('User(%s) does not exists.' , $email));
         } else {
-            $user->password = $user->encryptPassword($password);
+            $user->password = Hash::make($password);
             $user->save();
             $this->info(sprintf('User(%s) password has been changed.' , $email));
         }

@@ -28,7 +28,7 @@ class Backend
         //change default setting as admin setting
         Passport::setPassportUserModel(\Zento\Acl\Model\Auth\Administrator::class);
         ShareBucket::put(\Zento\Kernel\Consts::ZENTO_PORTAL, 'admin');
-        ThemeManager::setTheme('Zento_Backend');
+        ThemeManager::setThemePackage('Zento_Backend');
 
         if (config(self::BACKEND_IP_RESTRICT)
             && $this->checkIp($request)) {

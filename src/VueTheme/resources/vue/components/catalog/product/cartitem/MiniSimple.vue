@@ -40,7 +40,7 @@ export default {
       quantitive: !this.notQuantitive,
       product_image: this.productImage
         ? this.productImage
-        : this.getProductImageUrl(this.item.product),
+        : this.item.product.image,
       product_url: this.productUrl
         ? this.productUrl
         : this.getProductUrl(this.item.product)

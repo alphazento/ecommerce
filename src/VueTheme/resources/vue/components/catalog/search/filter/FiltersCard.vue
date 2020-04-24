@@ -55,7 +55,7 @@ export default {
       },
       filterChange(e) {
         this.routeQuery[e.filter] = e.data;
-        this.$router.push({ query: this.routeQuery });
+        this.$router.push({ query: this.routeQuery }).catch(err => {});
       },
       diffKeyInPagination(val1, val2) {
         var keys = Object.keys(val1);
@@ -74,8 +74,8 @@ export default {
           this.$store.dispatch("showSpinner", "Updating...");
           axios.get(url).then(response => {
             this.$store.dispatch("hideSpinner");
-            if (response.data.success) {              
-              this.$store.dispatch("assignSearchResult", response.data.data);
+            if (response.success) {              
+              this.$store.dispatch("assignSearchResult", response.data);
             } else {
               var result = Object.assign({}, this.searchResult);
               result.data = [];

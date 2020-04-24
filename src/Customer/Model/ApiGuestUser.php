@@ -22,4 +22,8 @@ class ApiGuestUser extends ORM\Customer {
     public function guest() {
         return true;
     }
+
+    public function isApi() {
+        return true;
+    }
 }

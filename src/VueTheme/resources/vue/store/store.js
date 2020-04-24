@@ -13,7 +13,7 @@ export default new Vuex.Store({
             opacity: 0.76,
             overlay: false,
             text: "",
-            showBtn: false
+            snack: false
         },
 
         swatches: {},
@@ -123,11 +123,11 @@ export default new Vuex.Store({
         loadCart({
             commit
         }) {
-            this.dispatch('showSpinner', "Loading shopping cart")
+            // this.dispatch('showSpinner', "Loading shopping cart")
             axios.get('/api/v1/cart').then(response => {
-                this.dispatch('hideSpinner')
-                if (response.data && response.data.success) {
-                    commit('setCart', response.data.data)
+                // this.dispatch('hideSpinner')
+                if (response && response.success) {
+                    commit('setCart', response.data)
                 }
             });
         },
@@ -147,10 +147,9 @@ export default new Vuex.Store({
         postGuestUser({
             commit
         }, user) {
-            var url = '/ajax/checkout/guest/details';
             return new Promise((resolve, reject) => {
-                axios.put(url, user).then(response => {
-                    commit('setUser', response.data.data)
+                axios.put('/ajax/checkout/guest/details', user).then(response => {
+                    commit('setUser', response.data)
                     resolve(response);
                 }, error => {
                     reject(error);
@@ -165,8 +164,8 @@ export default new Vuex.Store({
             var url = `/api/v1/cart/shipping_address`;
             return new Promise((resolve, reject) => {
                 axios.put(url, address).then(response => {
-                    console.log('setCart', response.data)
-                    commit('setCart', response.data.data)
+                    console.log('setCart', response)
+                    commit('setCart', response.data)
                     resolve(response);
                 }, error => {
                     reject(error);
@@ -181,8 +180,8 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 this.dispatch('showSpinner', "Updating shopping cart")
                 axios.patch(url).then(response => {
-                    commit('setCart', response.data.data)
-                    resolve(response.data);
+                    commit('setCart', response.data)
+                    resolve(response);
                     this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
@@ -197,8 +196,8 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 this.dispatch('showSpinner', "Deleing shopping cart item")
                 axios.delete(url).then(response => {
-                    commit('setCart', response.data.data)
-                    resolve(response.data);
+                    commit('setCart', response.data)
+                    resolve(response);
                     this.dispatch('hideSpinner')
                 }, error => {
                     reject(error);
@@ -211,18 +210,8 @@ export default new Vuex.Store({
         }, text) {
             commit('controlSpinnerLayer', {
                 overlay: true,
-                text: text,
-                showBtn: false
-            });
-        },
-
-        keepSpinner({
-            commit
-        }, text) {
-            commit('controlSpinnerLayer', {
-                overlay: true,
-                text: text,
-                showBtn: true
+                snack: false,
+                text: text
             });
         },
 
@@ -230,9 +219,24 @@ export default new Vuex.Store({
             commit
         }) {
             commit('controlSpinnerLayer', {
-                overlay: false,
-                showBtn: false
+                overlay: false
             });
+        },
+
+        snackMessage({
+            commit
+        }, text) {
+            commit('controlSpinnerLayer', {
+                overlay: false,
+                snack: true,
+                text: text
+            });
+        },
+
+        controlSpinnerLayer({
+            commit
+        }, newO) {
+            commit('controlSpinnerLayer', newO);
         },
 
         updatePagination({

@@ -11,7 +11,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
 
-    const TYPE_ID = "simple";
+    const MODEL_TYPE = "simple";
 
     protected static $typeMapping = [
         'simple' => '\Zento\Catalog\Model\ORM\Product',
@@ -21,21 +21,32 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     ];
 
     public $_richData_ = [
-        'desc',
         'prices',
         'special_price'
     ];
 
-    public static function registerType($type_id, $class) {
-        self::$typeMapping[$type_id] = $class;
+    protected $fillable = [
+        'name',
+        'attribute_set_id',
+        'sku',
+        'model_type',
+        'active'
+    ];
+
+    public static function registerType($model_type, $class) {
+        self::$typeMapping[$model_type] = $class;
+    }
+
+    public static function getProductTypes() {
+        return self::$typeMapping;
+    }
+
+    public function getTableFields() {
+        return $this->fillable;
     }
     
     public function shippable() {
         return true;
-    }
-   
-    public function desc() {
-        return $this->hasOne(ProductDescription::class, 'product_id');
     }
 
     public function prices() {
@@ -55,33 +66,36 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
      */
     public function newFromBuilder($attributes = [], $connection = null)
     {
-        $model = $this->newInstanceBaseTypeId($attributes);
-
+        $model = self::newInstanceBaseTypeId($attributes, $this);
         $model->setRawAttributes((array) $attributes, true);
 
         $model->setConnection($connection ?: $this->getConnectionName());
 
         $model->fireModelEvent('retrieved', false);
-
+        $model->lazyLoadRelation();
         return $model;
     }
 
-    protected function newInstanceBaseTypeId($attributes = []) {
-        $type_id = false;
+    public static function newInstanceBaseTypeId($attributes = [], $pthis = null) {
+        $model_type = false;
         if (is_array($attributes)) {
-            if (isset($attributes['type_id'])) {
-                $type_id = $attributes['type_id'];
+            if (isset($attributes['model_type'])) {
+                $model_type = $attributes['model_type'];
             }
-        } elseif (is_object($attributes) && property_exists($attributes, 'type_id')) {
-            $type_id = $attributes->type_id;
+        } elseif (is_object($attributes) && property_exists($attributes, 'model_type')) {
+            $model_type = $attributes->model_type;
         }
-        if ($type_id) {
-            if (isset(self::$typeMapping[$type_id])) {
-                $class = self::$typeMapping[$type_id];
-                return new $class([], true);
+        if ($model_type) {
+            if (isset(self::$typeMapping[$model_type])) {
+                $class = self::$typeMapping[$model_type];
+                return with(new $class)->newInstance([], true);
             }
         } else {
-            return $this->newInstance([], true);
+            if ($pthis) {
+                return $pthis->newInstance([], true);
+            } else {
+                return with(new static)->newInstance([], true);
+            }
         }
     }
 
@@ -102,14 +116,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
             ->orderBy('level');
     }
 
-    public function getNameAttribute() {
-        return $this->desc->name ?? '';
-    }
-
-    public function getDescriptionAttribute() {
-        return $this->desc->description ?? '';
-    }
-
     public function getPriceAttribute() {
         return $this->prices->price ?? 0;
     }
@@ -120,7 +126,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
 
     public static function assignExtraRelation($products) {
         $reduced = array_filter($products, function($product) {
-            return $product->type_id === static::TYPE_ID;
+            return $product->model_type === static::MODEL_TYPE;
         });
         $ids = array_map(function($product) {
             return $product->id;

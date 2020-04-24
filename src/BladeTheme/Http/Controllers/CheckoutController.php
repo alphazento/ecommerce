@@ -12,6 +12,10 @@ class CheckoutController extends \App\Http\Controllers\Controller
 {
     use TraitThemeRouteOverwritable;
 
+    /**
+     * Render shopping cart page
+     * @group Web Pages
+     */
     public function index() {
         $cart = $this->getCart();
         $user = Auth::user();
@@ -20,11 +24,18 @@ class CheckoutController extends \App\Http\Controllers\Controller
             [
                 'consts' => compact('paymentmethods')
             ]
-        )->breadcrumb(route('web.get.checkout'), 'Checkout')
+        )->breadcrumb(route('checkout.page'), 'Checkout')
         ->view('page.checkout.index', compact('cart'));
     }
     
+    /**
+     * Render checkout success page
+     * @group Web Pages
+     */
     public function success() {
-        return BladeTheme::view('page.checkout.success');
+        if ($order_number = Request::session()->pull('order_number')) {
+            return BladeTheme::view('page.checkout.success', compact('order_number'));
+        } 
+        return redirect()->to('/');
     }
 }

@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zento\Passport\Model\GoogleOAuthConnect;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
 use Zento\Kernel\Http\Controllers\TraitApiResponse;
+use Zento\Passport\Consts;
 
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
@@ -19,11 +20,25 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         return '';
     }
     
+    /**
+     * issue client token
+     * @group Passport
+     * @bodyParam username string required
+     * @bodyParam password string required
+     * @response {
+     * "token_type": "Bearer",
+     * "expires_in": 1296000, 
+     * "access_token": ""
+     * "refresh_token": ""
+     * }
+     * @response 401{
+     * }
+     */
     public function issueToken(ServerRequestInterface $request)
     {
         $parsedBody = $request->getParsedBody();
         if (!isset($parsedBody['client_id'])) {
-            if ($configs = config('passport.defaultclient')) {
+            if ($configs = config(Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT)) {
                 $request = $request->withParsedBody(array_merge($configs, $parsedBody));
             }
         }
@@ -35,11 +50,15 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         );
     }
 
+    /**
+     * refresh a client token
+     * @group Passport
+     */
     public function refreshToken(ServerRequestInterface $request)
     {
         $parsedBody = $request->getParsedBody();
         if (!isset($parsedBody['client_id'])) {
-            if ($configs = config('passport.defaultclient')) {
+            if ($configs = config(Consts::CONFIG_KEY_PASSPORT_DEFAULT_CLIENT)) {
                 $configs['grant_type'] = 'refresh_token';
                 $request = $request->withParsedBody(array_merge($configs, $parsedBody));
             }
@@ -52,6 +71,19 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         );
     }
     
+    /**
+     * register a Passport user
+     * @group Passport
+     * @bodyParam username string required email, max255
+     * @bodyParam password string required min 8
+     * @bodyParam name string required max 128
+     * @response {
+     * "token_type": "Bearer",
+     * "expires_in": 1296000, 
+     * "access_token": ""
+     * "refresh_token": ""
+     * }
+     */
     public function register(ServerRequestInterface $request) {
         $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
@@ -74,19 +106,27 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         return $this->error(400, 'fail to create customer');
     }
 
+    /**
+     * logout current Passport user
+     * @group Passport
+     */
     public function logout()
     {
         Auth::user()->token()->revoke();
         return $this->success();
     }
 
+    /**
+     * get current passport user's profile
+     * @group Passport
+     */
     public function profile() {
         return $this->withData(Auth::user());
     }
 
     /**
-     * generate a guest token
-     *
+     * generate a guest token to support some business
+     * @group Passport
      * @return void
      */
     public function guestToken() {
