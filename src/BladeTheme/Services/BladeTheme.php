@@ -53,8 +53,4 @@ class BladeTheme {
     public function getApiGuestToken($user) {
         return sprintf('Guest %s', encrypt(json_encode($user->toArray())));
     }
-
-    public function getCategoryUrl($category) {
-        return sprintf('/%s.html', $category->url_key);
-    }
 }

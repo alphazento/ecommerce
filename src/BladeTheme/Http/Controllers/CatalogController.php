@@ -36,10 +36,10 @@ class CatalogController extends Controller
                     'catalog_search_uri' => $catalog_search_uri];
                 foreach($category->parents as $parent) {
                     if ($parent->id > 2) {
-                        BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($parent), $parent->name);
+                        BladeTheme::breadcrumb($parent->url, $parent->name);
                     }
                 } 
-                BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($category), $category->name);
+                BladeTheme::breadcrumb($category->url, $category->name);
                 return BladeTheme::view('page.searchresult', compact('pagination', 'path', 'page_data'));
             }
         }
@@ -62,7 +62,7 @@ class CatalogController extends Controller
                 if ($category_ids = Route::input('category_ids')) {
                     if ($categories = $this->fetchCategories()) {
                         foreach($categories as $category) {
-                            BladeTheme::breadcrumb(BladeTheme::getCategoryUrl($category), $category->name);
+                            BladeTheme::breadcrumb($category->url, $category->name);
                         }
                     }
                     $category = $categories[0];

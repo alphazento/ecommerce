@@ -6,10 +6,10 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="mb-1">
-          {{ item.name }} * {{item.quantity}}
+          {{ item.name }} * {{ item.quantity }}
           <!-- <cart-item-options-variation :product="item.product" :options="item.options"></cart-item-options-variation> -->
         </v-list-item-title>
-        <v-list-item-subtitle>${{item.row_price}}</v-list-item-subtitle>
+        <v-list-item-subtitle>${{ item.row_price }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
     <hr />
@@ -25,25 +25,25 @@ export default {
   props: {
     extraData: {
       products: Array,
-      items: Array
-    }
+      items: Array,
+    },
   },
   data() {
     return {
       products: this.extraData.products ? this.extraData.products : [],
-      items: this.extraData.items ? this.extraData.items : []
+      items: this.extraData.items ? this.extraData.items : [],
     };
   },
   watch: {
     extraData(nV, oV) {
       this.products = this.extraData.products ? this.extraData.products : [];
       this.items = this.extraData.items ? this.extraData.items : [];
-    }
+    },
   },
   methods: {
     getProductUrl: function(product) {
       if (product) {
-        return `/${product.url_key}.html`;
+        return `/${product.url}.html`;
       }
       return "#";
     },
@@ -55,6 +55,6 @@ export default {
     //   }
     //   return "not-found.png";
     // }
-  }
+  },
 };
 </script>

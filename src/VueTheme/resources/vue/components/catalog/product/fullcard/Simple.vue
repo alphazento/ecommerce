@@ -19,7 +19,9 @@
           <v-card-text class="font-weight-bold">
             <v-layout row>
               <slot name="price" v-bind:product="product">
-                <div class="display-1" style="color:#F44336;">${{ product.price.price }}</div>
+                <div class="display-1" style="color:#F44336;">
+                  ${{ product.price.price }}
+                </div>
               </slot>
             </v-layout>
             <v-layout row>
@@ -31,8 +33,13 @@
 
           <v-card-actions>
             <input type="hidden" name="qty" v-model="selectedQty" />
-            <quantity-selector :max="20" v-model="selectedQty"></quantity-selector>
-            <v-btn depressed large type="submit" class="btn__addtocart">Add to Cart</v-btn>
+            <quantity-selector
+              :max="20"
+              v-model="selectedQty"
+            ></quantity-selector>
+            <v-btn depressed large type="submit" class="btn__addtocart"
+              >Add to Cart</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-form>
@@ -44,14 +51,14 @@
 export default {
   props: {
     product: {
-      type: Object
+      type: Object,
     },
     tabs: {
-      type: Object
+      type: Object,
     },
     showQutity: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -59,8 +66,9 @@ export default {
       canShowQutity: this.showQutity ? true : false,
       canShowQutity: true,
       qtys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      model: "tab-physic"
+      model: "tab-physic",
     };
-  }
+  },
+  computed: {},
 };
 </script>

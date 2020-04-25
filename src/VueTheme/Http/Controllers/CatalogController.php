@@ -16,7 +16,7 @@ class CatalogController extends \Zento\BladeTheme\Http\Controllers\CatalogContro
             $category = $data['pageData']['category'];
            
             BladeTheme::breadcrumb('/', 'Home')
-                ->breadcrumb(url(BladeTheme::getCategoryUrl($category)), $category->name);
+                ->breadcrumb(url($category->url), $category->name);
             return $view;
         }
     }
