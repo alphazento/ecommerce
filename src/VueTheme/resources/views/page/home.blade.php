@@ -30,7 +30,7 @@
 @endsection
 
 @push('tail')
-    <script>
+<script>
     const store = window.vStore.default;
     const app = new Vue({
         el: '#app',
@@ -48,5 +48,5 @@
             this.$store.dispatch('setUser', this.user);
         }
     });
-    </script>
+</script>
 @endpush

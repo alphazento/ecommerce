@@ -3,7 +3,10 @@
     <v-card class="mx-auto" fill-width>
       <v-list-item two-line v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar tile size="80">
-          <v-img :src="item.product.image" eager></v-img>
+          <v-img
+            :src="catalogMediaUrl('product', item.product.image)"
+            eager
+          ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-container>
@@ -19,9 +22,15 @@
             <v-layout row>
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">
-                <quantity-selector :max="20" v-model="item.quantity" v-on:change="updateCartItemQty(item)"></quantity-selector>
+                <quantity-selector
+                  :max="20"
+                  v-model="item.quantity"
+                  v-on:change="updateCartItemQty(item)"
+                ></quantity-selector>
               </v-flex>
-              <v-flex md5 xs5 class="v-middle text-right">${{item.row_price}}</v-flex>
+              <v-flex md5 xs5 class="v-middle text-right"
+                >${{ item.row_price }}</v-flex
+              >
             </v-layout>
           </v-container>
         </v-list-item-content>
@@ -33,13 +42,13 @@
             <v-flex md6 xs6>
               <strong>Subtotal</strong>
             </v-flex>
-            <v-flex md6 xs6>${{cart.total}}</v-flex>
+            <v-flex md6 xs6>${{ cart.total }}</v-flex>
           </v-layout>
           <v-layout>
             <v-flex md6 xs6>
               <strong>Shipping & Handling</strong>
             </v-flex>
-            <v-flex md6 xs6>${{cart.handle_fee}}</v-flex>
+            <v-flex md6 xs6>${{ cart.handle_fee }}</v-flex>
           </v-layout>
         </v-container>
       </v-card-actions>
@@ -79,9 +88,9 @@ export default {
       valid: false,
       coupon_code: "",
       couponRules: [
-        v => !!v || "Coupon code is required",
-        v => (v && v.length <= 10) || "Name must be less than 10 characters"
-      ]
+        (v) => !!v || "Coupon code is required",
+        (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      ],
     };
   },
   created() {
@@ -92,19 +101,19 @@ export default {
   computed: {
     cart() {
       return this.$store.state.cart;
-    }
+    },
   },
   methods: {
     updateCartItemQty(item) {
-      this.$store.dispatch("updateCartItemQty", item).then(response => {
+      this.$store.dispatch("updateCartItemQty", item).then((response) => {
         console.log("updateCartItemQty ", response);
       });
     },
     deleteCartItem(item) {
-      this.$store.dispatch("deleteCartItem", item).then(response => {
+      this.$store.dispatch("deleteCartItem", item).then((response) => {
         console.log("deleteCartItem", response);
       });
-    }
-  }
+    },
+  },
 };
 </script>

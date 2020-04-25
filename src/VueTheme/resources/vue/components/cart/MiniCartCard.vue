@@ -5,7 +5,10 @@
     <v-container class="limit-height">
       <v-list-item two-line v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar tile size="80">
-          <v-img :src="item.product.image" eager></v-img>
+          <v-img
+            :src="catalogMediaUrl('product', item.product.image)"
+            eager
+          ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="headline mb-1">
@@ -44,8 +47,8 @@ export default {
   mixins: [mixin.default],
   props: {
     cart: {
-      type: Object
-    }
-  }
+      type: Object,
+    },
+  },
 };
 </script>

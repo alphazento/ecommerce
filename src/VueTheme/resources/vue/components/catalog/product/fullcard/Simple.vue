@@ -7,7 +7,7 @@
           <v-img
             max-width="600px"
             style="margin-left: auto;margin-right: auto;"
-            :src="product.image"
+            :src="catalogMediaUrl('product', product.image)"
             eager
           ></v-img>
         </v-card-text>

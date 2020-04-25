@@ -7,7 +7,11 @@
 <script src=@asset("zento_vuetheme/js/" . ($appjs ?? 'app.js')) type="text/javascript"></script>
 <script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
 <script>
-    window.themeData = @json($themeData); 
+    window.appSettings = @json($appSettings);
+    Vue.prototype.catalogMediaUrl = function(subType, url) {
+        var baseUrl = window.appSettings.mediaLibs.catalog;
+        return `${baseUrl}/${subType}${url}`;
+    };
 </script>
 
 <body>

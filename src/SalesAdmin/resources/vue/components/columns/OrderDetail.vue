@@ -2,7 +2,10 @@
   <v-container>
     <v-list-item two-line v-for="(item, idx) in products" :key="idx">
       <v-list-item-avatar tile size="80">
-        <v-img :src="item.product.image" eager></v-img>
+        <v-img
+          :src="catalogMediaUrl('product', item.product.image)"
+          eager
+        ></v-img>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="mb-1">

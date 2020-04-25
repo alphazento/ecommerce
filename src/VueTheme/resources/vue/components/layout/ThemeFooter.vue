@@ -1,8 +1,5 @@
 <template>
-  <v-footer
-    dark
-    padless
-  >
+  <v-footer dark padless>
     <v-card
       flat
       tile
@@ -21,17 +18,16 @@
           <v-icon size="24px">{{ item.icon }}</v-icon>
         </v-btn>
       </v-card-text>
-      <v-row
-        justify="center"
-        no-gutters >
+      <v-row justify="center" no-gutters>
         <v-btn
           v-for="link in links"
           :key="link.title"
           color="white"
           text
           rounded
-          class="my-2" 
-          :href="link.link">
+          class="my-2"
+          :href="link.link"
+        >
           {{ link.title }}
         </v-btn>
       </v-row>
@@ -44,19 +40,27 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        @{{ copyright }} — <strong>{{company.name}}</strong>
+        @{{ copyright }} — <strong>{{ company.name }}</strong>
       </v-card-text>
     </v-card>
   </v-footer>
 </template>
 
 <script>
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFacebook, faTwitter, faLinkedin, faInstagram, faWeibo, faWeixin, faGooglePlay } from '@fortawesome/fontawesome-free-brands'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faFacebook,
+  faTwitter,
+  faLinkedin,
+  faInstagram,
+  faWeibo,
+  faWeixin,
+  faGooglePlay,
+} from "@fortawesome/fontawesome-free-brands";
 
 export default {
   data: () => {
-    return window.themeData.footer;
+    return window.appSettings.theme.footer;
   },
-}
+};
 </script>

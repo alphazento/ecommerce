@@ -1,6 +1,11 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card light outlined class="mx-auto" :color="hover ? '#EEEEEE' : '#FFFFFF'">
+    <v-card
+      light
+      outlined
+      class="mx-auto"
+      :color="hover ? '#EEEEEE' : '#FFFFFF'"
+    >
       <v-carousel
         :show-arrows-on-hover="true"
         :hide-delimiters="true"
@@ -15,8 +20,18 @@
             transition="fade-transition"
           >
             <v-sheet height="100%" tile light>
-              <v-row class="fill-height" align="center" justify="center" height="280px">
-                <v-img :src="item.image" height="280px" contain eager>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+                height="280px"
+              >
+                <v-img
+                  :src="catalogMediaUrl('product', item.image)"
+                  height="280px"
+                  contain
+                  eager
+                >
                   <v-container fill-height fluid>
                     <v-layout fill-height>
                       <v-flex xs12 align-end flexbox></v-flex>
@@ -33,7 +48,14 @@
         <div class="mx-5">
           <p class="title blue--text">{{ product.name }}</p>
           <br />
-          <v-rating readonly small dense background-color="orange" color="orange" v-model="rating"></v-rating>
+          <v-rating
+            readonly
+            small
+            dense
+            background-color="orange"
+            color="orange"
+            v-model="rating"
+          ></v-rating>
           <span class="title">${{ product.price.price }}</span>
           &nbsp;
           <del class>${{ product.price.rrp }}</del>
@@ -58,8 +80,8 @@ export default {
   mixins: [mixin.default],
   props: {
     product: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
@@ -67,14 +89,14 @@ export default {
       color: "grey lighten-2",
       variationElements: {
         images: [],
-        priceRange: [this.product.price.price, this.product.price.price]
-      }
+        priceRange: [this.product.price.price, this.product.price.price],
+      },
     };
   },
   methods: {
     productElementsUpdated(elements) {
       this.variationElements = elements;
-    }
-  }
+    },
+  },
 };
 </script>

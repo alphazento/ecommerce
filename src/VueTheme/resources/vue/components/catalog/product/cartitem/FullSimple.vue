@@ -2,7 +2,11 @@
   <v-layout>
     <v-flex md3 xs3>
       <a :href="product_url">
-        <v-img :src="product_image" width="130" height="130"></v-img>
+        <v-img
+          :src="catalogMediaUrl('product', product_image)"
+          width="130"
+          height="130"
+        ></v-img>
       </a>
     </v-flex>
     <v-flex class="v-middle" md4 xs4>
@@ -11,7 +15,12 @@
       <a :href="product_url">Keep Shopping {{ item.name }}</a>
     </v-flex>
     <v-flex class="v-middle" md2 xs3>
-      <quantity-selector :max="20" v-if="quantitive" v-model="item.quantity" v-on:change="quantityChange"></quantity-selector>
+      <quantity-selector
+        :max="20"
+        v-if="quantitive"
+        v-model="item.quantity"
+        v-on:change="quantityChange"
+      ></quantity-selector>
     </v-flex>
     <v-flex class="v-middle text-right" md2 xs2>${{ item.row_price }}</v-flex>
     <v-flex md1 xs0></v-flex>
@@ -25,7 +34,7 @@ export default {
   methods: {
     quantityChange() {
       this.$emit("quantityChange", this.item);
-    }
-  }
+    },
+  },
 };
 </script>

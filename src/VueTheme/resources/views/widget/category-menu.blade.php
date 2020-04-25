@@ -43,7 +43,7 @@
     <a href="/" class="menu-item">Home</a>
   </li>
   @php
-  foreach($category_tree as $category) {
+  foreach($categoryTree as $category) {
     if ($category->include_in_menu) {
       echo _renderCategoryMenu_($category, 0);
     }

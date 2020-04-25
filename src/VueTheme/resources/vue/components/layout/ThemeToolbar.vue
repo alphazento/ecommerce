@@ -2,7 +2,10 @@
   <div>
     <!-- <v-app-bar hide-on-scroll> -->
     <v-app-bar app>
-      <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        icon
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
       <!-- logo -->
       <a href="/">
         <v-img :src="logo" :max-height="45" contain :position="'left'"></v-img>
@@ -46,7 +49,13 @@
         <v-card class="mx-auto" max-width="344" max-height="400">
           <v-card-text>{{ user.name }}</v-card-text>
           <v-card-actions>
-            <v-btn color="blue-grey" class="ma-2 white--text" href="/logout" @click="logout">Log out</v-btn>
+            <v-btn
+              color="blue-grey"
+              class="ma-2 white--text"
+              href="/logout"
+              @click="logout"
+              >Log out</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -67,7 +76,12 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary class="fixed-position">
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+      class="fixed-position"
+    >
       <navigation-drawer @signin="signin">
         <template>
           <slot name="navigation_drawer"></slot>
@@ -93,7 +107,12 @@
           />
         </v-flex>
         <v-flex xs2>
-          <v-btn depressed style="height:98%" color="primary" @click.stop="btnSearchClick">
+          <v-btn
+            depressed
+            style="height:98%"
+            color="primary"
+            @click.stop="btnSearchClick"
+          >
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </v-flex>
@@ -117,8 +136,8 @@
 export default {
   props: {
     links: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
@@ -126,7 +145,7 @@ export default {
       drawer: false,
       searcher: false,
       signinDialog: false,
-      logo: window.themeData.logo
+      logo: window.appSettings.theme.logo,
     };
   },
 
@@ -166,7 +185,7 @@ export default {
     },
     logout(event) {
       event && event.preventDefault();
-    }
+    },
   },
   computed: {
     cart() {
@@ -174,13 +193,13 @@ export default {
     },
     user() {
       return this.$store.state.user;
-    }
+    },
   },
   created() {
     if (!this.cart || !this.cart.uuid) {
       this.$store.dispatch("loadCart");
     }
-  }
+  },
 };
 </script>
 

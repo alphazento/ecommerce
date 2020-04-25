@@ -18,13 +18,6 @@ export default new Vuex.Store({
 
         swatches: {},
 
-        themeData: {
-            footer: {
-
-            },
-            logo: ''
-        },
-
         user: {
             id: 0,
             group_id: 0,
@@ -70,12 +63,11 @@ export default new Vuex.Store({
         setSwatches(state, swatches) {
             state.swatches = swatches;
         },
-        setThemeData(state, values) {
-            state.themeData = values;
-        },
+
         setCart(state, cart) {
             state.cart = cart;
         },
+
         setUser(state, user) {
             state.user = user
         },
@@ -106,12 +98,6 @@ export default new Vuex.Store({
             commit
         }, swatches) {
             commit('setSwatches', swatches)
-        },
-
-        setThemeData({
-            commit
-        }, values) {
-            commit('setThemeData', values)
         },
 
         assignSearchResult({

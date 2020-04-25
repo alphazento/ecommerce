@@ -21,7 +21,6 @@ const app = new Vue({
   vuetify: new Vuetify(),
   router: router,
   created() {
-    this.$store.dispatch('SET_THEME_DATA', @json(['logo'=>$logo]));
     this.$store.dispatch('AXIOS_AUTH_INTERCEPTOR', this.$router);
   }
 });

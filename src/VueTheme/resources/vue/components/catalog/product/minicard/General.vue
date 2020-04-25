@@ -2,12 +2,19 @@
   <v-hover v-slot:default="{ hover }">
     <v-card class="mx-auto">
       <a :href="getProductUrl(product)">
-        <v-img :src="product.image" height="280px" contain eager></v-img>
+        <v-img
+          :src="catalogMediaUrl('product', product.image)"
+          height="280px"
+          contain
+          eager
+        ></v-img>
       </a>
       <v-card-title class="title">
         <v-container>
           <p class="mt-4 text-left">{{ product.name }}</p>
-          <p class="ma-0 subheading body-1 font-weight-bold text-left">${{ product.price.price }}</p>
+          <p class="ma-0 subheading body-1 font-weight-bold text-left">
+            ${{ product.price.price }}
+          </p>
         </v-container>
       </v-card-title>
     </v-card>
@@ -20,8 +27,8 @@ export default {
   mixins: [mixin.default],
   props: {
     product: {
-      type: Object
-    }
-  }
+      type: Object,
+    },
+  },
 };
 </script>
