@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Zento\CatalogSearch\Services\CatalogSearchService;
 use Zento\Kernel\Facades\PackageManager;
 
-class Entry extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

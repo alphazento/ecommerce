@@ -7,7 +7,7 @@ return [
             '\Zento\BladeTheme\Console\Commands\PrepareVueBlade'
         ],
         "providers"=> [
-            "\\Zento\\BladeTheme\\Provider"
+            "\\Zento\\BladeTheme\\Providers\\Plugin"
         ],
         "middlewares"=> [],
         "middlewaregroup"=> [

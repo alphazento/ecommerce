@@ -5,7 +5,7 @@ return [
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Checkout\\Providers\\Entry"
+            "\\Zento\\Checkout\\Providers\\Plugin"
         ]
     ]
 ];

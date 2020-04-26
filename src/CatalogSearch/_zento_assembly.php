@@ -6,7 +6,7 @@ return [
             "\\Zento\\CatalogSearch\\Console\\Commands\\FulltextIndex"
         ],
         "providers"=> [
-            "\\Zento\\CatalogSearch\\Providers\\Entry"
+            "\\Zento\\CatalogSearch\\Providers\\Plugin"
         ],
         "depends"=>[
             "Zento_Catalog",

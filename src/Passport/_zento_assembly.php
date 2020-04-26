@@ -5,7 +5,7 @@ return [
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Passport\\Provider"
+            "\\Zento\\Passport\\Providers\\Plugin"
         ],
         "middlewares"=> [
             "cors"=> "\\Zento\\Passport\\Http\\Middleware\\CORS",

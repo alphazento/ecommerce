@@ -11,7 +11,7 @@ use ThemeManager;
 
 use Zento\Kernel\Facades\PackageManager;
 
-class Entry extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

@@ -5,7 +5,7 @@ return [
         "commands" =>  [],
         'vuetheme_type'=>'backend',
         "providers" => [
-            "\\Zento\\Backend\\Providers\\Entry"
+            "\\Zento\\Backend\\Providers\\Plugin"
         ],
         "listeners"=> [],
         "middlewaregroup"=> [

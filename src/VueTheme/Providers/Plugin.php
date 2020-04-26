@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\VueTheme;
+namespace Zento\VueTheme\Providers;
 
 use Auth;
 use Storage;
@@ -13,7 +13,7 @@ use Zento\Catalog\Providers\Facades\ProductService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
-class Provider extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

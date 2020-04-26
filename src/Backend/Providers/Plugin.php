@@ -8,7 +8,7 @@ use Zento\Backend\Services\AdminDashboardService;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
-class Entry extends AuthServiceProvider
+class Plugin extends AuthServiceProvider
 {
     /**
     * The policy mappings for the application.

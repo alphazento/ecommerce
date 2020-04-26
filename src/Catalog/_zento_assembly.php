@@ -5,7 +5,7 @@ return [
         "vue_component" => true,
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\Catalog\\Providers\\Entry"
+            "\\Zento\\Catalog\\Providers\\Plugin"
         ],
         "depends"=>[
             "Zento_Backend",

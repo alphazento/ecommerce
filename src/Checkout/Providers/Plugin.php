@@ -6,7 +6,7 @@ use Zento\Checkout\Services\CheckoutService;
 use Illuminate\Support\ServiceProvider;
 use PackageManager;
 
-class Entry extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

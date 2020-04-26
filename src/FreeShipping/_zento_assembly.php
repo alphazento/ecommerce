@@ -4,7 +4,7 @@ return [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\FreeShipping\\Providers\\Entry"
+            "\\Zento\\FreeShipping\\Providers\\Plugin"
         ],
         "depends"=> [
             "Zento_Shipment"

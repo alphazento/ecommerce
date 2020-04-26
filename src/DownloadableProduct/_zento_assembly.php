@@ -4,7 +4,7 @@ return [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\DownloadableProduct\\Providers\\Entry"
+            "\\Zento\\DownloadableProduct\\Providers\\Plugin"
         ],
         "depends"=>[
             "Zento_Catalog",

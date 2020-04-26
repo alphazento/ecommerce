@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Passport;
+namespace Zento\Passport\Providers;
 
 use Gate;
 use ShareBucket;
@@ -19,7 +19,7 @@ use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Guards\TokenGuard;
 
 
-class Provider extends AuthServiceProvider
+class Plugin extends AuthServiceProvider
 {
     /**
      * The policy mappings for the application.

@@ -5,7 +5,7 @@ return [
         'theme'=> 'Zento_BladeTheme',
         'vuetheme_type'=>'frontstore',
         'providers'=>[
-            "\\Zento\\VueTheme\\Provider"
+            "\\Zento\\VueTheme\\Providers\\Plugin"
         ],
         'middlewares'=>[],
         'commands'=>[],

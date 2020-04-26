@@ -5,7 +5,7 @@ return [
         "vue_component" => true,
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\PaypalPayment\\Providers\\Entry"
+            "\\Zento\\PaypalPayment\\Providers\\Plugin"
         ],
         "depends"=> ["Zento_PaymentGateway"]
     ]

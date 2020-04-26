@@ -5,7 +5,7 @@ return [
         "vue_component" => true,
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\HelloSns\\Provider"
+            "\\Zento\\HelloSns\\Providers\\Plugin"
         ],
         "depends"=> [
             'Zento_Backend',

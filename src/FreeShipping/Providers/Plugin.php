@@ -7,7 +7,7 @@ use Zento\Shipment\Providers\Facades\ShipmentService;
 use Zento\FreeShipping\Model\ShippingMethod;
 use Illuminate\Support\ServiceProvider;
 
-class Entry extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function boot()
     {

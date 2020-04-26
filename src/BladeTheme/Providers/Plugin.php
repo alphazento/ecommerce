@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\BladeTheme;
+namespace Zento\BladeTheme\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Zento\BladeTheme\View\DirectiveExtend;
@@ -10,7 +10,7 @@ use Zento\BladeTheme\Services\BladeTheme;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Facades\ThemeManager;
 
-class Provider extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

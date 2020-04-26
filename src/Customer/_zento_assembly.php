@@ -5,7 +5,7 @@ return [
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Customer\\Providers\\Entry"
+            "\\Zento\\Customer\\Providers\\Plugin"
         ],
         "listeners"=> [
             "Zento\\Customer\\Event\\PassportTokenIssued"=> [

@@ -5,7 +5,7 @@ namespace Zento\ShoppingCart\Providers;
 use Illuminate\Support\ServiceProvider;
 use Zento\Kernel\Facades\PackageManager;
 
-class Entry extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function register()
     {

@@ -4,7 +4,7 @@ return [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\PaymentGateway\\Providers\\Entry"
+            "\\Zento\\PaymentGateway\\Providers\\Plugin"
         ],
         "depends"=> [
             "Zento_Backend"

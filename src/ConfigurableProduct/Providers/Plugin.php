@@ -7,7 +7,7 @@ use CatalogSearchService;
 
 use Zento\ConfigurableProduct\Model\ORM\Product as ConfigurableProduct;
 
-class Entry extends \Illuminate\Support\ServiceProvider
+class Plugin extends \Illuminate\Support\ServiceProvider
 {
     public function boot() {
         ConfigurableProduct::registerType(ConfigurableProduct::MODEL_TYPE, ConfigurableProduct::class);

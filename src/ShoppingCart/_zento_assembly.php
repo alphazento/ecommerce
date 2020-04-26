@@ -4,7 +4,7 @@ return [
         "version"=> "0.0.1",
         "commands"=> [],
         "providers"=> [
-            "\\Zento\\ShoppingCart\\Providers\\Entry"
+            "\\Zento\\ShoppingCart\\Providers\\Plugin"
         ],
         "listeners"=> [
             // "Zento\\Sales\\Event\\OrderCreatedEvent"=> [

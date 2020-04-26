@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
-class Entry extends AuthServiceProvider
+class Plugin extends AuthServiceProvider
 {
     /**
      * The policy mappings for the application.

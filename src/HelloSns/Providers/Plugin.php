@@ -1,12 +1,12 @@
 <?php
 
-namespace Zento\HelloSns;
+namespace Zento\HelloSns\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Zento\BladeTheme\Facades\BladeTheme;
 use Zento\HelloSns\Services\HelloSnsService;
 
-class Provider extends ServiceProvider
+class Plugin extends ServiceProvider
 {
     public function boot()
     {
