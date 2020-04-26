@@ -14,8 +14,8 @@
 export default {
   props: {
     product: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   data() {
@@ -24,11 +24,11 @@ export default {
       products: {},
       availables: [],
       priceRange: [],
-      images: []
+      images: [],
     };
   },
   created() {
-    if (this.product.configurables) {
+    if (this.product.configurables && this.product.configurables.length > 0) {
       this.availables = this.product.configurables;
     }
     this.initSwatches();
@@ -37,20 +37,20 @@ export default {
   computed: {
     swatchConsts() {
       return this.$store.state.swatches;
-    }
+    },
   },
   methods: {
     initSwatches() {
       let keys = Object.keys(this.swatchConsts);
       if (keys.length > 0 && this.availables) {
-        keys.forEach(swatch => {
+        keys.forEach((swatch) => {
           this.swatches[swatch] = {
             type: swatch,
             items: [],
-            current: null
+            current: null,
           };
           this.products[swatch] = [];
-          this.product.configurables.forEach(product => {
+          this.product.configurables.forEach((product) => {
             this.products[swatch].push(product);
             if (!this.swatches[swatch].items.includes(product[swatch])) {
               this.swatches[swatch].items.push(product[swatch]);
@@ -71,10 +71,10 @@ export default {
     },
     reduceResouces() {
       var reduced = this.product.configurables;
-      Object.keys(this.swatchConsts).forEach(key => {
+      Object.keys(this.swatchConsts).forEach((key) => {
         var swatch = this.swatches[key];
         if (swatch.current && swatch.current !== undefined) {
-          reduced = reduced.filter(product => {
+          reduced = reduced.filter((product) => {
             return product[swatch.type] === swatch.current;
           });
         }
@@ -83,7 +83,7 @@ export default {
       this.availables = reduced;
     },
     calc() {
-      var images = this.availables.map(v => {
+      var images = this.availables.map((v) => {
         return v.media_gallery;
       });
       images = images.reduce((accumulator, currentValue) => {
@@ -94,7 +94,7 @@ export default {
         return self.indexOf(value) === index;
       });
 
-      this.images = images.map(jsontext => {
+      this.images = images.map((jsontext) => {
         var item = JSON.parse(jsontext);
         item.image = item.value;
         return item;
@@ -110,14 +110,14 @@ export default {
       this.$emit("productElementsUpdated", {
         images: this.images,
         priceRange: this.priceRange,
-        candidates: this.availables
+        candidates: this.availables,
       });
     },
     swatchSelected(item) {
       this.swatches[item.swatch].current = item.value;
       this.reduceResouces();
       this.calc();
-    }
-  }
+    },
+  },
 };
 </script>

@@ -9,6 +9,7 @@
 namespace Zento\Acl\Console\Commands;
 
 use Zento\Acl\Model\Auth\Administrator;
+use Illuminate\Support\Facades\Hash;
 
 class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -17,19 +18,25 @@ class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Bas
      *
      * @var string
      */
-    protected $signature = 'acl:addadmin {email : email address} {--root}';
+    protected $signature = 'acl:addadmin {email : email address} {--password=false} {--root}';
 
     protected $description = 'Add an administrator';
 
     public function handle() {
         $email = $this->argument('email');
         $root = $this->option('root');
+        $password = $this->option('password', false);
         $user = Administrator::where('email', $email)->first();
         if (!$user) {
             $user = new Administrator;
             $user->email = $email;
             $user->name = explode('@', $email)[0];
-            $password = $user->applyRandomPassword();
+            if ($password) {
+                $user->password = Hash::make($password);
+                $user->save();
+            } else {
+                $password = $user->applyRandomPassword();
+            }
             $this->info(sprintf('Administrator(%s) has been created. Password is %s', $email, $password));
         } else {
             $this->error(sprintf('Administrator(%s) has exists.' , $email));

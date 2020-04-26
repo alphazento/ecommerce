@@ -58,7 +58,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
 
     public function getProductSwatches() {
         $attributes = DynamicAttribute::with(['options'])
-            ->where('swatch', 1)
+            ->where('swatch', '>', 0)
             ->where('active', 1)
             ->get();
         

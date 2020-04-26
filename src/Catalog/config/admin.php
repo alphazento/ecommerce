@@ -249,7 +249,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             //not display, but for the logic
             AdminConfigurationService::registerGroup([$groupTag, '_extra_'], $daSets->toArray());
 
-            foreach($itemsGroups as $group => $items) {
+            foreach($itemsGroups ?? [] as $group => $items) {
                 AdminConfigurationService::registerGroup([$groupTag, 
                     $group], 
                     [

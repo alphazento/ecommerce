@@ -26,7 +26,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
         if (ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL) === 'admin') {
             return [
                 'prices',
-                'special_price'
+                'special_prices'
             ];
         } else {
             return ['price'];
