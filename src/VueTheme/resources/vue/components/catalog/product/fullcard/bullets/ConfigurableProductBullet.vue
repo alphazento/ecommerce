@@ -6,7 +6,12 @@
       :rules="[rules.required]"
     ></product-variations-block>
     <v-container class="no-v-padding">
-      <v-input v-model="actual_pid" type="hidden" readonly :rules="[rules.required]" />
+      <v-input
+        v-model="actual_pid"
+        type="hidden"
+        readonly
+        :rules="[rules.required]"
+      />
       <input name="options[actual_pid]" type="hidden" v-model="actual_pid" />
     </v-container>
   </div>
@@ -16,20 +21,20 @@
 export default {
   props: {
     product: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
       variationElements: {
         images: [],
-        priceRange: [this.product.price.price],
-        candidates: []
+        priceRange: [this.product.price.final_price],
+        candidates: [],
       },
       actual_pid: 0,
       rules: {
-        required: value => !!value || "Please select product option."
-      }
+        required: (value) => !!value || "Please select product option.",
+      },
     };
   },
   methods: {
@@ -48,7 +53,7 @@ export default {
 
       this.$emit("update_images", elements.images);
       this.$emit("update_price", price);
-    }
-  }
+    },
+  },
 };
 </script>

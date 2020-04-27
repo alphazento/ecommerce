@@ -11,6 +11,7 @@ class ProductPrice extends \Illuminate\Database\Eloquent\Model
         'product_id',
         'customer_group_id',
         'price',
+        'final_price',  //it calculate by normal price and special price every day
         'discount'
     ];
 

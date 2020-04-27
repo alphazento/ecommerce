@@ -137,8 +137,8 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
             ->orderBy('level');
     }
 
-    public function getPriceAttribute() {
-        return $this->price->price ?? 0;
+    public function getFinalPriceAttribute() {
+        return $this->price->final_price ?? 0;
     }
 
     public static function assignExtraRelation($products) {
@@ -174,7 +174,7 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
      * @return void
      */
     public function prepareToCartItem(array &$options) {
-        $price = (string)$this->prices->price;
+        $price = (string)$this->price->final_price;
         return [
             'price' => $price,
             'name' => $this->name,

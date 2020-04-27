@@ -28,7 +28,7 @@
             color="orange"
             v-model="rating"
           ></v-rating>
-          <span class="title">${{ product.price.price }}</span>
+          <span class="title">${{ product.price.final_price }}</span>
           &nbsp
           <del class>${{ product.price.rrp }}</del>
         </div>

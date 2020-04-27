@@ -65,7 +65,7 @@
                 tabs: @json($tabs),
                 detailTabs: @json($jsonFields),
                 swatches: @json($swatches),
-                price: product.price.price,
+                price: product.price.final_price,
                 images: [product.image]
             }
         },

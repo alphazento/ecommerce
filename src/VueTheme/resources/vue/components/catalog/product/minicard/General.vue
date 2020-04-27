@@ -13,7 +13,7 @@
         <v-container>
           <p class="mt-4 text-left">{{ product.name }}</p>
           <p class="ma-0 subheading body-1 font-weight-bold text-left">
-            ${{ product.price.price }}
+            ${{ product.price.final_price }}
           </p>
         </v-container>
       </v-card-title>

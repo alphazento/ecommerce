@@ -20,7 +20,7 @@
             <v-layout row>
               <slot name="price" v-bind:product="product">
                 <div class="display-1" style="color:#F44336;">
-                  ${{ product.price.price }}
+                  ${{ product.price.final_price }}
                 </div>
               </slot>
             </v-layout>

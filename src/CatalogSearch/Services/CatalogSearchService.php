@@ -111,25 +111,6 @@ class CatalogSearchService
         $builder->orderBy('name', $direction);
     }
 
-    // /**
-    //  * filter category
-    //  *
-    //  * @param [type] $builder
-    //  * @param array $category_ids  [id1, id2]
-    //  * @return void
-    //  */
-    // protected function filterMainCategory($builder, array $category_ids) {
-    //     if (count($category_ids) > 0) {
-    //         $product_table = $builder->getModel()->getTable();
-    //         if (!isset($this->joined_tables[$this->categoryProductTable])) {
-    //             $this->joined_tables[$this->categoryProductTable] = true;
-    //             $builder->join($this->categoryProductTable, $product_table . '.id', '=', $this->categoryProductTable . '.product_id');
-    //         }
-    //         $ids = CategoryService::getCategoryIdsWithChildrenByIds($category_ids);
-    //         $builder->whereIn($this->categoryProductTable . '.category_id', $ids);
-    //     }
-    // }
-
     /**
      * filter category
      *
@@ -453,21 +434,16 @@ class CatalogSearchService
         $table = (new ProductPrice)->getTable();
         $product_table = $query->getModel()->getTable();
         $query->leftJoin($table, $product_table . '.id', '=', $table . '.product_id');
-        $columnName = $table . '.price';
+        $columnName = $table . '.final_price';
         $query->addSelect($columnName);
 
         $minQuery = clone $query;
-        $min = $minQuery->orderBy($columnName)->first();
-        $minValue = $min ? floor($min->price) : 0;
+        $min = $minQuery->orderBy($columnName)->pureExec('first');
+        $minValue = floor($min->final_price ?? 0);
 
         $maxQuery = clone $query;
-        $max = $maxQuery->orderBy($columnName, 'desc')->first();
-        $maxValue = $max ? ceil($max->price) : 999999;
-
-        // $range = $max - $min;
-        // $split = 4;
-        // $avgQuery = clone $query;
-        // $avg = $avgQuery->avg('price');
+        $max = $maxQuery->orderBy($columnName, 'desc')->pureExec('first');
+        $maxValue = ceil($max->final_price ?? 99999);
 
         return [$minValue, $maxValue];
     }

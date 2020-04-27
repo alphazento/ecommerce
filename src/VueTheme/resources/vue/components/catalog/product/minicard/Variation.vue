@@ -56,7 +56,7 @@
             color="orange"
             v-model="rating"
           ></v-rating>
-          <span class="title">${{ product.price.price }}</span>
+          <span class="title">${{ product.price.final_price }}</span>
           &nbsp;
           <del class>${{ product.price.rrp }}</del>
         </div>
@@ -89,7 +89,10 @@ export default {
       color: "grey lighten-2",
       variationElements: {
         images: [],
-        priceRange: [this.product.price.price, this.product.price.price],
+        priceRange: [
+          this.product.price.final_price,
+          this.product.price.final_price,
+        ],
       },
     };
   },
