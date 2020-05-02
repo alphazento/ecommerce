@@ -33,7 +33,7 @@ Route::group(
 
     Route::post(
         '/orders/{id}/unhold', 
-        ['as' => 'orders.hold', 'uses' => 'ApiController@unholdOrder']
+        ['as' => 'orders.unhold', 'uses' => 'ApiController@unholdOrder']
     );
 
     Route::get(
