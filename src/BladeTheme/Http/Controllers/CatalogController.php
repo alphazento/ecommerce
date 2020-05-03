@@ -84,7 +84,7 @@ class CatalogController extends Controller
                     }
                 }
 
-                BladeTheme::breadcrumb(BladeTheme::getProductUrl($product), $product->name);
+                BladeTheme::breadcrumb($product->url, $product->name);
                 return BladeTheme::view('page.product', compact('product', 'category', 'categories', 'tabs'));
             }
             return BladeTheme::view('page.404');

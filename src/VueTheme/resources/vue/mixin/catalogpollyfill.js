@@ -2,7 +2,7 @@ export default {
     methods: {
         getProductUrl: function (product) {
             if (product) {
-                return `/${product.url}.html`;
+                return `/${product.url_key}.html`;
             }
             return '#';
         },

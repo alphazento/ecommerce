@@ -176,7 +176,6 @@ class Product extends \Illuminate\Database\Eloquent\Model implements IProduct
     public function prepareToCartItem(array &$options) {
         $price = (string)$this->price->final_price;
         return [
-            'price' => $price,
             'name' => $this->name,
             'product_id' => $this->id,
             'sku' => $this->sku,

@@ -46,7 +46,9 @@ class BladeTheme {
         //restore to origin stack
         app()->instance('request', $originRequest);
         Route::setCurrent($originRoute);
-        
+        if (is_string($resp)) {
+            echo $resp;die;
+        }
         return $resp->getApiResponse();
     }
 
