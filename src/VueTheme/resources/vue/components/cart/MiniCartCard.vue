@@ -1,7 +1,11 @@
 <template>
   <v-card flat class="mx-auto">
     <v-toolbar flat color="#F2F2F2">
-      <v-toolbar-title class="display-1">{{ cart.items_quantity }} Items</v-toolbar-title>
+      <v-toolbar-title
+        v-if="cart.items_quantity>1"
+        class="display-1"
+      >{{ cart.items_quantity }} Items</v-toolbar-title>
+      <v-toolbar-title v-else class="display-1">1 Item</v-toolbar-title>
       <v-spacer />
       <v-tooltip right>
         <template v-slot:activator="{ on }">
@@ -15,10 +19,14 @@
     <v-container>
       <v-list-item three-line v-for="(item, idx) in cart.items" :key="idx">
         <v-list-item-avatar tile size="80">
-          <v-img :src="catalogMediaUrl('product', item.product.image)" eager></v-img>
+          <a :href="productUrl(item.product.url_key)">
+            <img :src="catalogMediaUrl('product', item.product.image)" style="width:80px" />
+          </a>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
+          <v-list-item-title>
+            <a :href="productUrl(item.product.url_key)">{{ item.name }}</a>
+          </v-list-item-title>
           <v-list-item-subtitle>
             <span class="text-uppercase">{{displayVariations(item)}}</span>
           </v-list-item-subtitle>

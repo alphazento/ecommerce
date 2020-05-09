@@ -12,6 +12,9 @@
         var baseUrl = window.appSettings.mediaLibs.catalog;
         return `${baseUrl}/${subType}${url}`;
     };
+    Vue.prototype.productUrl = function(url) {
+        return `${url}.html`;
+    };
 </script>
 
 <body>

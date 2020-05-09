@@ -29,7 +29,7 @@ export default {
         "z-product-price-bullet": "components/catalog/product/fullcard/bullets/PriceBullet.vue",
         "z-product-stock-bullet": "components/catalog/product/fullcard/bullets/StockBullet.vue",
         "z-product-shipping-bullet": "components/catalog/product/fullcard/bullets/ShippingBullet.vue",
-        "z-configuable-product-bullet": "components/catalog/product/fullcard/bullets/ConfigurableProductBullet.vue",
+        "z-configurable-product-bullet": "components/catalog/product/fullcard/bullets/ConfigurableProductBullet.vue",
 
         "mini-cart-item-simple": "components/catalog/product/cartitem/MiniSimple.vue",
         "full-cart-item-simple": "components/catalog/product/cartitem/FullSimple.vue",

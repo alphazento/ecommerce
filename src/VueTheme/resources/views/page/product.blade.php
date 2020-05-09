@@ -18,11 +18,11 @@
                     <z-product-price-bullet :product="product" :price="price"></z-product-price-bullet>
                     <z-product-stock-bullet :product="product"></z-product-stock-bullet>
                     <z-product-shipping-bullet :product="product"></z-product-shipping-bullet>
-                    <z-configuable-product-bullet v-if="product.model_type=='configurable'"
+                    <z-configurable-product-bullet v-if="product.model_type=='configurable'"
                         :product="product" 
                         @update_images="updateImages" 
                         @update_price="updatePrice">
-                    </z-configuable-product-bullet>
+                    </z-configurable-product-bullet>
                 </template>
             </z-product-action-card>
         </v-flex>
