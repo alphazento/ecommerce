@@ -31,7 +31,7 @@ class Seeder extends \Illuminate\Database\Seeder {
         //     $product = new Product();
         //     $product->id = $item->entity_id;
         //     $product->attribute_set_id = $item->attribute_set_id;
-        //     $product->model_type = $item->model_type;
+        //     $product->morph_type = $item->morph_type;
         //     $product->has_options = $item->has_options;
         //     $product->required_options = $item->required_options;
         //     $product->sku = $item->sku;

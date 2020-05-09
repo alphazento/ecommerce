@@ -30,7 +30,7 @@ export default {
       if (this.gerneralMode) {
         // return "mini-simple-product-card";
       }
-      switch (product.model_type) {
+      switch (product.morph_type) {
         case "simple":
         case "downloadable":
           return "mini-simple-product-card";

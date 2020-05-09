@@ -82,7 +82,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                     [
                         'text' => 'Product Model Type',
                         'ui' => 'z-options-display',
-                        'value' => 'model_type',
+                        'value' => 'morph_type',
                         'options' => $this->getProductModelTypsMapping(),
                         'filter_ui' => 'config-options-item',
                         'filter_data_type' => 'string',
@@ -214,7 +214,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
             $items[] = [
                 'text' => 'Product Type',
                 'ui' => 'config-options-item',
-                'accessor' => 'model_type',
+                'accessor' => 'morph_type',
                 'options'  => $this->getProductModelTypsMapping('products')
             ];
             $items[] = [
@@ -288,7 +288,7 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                 'label' => $key,
                 'value' => $key
             ];
-        }, array_keys(Product::getProductTypes()));
+        }, Product::getMorphTypes());
     }
     protected function getProductVisibilityOptions() {
         return [

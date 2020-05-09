@@ -17,7 +17,7 @@ class CreateProductTable extends Migration
             $table->integer('attribute_set_id')->unsigned();
             $table->string('sku', 255);
             $table->string('name', 255);
-            $table->string('model_type', 64);
+            $table->string('morph_type', 64);
             $table->boolean('has_options');
             $table->boolean('required_options');
             $table->boolean('active');

@@ -6,7 +6,7 @@ interface IProduct extends \Zento\Contracts\AssertAbleInterface
 {
     const PROPERTIES = [
         'id', 
-        'model_type',
+        'morph_type',
         'has_options',
         'required_options',
         'active',

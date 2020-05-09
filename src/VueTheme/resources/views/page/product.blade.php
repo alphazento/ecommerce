@@ -12,13 +12,13 @@
             <z-product-image-carousel :images="images"></z-product-image-carousel>
         </v-flex>
         <v-flex md4 xs12>
-            <z-product-action-card :product="product" :fix-quantity="product.model_type=='downloadable' ? 1 : 0">
+            <z-product-action-card :product="product" :fix-quantity="product.morph_type=='downloadable' ? 1 : 0">
                 <template v-slot:content>
                     <z-product-review-bullet :product="product"></z-product-review-bullet>
                     <z-product-price-bullet :product="product" :price="price"></z-product-price-bullet>
                     <z-product-stock-bullet :product="product"></z-product-stock-bullet>
                     <z-product-shipping-bullet :product="product"></z-product-shipping-bullet>
-                    <z-configurable-product-bullet v-if="product.model_type=='configurable'"
+                    <z-configurable-product-bullet v-if="product.morph_type=='configurable'"
                         :product="product" 
                         @update_images="updateImages" 
                         @update_price="updatePrice">

@@ -25,7 +25,7 @@ class Product extends SimpleProduct
 
     public static function assignExtraRelation($products) {
         // $reduced = array_filter($products, function($product) {
-        //     return $product->model_type === self::MODEL_TYPE;
+        //     return $product->morph_type === self::MODEL_TYPE;
         // });
         // $ids = array_map(function($product) {
         //     return $product->id;

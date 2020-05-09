@@ -125,7 +125,7 @@ export default {
           name: "",
           visibility: 3,
           attribute_set_id: this.defaultAttributeSet.id,
-          model_type: "simple",
+          morph_type: "simple",
           active: "false"
         }
       };

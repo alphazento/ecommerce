@@ -46,9 +46,12 @@ class BladeTheme {
         //restore to origin stack
         app()->instance('request', $originRequest);
         Route::setCurrent($originRoute);
-        if (is_string($resp)) {
+
+        if (is_string($resp) && env('APP_DEBUG')) {
+            //it's a debug error render.
             echo $resp;die;
         }
+        
         return $resp->getApiResponse();
     }
 

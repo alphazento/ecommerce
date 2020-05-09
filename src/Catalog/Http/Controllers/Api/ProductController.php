@@ -28,7 +28,7 @@ class ProductController extends ApiBaseController
      */
     public function create() {
         $data = Request::all();
-        $product = ProductService::newInstanceBaseTypeId($data['model_type']);
+        $product = ProductService::newInstanceBaseTypeId($data['morph_type']);
         $filedList = $product->getTableFields();
         $fileds = Arr::only($data, $product->getTableFields());
         $product->fill($fileds);
