@@ -2,20 +2,13 @@
 
 namespace Zento\Sales\Event\Listener;
 
-use Request;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Foundation\Events\Dispatchable;
-
-use Zento\Sales\Model\ORM\SalesOrder;
-use Zento\Sales\Model\ORM\SalesAddress;
-use Zento\Sales\Model\ORM\SalesShipment;
-use Zento\Sales\Model\ORM\SalesOrderStatus;
 use Zento\Sales\Providers\Facades\SalesService;
 
 class DraftOrderListener extends \Zento\Kernel\Booster\Events\BaseListener
 {
-    protected function run($event) {
+    protected function run($event)
+    {
         $order = SalesService::placeOrder($event->pay_id);
-        return $event->createResult(true, ['order' =>  $order]);
+        return $event->createResult(true, ['order' => $order]);
     }
 }

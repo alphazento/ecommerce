@@ -2,20 +2,12 @@
 
 namespace Zento\ShoppingCart\Http\Controllers\Api;
 
-
-use Auth;
+use Illuminate\Http\Request;
 use Route;
-use Response;
-use Registry;
-use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
-use Zento\Catalog\Providers\Facades\ProductService;
-
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 use Zento\ShoppingCart\Model\ORM\ShoppingCart;
 use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zento\Kernel\Http\Controllers\ApiBaseController;
+use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 
 class ShoppingCartController extends ApiBaseController
 {
@@ -25,8 +17,9 @@ class ShoppingCartController extends ApiBaseController
      * Retrieves current user's shopping cart
      * @group Shopping Cart
      */
-    public function getCart() {
-        return $this->tapCart(function($cart) {
+    public function getCart()
+    {
+        return $this->tapCart(function ($cart) {
             return $this->withData($cart);
         });
     }
@@ -35,18 +28,20 @@ class ShoppingCartController extends ApiBaseController
      * create a new shopping cart for current user
      * @group Shopping Cart
      */
-    public function create() {
+    public function create()
+    {
         $cart = ShoppingCartService::createCart();
         $cart ? $this->success(201) : $this->error();
         return $this->withData($cart);
     }
 
     /**
-     * delete current shopping cart of current user 
+     * delete current shopping cart of current user
      * @group Shopping Cart
      */
-    public function delete() {
-        return $this->tapCart(function($cart) {
+    public function delete()
+    {
+        return $this->tapCart(function ($cart) {
             $cart->delete();
             return $this;
         });
@@ -56,13 +51,13 @@ class ShoppingCartController extends ApiBaseController
      * add Item to shopping cart
      * @group Shopping Cart
      */
-    public function addItem(Request $request) {
-        return $this->tapCart(function($cart) use ($request) {
-            if ($item = ShoppingCartService::addProduct($cart, 
+    public function addItem(Request $request)
+    {
+        return $this->tapCart(function ($cart) use ($request) {
+            if ($item = ShoppingCartService::addProduct($cart,
                 $request->get('product_id'),
                 $request->get('quantity', 1),
-                $request->get('options', []))) 
-            {
+                $request->get('options', []))) {
                 return $this->withData($cart);
             } else {
                 $this->error(400, 'fail to add item to cart');
@@ -74,8 +69,9 @@ class ShoppingCartController extends ApiBaseController
      * update a shopping cart item's quantity
      * @group Shopping Cart
      */
-    public function updateItemQuantity() {
-        return $this->tapCart(function($cart) {
+    public function updateItemQuantity()
+    {
+        return $this->tapCart(function ($cart) {
             if (ShoppingCartService::updateItemQuantity($cart, Route::input('item_id'), Route::input('quantity'))) {
                 return $this->success(200)->withData($cart);
             } else {
@@ -88,8 +84,9 @@ class ShoppingCartController extends ApiBaseController
      * delete a shopping cart item
      * @group Shopping Cart
      */
-    public function deleteItem() {
-        return $this->tapCart(function($cart) {
+    public function deleteItem()
+    {
+        return $this->tapCart(function ($cart) {
             if (ShoppingCartService::deleteItem($cart, Route::input('item_id'))) {
                 return $this->withData($cart);
             } else {
@@ -102,7 +99,8 @@ class ShoppingCartController extends ApiBaseController
      * update shopping cart item
      * @group Shopping Cart
      */
-    public function updateItem() {
+    public function updateItem()
+    {
         ShoppingCartService::updateItem();
     }
 
@@ -110,8 +108,9 @@ class ShoppingCartController extends ApiBaseController
      * try to apply coupon code for a shopping cart
      * @group Shopping Cart
      */
-    public function putCoupon() {
-        return $this->tapCart(function($cart) {
+    public function putCoupon()
+    {
+        return $this->tapCart(function ($cart) {
             if (ShoppingCartService::addCoupon($cart, Route::input('coupon'))) {
                 return $this->withData($cart);
             } else {
@@ -124,7 +123,8 @@ class ShoppingCartController extends ApiBaseController
      * try to get current coupon code from a shopping cart
      * @group Shopping Cart
      */
-    public function getCoupon() {
+    public function getCoupon()
+    {
         ShoppingCartService::addCoupon();
     }
 
@@ -132,7 +132,8 @@ class ShoppingCartController extends ApiBaseController
      * cancel a coupon
      * @group Shopping Cart
      */
-    public function deleteCoupon() {
+    public function deleteCoupon()
+    {
         ShoppingCartService::deleteCoupon();
     }
 
@@ -140,8 +141,9 @@ class ShoppingCartController extends ApiBaseController
      * set current shopping cart's billing address
      * @group Shopping Cart
      */
-    public function setBillingAddress(Request $request) {
-        return $this->tapCart(function($cart) use ($request) {
+    public function setBillingAddress(Request $request)
+    {
+        return $this->tapCart(function ($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
             ShoppingCartService::setBillingAddress($cart, $address, $request->get('ship_to_billingaddesss'));
             return $this->withData($cart);
@@ -152,8 +154,9 @@ class ShoppingCartController extends ApiBaseController
      * set current shopping cart's shipping address
      * @group Shopping Cart
      */
-    public function setShippingAddress(Request $request) {
-        return $this->tapCart(function($cart) use ($request) {
+    public function setShippingAddress(Request $request)
+    {
+        return $this->tapCart(function ($cart) use ($request) {
             $address = new ShoppingCartAddress($request->all());
             ShoppingCartService::setShippingAddress($cart, $address);
             return $this->withData($cart);
@@ -164,10 +167,11 @@ class ShoppingCartController extends ApiBaseController
      * merge a shopping cart to anohter shopping cart
      * @group Shopping Cart
      */
-    public function mergeCart() {
-        return $this->tapCart(function($cart) {
+    public function mergeCart()
+    {
+        return $this->tapCart(function ($cart) {
             if ($to_cart = ShoppingCartService::cart(Route::input('to_cart_guid'))) {
-                foreach($cart->items as $item) {
+                foreach ($cart->items as $item) {
                     ShoppingCartService::addItem($to_cart, $item, false);
                 }
                 ShoppingCartService::ShoppingCartUpdated($to_cart);
@@ -180,7 +184,8 @@ class ShoppingCartController extends ApiBaseController
      * get current shopping cart's customer details
      * @group Shopping Cart
      */
-    public function getCustomer() {
+    public function getCustomer()
+    {
 
     }
 
@@ -188,8 +193,9 @@ class ShoppingCartController extends ApiBaseController
      * attach a customer to a shopping cart
      * @group Shopping Cart
      */
-    public function setCustomer(Request $request) {
-        return $this->tapCart(function($cart) use ($request) {
+    public function setCustomer(Request $request)
+    {
+        return $this->tapCart(function ($cart) use ($request) {
             if ($cart->mode == 0) {
                 $cart->customer_id = Route::input('customer_id');
                 $cart->mode = 1;
@@ -205,8 +211,9 @@ class ShoppingCartController extends ApiBaseController
      * update a shopping cart's email address
      * @group Shopping Cart
      */
-    public function updateEmail(Request $request) {
-        return $this->tapCart(function($cart) use ($request) {
+    public function updateEmail(Request $request)
+    {
+        return $this->tapCart(function ($cart) use ($request) {
             $cart->email = $request->get('email');
             $cart->save();
             return $this->withData($cart);

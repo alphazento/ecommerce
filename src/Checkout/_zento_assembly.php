@@ -1,11 +1,11 @@
 <?php
 return [
-    "Zento_Checkout"=> [
+    "Zento_Checkout" => [
         "version" => "0.0.1",
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Checkout\\Providers\\Plugin"
-        ]
-    ]
+            "\\Zento\\Checkout\\Providers\\Plugin",
+        ],
+    ],
 ];

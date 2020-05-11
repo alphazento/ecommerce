@@ -2,18 +2,18 @@
 
 namespace Zento\BladeTheme\View;
 
-use Store;
-use Cookie;
 use Illuminate\View\Factory;
 
-class DirectiveExtend {
-    public function inject(Factory $viewFactory) {
+class DirectiveExtend
+{
+    public function inject(Factory $viewFactory)
+    {
         if ($bladeComplier = $viewFactory->getEngineResolver()->resolve('blade')->getCompiler()) {
             $bladeComplier->directive('asset', function ($key) {
                 return sprintf('{{ asset(%s) }}', $key);
             });
 
-            $bladeComplier->directive('stub', function($expression) {
+            $bladeComplier->directive('stub', function ($expression) {
                 return "<?php BladeTheme::processStub($expression, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path'])); ?>";
             });
 

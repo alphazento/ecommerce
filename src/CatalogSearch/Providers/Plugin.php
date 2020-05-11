@@ -17,8 +17,9 @@ class Plugin extends ServiceProvider
         PackageManager::class_alias('\Zento\CatalogSearch\Providers\Facades\CatalogSearchService', 'CatalogSearchService');
     }
 
-    public function boot() {
-        $this->app->resolving('catalogsearch_service', function($service) {
+    public function boot()
+    {
+        $this->app->resolving('catalogsearch_service', function ($service) {
             $service->registerCriteriaFilter('visibility',
                 function ($builder, $value) {
                     if (empty($value) || $value === 'storefront') {

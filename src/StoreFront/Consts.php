@@ -1,7 +1,8 @@
 <?php
 namespace Zento\StoreFront;
 
-class Consts  {
+class Consts
+{
     //CACHE KEYS
     const ASSETS_URL_PREFIX = 'assets.url_prefix';
     const LOGO = 'store.logo';

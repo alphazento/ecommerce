@@ -2,7 +2,7 @@
 
 namespace Zento\Contracts\Interfaces;
 
-interface IPaymentTransaction extends \Zento\Contracts\AssertAbleInterface 
+interface IPaymentTransaction extends \Zento\Contracts\AssertAbleInterface
 {
     const PROPERTIES = [
         'pay_id',
@@ -16,6 +16,6 @@ interface IPaymentTransaction extends \Zento\Contracts\AssertAbleInterface
         'currency',
         'amount_due',
         'amount_authorized',
-        'amount_paid'
+        'amount_paid',
     ];
 }

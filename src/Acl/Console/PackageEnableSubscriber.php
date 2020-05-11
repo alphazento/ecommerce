@@ -8,7 +8,6 @@
 namespace Zento\Acl\Console;
 
 use Event;
-use Artisan;
 
 class PackageEnableSubscriber
 {

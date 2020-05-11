@@ -2,31 +2,31 @@
 
 namespace Zento\Sales\Model\ORM;
 
-use DB;
 use Illuminate\Support\Arr;
 
 class SalesOrderProduct extends \Illuminate\Database\Eloquent\Model
 {
     protected $fillable = [
-        'order_id', 
-        'name', 
-        'product_id', 
-        'sku', 
+        'order_id',
+        'name',
+        'product_id',
+        'sku',
         'price',
         'custom_price',
-        'quantity', 
+        'quantity',
         'shippable',
         'taxable',
-        'unit_price', 
+        'unit_price',
         'row_price',
         'refund',
         'actuals',
         'options',
-        'active'
+        'active',
     ];
 
-    public static function recordProductsFromOrderQuote($order_id, $quote) {
-        foreach($quote->items ?? [] as $item) {
+    public static function recordProductsFromOrderQuote($order_id, $quote)
+    {
+        foreach ($quote->items ?? [] as $item) {
             $data = $item->toArray();
             $data['options'] = isset($data['options']) ? json_encode($data['options']) : '';
             $data = Arr::except($data, ['id', 'cart_id']);

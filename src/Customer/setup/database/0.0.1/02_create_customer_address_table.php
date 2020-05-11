@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCustomerAddressTable extends Migration
 {
@@ -29,7 +29,6 @@ class CreateCustomerAddressTable extends Migration
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.

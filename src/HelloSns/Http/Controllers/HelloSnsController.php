@@ -2,16 +2,16 @@
 
 namespace Zento\HelloSns\Http\Controllers;
 
-
 use Auth;
-use Socialite;
 use Illuminate\Http\Request;
+use Socialite;
 use Zento\HelloSns\Facades\HelloSnsService;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class HelloSnsController extends ApiBaseController
 {
-    protected function accountConnect(Request $request, $grantTyep) {
+    protected function accountConnect(Request $request, $grantTyep)
+    {
         if ($network = $request->input('network')) {
             if ($authResponse = $request->input('authResponse')) {
                 if ($token = $authResponse['access_token']) {
@@ -38,13 +38,15 @@ class HelloSnsController extends ApiBaseController
      * @group HelloSns
      * @queryParam authResponse required string authorize response from SNS
      */
-    public function tokenAccountConnect(Request $request) {
+    public function tokenAccountConnect(Request $request)
+    {
         return $this->accountConnect($request, 'token');
     }
 
-    public function sessionAccountConnect(Request $request) {
+    public function sessionAccountConnect(Request $request)
+    {
         if ($state = HelloSnsService::hasValidState($request)) {
-            return$this->accountConnect($request, 'session');
+            return $this->accountConnect($request, 'session');
         } else {
             return $this->error('State is not match.');
         }

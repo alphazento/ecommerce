@@ -2,9 +2,9 @@
 
 namespace Zento\PaymentGateway\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\PaymentGateway\Services\PaymentGateway;
-use Illuminate\Support\ServiceProvider;
 
 class Plugin extends ServiceProvider
 {

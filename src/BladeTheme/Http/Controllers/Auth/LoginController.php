@@ -2,11 +2,10 @@
 
 namespace Zento\BladeTheme\Http\Controllers\Auth;
 
-use Zento\BladeTheme\Facades\BladeTheme;
-use Zento\Kernel\Http\Controllers\TraitApiResponse;
-
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 class LoginController extends \App\Http\Controllers\Auth\LoginController
 {
@@ -22,11 +21,12 @@ class LoginController extends \App\Http\Controllers\Auth\LoginController
         return BladeTheme::breadcrumb('/login', 'Sign In')->view('auth.login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         try {
             return parent::login($request);
         } catch (ValidationException $e) {
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->error(422)->wrapValidationExceptionMessage($e);
             } else {
                 throw $e;
@@ -43,7 +43,7 @@ class LoginController extends \App\Http\Controllers\Auth\LoginController
      */
     protected function authenticated(Request $request, $user)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $this->withData($user);
         }
     }

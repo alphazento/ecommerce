@@ -3,9 +3,8 @@
 namespace Zento\CatalogSearch\Http\Controllers\Api;
 
 use CatalogSearchService;
-use Route;
 use Request;
-use Registry;
+use Route;
 use Zento\Kernel\Facades\DanamicAttributeFactory;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
@@ -16,7 +15,8 @@ class CatalogSearchController extends ApiBaseController
      * @group Catalog Search
      * @urlParam id number specified category id
      */
-    public function search() {
+    public function search()
+    {
         return $this->_search();
     }
 
@@ -24,12 +24,14 @@ class CatalogSearchController extends ApiBaseController
      * execute a catalog search from admin
      * @group Catalog Search
      */
-    public function adminSearch() {
+    public function adminSearch()
+    {
         DanamicAttributeFactory::withoutMappedValue(false);
         return $this->_search('admin', false);
     }
 
-    protected function _search($visibility = 'storefront', $withAggreate = true) {
+    protected function _search($visibility = 'storefront', $withAggreate = true)
+    {
         $params = Request::all();
         $per_page = 15;
         $page = 1;

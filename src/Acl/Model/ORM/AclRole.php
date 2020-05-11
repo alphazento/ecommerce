@@ -8,7 +8,7 @@ class AclRole extends AclBaseModel
         'scope',
         'name',
         'description',
-        'active'
+        'active',
     ];
 
     /**
@@ -16,7 +16,8 @@ class AclRole extends AclBaseModel
      *
      * @return Collection of AdminPermissionItem
      */
-    public function routes() {
+    public function routes()
+    {
         return $this->hasManyThrough(AclRoute::class, AclRoleRoute::class,
             'role_id',
             'id',
@@ -25,7 +26,8 @@ class AclRole extends AclBaseModel
         );
     }
 
-    public function users() {
+    public function users()
+    {
         return $this->hasMany(AclRoleUser::class, 'role_id', 'id');
     }
 }

@@ -21,16 +21,17 @@ class DisableAdministrator extends \Zento\Kernel\PackageManager\Console\Commands
 
     protected $description = 'Enable a exists user';
 
-    public function handle() {
+    public function handle()
+    {
         $email = $this->argument('email');
 
         $user = User::where('email', $email)->first();
         if (!$user) {
-            $this->error(sprintf('User(%s) does not exist' , $email));
+            $this->error(sprintf('User(%s) does not exist', $email));
         } else {
             $user->active = 0;
             $user->save();
-            $this->info(sprintf('User(%s) has been disabled.' , $email));
+            $this->info(sprintf('User(%s) has been disabled.', $email));
         }
     }
 }

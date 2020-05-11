@@ -3,16 +3,13 @@
 namespace Zento\Acl\Services;
 
 use Auth;
-use Store;
 use Request;
-use ShareBucket;
-
-use Zento\Acl\Model\Auth\GuestUser;
-use Zento\Acl\Model\Auth\AclUserInterface;
 use Zento\Acl\Model\ORM\AclRoute;
 
-class Acl implements AclInterface {
-    protected function matchAclRoutes(\Illuminate\Http\Request $request) {
+class Acl implements AclInterface
+{
+    protected function matchAclRoutes(\Illuminate\Http\Request $request)
+    {
         if ($route = $request->route()) {
             return AclRoute::where('uri', $route->uri)
                 ->whereIn('method', $route->methods)
@@ -27,14 +24,15 @@ class Acl implements AclInterface {
     /**
      * check by request
      */
-    public function checkRequest(\Illuminate\Http\Request $request, $user = null) {
+    public function checkRequest(\Illuminate\Http\Request $request, $user = null)
+    {
         if ($route = $request->route()) {
             $acl = $route->action['acl'] ?? 'false';
             if (!$acl || $acl === 'false') {
                 return true;
             }
         }
-        
+
         if ($user = $user ?? $request->user) {
             if ($user->guest()) {
                 return false;
@@ -59,7 +57,8 @@ class Acl implements AclInterface {
         return false;
     }
 
-    public function isRootUser($user) {
+    public function isRootUser($user)
+    {
         if ($user) {
             if (isset($this->userIsRoots[$user->id])) {
                 return true;
@@ -71,14 +70,16 @@ class Acl implements AclInterface {
         return false;
     }
 
-    public function checkRoute($uri, $method = 'get', $user = null) {
+    public function checkRoute($uri, $method = 'get', $user = null)
+    {
         return $this->checkRequest(Request::create($uri, strtoupper($method)), $user);
     }
 
     /**
      * admin pannel UX
      */
-    public function allowUX($uiItem, $desc = null) {
+    public function allowUX($uiItem, $desc = null)
+    {
         if ($this->isRootUser($user)) {
             return true;
         }

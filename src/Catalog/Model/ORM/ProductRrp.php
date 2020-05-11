@@ -2,18 +2,16 @@
 
 namespace Zento\Catalog\Model\ORM;
 
-use Illuminate\Support\Collection;
-use Zento\Catalog\Model\HasManyInAggregatedField;
-
 class ProductRrp extends \Illuminate\Database\Eloquent\Model
 {
     protected $fillable = [
         'product_id',
         'cost',
-        'rrp'
+        'rrp',
     ];
-    
-    public function getForeignKeyName() {
+
+    public function getForeignKeyName()
+    {
         return 'product_id';
     }
 }

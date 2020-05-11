@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateDownloadableProductConfigTable extends Migration
 {
@@ -15,14 +15,14 @@ class CreateDownloadableProductConfigTable extends Migration
         Schema::create('downloadable_product_configs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product_id')->unsigned();
-            $table->boolean('quantitative')->default(0);  //0 means only allow add qty 1
+            $table->boolean('quantitative')->default(0); //0 means only allow add qty 1
             $table->integer('downloadable')->unsigned()->default(0);
             $table->string('download_url');
             $table->timestamps();
 
             $table->foreign('product_id')
-                    ->references('id')
-                    ->on('products');
+                ->references('id')
+                ->on('products');
         });
     }
 

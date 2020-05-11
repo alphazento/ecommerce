@@ -1,25 +1,26 @@
 <?php
- /**
-  *
-  * @category   Framework support
-  * @package    Base
-  * @copyright
-  * @license
-  * @author      Yongcheng Chen yongcheng.chen@live.com
-  */
+/**
+ *
+ * @category   Framework support
+ * @package    Base
+ * @copyright
+ * @license
+ * @author      Yongcheng Chen yongcheng.chen@live.com
+ */
 
 namespace Zento\Acl\Model\Auth;
 
-use Zento\Acl\Model\ORM\AclRoute;
-use Zento\Acl\Model\ORM\AclWhiteList;
 use Zento\Acl\Model\ORM\AclBlackList;
 use Zento\Acl\Model\ORM\AclRole;
 use Zento\Acl\Model\ORM\AclRoleUser;
+use Zento\Acl\Model\ORM\AclRoute;
+use Zento\Acl\Model\ORM\AclWhiteList;
 
 trait TraitPermission
 {
     private $_routes;
-    public function whiteRoutes() {
+    public function whiteRoutes()
+    {
         return $this->hasManyThrough(AclRoute::class, AclWhiteList::class,
             'user_id',
             'id',
@@ -28,7 +29,8 @@ trait TraitPermission
         )->where(with(new AclWhiteList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function blackRoutes() {
+    public function blackRoutes()
+    {
         return $this->hasManyThrough(AclRoute::class, AclBlackList::class,
             'user_id',
             'id',
@@ -37,7 +39,8 @@ trait TraitPermission
         )->where(with(new AclBlackList)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function roles() {
+    public function roles()
+    {
         return $this->hasManyThrough(AclRole::class, AclRoleUser::class,
             'user_id',
             'id',
@@ -46,11 +49,12 @@ trait TraitPermission
         )->where(with(new AclRoleUser)->getTable() . '.scope', '=', static::$scope);
     }
 
-    public function routes() {
+    public function routes()
+    {
         if (!$this->_routes) {
             $this->_routes = [];
-            foreach($this->roles ?? [] as $role) {
-                foreach($role->routes ?? [] as $item) {
+            foreach ($this->roles ?? [] as $role) {
+                foreach ($role->routes ?? [] as $item) {
                     if (!$this->objectInArray($item, $this->_routes, 'id')) {
                         $this->_routes[] = $item;
                     }
@@ -60,8 +64,9 @@ trait TraitPermission
         return $this->_routes;
     }
 
-    private function objectInArray($needdle, &$array, $key) {
-        foreach($array ??[] as $item) {
+    private function objectInArray($needdle, &$array, $key)
+    {
+        foreach ($array ?? [] as $item) {
             if ($needdle[$key] == $item[$key]) {
                 return true;
             }

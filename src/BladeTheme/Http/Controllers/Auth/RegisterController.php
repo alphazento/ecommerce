@@ -2,14 +2,13 @@
 
 namespace Zento\BladeTheme\Http\Controllers\Auth;
 
-use ShareBucket;
-use Zento\BladeTheme\Facades\BladeTheme;
-use Zento\Customer\Model\ORM\Customer;
-use Zento\Kernel\Http\Controllers\TraitApiResponse;
-use Zento\BladeTheme\Http\Controllers\TraitThemeRouteOverwritable;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use ShareBucket;
+use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\BladeTheme\Http\Controllers\TraitThemeRouteOverwritable;
+use Zento\Customer\Model\ORM\Customer;
+use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 class RegisterController extends \App\Http\Controllers\Auth\RegisterController
 {
@@ -26,11 +25,12 @@ class RegisterController extends \App\Http\Controllers\Auth\RegisterController
         return BladeTheme::breadcrumb('/register', 'Sign Up')->view('auth.register');
     }
 
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         try {
             return parent::register($request);
         } catch (ValidationException $e) {
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->error(422)->wrapValidationExceptionMessage($e);
             } else {
                 throw $e;
@@ -50,7 +50,7 @@ class RegisterController extends \App\Http\Controllers\Auth\RegisterController
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'store_id' => ShareBucket::get('store_id', 0)
+            'store_id' => ShareBucket::get('store_id', 0),
         ]);
     }
 
@@ -63,7 +63,7 @@ class RegisterController extends \App\Http\Controllers\Auth\RegisterController
      */
     protected function registered(Request $request, $user)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $this->withData($user);
         }
     }

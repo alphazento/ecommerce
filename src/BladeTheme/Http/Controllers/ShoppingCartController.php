@@ -2,18 +2,18 @@
 
 namespace Zento\BladeTheme\Http\Controllers;
 
-use Auth;
-use Route;
-use Request;
-use Redirect;
 use BladeTheme;
+use Redirect;
+use Request;
+use Route;
 
 class ShoppingCartController extends \App\Http\Controllers\Controller
 {
     use TraitThemeRouteOverwritable;
 
-    protected function createCart() {
-        $resp = BladeTheme::requestInnerApi('POST', 
+    protected function createCart()
+    {
+        $resp = BladeTheme::requestInnerApi('POST',
             BladeTheme::apiUrl('cart'));
         if ($resp->success) {
             return $resp->data;
@@ -25,7 +25,8 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
      * Render shopping cart page
      * @group Web Pages
      */
-    public function index() {
+    public function index()
+    {
         if ($resp = $this->getCart(true)) {
             $cart = $resp->data;
         } else {
@@ -43,7 +44,8 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
      * @queryParam options required array product's qty
      * @queryParam url required string product's url
      */
-    public function addItem() {
+    public function addItem()
+    {
         $product_id = Route::input('pid');
 
         $cart = $this->getCart();
@@ -55,18 +57,18 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
         $options = Request::get('options', []);
         // $url = Request::get('url', 'https://alphazento.local.test/xl-518.html');
         $url = '';
-        $resp = BladeTheme::requestInnerApi('POST', 
+        $resp = BladeTheme::requestInnerApi('POST',
             BladeTheme::apiUrl('cart/items'),
             compact('product_id', 'quantity', 'options', 'url')
         );
-        
-        if($resp->success) {
+
+        if ($resp->success) {
             return redirect()->route('cart.page')
                 ->withMessage('Product has been added to Shopping Cart.');
         } else {
             return Redirect::back()->withErrors([$resp->message]);
         }
-        
+
         return Redirect::back()->withErrors(['Fail to add product to your Shopping Cart.']);
     }
 
@@ -75,11 +77,12 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
      * @group Web Pages
      * @urlParam item_id required number shopping cart item id
      */
-    public function deleteItem() {
+    public function deleteItem()
+    {
         $item_id = Route::input('item_id');
-        
+
         if ($cart = $this->getCart()) {
-            $resp = BladeTheme::requestInnerApi('DELETE', 
+            $resp = BladeTheme::requestInnerApi('DELETE',
                 BladeTheme::apiUrl(sprintf('cart/items/%s', $item_id))
             );
 
@@ -99,7 +102,8 @@ class ShoppingCartController extends \App\Http\Controllers\Controller
      * @urlParam item_id required number shopping cart item id
      * @queryParam qty required number shopping cart item new quantity
      */
-    public function updateItemQty() {
+    public function updateItemQty()
+    {
 
     }
 }

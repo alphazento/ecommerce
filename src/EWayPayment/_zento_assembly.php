@@ -1,14 +1,14 @@
 <?php
 return [
-    "Zento_EWayPayment"=> [
-        "version"=> "0.0.1",
-        "commands"=> [],
-        "providers"=> [
-            "\\Zento\\EWayPayment\\Providers\\Plugin"
+    "Zento_EWayPayment" => [
+        "version" => "0.0.1",
+        "commands" => [],
+        "providers" => [
+            "\\Zento\\EWayPayment\\Providers\\Plugin",
         ],
-        "depends"=> [
+        "depends" => [
             "Zento_PaymentGateway",
-            "Zento_Backend"
-        ]
-    ]
+            "Zento_Backend",
+        ],
+    ],
 ];

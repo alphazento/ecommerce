@@ -2,15 +2,11 @@
 
 namespace Zento\ShoppingCart\Model\ORM;
 
-use DB;
-use Illuminate\Support\Collection;
-use Zento\Catalog\Model\HasManyInAggregatedField;
-
 class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements \Zento\Contracts\Interfaces\IAddress
 {
     protected $fillable = [
         'customer_id',
-        'name',  
+        'name',
         "company",
         "address1",
         "address2",
@@ -19,6 +15,6 @@ class ShoppingCartAddress extends \Illuminate\Database\Eloquent\Model implements
         "postal_code",
         "state",
         "phone",
-        "address_type"
+        "address_type",
     ];
 }

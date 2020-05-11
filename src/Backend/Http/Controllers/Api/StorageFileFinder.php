@@ -2,12 +2,12 @@
 
 namespace Zento\Backend\Http\Controllers\Api;
 
+use Illuminate\Support\Str;
 use Request;
 use Route;
 use Storage;
-use Zento\StoreFront\Consts;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Illuminate\Support\Str;
+use Zento\StoreFront\Consts;
 
 class StorageFileFinder extends ApiBaseController
 {
@@ -19,14 +19,15 @@ class StorageFileFinder extends ApiBaseController
      * @bodyParam type required string find file type
      * @bodyParam text required string find file name
      */
-    public function findFiles() {
+    public function findFiles()
+    {
         $visibility = Route::input('visibility');
         $folder = Route::input('folder', '');
         $fileType = Request::get('type');
         $searchText = Request::get('text');
 
         $strategy = $this->getStrategy($visibility);
-        switch($strategy) {
+        switch ($strategy) {
             case 'local':
             case 'both':
                 $disk = config($visibility === 'public' ? Consts::PUBLIC_FILE_UPLOAD_STORAGE : Consts::PRIVATE_FILE_UPLOAD_STORAGE);
@@ -41,7 +42,7 @@ class StorageFileFinder extends ApiBaseController
                     'from' => 1,
                     'to' => $total > 9 ? 9 : $total,
                     'total' => $total,
-                    'local_pagination' => true
+                    'local_pagination' => true,
                 ];
                 break;
             case 'cloud':
@@ -52,14 +53,16 @@ class StorageFileFinder extends ApiBaseController
         return $this->success(200)->withData($data);
     }
 
-    protected function getStrategy($visibility) {
+    protected function getStrategy($visibility)
+    {
         return config($visibility === 'public' ? Consts::PUBLIC_FILE_UPLOAD_STORE_STRATEGY : Consts::PRIVATE_FILE_UPLOAD_STORE_STRATEGY, 'local');
     }
 
     /**
      * find in local, ignore page, return all results.
      */
-    protected function findInLocal($disk, $folder, $searchText, $fileType) {
+    protected function findInLocal($disk, $folder, $searchText, $fileType)
+    {
         $storage = Storage::disk($disk);
         $searchIn = $storage->path($folder);
         $pattern = "";
@@ -68,27 +71,27 @@ class StorageFileFinder extends ApiBaseController
         } else {
             $searchText = '*';
         }
-        switch($fileType) {
+        switch ($fileType) {
             case 'image':
-            break;
+                break;
             case 'all':
             case '*':
                 $pattern = sprintf('%s/%s', $searchIn, $searchText);
-            break;
-            
+                break;
+
             case '':
                 $pattern = sprintf('%s/%s.%s', $searchIn, $searchText, $fileType);
-            break;
+                break;
             default:
                 $pattern = sprintf('%s/%s.{%s}', $searchIn, $searchText, $fileType);
-            break;
+                break;
         }
 
         $files = glob($pattern, GLOB_BRACE);
         $ds = [];
         $storagePath = $storage->path('');
         $appUrl = env('APP_URL');
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $name = Str::replaceFirst($storagePath, '', $file);
             $url = $storage->url($name);
             $value = Str::replaceFirst($appUrl, '', $url);
@@ -96,7 +99,7 @@ class StorageFileFinder extends ApiBaseController
                 'url' => $url,
                 'thumbnail' => $url,
                 'name' => basename($name),
-                'value' => $value
+                'value' => $value,
             ];
         }
         return $ds;

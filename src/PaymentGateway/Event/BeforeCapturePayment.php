@@ -2,7 +2,8 @@
 
 namespace Zento\PaymentGateway\Event;
 
-class BeforeCapturePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
+class BeforeCapturePayment extends \Zento\Kernel\Booster\Events\BaseEvent
+{
     const HAS_ATTRS = [
         'method',
         'data',
@@ -19,7 +20,7 @@ class BeforeCapturePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
     {
         $this->data = [
             'method' => $method,
-            'data' => $data
+            'data' => $data,
         ];
     }
 }

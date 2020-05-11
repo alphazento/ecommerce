@@ -8,17 +8,17 @@
 
 namespace Zento\Acl\DocBlock;
 
+use Illuminate\Routing\Route;
 use Psy\Util\Docblock;
 use ReflectionClass;
 use Zento\Acl\Consts;
-use Zento\Acl\Model\ORM\AclRoute;
-use Illuminate\Routing\Route;
 
 class RouteAnalyzer
 {
     protected $reflection_cache = [];
     protected $method_docs_cache = [];
-    public function analyze(Route $route) {
+    public function analyze(Route $route)
+    {
         $middlewares = $route->action['middleware'] ?? [];
         if (is_string($middlewares)) {
             $middlewares = [$middlewares];
@@ -31,7 +31,7 @@ class RouteAnalyzer
         $tags = $dockBlock->tags;
         $acl = false;
         $scope = Consts::FRONTEND_SCOPE;
-        
+
         $parts = explode('/', $route->uri);
         if (count($parts) >= 3) {
             if ($parts[0] == 'api' && $parts[2] == 'admin') {
@@ -43,13 +43,14 @@ class RouteAnalyzer
             //admin default will not need acl, if there's a tag 'acl', it will be true
             $acl = isset($tags['acl']);
         }
-        
+
         $group = $tags['group'][0] ?? 'General';
         $description = $tags['desc'] ?? '';
         return compact('scope', 'group', 'description', 'acl');
     }
 
-    protected function retrieveRouteDockBlock(Route $route) {
+    protected function retrieveRouteDockBlock(Route $route)
+    {
         list($className, $methodName) = $this->getClassAndMethodNames($route);
         $cacheKey = sprintf('%s::%s', $className, $methodName);
         if (!isset($this->method_docs_cache[$cacheKey])) {
@@ -57,10 +58,10 @@ class RouteAnalyzer
                 $this->reflection_cache[$cacheKey] = new ReflectionClass($className);
             }
             $reflection = $this->reflection_cache[$cacheKey];
-            if (! $reflection->hasMethod($methodName)) {
+            if (!$reflection->hasMethod($methodName)) {
                 throw new \Exception(
                     sprintf('Error while analyzing docblock for route: Class %s does not contain method %s',
-                    $className, $methodName));
+                        $className, $methodName));
             }
             $methodBlock = new DocBlock($reflection->getMethod($methodName));
             $this->method_docs_cache[$cacheKey] = $methodBlock;
@@ -69,7 +70,7 @@ class RouteAnalyzer
             return $this->method_docs_cache[$cacheKey];
         }
     }
-    
+
     public function getClassAndMethodNames(Route $route)
     {
         $action = $route->getAction();

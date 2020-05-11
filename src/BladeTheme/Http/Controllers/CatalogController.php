@@ -2,11 +2,11 @@
 
 namespace Zento\BladeTheme\Http\Controllers;
 
-use Route;
-use Request;
-use BladeTheme;
 use App\Http\Controllers\Controller;
+use BladeTheme;
 use Illuminate\Support\Str;
+use Request;
+use Route;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class CatalogController extends Controller
@@ -18,27 +18,28 @@ class CatalogController extends Controller
      * Render a specified category page
      * @group Web Pages
      */
-    public function categoryProducts() {
+    public function categoryProducts()
+    {
         if ($category_id = Route::input('id')) {
             if ($category = \Zento\Catalog\Model\ORM\Category::thinMode()->find($category_id)) {
                 $request = Request::instance();
-                $path =  $request->path();
+                $path = $request->path();
                 $query = Str::after($request->getRequestUri(), $request->path());
                 $catalog_search_uri = BladeTheme::apiUrl(sprintf('catalog/search/categories/%s', $category_id));
-                $resp = BladeTheme::requestInnerApi('GET', 
+                $resp = BladeTheme::requestInnerApi('GET',
                     sprintf('%s/%s', $catalog_search_uri, $query)
                 );
                 $pagination = $resp->success && is_object($resp->data) ? $resp->data->toArray() : $resp->data;
 
-                $page_data = ['type' => 'category', 
-                    'title' => $category->name, 
+                $page_data = ['type' => 'category',
+                    'title' => $category->name,
                     'description' => $category->description,
                     'catalog_search_uri' => $catalog_search_uri];
-                foreach($category->parents as $parent) {
+                foreach ($category->parents as $parent) {
                     if ($parent->id > 2) {
                         BladeTheme::breadcrumb($parent->url, $parent->name);
                     }
-                } 
+                }
                 BladeTheme::breadcrumb($category->url, $category->name);
                 return BladeTheme::view('page.searchresult', compact('pagination', 'path', 'page_data'));
             }
@@ -50,9 +51,10 @@ class CatalogController extends Controller
      * Render a specified product page
      * @group Web Pages
      */
-    public function product() {
+    public function product()
+    {
         if ($productId = Route::input('id')) {
-            $resp = BladeTheme::requestInnerApi('GET', 
+            $resp = BladeTheme::requestInnerApi('GET',
                 BladeTheme::apiUrl(sprintf('catalog/products/%s', $productId))
             );
 
@@ -61,7 +63,7 @@ class CatalogController extends Controller
                 $categories = [];
                 if ($category_ids = Route::input('category_ids')) {
                     if ($categories = $this->fetchCategories()) {
-                        foreach($categories as $category) {
+                        foreach ($categories as $category) {
                             BladeTheme::breadcrumb($category->url, $category->name);
                         }
                     }
@@ -77,9 +79,8 @@ class CatalogController extends Controller
                     ->select('name', 'front_component', 'front_group')
                     ->orderBy('sort')
                     ->orderBy('front_component')
-                    ->get()) 
-                {
-                    foreach($collection as $item) {
+                    ->get()) {
+                    foreach ($collection as $item) {
                         $tabs[$item->front_group][] = ['type' => $item->front_component, 'attribute' => $item->name];
                     }
                 }
@@ -91,7 +92,8 @@ class CatalogController extends Controller
         }
     }
 
-    protected function fetchAllCategories() {
+    protected function fetchAllCategories()
+    {
         if (!$this->allCategories) {
             $resp = BladeTheme::requestInnerApi('GET', BladeTheme::apiUrl('catalog/categories/tree'));
             $this->allCategories = $resp->success ? $resp->data : null;
@@ -99,8 +101,9 @@ class CatalogController extends Controller
         return $this->allCategories;
     }
 
-    protected function fetchCategories($category_ids) {
-        $resp = BladeTheme::requestInnerApi('GET', 
+    protected function fetchCategories($category_ids)
+    {
+        $resp = BladeTheme::requestInnerApi('GET',
             BladeTheme::apiUrl(sprintf('catalog/categories/%s', $category_ids)));
         if ($succeed) {
             return $resp->data;
@@ -111,16 +114,17 @@ class CatalogController extends Controller
      * Render search result page
      * @group Web Pages
      */
-    public function search() {
+    public function search()
+    {
         $request = Request::instance();
         $query = Str::after($request->getRequestUri(), $request->path());
         $path = $request->path();
-        $resp = BladeTheme::requestInnerApi('GET', 
+        $resp = BladeTheme::requestInnerApi('GET',
             BladeTheme::apiUrl(sprintf('catalog/search%s', $query))
         );
         $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
         $page_data = [
-            'type' => 'search', 
+            'type' => 'search',
             'catalog_search_uri' => "/api/v1/catalog/search",
             'title' => sprintf('Search Result for: "%s"', $pagination['criteria']['text'] ?? ''),
             'description' => '',

@@ -5,7 +5,7 @@ namespace Zento\Contracts\Interfaces\Catalog;
 interface IProduct extends \Zento\Contracts\AssertAbleInterface
 {
     const PROPERTIES = [
-        'id', 
+        'id',
         'morph_type',
         'has_options',
         'required_options',
@@ -36,9 +36,8 @@ interface IProduct extends \Zento\Contracts\AssertAbleInterface
         'price',
         'special_price',
         'special_from',
-        'special_to'
+        'special_to',
     ];
-
 
     /**
      * check if shopping cart has same item exists

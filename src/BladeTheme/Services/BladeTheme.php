@@ -1,24 +1,26 @@
 <?php
 namespace Zento\BladeTheme\Services;
 
-use Route;
+use Illuminate\Support\Traits\Macroable;
 use Request;
+use Route;
 use ShareBucket;
 
-use Illuminate\Support\Traits\Macroable;
-
-class BladeTheme {
+class BladeTheme
+{
     use Macroable;
     use Concerns\TraitBladeDirective;
     use Concerns\TraitBreadcrumb;
     use Concerns\TraitViewData;
     use Concerns\TraitViewStub;
 
-    public function apiUrl($path) {
+    public function apiUrl($path)
+    {
         return sprintf('/api/v1/%s', $path);
     }
 
-    public function requestInnerApi($method, $url, $data = [], $headers = []) : \Zento\Kernel\Http\ApiResponse {
+    public function requestInnerApi($method, $url, $data = [], $headers = []): \Zento\Kernel\Http\ApiResponse
+    {
         //keep origin stack
         $originRequest = Request::instance();
         $originRoute = Route::current();
@@ -35,7 +37,7 @@ class BladeTheme {
             $request->headers->add($headers);
         }
         app()->instance('request', $request);
-        
+
         ShareBucket::put(\Zento\Passport\Http\Middleware\GuestToken::ALLOW_GUEST_API, true);
         try {
             $resp = Route::dispatch($request)->getOriginalContent();
@@ -51,11 +53,12 @@ class BladeTheme {
             //it's a debug error render.
             echo $resp;die;
         }
-        
+
         return $resp->getApiResponse();
     }
 
-    public function getApiGuestToken($user) {
+    public function getApiGuestToken($user)
+    {
         return sprintf('Guest %s', encrypt(json_encode($user->toArray())));
     }
 }

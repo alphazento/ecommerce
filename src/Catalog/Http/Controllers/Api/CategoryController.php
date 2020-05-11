@@ -2,14 +2,12 @@
 
 namespace Zento\Catalog\Http\Controllers\Api;
 
-use Route;
-use Request;
-use ShareBucket;
 use CategoryService;
-use Zento\Kernel\Consts;
-use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Zento\Catalog\Model\ORM\Category;
 use Illuminate\Support\Arr;
+use Request;
+use Route;
+use Zento\Catalog\Model\ORM\Category;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class CategoryController extends ApiBaseController
 {
@@ -17,10 +15,11 @@ class CategoryController extends ApiBaseController
      * list category tree
      * @group Catalog
      */
-    public function categoriesTree() {
+    public function categoriesTree()
+    {
         $all = Request::get('all', false);
         $tree = CategoryService::tree(!$all);
-        return $this->with('tree_conf',CategoryService::treeConfigs())->withData($tree);
+        return $this->with('tree_conf', CategoryService::treeConfigs())->withData($tree);
     }
 
     /**
@@ -28,11 +27,12 @@ class CategoryController extends ApiBaseController
      * @group Catalog
      * @urlParam ids required string category IDs Example:3,4
      */
-    public function categories() {
+    public function categories()
+    {
         $ids = explode(',', Route::input('ids'));
         $ids = array_unique($ids);
         $categories = [];
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $categories[] = CategoryService::getCategoryById($id);
         }
         return $this->withData($categories);
@@ -44,7 +44,8 @@ class CategoryController extends ApiBaseController
      * @urlParam attribute required string Attribute name
      * @bodyParam value required string Attribute value
      */
-    public function setAttribute() {
+    public function setAttribute()
+    {
         if ($id = Route::input('id')) {
             if ($category = CategoryService::getCategoryById($id)) {
                 $attribute = Route::input('attribute');
@@ -62,7 +63,8 @@ class CategoryController extends ApiBaseController
      * @group Catalog
      * @responseModel \Zento\Catalog\Model\ORM\Category
      */
-    public function newCategory() {
+    public function newCategory()
+    {
         $data = Request::all();
         unset($data['id']);
 
@@ -74,7 +76,7 @@ class CategoryController extends ApiBaseController
         //must reload to make sure it will load dynamic attributes
         if ($category = CategoryService::getCategoryById($category->id)) {
             $dynAttrs = Arr::except($data, $category->getTableFields());
-            foreach($dynAttrs as $attribute => $value) {
+            foreach ($dynAttrs as $attribute => $value) {
                 $category->{$attribute} = $value;
             }
             $category->push();
@@ -90,14 +92,16 @@ class CategoryController extends ApiBaseController
      * @queryParam per_page number pagination's per_page
      * @responseCollectionPagination \Zento\Catalog\Model\ORM\Product
      */
-    public function productsOfCategory() {
+    public function productsOfCategory()
+    {
         $category = CategoryService::getCategoryById(Route::input('id'));
         \zento_assert($category);
         return $this->with('category', $category)
-                    ->with('products', $category->products()->paginate(Request::get('per_page', 9)));
+            ->with('products', $category->products()->paginate(Request::get('per_page', 9)));
     }
 
-    public function newProductSection() {
+    public function newProductSection()
+    {
         // $categories[] = CategoryService::getCategoryById(19);
         $categories[] = CategoryService::getCategoryById(22);
         $categories[] = CategoryService::getCategoryById(29);
@@ -105,7 +109,7 @@ class CategoryController extends ApiBaseController
         $categories[] = CategoryService::getCategoryById(8);
 
         $collection = [];
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $collection[] = ['name' => $category->name, 'products' => $category->products()->limit(6)->get()];
         }
         return $this->withData($collection);

@@ -2,10 +2,9 @@
 
 namespace Zento\FreeShipping\Providers;
 
-use Zento\Catalog\Services\Product;
-use Zento\Shipment\Providers\Facades\ShipmentService;
-use Zento\FreeShipping\Model\ShippingMethod;
 use Illuminate\Support\ServiceProvider;
+use Zento\FreeShipping\Model\ShippingMethod;
+use Zento\Shipment\Providers\Facades\ShipmentService;
 
 class Plugin extends ServiceProvider
 {

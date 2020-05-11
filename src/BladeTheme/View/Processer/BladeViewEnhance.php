@@ -3,14 +3,15 @@
 namespace Zento\BladeTheme\View\Processer;
 
 use Illuminate\Contracts\View\View;
-
+use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\BladeTheme\View\ContentContainerView;
 use Zento\BladeTheme\View\Factory;
 use Zento\BladeTheme\View\ProcessorInterface;
-use Zento\BladeTheme\View\ContentContainerView;
-use Zento\BladeTheme\Facades\BladeTheme;
 
-class BladeViewEnhance implements ProcessorInterface {
-    public function process(Factory $factory, string $view, $data = [], $mergeData = []) {
+class BladeViewEnhance implements ProcessorInterface
+{
+    public function process(Factory $factory, string $view, $data = [], $mergeData = [])
+    {
         $replaced = BladeTheme::isViewReplaced($view);
         $deleted = BladeTheme::isViewDeleted($view);
         if ($replaced || $deleted) {
@@ -23,6 +24,7 @@ class BladeViewEnhance implements ProcessorInterface {
             }
             return $contentContainer;
         }
+
         return false;
     }
 }

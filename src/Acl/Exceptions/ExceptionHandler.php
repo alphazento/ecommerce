@@ -37,16 +37,16 @@ class ExceptionHandler extends Handler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-          if ($exception instanceof AclException) {
-            return response()->json([
-              'message' => $exception->getMessage(),
-              'code' => 403
-            ], 200);
-          } else {
-            return response()->json(['message' => $exception->getMessage()], 401);
-          }
+            if ($exception instanceof AclException) {
+                return response()->json([
+                    'message' => $exception->getMessage(),
+                    'code' => 403,
+                ], 200);
+            } else {
+                return response()->json(['message' => $exception->getMessage()], 401);
+            }
         } else {
-          return redirect()->guest($exception->redirectTo() ?? route('login'));
+            return redirect()->guest($exception->redirectTo() ?? route('login'));
         }
     }
 }

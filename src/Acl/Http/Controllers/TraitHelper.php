@@ -2,18 +2,19 @@
 
 namespace Zento\Acl\Http\Controllers;
 
-use Route;
 use Request;
+use Route;
 use Zento\Acl\Consts;
-use Zento\Acl\Model\Auth\Customer;
 use Zento\Acl\Model\Auth\Administrator;
+use Zento\Acl\Model\Auth\Customer;
 
 trait TraitHelper
 {
-    protected function getUserModel() {
+    protected function getUserModel()
+    {
         $scope = Route::input('scope');
         $model = '';
-        switch($scope) {
+        switch ($scope) {
             case 'administrator':
                 $model = Administrator::class;
                 break;
@@ -25,9 +26,10 @@ trait TraitHelper
         return $model;
     }
 
-    protected function getScope() {
+    protected function getScope()
+    {
         $scope = Route::input('scope');
-        switch($scope) {
+        switch ($scope) {
             case 'administrator':
                 return Consts::BACKEND_SCOPE;
             case 'customer':
@@ -38,9 +40,10 @@ trait TraitHelper
         return '';
     }
 
-    protected function getScopes() {
+    protected function getScopes()
+    {
         $scope = Route::input('scope');
-        switch($scope) {
+        switch ($scope) {
             case 'administrator':
                 return [Consts::BACKEND_SCOPE, Consts::BOTH_SCOPE];
             case 'customer':
@@ -49,9 +52,10 @@ trait TraitHelper
         return [];
     }
 
-    protected function applyFilter($collection, $filterAbles) {
+    protected function applyFilter($collection, $filterAbles)
+    {
         $filters = Request::only($filterAbles);
-        foreach($filters as $field => $value) {
+        foreach ($filters as $field => $value) {
             $collection->where($field, 'like', $value);
         }
         return $collection;

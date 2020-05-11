@@ -9,8 +9,8 @@
 namespace Zento\Acl\Console\Commands;
 
 use Auth;
-use Zento\Acl\Model\Auth\Administrator;
 use Illuminate\Support\Facades\Hash;
+use Zento\Acl\Model\Auth\Administrator;
 
 class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -23,7 +23,8 @@ class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Command
 
     protected $description = 'Change a admin user password.';
 
-    public function handle() {
+    public function handle()
+    {
         $email = $this->argument('email');
         $password = $this->argument('password');
 
@@ -34,11 +35,11 @@ class AdministratorPassword extends \Zento\Kernel\PackageManager\Console\Command
 
         $user = Administrator::where('email', $email)->first();
         if (!$user) {
-            $this->error(sprintf('User(%s) does not exists.' , $email));
+            $this->error(sprintf('User(%s) does not exists.', $email));
         } else {
             $user->password = Hash::make($password);
             $user->save();
-            $this->info(sprintf('User(%s) password has been changed.' , $email));
+            $this->info(sprintf('User(%s) password has been changed.', $email));
         }
     }
 }

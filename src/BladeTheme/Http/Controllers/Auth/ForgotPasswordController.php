@@ -2,11 +2,10 @@
 
 namespace Zento\BladeTheme\Http\Controllers\Auth;
 
-use Zento\BladeTheme\Facades\BladeTheme;
-use Zento\Kernel\Http\Controllers\TraitApiResponse;
-
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 class ForgotPasswordController extends \App\Http\Controllers\Auth\ForgotPasswordController
 {
@@ -21,13 +20,12 @@ class ForgotPasswordController extends \App\Http\Controllers\Auth\ForgotPassword
         return BladeTheme::view('auth.passwords.email');
     }
 
-
     public function sendResetLinkEmail(Request $request)
     {
         try {
             return parent::sendResetLinkEmail($request);
         } catch (ValidationException $e) {
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return $this->error(422)->wrapValidationExceptionMessage($e);
             } else {
                 throw $e;
@@ -44,7 +42,7 @@ class ForgotPasswordController extends \App\Http\Controllers\Auth\ForgotPassword
      */
     protected function sendResetLinkResponse(Request $request, $response)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $this->success(200, trans($response));
         } else {
             return parent::sendResetLinkResponse($request, $response);
@@ -60,7 +58,7 @@ class ForgotPasswordController extends \App\Http\Controllers\Auth\ForgotPassword
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             return $this->error(422, trans($response));
         } else {
             return parent::sendResetLinkFailedResponse($request, $response);

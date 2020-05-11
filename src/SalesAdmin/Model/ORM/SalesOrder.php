@@ -7,23 +7,26 @@ use Zento\Kernel\Booster\Database\Eloquent\QueryFilter;
 
 class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
 {
-    public function getRichDataDefines() {
-        return  [
+    public function getRichDataDefines()
+    {
+        return [
             'payments',
             'status_history',
             'customer',
             'shipments',
             'admin_comments.administrator',
             'products',
-            'items'
+            'items',
         ];
     }
 
-    public function customer() {
-       return $this->hasOne(Customer::class, 'id', 'customer_id');
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 
-    public function admin_comments() {
+    public function admin_comments()
+    {
         return $this->hasMany(AdminComment::class, 'order_id', 'id')
             ->where('type_id', '=', AdminComment::ADMIN_NOTE)
             ->orderBy('updated_at', 'desc');
@@ -34,7 +37,8 @@ class SalesOrder extends \Zento\Sales\Model\ORM\SalesOrder
         return $filters->apply($query);
     }
 
-    public function status_history() {
+    public function status_history()
+    {
         return $this->hasMany(SalesOrderStatusHistory::class, 'order_id');
     }
 }

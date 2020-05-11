@@ -3,13 +3,12 @@
 namespace Zento\Passport\Http\Middleware;
 
 use ShareBucket;
-use Zento\Passport\Model\ApiGuest;
 use Zento\Passport\Mixins\RequestGuestToken;
 
-class GuestToken 
+class GuestToken
 {
     const ALLOW_GUEST_API = 'ALLOW_GUEST_API';
-    const RestrictMode = 'restrict';   //will noly return user when guest token in the request header
+    const RestrictMode = 'restrict'; //will noly return user when guest token in the request header
     /**
      * Handle an incoming request.
      *
@@ -28,7 +27,8 @@ class GuestToken
      * @param \Illuminate\Foundation\Auth\User  $user
      * @return void
      */
-    public static function prepareGuestForApi($request) {
+    public static function prepareGuestForApi($request)
+    {
         if ($guestMode = ShareBucket::get(self::ALLOW_GUEST_API)) {
             $request->mixin(new RequestGuestToken());
             if ($token = $request->guestToken()) {

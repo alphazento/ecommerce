@@ -2,58 +2,62 @@
 
 namespace Zento\PaypalPayment\Config;
 
-use Zento\PaypalPayment\Consts;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
+use Zento\PaypalPayment\Consts;
 
-class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
-    
-    protected function _registerDashboardMenus() {}
+class Admin extends \Zento\Backend\Config\AbstractAdminConfig
+{
 
-    protected function _registerDynamicConfigItemMenus() {}
+    protected function _registerDashboardMenus()
+    {}
 
-    protected function _registerDynamicConfigItemGroups( &$data) {
-        $groups['sales/paymentgateway'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 'paypalexpress',  [
+    protected function _registerDynamicConfigItemMenus()
+    {}
+
+    protected function _registerDynamicConfigItemGroups(&$data)
+    {
+        $groups['sales/paymentgateway'] = function ($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag, 'paypalexpress', [
                 'title' => 'PayPal Express',
                 'items' => [
                     [
                         'title' => 'Enabled In Front-end',
                         'ui' => 'config-boolean-item',
-                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_FRONTEND,
                     ],
                     [
                         'title' => 'Enabled In Admin Panel',
                         'ui' => 'config-boolean-item',
-                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_BACKEND
+                        'accessor' => Consts::CONFIG_KEY_ENABLE_FOR_BACKEND,
                     ],
                     [
                         'title' => 'Mode',
                         'ui' => 'config-options-item',
                         'options' => [
-                            ['value' => 'sandbox', 'label' => 'Sandbox'], 
-                            ['value' => 'production', 'label' => 'Production']
+                            ['value' => 'sandbox', 'label' => 'Sandbox'],
+                            ['value' => 'production', 'label' => 'Production'],
                         ],
-                        'accessor' => Consts::PAYMENT_GATEWAY_PAYPAL_MODE
+                        'accessor' => Consts::PAYMENT_GATEWAY_PAYPAL_MODE,
                     ],
                     [
                         'title' => 'Sandbox ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, 'sandbox')
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, 'sandbox'),
                     ],
                     [
                         'title' => 'Sandbox Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_SECRET_BY_MODE, 'sandbox')
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_SECRET_BY_MODE, 'sandbox'),
                     ],
                     [
                         'title' => 'Production ClientID',
                         'ui' => 'config-longtext-item',
-                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, 'production')
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, 'production'),
                     ],
                     [
                         'title' => 'Production Secret',
                         'ui' => 'config-longtext-item',
-                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_SECRET_BY_MODE, 'production')
+                        'accessor' => sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_SECRET_BY_MODE, 'production'),
                     ],
                     [
                         'title' => 'Paypal Button Styles',
@@ -62,17 +66,19 @@ class Admin extends \Zento\Backend\Config\AbstractAdminConfig {
                             'label' => "config-text-item",
                             'size' => "config-text-item",
                             'shape' => "config-text-item",
-                            'color' => "config-text-item"
+                            'color' => "config-text-item",
                         ],
-                        'accessor' => Consts::CONFIG_KEY_BUTTON_STYLE
-                    ]
-                ]
+                        'accessor' => Consts::CONFIG_KEY_BUTTON_STYLE,
+                    ],
+                ],
             ]);
         };
     }
 
-    protected function _registerDataTableSchemas(&$data) {}
+    protected function _registerDataTableSchemas(&$data)
+    {}
 
-    protected function _registerModelDefines(&$data){}
-    
+    protected function _registerModelDefines(&$data)
+    {}
+
 }

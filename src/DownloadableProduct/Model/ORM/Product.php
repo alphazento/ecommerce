@@ -3,23 +3,24 @@
 namespace Zento\DownloadableProduct\Model\ORM;
 
 use Zento\Catalog\Model\ORM\Product as SimpleProduct;
-use Zento\Catalog\Providers\Facades\ProductService;
 use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
-use Illuminate\Support\Collection;
 
 class Product extends SimpleProduct
 {
     const MODEL_TYPE = "downloadable";
 
-    public function shippable() {
+    public function shippable()
+    {
         return false;
     }
 
-    public function downloadConfig() {
+    public function downloadConfig()
+    {
         return $this->hasOne(DownloadableProductConfig::class, 'product_id', 'id');
     }
 
-    public function canDownload($user) {
+    public function canDownload($user)
+    {
         return false;
         // if ($this->free) {
         //     return true;
@@ -33,23 +34,25 @@ class Product extends SimpleProduct
         // }
     }
 
-    public static function assignExtraRelation($products) {
+    public static function assignExtraRelation($products)
+    {
         list($reduced, $ids) = parent::assignExtraRelation($products);
 
         if (count($ids) > 0) {
             // foreach($collection as $)
             $name = 'downloadConfig';
-            $relation = (new static)->downloadConfig();
+            $relation = (new static )->downloadConfig();
             $relation->orWhereIn('product_id', $ids);
             $relation->match(
                 $relation->initRelation($reduced, $name),
-                $relation->getEager(), 
+                $relation->getEager(),
                 $name
             );
         }
     }
 
-    public function findExistCartItem(IShoppingCart $cart, array &$options) {
+    public function findExistCartItem(IShoppingCart $cart, array &$options)
+    {
         if ($item = parent::findExistCartItem($cart, $options)) {
             //if the download be quantitative so every time add product quantity will change
             //otherwise quantity will always be 1
@@ -61,7 +64,8 @@ class Product extends SimpleProduct
         return false;
     }
 
-    public function actualProductsInCart(array $options, $toArray = false) {
+    public function actualProductsInCart(array $options, $toArray = false)
+    {
         $this->assignExtraRelation([$this]);
         return null;
     }

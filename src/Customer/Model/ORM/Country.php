@@ -2,9 +2,6 @@
 
 namespace Zento\Customer\Model\ORM;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-
 class Country extends \Illuminate\Database\Eloquent\Model
 {
     public $timestamps = false;
@@ -16,7 +13,8 @@ class Country extends \Illuminate\Database\Eloquent\Model
         'backend_active',
     ];
 
-    public function states() {
+    public function states()
+    {
         return $this->hasMany(State::class, 'country_alpha2_code', 'alpha2_code');
     }
 }

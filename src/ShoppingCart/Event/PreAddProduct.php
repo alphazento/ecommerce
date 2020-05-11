@@ -2,10 +2,8 @@
 
 namespace Zento\ShoppingCart\Event;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Foundation\Events\Dispatchable;
-
-class PreAddProduct extends \Zento\Kernel\Booster\Events\BaseEvent {
+class PreAddProduct extends \Zento\Kernel\Booster\Events\BaseEvent
+{
     const HAS_ATTRS = [
         'product',
         'options',

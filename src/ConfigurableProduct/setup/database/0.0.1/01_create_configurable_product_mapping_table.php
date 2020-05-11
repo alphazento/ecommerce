@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateConfigurableProductMappingTable extends Migration
 {
@@ -18,12 +18,12 @@ class CreateConfigurableProductMappingTable extends Migration
             $table->integer('parent_id')->unsigned();
 
             $table->foreign('product_id')
-                    ->references('id')
-                    ->on('products');
+                ->references('id')
+                ->on('products');
 
             $table->foreign('parent_id')
-                    ->references('id')
-                    ->on('products');
+                ->references('id')
+                ->on('products');
         });
     }
 

@@ -22,7 +22,7 @@ class GuestToken extends \Illuminate\Auth\Middleware\Authenticate
         $default = DB::getDefaultConnection();
         //change db connection
         try {
-          $this->authenticate($request, ['api']);
+            $this->authenticate($request, ['api']);
         } catch (\Illuminate\Auth\AuthenticationException $e) {
         }
         //restore DB connection

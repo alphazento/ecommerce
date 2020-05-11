@@ -1,6 +1,6 @@
 <?php
 return [
-    "Zento_Acl"=>[
+    "Zento_Acl" => [
         "version" => "0.0.1",
         "vue_component" => true,
         "commands" => [
@@ -8,20 +8,20 @@ return [
             "\\Zento\\Acl\\Console\\Commands\\AddAdministrator",
             "\\Zento\\Acl\\Console\\Commands\\EnableAdministrator",
             "\\Zento\\Acl\\Console\\Commands\\DisableAdministrator",
-            "\\Zento\\Acl\\Console\\Commands\\AdministratorPassword"
+            "\\Zento\\Acl\\Console\\Commands\\AdministratorPassword",
         ],
         "providers" => [
             "\\Zento\\Acl\\Providers\\Plugin",
         ],
-        "listeners"=>  [
+        "listeners" => [
         ],
-        "middlewares"=> [
-            'ignore_acl' => "\\Zento\\Acl\\Http\\Middleware\\IgnoreAclCheck"
+        "middlewares" => [
+            'ignore_acl' => "\\Zento\\Acl\\Http\\Middleware\\IgnoreAclCheck",
         ],
-        "depends"=> [
+        "depends" => [
             "Zento_Passport",
             "Zento_Backend",
-            "Zento_Customer"
-        ]
-    ]
+            "Zento_Customer",
+        ],
+    ],
 ];

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSalesOrderProductTable extends Migration
 {
@@ -36,7 +36,6 @@ class CreateSalesOrderProductTable extends Migration
                 ->on('sales_orders');
         });
     }
-
 
     /**
      * Reverse the migrations.

@@ -1,7 +1,8 @@
 <?php
 namespace Zento\PaymentGateway\Interfaces;
 
-interface IMethod {
+interface IMethod
+{
     public function getCode();
     public function getTitle();
 
@@ -11,7 +12,7 @@ interface IMethod {
 
     public function canCapturePartial();
     public function canCaptureOnce();
-    
+
     public function canRefund();
     public function canUseAtFront();
     public function canUseCheckout();

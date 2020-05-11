@@ -2,11 +2,9 @@
 
 namespace Zento\Backend\Http\Controllers\Api;
 
-use Route;
-use Request;
 use Config;
+use Route;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
-use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class AdminMetaDataController extends ApiBaseController
@@ -30,9 +28,10 @@ class AdminMetaDataController extends ApiBaseController
      * "primary_key":"id"}
      * }
      */
-    public function datatableSchema() {
+    public function datatableSchema()
+    {
         $tableName = Route::input('table');
-        $this->traversePackages(function($className) use($tableName) {
+        $this->traversePackages(function ($className) use ($tableName) {
             (new $className)->registerDataTableSchemas($tableName);
         });
         if ($data = AdminConfigurationService::getDetailGroup($tableName)) {
@@ -53,9 +52,10 @@ class AdminMetaDataController extends ApiBaseController
      * {"text":"Description","ui":"config-text-item","accessor":"description"},
      * {"text":"Active","ui":"config-boolean-item","accessor":"active"}]}}}
      */
-    public function modelDefines() {
+    public function modelDefines()
+    {
         $model = Route::input('model');
-        $this->traversePackages(function($className) use($model) {
+        $this->traversePackages(function ($className) use ($model) {
             (new $className)->registerModelDefines($model);
         });
         if ($data = AdminConfigurationService::getDetailGroup($model)) {

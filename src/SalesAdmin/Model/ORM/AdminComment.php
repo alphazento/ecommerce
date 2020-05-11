@@ -24,10 +24,11 @@ class AdminComment extends \Illuminate\Database\Eloquent\Model
         'admin_id',
         'order_id',
         'comment',
-        'notify_to_customer'
+        'notify_to_customer',
     ];
 
-    public function administrator() {
-       return $this->hasOne(Administrator::class, 'id', 'admin_id');
+    public function administrator()
+    {
+        return $this->hasOne(Administrator::class, 'id', 'admin_id');
     }
 }

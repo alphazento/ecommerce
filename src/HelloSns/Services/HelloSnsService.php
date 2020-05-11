@@ -3,13 +3,12 @@
 namespace Zento\HelloSns\Services;
 
 use Auth;
-use Request;
-use Validator;
 use Config;
-use ShareBucket;
-use Zento\HelloSns\Consts;
-use Zento\BladeTheme\Facades\BladeTheme;
 use Illuminate\Support\Str;
+use Request;
+use ShareBucket;
+use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\HelloSns\Consts;
 
 class HelloSnsService
 {
@@ -18,29 +17,33 @@ class HelloSnsService
 
     protected $zento_portal;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->zento_portal = ShareBucket::get(\Zento\Kernel\Consts::ZENTO_PORTAL, 'front-end');
     }
 
-    protected function getConfigKey($format) {
+    protected function getConfigKey($format)
+    {
         return sprintf($format, $this->zento_portal);
     }
 
-    protected function isGuest() {
+    protected function isGuest()
+    {
         if ($user = Auth::user()) {
             return $user->guest();
         }
         return true;
     }
 
-    public function prepareServices() {
-        BladeTheme::appendStubProcessor(function($stub) {
+    public function prepareServices()
+    {
+        BladeTheme::appendStubProcessor(function ($stub) {
             if ($stub === 'sns_login') {
                 if ($this->isGuest()) {
                     echo '<hello-sns></hello-sns>';
                 }
             }
-        })->registerPreRouteCallAction(function($bladeTheme) {
+        })->registerPreRouteCallAction(function ($bladeTheme) {
             //if already login, not use to provide
             if ($this->isGuest()) {
                 $response_type = Config::get($this->getConfigKey(Consts::RESPONSE_TYPE), 'token');
@@ -62,7 +65,7 @@ class HelloSnsService
                                         'color' => '#5168A4',
                                         'icon' => 'mdi-facebook',
                                         'title' => 'Continue With Facebook',
-                                        'active' => true
+                                        'active' => true,
                                     ],
                                     [
                                         'service' => 'linkedin',
@@ -70,7 +73,7 @@ class HelloSnsService
                                         'color' => '#278CAE',
                                         'icon' => 'mdi-linkedin',
                                         'title' => 'Continue With Linkedin',
-                                        'active' => true
+                                        'active' => true,
                                     ],
                                     [
                                         'service' => 'google',
@@ -78,12 +81,12 @@ class HelloSnsService
                                         'color' => '#278CAE',
                                         'icon' => 'mdi-google',
                                         'title' => 'Continue With Google',
-                                        'active' => false
-                                    ]
+                                        'active' => false,
+                                    ],
                                 ],
-                                'options' => $options
-                            ]
-                        ]
+                                'options' => $options,
+                            ],
+                        ],
                     ]
                 );
             }
@@ -91,7 +94,8 @@ class HelloSnsService
         return $this;
     }
 
-    public function storeState() {
+    public function storeState()
+    {
         if (!$this->state) {
             if ($state = Request::session()->get(self::STATE)) {
                 $this->state = $state;
@@ -124,7 +128,8 @@ class HelloSnsService
         return false;
     }
 
-    public function connectSessionUser($user, $network) {
+    public function connectSessionUser($user, $network)
+    {
         if ($this->isGuest()) {
             $model = Config::get('auth.providers.users.model');
             $localUser = (new $model)->findForPassport($user->email);
@@ -138,11 +143,11 @@ class HelloSnsService
                 Auth::login($localUser);
             }
             return [
-                true, 
+                true,
                 [
                     'user' => $localUser,
-                    'apiGuestToken' => BladeTheme::getApiGuestToken($localUser)
-                ]
+                    'apiGuestToken' => BladeTheme::getApiGuestToken($localUser),
+                ],
             ];
         } else {
             if ($user->email === Auth::user()->email) {
@@ -153,15 +158,16 @@ class HelloSnsService
         }
     }
 
-    public function connectApiUser($user, $network) {
+    public function connectApiUser($user, $network)
+    {
         $model = Config::get('auth.providers.users.model');
         $localUser = (new $model)->findForPassport($user->email);
         if (empty($localUser)) {
-            return BladeTheme::requestInnerApi('POST', BladeTheme::apiUrl('oauth2/register'), 
+            return BladeTheme::requestInnerApi('POST', BladeTheme::apiUrl('oauth2/register'),
                 [
                     'name' => $user->name,
                     'username' => $user->email,
-                    'password' => Str::random(16)
+                    'password' => Str::random(16),
                 ]);
         } else {
             // $localUser->sns = 1;
@@ -170,7 +176,7 @@ class HelloSnsService
             return BladeTheme::requestInnerApi('POST', BladeTheme::apiUrl('oauth2/token'), [
                 'name' => $user->name,
                 'username' => $user->email,
-                'password' => $password
+                'password' => $password,
             ]);
         }
     }

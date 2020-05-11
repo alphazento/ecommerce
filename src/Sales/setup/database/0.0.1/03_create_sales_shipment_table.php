@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSalesShipmentTable extends Migration
 {
@@ -28,13 +28,12 @@ class CreateSalesShipmentTable extends Migration
             $table->foreign('order_id')
                 ->references('id')
                 ->on('sales_orders');
-            
+
             $table->foreign('sales_address_id')
                 ->references('id')
                 ->on('sales_addresses');
         });
     }
-
 
     /**
      * Reverse the migrations.

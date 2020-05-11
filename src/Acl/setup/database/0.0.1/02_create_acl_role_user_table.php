@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Zento\Acl\Consts;
 
 class CreateAclRoleUserTable extends Migration
 {
-    protected function getBuilder() {
+    protected function getBuilder()
+    {
         return Schema::connection(\Zento\Acl\Consts::DB);
     }
 
@@ -38,8 +39,8 @@ class CreateAclRoleUserTable extends Migration
                 [
                     'scope' => Consts::BACKEND_SCOPE,
                     'user_id' => 1,
-                    'role_id' => 1
-                ]
+                    'role_id' => 1,
+                ],
             ]);
         }
     }

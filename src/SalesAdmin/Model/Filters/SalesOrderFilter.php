@@ -16,11 +16,13 @@ class SalesOrderFilter extends QueryFilter
         return $this->builder->where('order_number', 'like', "%{$order_number}%");
     }
 
-    public function status_id($status_id) {
+    public function status_id($status_id)
+    {
         return $this->builder->where('status_id', '=', $status_id);
     }
 
-    public function created_at($dates) {
+    public function created_at($dates)
+    {
         if ($date = ($dates[0] ?? false)) {
             if ($date !== 'null') {
                 $this->builder->where('created_at', '>=', $date);
@@ -34,13 +36,14 @@ class SalesOrderFilter extends QueryFilter
         return $this->builder;
     }
 
-    public function customer($email) {
+    public function customer($email)
+    {
         if ($email) {
-            return $this->builder->whereIn('customer_id', function($query) use($email) {
+            return $this->builder->whereIn('customer_id', function ($query) use ($email) {
                 $query->select('id')
                     ->from(with(new Customer)->getTable())
                     ->where('email', 'like', "%{$email}%");
-            }); 
+            });
         }
     }
 }

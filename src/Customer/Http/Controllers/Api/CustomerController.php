@@ -2,21 +2,19 @@
 
 namespace Zento\Customer\Http\Controllers\Api;
 
-use Route;
+use Auth;
 use Request;
 use Response;
-use Auth;
-
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Route;
 use Zento\Customer\Model\ORM\Customer;
 use Zento\Customer\Providers\Facades\CustomerService;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class CustomerController extends ApiBaseController
 {
-    protected function _retrieveCustomer() {
-      return Auth::user();
+    protected function _retrieveCustomer()
+    {
+        return Auth::user();
     }
 
     /**
@@ -24,7 +22,8 @@ class CustomerController extends ApiBaseController
      * @group Customer
      * @responseModel \Zento\Customer\Model\ORM\Customer
      */
-    public function me() {
+    public function me()
+    {
         return $this->withData(Auth::user());
     }
 
@@ -34,14 +33,15 @@ class CustomerController extends ApiBaseController
      * @queryParam old_password required old password min 8
      * @queryParam new_password required new password min 8
      */
-    public function setPassword() {
-      Request::validate(['old_password'=>"string|min:8", 'new_password'=>"string|min:8"]);
+    public function setPassword()
+    {
+        Request::validate(['old_password' => "string|min:8", 'new_password' => "string|min:8"]);
 
-      if (CustomerService::changePassword(Auth::user(), Request::get('old_password'), Request::get('new_password'))) {
-          return $this->success();
-      } else {
-          return $this->error(400);
-      }
+        if (CustomerService::changePassword(Auth::user(), Request::get('old_password'), Request::get('new_password'))) {
+            return $this->success();
+        } else {
+            return $this->error(400);
+        }
     }
 
     /**
@@ -51,40 +51,42 @@ class CustomerController extends ApiBaseController
      * @bodyParam required Json customer's attributes
      * @responseModel \Zento\Customer\Model\ORM\Customer
      */
-    public function update() {
-      if ($customer = $this->_retrieveCustomer()){
-        $attrs = Request::except(['email', 'password']);
-        foreach($attrs as $key => $value) {
-          $customer->{$key} = $value;
+    public function update()
+    {
+        if ($customer = $this->_retrieveCustomer()) {
+            $attrs = Request::except(['email', 'password']);
+            foreach ($attrs as $key => $value) {
+                $customer->{$key} = $value;
+            }
+            $customer->save();
+            return $this->withData($customer);
+        } else {
+            return $this->error(404);
         }
-        $customer->save();
-        return $this->withData($customer);
-      } else {
-        return $this->error(404);
-      }
     }
 
-     /**
+    /**
      * add address
      * @group Customer
      */
-    public function addAddress() {
+    public function addAddress()
+    {
         Request::validate([
-          'name'=>"required|string|max:255",
-          'company'=>"string|max:255|nullable",
-          'address1'=>"required|string|max:255",
-          'address2'=>"string|max:255|nullable",
-          'city'=>"required|string|max:64",
-          'country'=>"required|string|max:64",
-          'postal_code'=>"required|string|max:16",
-          'state'=>"required|string|max:32",
-          'phone'=>"required|string|max:32"
+            'name' => "required|string|max:255",
+            'company' => "string|max:255|nullable",
+            'address1' => "required|string|max:255",
+            'address2' => "string|max:255|nullable",
+            'city' => "required|string|max:64",
+            'country' => "required|string|max:64",
+            'postal_code' => "required|string|max:16",
+            'state' => "required|string|max:32",
+            'phone' => "required|string|max:32",
         ]);
 
         if ($user = $this->_retrieveCustomer()) {
-          if ($address = CustomerService::addAddress($user, Request::all())) {
-            return $this->success(201)->withData($address);
-          }
+            if ($address = CustomerService::addAddress($user, Request::all())) {
+                return $this->success(201)->withData($address);
+            }
         }
         return $this->error();
     }
@@ -93,11 +95,12 @@ class CustomerController extends ApiBaseController
      * get current user all address
      * @group Customer
      */
-    public function getAddresses() {
+    public function getAddresses()
+    {
         if ($collection = CustomerService::getCustomerAddresses(Auth::user()->id)) {
-          return $this->withData($collection);
+            return $this->withData($collection);
         } else {
-          return $this->success(200, 'no address found.');
+            return $this->success(200, 'no address found.');
         }
     }
 
@@ -105,12 +108,13 @@ class CustomerController extends ApiBaseController
      * get address by id
      * @group Customer
      */
-    public function getAddress() {
+    public function getAddress()
+    {
         if ($address = CustomerService::getCustomerAddress(Auth::user()->id,
-           Route::input('address_id'))) {
-          return $this->withData($address);
+            Route::input('address_id'))) {
+            return $this->withData($address);
         } else {
-          return $this->success(200, 'no address found.');
+            return $this->success(200, 'no address found.');
         }
     }
 
@@ -118,11 +122,12 @@ class CustomerController extends ApiBaseController
      * set current user default billing address
      * @group Customer
      */
-    public function setDefaultBillingAddress() {
+    public function setDefaultBillingAddress()
+    {
         if (CustomerService::setDefaultBillingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
-          return $this->success();
+            return $this->success();
         } else {
-          return $this->error(400, 'Fail to set default billing address');
+            return $this->error(400, 'Fail to set default billing address');
         }
     }
 
@@ -130,11 +135,12 @@ class CustomerController extends ApiBaseController
      * set current user default shipping address
      * @group Customer
      */
-    public function setDefaultShippingAddress() {
+    public function setDefaultShippingAddress()
+    {
         if (CustomerService::setDefaultShippingAddress($this->_retrieveCustomer(), Route::input('address_id'))) {
-          return $this->success();
+            return $this->success();
         } else {
-          return $this->error(400, 'Fail to set default billing address');
+            return $this->error(400, 'Fail to set default billing address');
         }
     }
 }

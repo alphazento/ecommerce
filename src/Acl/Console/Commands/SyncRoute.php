@@ -8,16 +8,12 @@
 
 namespace Zento\Acl\Console\Commands;
 
-use Psy\Util\Docblock;
-use ReflectionClass;
-use Zento\Acl\Consts;
-use Zento\Acl\Model\ORM\AclRoute;
-use Zento\Acl\DocBlock\RouteAnalyzer;
-
 use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zento\Acl\DocBlock\RouteAnalyzer;
+use Zento\Acl\Model\ORM\AclRoute;
 
 class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
 {
@@ -35,11 +31,12 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
      */
     protected $analyzer;
 
-    public static function register($serviceProvider, $appContainer = null) {
+    public static function register($serviceProvider, $appContainer = null)
+    {
         $class = static::class;
         $name = md5($class);
         $appContainer = $appContainer ?? app();
-        $appContainer->singleton($name, function ($app) use($class) {
+        $appContainer->singleton($name, function ($app) use ($class) {
             return $app[$class];
         });
         $serviceProvider->commands($name);
@@ -51,14 +48,16 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         return $this->laravel->call([$this, $method]);
     }
 
-    public function option($key=null) {
+    public function option($key = null)
+    {
         if ($key == 'path') {
             // return ltrim('/');
         }
         return false;
     }
 
-    public function handle() {
+    public function handle()
+    {
         $this->analyzer = new RouteAnalyzer();
         if (empty($routes = $this->getRoutes())) {
             return $this->error("Your application doesn't have any routes matching the given criteria.");
@@ -87,15 +86,16 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
         return $info;
     }
 
-    protected function getColumns() {
+    protected function getColumns()
+    {
         $columns = parent::getColumns();
         $columns[] = 'methods';
         $columns[] = 'acl_attrs';
         return $columns;
     }
 
-
-    protected function needPermission(array $route) {
+    protected function needPermission(array $route)
+    {
         if ($middleware = ($route['middleware'] ?? false)) {
             return in_array('auth:api', explode(',', $middleware));
         }
@@ -106,13 +106,13 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     {
         $ids = [1];
         $item = null;
-        foreach($routes as $route) {
-            if (!$this->needPermission($route)){
+        foreach ($routes as $route) {
+            if (!$this->needPermission($route)) {
                 continue;
             }
             if ($acl_attrs = $route['acl_attrs']) {
                 $methods = array_diff($route['methods'], ['HEAD']);
-                foreach($methods as $method) {
+                foreach ($methods as $method) {
                     if ($method != 'HEAD') {
                         $item = AclRoute::where('method', $method)->where('uri', $route['uri'])->first();
                         if (!$item) {
@@ -134,7 +134,7 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
                     }
                 }
             }
-            
+
         }
         if ($item) {
             $item->getConnection()

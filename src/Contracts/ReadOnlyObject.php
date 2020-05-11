@@ -4,19 +4,19 @@ namespace Zento\Contracts;
 
 use ArrayAccess;
 use ArrayIterator;
-use IteratorAggregate;
-
-use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use IteratorAggregate;
 use \Illuminate\Database\Eloquent\JsonEncodingException;
 
 class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable, IteratorAggregate
 {
     protected $attrs;
 
-    public function __construct(array $attrs) {
+    public function __construct(array $attrs)
+    {
         $this->attrs = [];
-        foreach($attrs as $key => $value) {
+        foreach ($attrs as $key => $value) {
             if (is_array($value)) {
                 $this->attrs[$key] = new static($value);
             } else {
@@ -25,18 +25,21 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable, IteratorAggreg
         }
     }
 
-    public function __get($key) {
+    public function __get($key)
+    {
         return array_key_exists($key, $this->attrs) ? $this->attrs[$key] : null;
     }
 
-    public function __set($key, $value) {
+    public function __set($key, $value)
+    {
         throw new \Exception("This model is read only");
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         $attrs = [];
-        foreach($this->attrs as $key => $value) {
-            if ($value instanceof static) {
+        foreach ($this->attrs as $key => $value) {
+            if ($value instanceof static ) {
                 $attrs[$key] = $value->toArray();
             } else {
                 $attrs[$key] = $value;
@@ -45,11 +48,13 @@ class ReadOnlyObject implements ArrayAccess, Arrayable, Jsonable, IteratorAggreg
         return $attrs;
     }
 
-    public function getIterator() {
+    public function getIterator()
+    {
         return new ArrayIterator($this->attrs);
     }
 
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return $this->attrs;
     }
 

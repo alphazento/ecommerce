@@ -3,24 +3,29 @@ namespace Zento\BladeTheme\View;
 
 use Cache;
 use Carbon\Carbon;
-use Zento\BladeTheme\Consts;
 use Illuminate\Contracts\View\View;
+use Zento\BladeTheme\Consts;
 
-class CacheView implements View {
+class CacheView implements View
+{
     private $key;
     private $view;
     private $data;
 
-    public function __construct($key, $view, $data=[]) {
+    public function __construct($key, $view, $data = [])
+    {
         $this->key = sprintf('viewcache.%s.%s', $view->name(), $key);
         $this->view = $view;
         $this->data = $data;
     }
-    public function name() {
+
+    public function name()
+    {
         return $this->view->name();
     }
 
-    public function render() {
+    public function render()
+    {
         $content = '';
         if (Cache::store('viewcache')->has($this->key)) {
             $content = Cache::store('fullpageview')->get($this->key);
@@ -31,11 +36,13 @@ class CacheView implements View {
         return $content;
     }
 
-    public function with($key, $value = null){
+    public function with($key, $value = null)
+    {
         return $this;
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 }

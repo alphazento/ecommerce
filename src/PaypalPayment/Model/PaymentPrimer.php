@@ -1,16 +1,19 @@
 <?php
 
 namespace Zento\PaypalPayment\Model;
+
 use Carbon\Carbon;
 
-class PaymentPrimer {
+class PaymentPrimer
+{
     /**Old version paypal express */
-    public function getPaymentData0(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
+    public function getPaymentData0(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart)
+    {
         $details = [];
         $details['subtotal'] = $cart->subtotal;
 
         $items = [];
-        foreach($cart->items as $item) {
+        foreach ($cart->items as $item) {
             $attrs = [];
             $attrs['name'] = $item->name;
             $attrs['description'] = $item->description;
@@ -30,26 +33,26 @@ class PaymentPrimer {
             'intent' => 'sale', //'authorize'
             'payer' => [
                 'payer_info' => [
-                    'email' => $cart->email
-                ]
+                    'email' => $cart->email,
+                ],
             ],
-            'transactions'=> [
+            'transactions' => [
                 [
-                    'amount'=> [
-                            'total'=> $cart->total,
-                            'currency'=> "AUD",
-                            'details'=>  $details,
-                        ],
+                    'amount' => [
+                        'total' => $cart->total,
+                        'currency' => "AUD",
+                        'details' => $details,
+                    ],
                     "description" => "The payment transaction description.",
                     "custom" => $cart->customer_id,
                     "invoice_number" => sprintf('c%s %s', $cart->customer_id, Carbon::now()->timestamp),
-                    "payment_options"=> [
+                    "payment_options" => [
                         // "allowed_payment_method" => "INSTANT_FUNDING_SOURCE"
-                        "allowed_payment_method" => "UNRESTRICTED"
+                        "allowed_payment_method" => "UNRESTRICTED",
                     ],
                     // "soft_descriptor"=> "",
-                    "item_list"=>[
-                        "items"=> $items,
+                    "item_list" => [
+                        "items" => $items,
                         // "shipping_address" => [
                         //     "recipient_name"=> $shippingaddress->name,
                         //     "line1"=> substr($shippingaddress->address1, 0, 100),
@@ -61,18 +64,18 @@ class PaymentPrimer {
                         //     "state"=> substr($shippingaddress->state, 0, 40)
                         // ]
                         "shipping_address" => [
-                            "recipient_name"=>'Tony Chen',
-                            "line1"=> '100 St',
-                            "line2"=> '',
-                            "city"=> 'Sydney',
-                            "country_code"=> 'AU',
-                            "postal_code"=> 2000,
+                            "recipient_name" => 'Tony Chen',
+                            "line1" => '100 St',
+                            "line2" => '',
+                            "city" => 'Sydney',
+                            "country_code" => 'AU',
+                            "postal_code" => 2000,
                             // "phone"=> '',
-                            "state"=> 'NSW'
-                        ]
-                    ]
-                ]
-            ]
+                            "state" => 'NSW',
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         return [true, $payment];
@@ -84,12 +87,13 @@ class PaymentPrimer {
      * @param \Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart
      * @return void
      */
-    public function getPaymentData(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart) {
+    public function getPaymentData(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $cart)
+    {
         $details = [];
         $details['subtotal'] = $cart->subtotal;
 
         $items = [];
-        foreach($cart->items as $item) {
+        foreach ($cart->items as $item) {
             $attrs = [];
             $attrs['name'] = $item->name;
             $attrs['description'] = $item->description;
@@ -109,17 +113,17 @@ class PaymentPrimer {
             // 'intent' => 'sale', //'authorize'
             'payer' => [
                 'payer_info' => [
-                    'email' => $cart->email
-                ]
+                    'email' => $cart->email,
+                ],
             ],
-            'purchase_units'=> [
+            'purchase_units' => [
                 [
-                    'amount'=> [
-                        'value'=> $cart->total,
+                    'amount' => [
+                        'value' => $cart->total,
                         // 'currency_code'=> "AUD",
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
 
         return [true, $payment];

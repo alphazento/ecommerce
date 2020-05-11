@@ -2,9 +2,8 @@
 
 namespace Zento\CatalogSearch\Console\Commands;
 
-use Zento\Catalog\Model\ORM\Product;
 use Zento\CatalogSearch\Model\ORM\FulltextIndex as FulltextIndexModel;
-use Zento\CatalogSearch\Providers\Facades\CatalogSearchService;
+use Zento\Catalog\Model\ORM\Product;
 
 class FulltextIndex extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -14,7 +13,7 @@ class FulltextIndex extends \Zento\Kernel\PackageManager\Console\Commands\Base
      * @var string
      */
     protected $signature = 'searchdata:index';
-        
+
     /**
      * The console command description.
      *
@@ -27,17 +26,19 @@ class FulltextIndex extends \Zento\Kernel\PackageManager\Console\Commands\Base
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         $this->build();
     }
 
     const SEARCH_FIELDS = [
-        'sku', 'url_key', 'name', 'climate', 'pattern', 'style_general'
+        'sku', 'url_key', 'name', 'climate', 'pattern', 'style_general',
     ];
 
-    protected function collectFulltext($product, &$fields) {
+    protected function collectFulltext($product, &$fields)
+    {
         $productArray = $product->toArray();
-        foreach(self::SEARCH_FIELDS as $field) {
+        foreach (self::SEARCH_FIELDS as $field) {
             if (!isset($productArray[$field])) {
                 continue;
             }
@@ -47,18 +48,19 @@ class FulltextIndex extends \Zento\Kernel\PackageManager\Console\Commands\Base
             }
             $fields[$field] = array_merge($fields[$field], is_array($value) ? $value : [$value]);
         }
-        foreach($product->configurables ?? [] as $subItem) {
+        foreach ($product->configurables ?? [] as $subItem) {
             $this->collectFulltext($subItem, $fields);
         }
     }
 
-    private function build() {
+    private function build()
+    {
         $products = Product::all();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $fields = [];
             $this->collectFulltext($product, $fields);
 
-            foreach($fields as $key => $values) {
+            foreach ($fields as $key => $values) {
                 $index = FulltextIndexModel::where('product_id', '=', $product->id)
                     ->where('field_name', '=', $key)
                     ->first();

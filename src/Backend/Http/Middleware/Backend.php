@@ -3,19 +3,17 @@
 namespace Zento\Backend\Http\Middleware;
 
 use Closure;
-
-use Request;
 use Config;
+use Request;
 use ShareBucket;
-use Zento\Passport\Passport;
-use Zento\Passport\NotUsingPassportException;
 use Zento\Kernel\Facades\ThemeManager;
+use Zento\Passport\Passport;
 
 class Backend
 {
     const BACKEND_IP_RESTRICT = 'backend.ip.restrict';
     const BACKEND_IP_ALLOWLIST = 'backend.ip.allowlist';
-    
+
     /**
      * Handle an incoming request.
      *
@@ -44,7 +42,7 @@ class Backend
         $ipAllows = config(self::BACKEND_IP_ALLOWLIST, false);
         if ($ipAllows) {
             $ipAllows = explode(';', $ipAllows);
-            $ipAllows = array_map(function($v) {
+            $ipAllows = array_map(function ($v) {
                 $ip = explode('#', $v);
                 return trim($ip[0]);
             }, $ipAllows);

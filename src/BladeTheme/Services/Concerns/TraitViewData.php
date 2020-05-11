@@ -1,14 +1,16 @@
 <?php
 namespace Zento\BladeTheme\Services\Concerns;
 
-use View;
 use Closure;
+use View;
 
-trait TraitViewData {
+trait TraitViewData
+{
     protected $globalViewData = [];
     protected $preRouteCallActions = [];
 
-    public function view($view, $data = null) {
+    public function view($view, $data = null)
+    {
         if ($data) {
             $this->addGlobalViewData($data);
         }
@@ -16,7 +18,8 @@ trait TraitViewData {
         return view($view, $this->globalViewData);
     }
 
-    public function noLocalCacheView($view, $data =null, $headers = []) {
+    public function noLocalCacheView($view, $data = null, $headers = [])
+    {
         $data && View::share($data);
         return response()
             ->view($view)
@@ -24,16 +27,19 @@ trait TraitViewData {
                 "no-cache, max-age=0, must-revalidate, no-store");
     }
 
-    public function addGlobalViewData(array $data) {
+    public function addGlobalViewData(array $data)
+    {
         $this->globalViewData = array_merge_recursive($this->globalViewData, $data);
         return $this;
     }
 
-    public function getGlobalViewData($key) {
+    public function getGlobalViewData($key)
+    {
         return $this->globalViewData[$key] ?? null;
     }
 
-    public function shareViewData() {
+    public function shareViewData()
+    {
         View::share($this->globalViewData);
         return $this;
     }
@@ -43,8 +49,9 @@ trait TraitViewData {
      *
      * @return void
      */
-    public function preRouteCallAction() {
-        foreach($this->preRouteCallActions as $callback) {
+    public function preRouteCallAction()
+    {
+        foreach ($this->preRouteCallActions as $callback) {
             $callback($this);
         }
         return $this;
@@ -54,7 +61,8 @@ trait TraitViewData {
      * @param \Closure|null $callback
      * @return void
      */
-    public function registerPreRouteCallAction(\Closure $callback) {
+    public function registerPreRouteCallAction(\Closure $callback)
+    {
         $this->preRouteCallActions[] = $callback;
         return $this;
     }

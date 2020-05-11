@@ -1,7 +1,8 @@
 <?php
 
 if (!function_exists('zento_assert')) {
-    function zento_assert($obj, $interface = false) {
+    function zento_assert($obj, $interface = false)
+    {
         if (app()->environment(['local', 'staging'])) {
             if (!$obj) {
                 $errorMessage = sprintf('Assert object is null');
@@ -19,11 +20,10 @@ if (!function_exists('zento_assert')) {
                 $errorMessage = sprintf('Assert object is not an instance of \Zento\Contracts\AssertAbleInterface, then you need to define the assert interface');
                 trigger_error($errorMessage, E_USER_ERROR);
             }
-        
+
             $diffs = [];
-            if ($obj instanceof \Illuminate\Database\Eloquent\Model 
-                || $obj instanceof \Zento\Contracts\ReadOnlyObject) 
-            {
+            if ($obj instanceof \Illuminate\Database\Eloquent\Model
+                || $obj instanceof \Zento\Contracts\ReadOnlyObject) {
                 $attributes = $obj->getAttributes();
                 if (!empty($attributes)) {
                     $diffs = array_diff($PROPERTIES, array_keys($attributes));
@@ -35,7 +35,7 @@ if (!function_exists('zento_assert')) {
                 $diffs = $PROPERTIES;
             }
             $not_exists = [];
-            foreach($diffs as $property) {
+            foreach ($diffs as $property) {
                 if (!property_exists($obj, $property)) {
                     $not_exists[] = $property;
                 }
@@ -49,11 +49,12 @@ if (!function_exists('zento_assert')) {
 }
 
 if (!function_exists('guidv4')) {
-    function guidv4() {
+    function guidv4()
+    {
         if (function_exists('openssl_random_pseudo_bytes')) {
             $data = openssl_random_pseudo_bytes(16);
-            $data[6] = chr(ord($data[6]) & 0x0f | 0x40);    // set version to 0100
-            $data[8] = chr(ord($data[8]) & 0x3f | 0x80);    // set bits 6-7 to 10
+            $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+            $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
             return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
         } else {
             throw new \Exception('function openssl_random_pseudo_bytes not exist.');

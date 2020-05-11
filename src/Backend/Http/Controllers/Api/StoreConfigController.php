@@ -2,11 +2,10 @@
 
 namespace Zento\Backend\Http\Controllers\Api;
 
-use Route;
-use Request;
 use Config;
+use Request;
+use Route;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
-use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class StoreConfigController extends ApiBaseController
@@ -18,8 +17,9 @@ class StoreConfigController extends ApiBaseController
      * @authenticated
      * @group Store Configuration
      */
-    public function menus() {
-        $this->traversePackages(function($className) {
+    public function menus()
+    {
+        $this->traversePackages(function ($className) {
             (new $className)->registerDynamicConfigItemMenus();
         });
         return $this->withData(AdminConfigurationService::getMenus());
@@ -32,8 +32,9 @@ class StoreConfigController extends ApiBaseController
      * @urlParam l0 required Level0 Store Configuration Access Key
      * @urlParam l1 required Level1 Store Configuration Access Key
      */
-    public function groups() {
-        $key = $this->traversePackages(function($className) {
+    public function groups()
+    {
+        $key = $this->traversePackages(function ($className) {
             return (new $className)->registerDynamicConfigItemGroups(Route::input('l0'), Route::input('l1'));
         });
 
@@ -44,10 +45,11 @@ class StoreConfigController extends ApiBaseController
         }
     }
 
-    protected function getGroupValues(&$groups) {
-        foreach($groups as $name => &$group) {
+    protected function getGroupValues(&$groups)
+    {
+        foreach ($groups as $name => &$group) {
             if ($group['items'] ?? false) {
-                foreach($group['items'] as &$item) {
+                foreach ($group['items'] as &$item) {
                     if ($accessor = $item['accessor'] ?? false) {
                         $item['value'] = config($accessor);
                         if ($item['value'] === null && isset($item['defaultValue'])) {
@@ -57,8 +59,8 @@ class StoreConfigController extends ApiBaseController
                 }
             }
             if ($group['subgroups'] ?? false) {
-                foreach($group['subgroups'] as &$subgroups) {
-                    foreach($subgroups['items'] ?? [] as &$item) {
+                foreach ($group['subgroups'] as &$subgroups) {
+                    foreach ($subgroups['items'] ?? [] as &$item) {
                         if ($accessor = $item['accessor'] ?? false) {
                             $item['value'] = config($accessor);
                             if ($item['value'] === null && isset($item['defaultValue'])) {
@@ -79,7 +81,8 @@ class StoreConfigController extends ApiBaseController
      * @urlParam key Configuration Item Access key
      * @queryParam value Configuration Item new value
      */
-    public function store() {
+    public function store()
+    {
         $key = Route::input('key');
         $value = Request::get('value');
         if (Request::get('is_json', false)) {

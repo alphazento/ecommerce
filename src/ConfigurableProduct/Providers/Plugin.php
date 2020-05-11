@@ -2,16 +2,16 @@
 
 namespace Zento\ConfigurableProduct\Providers;
 
-use ProductService;
 use CatalogSearchService;
-
+use ProductService;
 use Zento\ConfigurableProduct\Model\ORM\Product as ConfigurableProduct;
 
 class Plugin extends \Illuminate\Support\ServiceProvider
 {
-    public function boot() {
+    public function boot()
+    {
         ConfigurableProduct::registerMorph(ConfigurableProduct::MODEL_TYPE);
-        $callback = function($items) {
+        $callback = function ($items) {
             if (ConfigurableProduct::isRichMode()) {
                 ConfigurableProduct::assignExtraRelation($items);
             }

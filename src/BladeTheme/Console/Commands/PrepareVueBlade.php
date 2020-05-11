@@ -8,8 +8,8 @@
 
 namespace Zento\BladeTheme\Console\Commands;
 
-use PackageManager;
 use Illuminate\Support\Str;
+use PackageManager;
 
 class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -36,11 +36,12 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
 
     protected $basePath = '';
 
-    public function handle() {
+    public function handle()
+    {
         $this->basePath = base_path();
         $packageConfigs = PackageManager::loadPackagesConfigs();
         PackageManager::rebuildPackages();
-        foreach($packageConfigs ?? [] as $name => $packageConfig) {
+        foreach ($packageConfigs ?? [] as $name => $packageConfig) {
             if ($assembly = PackageManager::assembly($name)) {
                 if ($assembly['vuetheme_type'] ?? false) {
                     $this->themeType = $assembly['vuetheme_type'];
@@ -50,7 +51,8 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
         }
     }
 
-    protected function handleThemePackage($themeName) {
+    protected function handleThemePackage($themeName)
+    {
         $this->aliases = [];
         $this->mix = [];
         $this->mixDepress = [];
@@ -59,33 +61,33 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
         $this->mergedPackages = [];
         $this->themeName = $themeName;
 
-
         $this->mergeVueComponentPackageConfig();
-        $this->mergeThemePackageConfig('Zento_BladeTheme');  //all vuetheme depends on this theme
+        $this->mergeThemePackageConfig('Zento_BladeTheme'); //all vuetheme depends on this theme
         $this->mergeThemePackageConfig($themeName);
         $this->genWebpackMixJs();
         // $this->genRegisterComponentProdFile();
         $this->genRegisterComponentSupportFile();
-        
+
         $this->info(sprintf('Theme package [%s] found:', $themeName));
         $this->info('  Please run command to compile:');
-        // $this->warn(sprintf('    npm run dev "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
-        // $this->warn(sprintf('    npm run prod "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
-        // $this->warn(sprintf('    npm run watch "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
-        // $this->warn(sprintf('    npm run hot "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName)); 
+        // $this->warn(sprintf('    npm run dev "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName));
+        // $this->warn(sprintf('    npm run prod "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName));
+        // $this->warn(sprintf('    npm run watch "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName));
+        // $this->warn(sprintf('    npm run hot "\'--env.mixfile=webpack.mix.%s.js\'"', $this->themeName));
 
-        $this->warn(sprintf('    npm run dev "\'--theme=%s\'"', $themeName)); 
-        $this->warn(sprintf('    npm run prod "\'--theme=%s\'"', $themeName)); 
-        $this->warn(sprintf('    npm run watch "\'--theme=%s\'"', $themeName)); 
-        $this->warn(sprintf('    npm run hot "\'--theme=%s\'"', $themeName)); 
+        $this->warn(sprintf('    npm run dev "\'--theme=%s\'"', $themeName));
+        $this->warn(sprintf('    npm run prod "\'--theme=%s\'"', $themeName));
+        $this->warn(sprintf('    npm run watch "\'--theme=%s\'"', $themeName));
+        $this->warn(sprintf('    npm run hot "\'--theme=%s\'"', $themeName));
 
         $this->info('  Loaded Packages:');
         $this->line(sprintf('    %s', implode(', ', array_keys($this->mergedPackages))));
     }
 
-    protected function mergeVueComponentPackageConfig() {
+    protected function mergeVueComponentPackageConfig()
+    {
         $packageConfigs = PackageManager::loadPackagesConfigs();
-        foreach($packageConfigs ?? [] as $name => $packageConfig) {
+        foreach ($packageConfigs ?? [] as $name => $packageConfig) {
             if (!isset($this->mergedPackages[$name])) {
                 $assembly = PackageManager::assembly($name);
                 if (!empty($assembly) && ($assembly['vue_component'] ?? false)) {
@@ -97,7 +99,8 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
         return $packageConfigs;
     }
 
-    protected function mergeThemePackageConfig($packageName) {
+    protected function mergeThemePackageConfig($packageName)
+    {
         if ($packageConfig = PackageManager::getPackageConfig($packageName)) {
             if ($packageConfig['enabled'] ?? false) {
                 if ($assembly = PackageManager::assembly($packageName)) {
@@ -119,7 +122,8 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
         return false;
     }
 
-    protected function _mergeThemePackageConfig($packageName, $assembly, $packageConfig) {
+    protected function _mergeThemePackageConfig($packageName, $assembly, $packageConfig)
+    {
         $this->mergedPackages[$packageName] = true;
         if ($file = PackageManager::packagePath($packageName, ['resources', 'vue'])) {
             if (file_exists($file)) {
@@ -135,7 +139,7 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
                         $aliasName = '@' . $packageName;
                         $this->mix[$packageName] = str_replace($aliasName, $aliasValue, $content);
                     }
-                } 
+                }
 
                 if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_mix_depress.json'])) {
                     if (file_exists($file)) {
@@ -154,10 +158,10 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
                     if ($file = PackageManager::packagePath($packageName, ['resources', 'vue', '_npm.package.json'])) {
                         if (file_exists($file)) {
                             $exNpmPackages = json_decode(file_get_contents($file), true);
-                            foreach($exNpmPackages as $npmPackage) {
+                            foreach ($exNpmPackages as $npmPackage) {
                                 $this->info(sprintf("install [%s] depends npm package %s", $packageName, $npmPackage));
                                 if ($this->command_exist('npm')) {
-                                    exec(sprintf('cd %s && npm i %s',base_path(), $npmPackage));
+                                    exec(sprintf('cd %s && npm i %s', base_path(), $npmPackage));
                                 } else {
                                     $this->error('npm command is not found.');
                                 }
@@ -165,21 +169,23 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
                         }
                     }
                 }
-                
+
             }
         }
     }
 
-    protected function command_exist($cmd) {
+    protected function command_exist($cmd)
+    {
         $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
         return !empty($return);
     }
 
-    protected function genWebpackMixJs() {
+    protected function genWebpackMixJs()
+    {
         $contents = [];
-        foreach($this->mix as $packageName => $content) {
+        foreach ($this->mix as $packageName => $content) {
             if ($packageName !== 'Zento_BladeTheme') {
-                foreach($this->aliases as $name => $value) {
+                foreach ($this->aliases as $name => $value) {
                     $contents[] = sprintf('mix.alias("@%s", "%s");', $name, $value);
                 }
             }
@@ -200,10 +206,10 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
     //             if (isset($contents[$name])) {
     //                 $this->warn(sprintf('Vue component [%s] has been defined in other module', $name));
     //                 $this->warn(sprintf('Here is the previous defination', $contents[$name]));
-    //             } 
+    //             }
     //             $lines = [];
     //             $variableName = sprintf('Dynamic%sComponent', Str::studly($name));
-    //             $lines[] = sprintf('const %s= ()=> import("%s/%s" /* webpackChunkName:"%s/js/cmps/%s" */);', 
+    //             $lines[] = sprintf('const %s= ()=> import("%s/%s" /* webpackChunkName:"%s/js/cmps/%s" */);',
     //                 $variableName,
     //                 $alias,
     //                 $file,
@@ -219,17 +225,18 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
     //     }
     // }
 
-    protected function genRegisterComponentSupportFile() {
+    protected function genRegisterComponentSupportFile()
+    {
         $contents = [];
         $imports = [
             'var Vue = window.Vue;',
-            'var routes = [];'
+            'var routes = [];',
         ];
-        foreach($this->componentJsonFiles as $themeName => $jsFile) {
+        foreach ($this->componentJsonFiles as $themeName => $jsFile) {
             $configName = $themeName . '_ASM';
             $imports[] = sprintf('import %s from "@%s/_%s.asm.js"', $configName, $themeName, $this->themeType);
             $contents[] = sprintf('
-if (%s.components !== undefined) { 
+if (%s.components !== undefined) {
     for (const [key, value] of Object.entries(%s.components)) {
         Vue.component(
             key,

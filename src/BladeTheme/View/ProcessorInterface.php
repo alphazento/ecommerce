@@ -3,7 +3,8 @@ namespace Zento\BladeTheme\View;
 
 use Zento\BladeTheme\View\Factory;
 
-interface ProcessorInterface {
+interface ProcessorInterface
+{
     /**
      * return \Illuminate\Contracts\View\View | null
      */

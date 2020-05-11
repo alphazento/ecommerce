@@ -3,29 +3,33 @@
 namespace Zento\SalesAdmin\Config;
 
 use Zento\Backend\Config\AbstractAdminConfig;
-use Zento\Backend\Providers\Facades\AdminDashboardService;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
+use Zento\Backend\Providers\Facades\AdminDashboardService;
 
-class Admin extends AbstractAdminConfig {
-    protected function _registerDashboardMenus() {
+class Admin extends AbstractAdminConfig
+{
+    protected function _registerDashboardMenus()
+    {
         AdminDashboardService::registerRootLevelMenuNode('Sales', 'mdi-store');
-        AdminDashboardService::registerLevel1MenuNode('Sales', 'Orders', 
+        AdminDashboardService::registerLevel1MenuNode('Sales', 'Orders',
             'mdi-file-table-box-multiple', '/admin/sales_orders');
     }
-    
-    protected function _registerDynamicConfigItemMenus() {}
 
-    protected function _registerDataTableSchemas(&$data) {
-        $data['orders'] = function($groupTag) {
-            AdminConfigurationService::registerGroup($groupTag, 
-            [
+    protected function _registerDynamicConfigItemMenus()
+    {}
+
+    protected function _registerDataTableSchemas(&$data)
+    {
+        $data['orders'] = function ($groupTag) {
+            AdminConfigurationService::registerGroup($groupTag,
+                [
                     'headers' => [
                         [
                             'text' => 'ID/Order Number',
                             'ui' => 'z-orders-number-and-log-column',
                             'value' => 'order_number',
                             'filter_ui' => 'config-text-item',
-                            'clearable' => true
+                            'clearable' => true,
                         ],
                         [
                             'text' => 'Status',
@@ -41,14 +45,14 @@ class Admin extends AbstractAdminConfig {
                             'value' => 'payment',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
-                            'sortable' => false
+                            'sortable' => false,
                         ],
                         [
                             'text' => 'Customer',
                             'ui' => 'z-orders-customer-column',
                             'value' => 'customer',
                             'filter_ui' => 'config-text-item',
-                            'clearable' => true
+                            'clearable' => true,
                         ],
                         [
                             'text' => 'Order Detail',
@@ -56,7 +60,7 @@ class Admin extends AbstractAdminConfig {
                             'value' => 'order_detail',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
-                            'sortable' => false
+                            'sortable' => false,
                         ],
                         [
                             'text' => 'Shipment',
@@ -64,7 +68,7 @@ class Admin extends AbstractAdminConfig {
                             'value' => 'order_items',
                             'filter_ui' => 'config-text-item',
                             'clearable' => true,
-                            'sortable' => false
+                            'sortable' => false,
                         ],
                         [
                             'text' => 'Purchase Date',
@@ -79,47 +83,50 @@ class Admin extends AbstractAdminConfig {
         };
     }
 
-    protected function _registerDynamicConfigItemGroups( &$data) {
-       
+    protected function _registerDynamicConfigItemGroups(&$data)
+    {
+
     }
 
-    protected function _registerModelDefines(&$data){}
-    
-    protected function getOrderStatusOptions() {
+    protected function _registerModelDefines(&$data)
+    {}
+
+    protected function getOrderStatusOptions()
+    {
         return [
             [
                 'value' => '',
-                'label' => 'Not Set'
+                'label' => 'Not Set',
             ],
             [
                 'value' => 0,
                 'label' => 'Pending',
-                'color' => '#E0BFBE'
+                'color' => '#E0BFBE',
             ],
             [
                 'value' => 10,
                 'label' => 'Completed',
-                'next_cadidates' => [1,4,5],
-                'color' => 'success'
+                'next_cadidates' => [1, 4, 5],
+                'color' => 'success',
             ],
             [
                 'value' => 4,
                 'label' => 'Cancel',
                 'next_cadidates' => [1, 5, 10],
-                'color' => 'error'
+                'color' => 'error',
             ],
             [
                 'value' => 5,
                 'label' => 'Hold',
-                'color' => 'pink'
+                'color' => 'pink',
 
             ],
             [
                 'value' => 1,
                 'label' => 'Processing',
                 'next_cadidates' => [4, 5, 10],
-                'color' => 'primary'
-            ]
+                'color' => 'primary',
+            ],
         ];
     }
 }

@@ -3,9 +3,8 @@
 namespace Zento\Sales\Providers;
 
 // use Zento\Catalog\Services\CategoryService;
-use Zento\Kernel\Facades\PackageManager;
-use Zento\Catalog\Services\Product;
 use Illuminate\Support\ServiceProvider;
+use Zento\Kernel\Facades\PackageManager;
 
 class Plugin extends ServiceProvider
 {
@@ -14,7 +13,7 @@ class Plugin extends ServiceProvider
         $this->app->singleton('sales_service', function ($app) {
             return new \Zento\Sales\Services\SalesService();
         });
-       
+
         PackageManager::class_alias('\Zento\Sales\Providers\Facades\SalesService', 'SalesService');
     }
 }

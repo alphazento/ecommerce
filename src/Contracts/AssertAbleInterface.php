@@ -2,10 +2,10 @@
 
 namespace Zento\Contracts;
 
-require_once('helpers.php');
+require_once 'helpers.php';
 
-interface AssertAbleInterface 
+interface AssertAbleInterface
 {
-    //must have 
+    //must have
     // const PROPERTIES = [];
 }

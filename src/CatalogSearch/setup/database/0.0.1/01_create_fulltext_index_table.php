@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateFulltextIndexTable extends Migration
 {
@@ -18,7 +18,6 @@ class CreateFulltextIndexTable extends Migration
             $table->longtext('data_index');
         });
     }
-
 
     /**
      * Reverse the migrations.

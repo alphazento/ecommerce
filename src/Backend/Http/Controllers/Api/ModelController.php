@@ -2,11 +2,11 @@
 
 namespace Zento\Backend\Http\Controllers\Api;
 
-use Route;
 use Request;
-use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Zento\Catalog\Providers\Facades\ProductService;
+use Route;
 use Zento\Catalog\Providers\Facades\CategoryService;
+use Zento\Catalog\Providers\Facades\ProductService;
+use Zento\Kernel\Http\Controllers\ApiBaseController;
 
 class ModelController extends ApiBaseController
 {
@@ -16,11 +16,12 @@ class ModelController extends ApiBaseController
      * @urlParam id required number model's id
      * @urlParam model required string model's type
      */
-    public function updateModel() {
+    public function updateModel()
+    {
         $id = Route::input('id');
         $modelName = Route::input('model');
         $model = null;
-        switch($modelName) {
+        switch ($modelName) {
             case 'category':
                 $model = CategoryService::getCategoryById($id);
                 break;
@@ -30,7 +31,7 @@ class ModelController extends ApiBaseController
         }
         if ($model) {
             $attrs = Request::all();
-            foreach($attrs as $key => $name) {
+            foreach ($attrs as $key => $name) {
                 $model->{$key} = $name;
             }
             $model->exists = true;

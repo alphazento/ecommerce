@@ -2,9 +2,8 @@
 
 namespace Zento\Customer\Model\ORM;
 
-use ShareBucket;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
+use ShareBucket;
 
 class Customer extends \Zento\Passport\Model\User
 {
@@ -16,25 +15,29 @@ class Customer extends \Zento\Passport\Model\User
         'name',
         'email',
         'password',
-        'is_guest'
+        'is_guest',
     ];
 
-    public function getRichDataDefines() {
+    public function getRichDataDefines()
+    {
         return [
             'default_billing_address',
-            'default_shipping_address'
+            'default_shipping_address',
         ];
     }
 
-    public function default_billing_address() {
+    public function default_billing_address()
+    {
         return $this->hasOne(CustomerAddress::class, 'id', 'default_billing_address_id');
     }
 
-    public function default_shipping_address() {
+    public function default_shipping_address()
+    {
         return $this->hasOne(CustomerAddress::class, 'id', 'default_shipping_address_id');
     }
 
-    public static function findOrCreateByEmail($email, $name = null) {
+    public static function findOrCreateByEmail($email, $name = null)
+    {
         $customer = static::where('email', $email)->first();
         if (!$customer) {
             $name = $name ? $name : $email;
@@ -44,17 +47,19 @@ class Customer extends \Zento\Passport\Model\User
                 'name' => $name,
                 'email' => $email,
                 'password' => bcrypt(Str::random(12)),
-                'is_guest' => 1
+                'is_guest' => 1,
             ]);
         }
         return $customer;
     }
 
-    public function guest() {
+    public function guest()
+    {
         return $this->is_guest;
     }
 
-    public function isApi() {
+    public function isApi()
+    {
         return false;
     }
 }

@@ -8,8 +8,8 @@
 
 namespace Zento\Acl\Console\Commands;
 
-use Zento\Acl\Model\Auth\Administrator;
 use Illuminate\Support\Facades\Hash;
+use Zento\Acl\Model\Auth\Administrator;
 
 class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Base
 {
@@ -22,7 +22,8 @@ class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Bas
 
     protected $description = 'Add an administrator';
 
-    public function handle() {
+    public function handle()
+    {
         $email = $this->argument('email');
         $root = $this->option('root');
         $password = $this->option('password', false);
@@ -39,7 +40,7 @@ class AddAdministrator extends \Zento\Kernel\PackageManager\Console\Commands\Bas
             }
             $this->info(sprintf('Administrator(%s) has been created. Password is %s', $email, $password));
         } else {
-            $this->error(sprintf('Administrator(%s) has exists.' , $email));
+            $this->error(sprintf('Administrator(%s) has exists.', $email));
         }
     }
 }

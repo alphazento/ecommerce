@@ -2,9 +2,9 @@
 
 namespace Zento\Checkout\Providers;
 
-use Zento\Checkout\Services\CheckoutService;
 use Illuminate\Support\ServiceProvider;
 use PackageManager;
+use Zento\Checkout\Services\CheckoutService;
 
 class Plugin extends ServiceProvider
 {

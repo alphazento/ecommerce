@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCustomerTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateCustomerTable extends Migration
             $table->integer('group_id')->unsigned()->nullable();
             $table->integer('store_id')->unsigned();
             $table->string('name', 255);
-            $table->string('email', 255);//->unique();
+            $table->string('email', 255); //->unique();
             $table->string('email_hash', 32)->index();
             $table->string('password', 255);
             $table->string('remember_token', 255)->nullable();
@@ -43,7 +43,7 @@ class CreateCustomerTable extends Migration
             // $table->foreign('default_billing_address_id')
             //     ->references('id')
             //     ->on('customer_addresses');
-            
+
             // $table->foreign('default_shipping_address_id')
             //     ->references('id')
             //     ->on('customer_addresses');

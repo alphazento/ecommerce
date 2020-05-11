@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Zento\Acl\Consts;
 
 class CreateAclWhiteListTable extends Migration
 {
-    protected function getBuilder() {
+    protected function getBuilder()
+    {
         return Schema::connection(\Zento\Acl\Consts::DB);
     }
     /**
@@ -27,9 +28,9 @@ class CreateAclWhiteListTable extends Migration
                 $table->timestamps();
 
                 $table->foreign('route_id')
-                        ->references('id')
-                        ->on('acl_routes')
-                        ->onDelete('cascade');
+                    ->references('id')
+                    ->on('acl_routes')
+                    ->onDelete('cascade');
             });
         }
     }

@@ -20,7 +20,6 @@ interface ProductServiceInterface
      */
     public function getProductBySku($sku);
 
-
     /**
      * Retrieves products by their unique identifiers.
      *
@@ -45,7 +44,7 @@ interface ProductServiceInterface
      */
     public function getLatestProducts($limit);
 
-   /**
+    /**
      * get popular products(new product)
      *
      * @param integer $limit

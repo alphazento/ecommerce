@@ -2,12 +2,11 @@
 
 namespace Zento\Catalog\Http\Controllers\Api;
 
-use Route;
-use Request;
-use ShareBucket;
 use ProductService;
+use Request;
+use Route;
+use ShareBucket;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
-use Zento\Kernel\Facades\DanamicAttributeFactory;
 
 class ProductController extends ApiBaseController
 {
@@ -16,17 +15,19 @@ class ProductController extends ApiBaseController
      * @group Catalog
      * @urlParam id required number product id Example:1
      */
-    public function product() {
+    public function product()
+    {
         $product = ProductService::getProductById(Route::input('id'));
         return $this->withData($product);
     }
 
     /**
-     * create a new product 
+     * create a new product
      * @group Catalog
      * @responseModel \Zento\Catalog\Model\ORM\Product
      */
-    public function create() {
+    public function create()
+    {
         $data = Request::all();
         $product = ProductService::newInstanceBaseTypeId($data['morph_type']);
         $filedList = $product->getTableFields();
@@ -36,7 +37,7 @@ class ProductController extends ApiBaseController
         ShareBucket::put(Consts::MODEL_RICH_MODE, true);
         $product = ProductService::getProductById($product->id);
         $dynAttrs = Arr::except($data, $product->getTableFields());
-        foreach($dynAttrs as $attribute => $value) {
+        foreach ($dynAttrs as $attribute => $value) {
             $product->{$attribute} = $value;
         }
         $product->update();
@@ -49,7 +50,8 @@ class ProductController extends ApiBaseController
      * @urlParam attribute required string Attribute name
      * @bodyParam value required string Attribute value
      */
-    public function setAttribute() {
+    public function setAttribute()
+    {
         if ($id = Route::input('id')) {
             if ($product = ProductService::getProductById($id)) {
                 $attribute = Route::input('attribute');

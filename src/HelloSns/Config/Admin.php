@@ -2,20 +2,24 @@
 
 namespace Zento\HelloSns\Config;
 
-use Zento\HelloSns\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
+use Zento\HelloSns\Consts;
 
-class Admin extends AbstractAdminConfig {
-    protected function _registerDashboardMenus() {}
+class Admin extends AbstractAdminConfig
+{
+    protected function _registerDashboardMenus()
+    {}
 
-    protected function _registerDynamicConfigItemMenus() {
+    protected function _registerDynamicConfigItemMenus()
+    {
         AdminConfigurationService::registerLevel1MenuNode('Website', 'HelloSns');
     }
 
-    protected function _registerDynamicConfigItemGroups(&$data) {
-        $data['website/hellosns'] = function($groupTag) {
-            AdminConfigurationService::registerGroup([$groupTag, 'front-end'],  [
+    protected function _registerDynamicConfigItemGroups(&$data)
+    {
+        $data['website/hellosns'] = function ($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'front-end'], [
                 'text' => 'Front-end Panel use Hellosns',
                 'items' => [
                     [
@@ -28,23 +32,23 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-multi-options-item',
                         'accessor' => sprintf(Consts::ALLOW_SERVICES, 'front-end'),
                         'options' => [
-                            ['label' => 'Facebook', 'value'=>'facebook'],
-                            ['label' => 'Google', 'value'=>'google'],
-                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
-                            ['label' => 'Twitter', 'value'=>'twitter'],
-                            ['label' => 'Github', 'value'=>'github'],
-                            ['label' => 'Gitlab', 'value'=>'gitlab'],
-                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
-                        ]
+                            ['label' => 'Facebook', 'value' => 'facebook'],
+                            ['label' => 'Google', 'value' => 'google'],
+                            ['label' => 'LinkedIn', 'value' => 'linkedin'],
+                            ['label' => 'Twitter', 'value' => 'twitter'],
+                            ['label' => 'Github', 'value' => 'github'],
+                            ['label' => 'Gitlab', 'value' => 'gitlab'],
+                            ['label' => 'Bitbucket', 'value' => 'bitbucket'],
+                        ],
                     ],
                     [
                         'text' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'front-end'),
                         'options' => [
-                            ['label' => 'code', 'value'=>'code'],
-                            ['label' => 'token', 'value'=>'token']
-                        ]
+                            ['label' => 'code', 'value' => 'code'],
+                            ['label' => 'token', 'value' => 'token'],
+                        ],
                     ],
                     [
                         'text' => 'Use State Check',
@@ -56,9 +60,9 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'front-end'),
                     ],
-                ]
+                ],
             ]);
-            AdminConfigurationService::registerGroup([$groupTag, 'backend'],  [
+            AdminConfigurationService::registerGroup([$groupTag, 'backend'], [
                 'text' => 'Admin Panel use Hellosns',
                 'items' => [
                     [
@@ -71,23 +75,23 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-multi-options-item',
                         'accessor' => sprintf(Consts::ALLOW_SERVICES, 'backend'),
                         'options' => [
-                            ['label' => 'Facebook', 'value'=>'facebook'],
-                            ['label' => 'Google', 'value'=>'google'],
-                            ['label' => 'LinkedIn', 'value'=>'linkedin'],
-                            ['label' => 'Twitter', 'value'=>'twitter'],
-                            ['label' => 'Github', 'value'=>'github'],
-                            ['label' => 'Gitlab', 'value'=>'gitlab'],
-                            ['label' => 'Bitbucket', 'value'=>'bitbucket'],
-                        ]
+                            ['label' => 'Facebook', 'value' => 'facebook'],
+                            ['label' => 'Google', 'value' => 'google'],
+                            ['label' => 'LinkedIn', 'value' => 'linkedin'],
+                            ['label' => 'Twitter', 'value' => 'twitter'],
+                            ['label' => 'Github', 'value' => 'github'],
+                            ['label' => 'Gitlab', 'value' => 'gitlab'],
+                            ['label' => 'Bitbucket', 'value' => 'bitbucket'],
+                        ],
                     ],
                     [
                         'text' => 'Response Type',
                         'ui' => 'config-options-item',
                         'accessor' => sprintf(Consts::RESPONSE_TYPE, 'backend'),
                         'options' => [
-                            ['label' => 'code', 'value'=>'code'],
-                            ['label' => 'token', 'value'=>'token']
-                        ]
+                            ['label' => 'code', 'value' => 'code'],
+                            ['label' => 'token', 'value' => 'token'],
+                        ],
                     ],
                     // [
                     //     'title' => 'Allow Services',
@@ -104,10 +108,10 @@ class Admin extends AbstractAdminConfig {
                         'ui' => 'config-boolean-item',
                         'accessor' => sprintf(Consts::ALLOW_CREATE_ACCOUNT, 'backend'),
                     ],
-                ]
+                ],
             ]);
 
-            AdminConfigurationService::registerGroup([$groupTag, 'services'],  [
+            AdminConfigurationService::registerGroup([$groupTag, 'services'], [
                 'text' => 'Social Media Login Services',
                 'items' => [
                     [
@@ -117,7 +121,7 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
                     [
@@ -127,7 +131,7 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
                     [
@@ -137,7 +141,7 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
                     [
@@ -147,7 +151,7 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
                     [
@@ -157,7 +161,7 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
                     [
@@ -167,16 +171,18 @@ class Admin extends AbstractAdminConfig {
                         'schema' => [
                             "client_id" => "config-text-item",
                             "client_secret" => "config-text-item",
-                            "redirect" => "config-text-item"
+                            "redirect" => "config-text-item",
                         ],
                     ],
-                ]
+                ],
             ]);
         };
     }
 
-    protected function _registerDataTableSchemas(&$data) {}
+    protected function _registerDataTableSchemas(&$data)
+    {}
 
-    protected function _registerModelDefines(&$data){}
-    
+    protected function _registerModelDefines(&$data)
+    {}
+
 }

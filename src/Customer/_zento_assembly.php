@@ -1,25 +1,25 @@
 <?php
 return [
-    "Zento_Customer"=>[
+    "Zento_Customer" => [
         "version" => "0.0.3",
         "commands" => [
         ],
         "providers" => [
-            "\\Zento\\Customer\\Providers\\Plugin"
+            "\\Zento\\Customer\\Providers\\Plugin",
         ],
-        "listeners"=> [
-            "Zento\\Customer\\Event\\PassportTokenIssued"=> [
-            ]
+        "listeners" => [
+            "Zento\\Customer\\Event\\PassportTokenIssued" => [
+            ],
         ],
-        "middlewaregroup"=> [
-            
+        "middlewaregroup" => [
+
         ],
-        "middlewares"=> [
-            'guest' => '\Zento\Customer\Http\Middleware\RedirectIfAuthenticated'
+        "middlewares" => [
+            'guest' => '\Zento\Customer\Http\Middleware\RedirectIfAuthenticated',
         ],
-        "depends"=> [
-            "Zento_Passport"
+        "depends" => [
+            "Zento_Passport",
         ],
-        'tony' => 1
-    ]
+        'tony' => 1,
+    ],
 ];

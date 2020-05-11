@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateShoppingCartTable extends Migration
 {
@@ -23,7 +23,7 @@ class CreateShoppingCartTable extends Migration
             $table->string('applied_rules', 255)->nullable();
             $table->string('coupon_codes', 255)->nullable();
             $table->string('client_ip', 48)->nullable();
-            $table->tinyInteger('status')->default(0);  // 0:inprogress, 1:abandoned, 2:converted
+            $table->tinyInteger('status')->default(0); // 0:inprogress, 1:abandoned, 2:converted
             $table->integer('items_quantity')->default(0);
             $table->boolean('ship_to_billingaddesss')->default(0);
             $table->integer('billing_address_id')->unsigned()->default(0);
@@ -40,7 +40,6 @@ class CreateShoppingCartTable extends Migration
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.

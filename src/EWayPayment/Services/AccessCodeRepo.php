@@ -2,21 +2,16 @@
 
 namespace Zento\EWayPayment\Services;
 
-use Session;
-use Closure;
-use Request;
-
-use Zento\EWayPayment\Consts;
 use eWayAPI;
 use Eway\Rapid;
-use Eway\Rapid\Client;
 use Eway\Rapid\Enum\ApiMethod;
-use Eway\Rapid\Model\Response\AbstractResponse;
 use Eway\Rapid\Enum\TransactionType;
 use Eway\Rapid\Validator\ClassValidator;
-use Carbon\Carbon;
+use Request;
+use Zento\EWayPayment\Consts;
 
-class AccessCodeRepo {
+class AccessCodeRepo
+{
     protected $lastRemoteResponse;
     protected $lastRemoteStatus;
     private $success_response_messages = [
@@ -24,12 +19,13 @@ class AccessCodeRepo {
         'A2008',
         'A2010',
         'A2011',
-        'A2016'
+        'A2016',
     ];
 
     protected $ewayApi = null;
 
-    protected function getApiClient() {
+    protected function getApiClient()
+    {
         if (!$this->ewayApi) {
             $mode = config(Consts::PAYMENT_GATEWAY_EWAY_MODE, 'sandbox');
             $this->ewayApi = Rapid::createClient(
@@ -42,29 +38,30 @@ class AccessCodeRepo {
         return $this->ewayApi;
     }
 
-    protected function prepareParams($shoppingCart, $reference) {
+    protected function prepareParams($shoppingCart, $reference)
+    {
         $shippingAddress = $shoppingCart['shipping_address'];
         $customer = [
             'name' => $shippingAddress['name'],
             'Title' => 'Prof',
-            'Street1'=> $shippingAddress['address1'],
-            'Street2'=> $shippingAddress['address2'],
+            'Street1' => $shippingAddress['address1'],
+            'Street2' => $shippingAddress['address2'],
             'City' => $shippingAddress['city'],
             'State' => $shippingAddress['state'],
-            'PostalCode' =>$shippingAddress['postal_code'],
+            'PostalCode' => $shippingAddress['postal_code'],
             'Country' => 'AU',
-            'Active'=> $shippingAddress['active'],
-            'Email'=> $shoppingCart['email'],
+            'Active' => $shippingAddress['active'],
+            'Email' => $shoppingCart['email'],
             'Phone' => $shippingAddress['phone'],
             'Mobile' => $shippingAddress['phone'],
-            'RedirectUrl' => "/paymentcallback/ewaypayment"
+            'RedirectUrl' => "/paymentcallback/ewaypayment",
         ];
         $transaction = [
             'TransactionType' => TransactionType::MOTO,
             'Payment' => [
                 'TotalAmount' => $shoppingCart['total'] * 100,
                 'InvoiceReference' => $reference,
-            ]
+            ],
         ];
 
         $transaction = array_merge($transaction, $customer);
@@ -77,7 +74,8 @@ class AccessCodeRepo {
      * @param array $shoppingCart
      * @return void
      */
-    public function requestNewCode($shoppingCart) {
+    public function requestNewCode($shoppingCart)
+    {
         $ref = $shoppingCart['id'];
         $transaction = $this->prepareParams($shoppingCart, $ref);
         $response = $this->getApiClient()->createTransaction(
@@ -90,9 +88,9 @@ class AccessCodeRepo {
                     true,
                     [
                         'access_code' => $response->AccessCode,
-                        'ref'=>$ref,
-                        'action_url' => $response->FormActionURL
-                    ]
+                        'ref' => $ref,
+                        'action_url' => $response->FormActionURL,
+                    ],
                 ];
             } else {
                 return [false, ['response' => $response->toArray(), 'messages' => $this->parseErrors($response->Errors)]];
@@ -102,13 +100,14 @@ class AccessCodeRepo {
         }
     }
 
-   /**
-    * check an access code's status
-    *
-    * @param string $accesscode
-    * @return array with indicator if success and messages
-    */
-    public function checkAccessCode($accesscode) {
+    /**
+     * check an access code's status
+     *
+     * @param string $accesscode
+     * @return array with indicator if success and messages
+     */
+    public function checkAccessCode($accesscode)
+    {
         $response = $this->getApiClient()->queryAccessCode($accesscode);
 
         $messages = array_merge($this->parseErrors($response->ResponseMessage), $this->parseErrors($response->Errors));
@@ -122,8 +121,7 @@ class AccessCodeRepo {
 
         if ($response->TransactionStatus
             && $response->TransactionID
-            && in_array($response->ResponseMessage, $this->success_response_messages))
-        {
+            && in_array($response->ResponseMessage, $this->success_response_messages)) {
             return [true, $response->toArray(), $messages];
         }
         return [false, $response->toArray(), $messages];
@@ -135,7 +133,8 @@ class AccessCodeRepo {
      * @param array|string $errors
      * @return array messages
      */
-    protected function parseErrors($errors) {
+    protected function parseErrors($errors)
+    {
         if (empty($errors)) {
             return [];
         }
@@ -143,7 +142,7 @@ class AccessCodeRepo {
             $errors = [$errors];
         }
         $messages = [];
-        foreach($errors as $error) {
+        foreach ($errors as $error) {
             $messages[$error] = Rapid::getMessage($error);
         }
         return $messages;

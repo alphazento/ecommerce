@@ -2,8 +2,8 @@
 
 namespace Zento\BladeTheme\Http\Controllers\Auth;
 
-use Zento\BladeTheme\Facades\BladeTheme;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Zento\BladeTheme\Facades\BladeTheme;
 
 class VerificationController extends \App\Http\Controllers\Auth\VerificationController
 {
@@ -16,7 +16,7 @@ class VerificationController extends \App\Http\Controllers\Auth\VerificationCont
     | user that recently registered with the application. Emails may also
     | be re-sent if the user didn't receive the original email message.
     |
-    */
+     */
 
     use VerifiesEmails;
 

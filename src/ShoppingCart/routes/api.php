@@ -22,4 +22,4 @@ Route::group(
         Route::post('/to/{to_cart_guid}', 'ShoppingCartController@mergeCart');
         Route::get('/customer', 'ShoppingCartController@getCustomer');
         Route::put('/customer', 'ShoppingCartController@setCustomer');
-});
+    });

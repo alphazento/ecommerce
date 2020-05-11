@@ -1,6 +1,7 @@
 <?php
 
 namespace Zento\Contracts\Interfaces\Service;
+
 use Zento\Contracts\Interfaces\Catalog\ICategory;
 
 interface CategoryServiceInterface
@@ -12,8 +13,8 @@ interface CategoryServiceInterface
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
      */
     public function getCategoryById($id);
-    
-    public function getCategoriesByLevel($level, $activeOnly = true,  $parent_id = -1);
+
+    public function getCategoriesByLevel($level, $activeOnly = true, $parent_id = -1);
 
     /**
      * Retrieves root category of the store
@@ -28,6 +29,6 @@ interface CategoryServiceInterface
      * @return void
      */
     public function tree();
-    
+
     public function getName(ICategory $category, $withProductCount = false);
 }

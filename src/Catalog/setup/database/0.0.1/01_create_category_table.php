@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCategoryTable extends Migration
 {
@@ -24,10 +24,9 @@ class CreateCategoryTable extends Migration
             $table->boolean('active');
             $table->integer('sort_by')->unsigned()->nullable();
             $table->timestamps();
-            $table->unique(['parent_id', 'name']); 
+            $table->unique(['parent_id', 'name']);
         });
     }
-
 
     /**
      * Reverse the migrations.

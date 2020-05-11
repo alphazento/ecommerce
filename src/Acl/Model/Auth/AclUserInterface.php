@@ -1,12 +1,12 @@
 <?php
- /**
-  *
-  * @category   Framework support
-  * @package    Base
-  * @copyright
-  * @license
-  * @author      Yongcheng Chen yongcheng.chen@live.com
-  */
+/**
+ *
+ * @category   Framework support
+ * @package    Base
+ * @copyright
+ * @license
+ * @author      Yongcheng Chen yongcheng.chen@live.com
+ */
 
 namespace Zento\Acl\Model\Auth;
 

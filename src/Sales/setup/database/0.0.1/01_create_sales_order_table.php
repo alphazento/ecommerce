@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSalesOrderTable extends Migration
 {
@@ -19,8 +19,8 @@ class CreateSalesOrderTable extends Migration
             $table->integer('invoice_id')->unsigned()->default(0);
             $table->integer('status_id')->unsigned();
             $table->integer('hold_before_status_id')->unsigned()->default(0);
-            $table->integer('amend_from')->unsigned()->default(0);   //when customer need to amend order, origin order set active = 0
-            $table->integer('resend_from')->unsigned()->default(0);  //when resend all or partial order items from origin order. still set active=1
+            $table->integer('amend_from')->unsigned()->default(0); //when customer need to amend order, origin order set active = 0
+            $table->integer('resend_from')->unsigned()->default(0); //when resend all or partial order items from origin order. still set active=1
             $table->boolean('is_backorder')->default(0);
             $table->integer('customer_id')->unsigned();
             $table->string('customer_note', 255)->nullable();

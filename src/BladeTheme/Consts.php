@@ -1,8 +1,9 @@
 <?php
 namespace Zento\BladeTheme;
 
-class Consts  {
-    
+class Consts
+{
+
     //CACHE KEYS
     const CACHE_KEY_BLADE_VIEW_EXPIRE = 'cache.bladeview.expire';
 

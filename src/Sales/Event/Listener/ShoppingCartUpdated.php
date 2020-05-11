@@ -2,21 +2,19 @@
 
 namespace Zento\Sales\Event\Listener;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Foundation\Events\Dispatchable;
-
 class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseListener
 {
     /**
      * @param \Zento\Contracts\Interfaces\Catalog\IShoppingCart $event
      * @return void
      */
-    protected function run($event) {
+    protected function run($event)
+    {
         // \zento_assert($event->shoppingCart);
         if ($event->shoppingCart) {
             $total = 0;
             $items_quantity = 0;
-            foreach($event->shoppingCart->items ?? [] as $item) {
+            foreach ($event->shoppingCart->items ?? [] as $item) {
                 \zento_assert($item);
                 $total += $item->row_price;
                 $items_quantity += $item->quantity;

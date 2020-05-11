@@ -3,9 +3,9 @@
 namespace Zento\Catalog\Services;
 
 use Illuminate\Database\Eloquent\Model;
-use Zento\Contracts\Interfaces\Catalog\ICategory ;
+use Zento\Contracts\Interfaces\Catalog\ICategory;
 
-class CategoryService implements \Zento\Contracts\Interfaces\Service\CategoryServiceInterface 
+class CategoryService implements \Zento\Contracts\Interfaces\Service\CategoryServiceInterface
 {
     protected $rootId;
     protected $treeLevelFrom;
@@ -15,7 +15,8 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
 
     protected $model = \Zento\Catalog\Model\ORM\Category::class;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->rootId = config('category.tree.root.id', 1);
         $this->treeLevelFrom = config('category.tree.level.from', 2);
         $this->treeMaxLevel = config('category.tree.level.max', 3);
@@ -43,14 +44,15 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
     /**
      * give category ids, build their category tree relationship
      */
-    public function buildCategoryTreeByIds(array $identifiers, $activeOnly = true) {
+    public function buildCategoryTreeByIds(array $identifiers, $activeOnly = true)
+    {
         $model = $this->model;
         $builder = $model::whereIn('id', $identifiers);
         if ($activeOnly) {
             $builder->active($activeOnly);
         }
         $categories = $builder->get()->keyBy('id');
-        foreach($categories ?? [] as $key => $category) {
+        foreach ($categories ?? [] as $key => $category) {
         }
     }
 
@@ -61,7 +63,8 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
      * @param boolean $activeOnly
      * @return array
      */
-    public function getCategoryIdsWithChildrenByIds(array $identifiers, $activeOnly = true) {
+    public function getCategoryIdsWithChildrenByIds(array $identifiers, $activeOnly = true)
+    {
         $model = $this->model;
         $builder = $model::whereIn('id', $identifiers);
         if ($activeOnly) {
@@ -69,28 +72,30 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
         }
         $categories = $builder->get();
         $ids = [];
-        foreach($categories ?? [] as $category) {
+        foreach ($categories ?? [] as $category) {
             $this->getCategoryIdsInCategory($category, $ids);
         }
         return $ids;
     }
 
-    protected function getCategoryIdsInCategory(Model $category, array &$ids) {
+    protected function getCategoryIdsInCategory(Model $category, array &$ids)
+    {
         $ids[] = $category->id;
-        foreach($category->children ?? [] as $item) {
+        foreach ($category->children ?? [] as $item) {
             $this->getCategoryIdsInCategory($item, $ids);
-        } 
+        }
     }
 
     /**
-     * 
+     *
      *
      * @param integer $level
      * @param boolean $activeOnly
      * @param integer $parent_id
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
-    public function getCategoriesByLevel($level, $activeOnly = true, $parent_id = -1) {
+    public function getCategoriesByLevel($level, $activeOnly = true, $parent_id = -1)
+    {
         $model = $this->model;
         $cacheKey = sprintf('%s.all.%s', $level, $parent_id);
         if (!isset($this->cache[$cacheKey])) {
@@ -108,28 +113,31 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return \Zento\Contracts\Interfaces\Catalog\ICategory|null
      */
-    public function root() {
+    public function root()
+    {
         return $this->getCategoryById(1);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
-    public function tree($activeOnly = true) {
+    public function tree($activeOnly = true)
+    {
         static $tree = 0;
-		if (!$tree) {
-			$tree = $this->getCategoriesByLevel($this->treeLevelFrom, $activeOnly);
-		}
-		return $tree;
+        if (!$tree) {
+            $tree = $this->getCategoriesByLevel($this->treeLevelFrom, $activeOnly);
+        }
+        return $tree;
     }
 
-    public function treeConfigs() {
+    public function treeConfigs()
+    {
         return [
             'level_from' => $this->treeLevelFrom,
-            'level_to'=> $this->treeMaxLevel + $this->treeLevelFrom - 1,
+            'level_to' => $this->treeMaxLevel + $this->treeLevelFrom - 1,
         ];
     }
-    
+
     /**
      * get a category's name
      *
@@ -137,11 +145,13 @@ class CategoryService implements \Zento\Contracts\Interfaces\Service\CategorySer
      * @param boolean $withProductCount
      * @return string
      */
-    public function getName(ICategory $category, $withProductCount = false) {
+    public function getName(ICategory $category, $withProductCount = false)
+    {
         return $category->name . ($withProductCount ? sprintf('(%s)', $category->products_count) : '');
     }
-    
-    public function __call($method, $args) {
+
+    public function __call($method, $args)
+    {
         $model = $this->model;
         return $model::{$method}(...$args);
     }

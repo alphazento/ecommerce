@@ -1,7 +1,8 @@
 <?php
 namespace Zento\PaypalPayment;
 
-class Consts  {
+class Consts
+{
     const PAYMENT_GATEWAY_PAYPAL_MODE = 'paymentgateway.paypalexpress.mode';
     const PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE = 'paymentgateway.paypalexpress.%s.client_id';
     const PAYMENT_GATEWAY_PAYPAL_SECRET_BY_MODE = 'paymentgateway.paypalexpress.%s.secret';

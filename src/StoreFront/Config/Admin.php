@@ -2,24 +2,29 @@
 
 namespace Zento\StoreFront\Config;
 
-use Zento\StoreFront\Consts;
 use Zento\Backend\Config\AbstractAdminConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
+use Zento\StoreFront\Consts;
 
-class Admin extends AbstractAdminConfig {
+class Admin extends AbstractAdminConfig
+{
     protected $storages;
 
-    protected function _registerDashboardMenus() {}
+    protected function _registerDashboardMenus()
+    {}
 
-    protected function _registerDynamicConfigItemMenus() {
+    protected function _registerDynamicConfigItemMenus()
+    {
         AdminConfigurationService::registerLevel1MenuNode('Website', 'StoreFront');
     }
 
-    protected function _registerDataTableSchemas(&$data) {}
+    protected function _registerDataTableSchemas(&$data)
+    {}
 
-    protected function _registerDynamicConfigItemGroups(&$data) {
-        $data['website/storefront'] = function($groupTag) {
-            AdminConfigurationService::registerGroup([$groupTag, 'basic'],  [
+    protected function _registerDynamicConfigItemGroups(&$data)
+    {
+        $data['website/storefront'] = function ($groupTag) {
+            AdminConfigurationService::registerGroup([$groupTag, 'basic'], [
                 'text' => 'Store Basic Settings',
                 'items' => [
                     [
@@ -35,41 +40,41 @@ class Admin extends AbstractAdminConfig {
                     [
                         'text' => 'Currency',
                         'ui' => 'config-text-item',
-                        'accessor' => Consts::CURRENCY
+                        'accessor' => Consts::CURRENCY,
                     ],
                     [
                         'text' => 'Assets Url Prefix',
                         'ui' => 'config-text-item',
-                        'accessor' => Consts::ASSETS_URL_PREFIX
-                    ]
-                ]
+                        'accessor' => Consts::ASSETS_URL_PREFIX,
+                    ],
+                ],
             ]);
 
-            AdminConfigurationService::registerGroup([$groupTag, 'disks'],  [
+            AdminConfigurationService::registerGroup([$groupTag, 'disks'], [
                 'text' => 'Storage',
                 'items' => [
                     [
                         'text' => 'Private File Upload Storage',
                         'ui' => 'config-options-item',
-                        'options' =>  $this->getStorages(),
-                        'accessor' => Consts::PRIVATE_FILE_UPLOAD_STORAGE
+                        'options' => $this->getStorages(),
+                        'accessor' => Consts::PRIVATE_FILE_UPLOAD_STORAGE,
                     ],
                     [
                         'text' => 'Public File Upload Storage',
                         'ui' => 'config-options-item',
-                        'options' =>  $this->getStorages(),
-                        'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORAGE
+                        'options' => $this->getStorages(),
+                        'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORAGE,
                     ],
                     [
                         'text' => 'Cloud Storage',
                         'ui' => 'config-options-item',
-                        'options' =>  $this->getStorages(),
-                        'accessor' => Consts::CLOUD_STORAGE
+                        'options' => $this->getStorages(),
+                        'accessor' => Consts::CLOUD_STORAGE,
                     ],
-                ]
+                ],
             ]);
 
-            AdminConfigurationService::registerGroup([$groupTag, 'fileupload'],  [
+            AdminConfigurationService::registerGroup([$groupTag, 'fileupload'], [
                 'text' => 'File Upload',
                 'items' => [
                     [
@@ -78,18 +83,18 @@ class Admin extends AbstractAdminConfig {
                         'options' => [
                             [
                                 'label' => 'Local Public only',
-                                'value' => 'local'
+                                'value' => 'local',
                             ],
                             [
                                 'label' => 'Cloud only',
-                                'value' => 'cloud'
+                                'value' => 'cloud',
                             ],
                             [
                                 'label' => 'Both Local and Cloud',
-                                'value' => 'both'
+                                'value' => 'both',
                             ],
                         ],
-                        'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORE_STRATEGY
+                        'accessor' => Consts::PUBLIC_FILE_UPLOAD_STORE_STRATEGY,
                     ],
                     [
                         'text' => 'Private File Upload Public Storage',
@@ -97,42 +102,44 @@ class Admin extends AbstractAdminConfig {
                         'options' => [
                             [
                                 'label' => 'Private Local only',
-                                'value' => 'local'
+                                'value' => 'local',
                             ],
                             [
                                 'label' => 'Cloud only',
-                                'value' => 'cloud'
+                                'value' => 'cloud',
                             ],
                             [
                                 'label' => 'Both Local and Cloud',
-                                'value' => 'both'
+                                'value' => 'both',
                             ],
                         ],
-                        'accessor' => Consts::PRIVATE_FILE_UPLOAD_STORE_STRATEGY
-                    ]
-                ]
+                        'accessor' => Consts::PRIVATE_FILE_UPLOAD_STORE_STRATEGY,
+                    ],
+                ],
             ]);
         };
     }
 
-    protected function _registerModelDefines(&$data){}
-    
-    protected function getStorages() {
+    protected function _registerModelDefines(&$data)
+    {}
+
+    protected function getStorages()
+    {
         if (!$this->storages) {
             $this->storages = [];
             $disks = config('filesystems.disks');
-            foreach($disks as $name => $configs) {
+            foreach ($disks as $name => $configs) {
                 unset($configs['key']);
                 unset($configs['secret']);
                 $this->storages[] = [
-                    'label' => str_replace('\/', '/', sprintf('%s(%s)', 
-                        $name, 
+                    'label' => str_replace('\/', '/', sprintf('%s(%s)',
+                        $name,
                         json_encode($configs, 1))),
-                    'value' => $name
+                    'value' => $name,
                 ];
             }
         }
-        
+
         return $this->storages;
     }
 }

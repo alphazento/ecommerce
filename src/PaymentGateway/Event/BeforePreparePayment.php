@@ -2,7 +2,8 @@
 
 namespace Zento\PaymentGateway\Event;
 
-class BeforePreparePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
+class BeforePreparePayment extends \Zento\Kernel\Booster\Events\BaseEvent
+{
     const HAS_ATTRS = [
         'method',
         'shoppingCart',
@@ -18,7 +19,7 @@ class BeforePreparePayment extends \Zento\Kernel\Booster\Events\BaseEvent {
     {
         $this->data = [
             'method' => $method,
-            'shoppingCart' => $data
+            'shoppingCart' => $data,
         ];
     }
 }

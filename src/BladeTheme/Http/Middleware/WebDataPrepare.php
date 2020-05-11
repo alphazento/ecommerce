@@ -3,9 +3,7 @@
 namespace Zento\BladeTheme\Http\Middleware;
 
 use Closure;
-use ShareBucket;
 use ProductService;
-
 use Zento\BladeTheme\Consts;
 use Zento\BladeTheme\Facades\BladeTheme;
 
@@ -29,11 +27,12 @@ class WebDataPrepare
                 ->preRouteCallAction()
                 ->shareViewData();
         }
-        
+
         return $next($request);
     }
 
-    protected function prepareApiGuestToken($user) {
+    protected function prepareApiGuestToken($user)
+    {
         $apiGuestToken = config(Consts::WORK_WITH_PASSPORT_GUEST_TOKEN) ? BladeTheme::getApiGuestToken($user) : null;
         BladeTheme::addGlobalViewData(compact('apiGuestToken'));
         return $apiGuestToken;

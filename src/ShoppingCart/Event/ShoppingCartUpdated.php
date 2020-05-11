@@ -2,14 +2,12 @@
 
 namespace Zento\ShoppingCart\Event;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Foundation\Events\Dispatchable;
-
-class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseEvent {
+class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseEvent
+{
     const HAS_ATTRS = [
-        'shoppingCart'
+        'shoppingCart',
     ];
-    
+
     /**
      * Create a new event instance.
      *
@@ -19,16 +17,17 @@ class ShoppingCartUpdated extends \Zento\Kernel\Booster\Events\BaseEvent {
     public function __construct(\Zento\Contracts\Interfaces\Catalog\IShoppingCart $shoppingCart)
     {
         $this->data = [
-            'shoppingCart' => $shoppingCart
+            'shoppingCart' => $shoppingCart,
         ];
     }
 
-    protected function afterFireUntil(\Zento\Kernel\Booster\Events\EventFiredResult $result) : \Zento\Kernel\Booster\Events\EventFiredResult {
+    protected function afterFireUntil(\Zento\Kernel\Booster\Events\EventFiredResult $result): \Zento\Kernel\Booster\Events\EventFiredResult
+    {
         if ($result->isSuccess()) {
             if ($shoppingCart = $this->shoppingCart) {
                 $shoppingCart->update();
             }
-        } 
+        }
         return $result;
     }
 }

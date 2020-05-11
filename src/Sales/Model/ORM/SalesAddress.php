@@ -2,11 +2,9 @@
 
 namespace Zento\Sales\Model\ORM;
 
-use DB;
-use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
-use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
+use Zento\Contracts\Interfaces\Catalog\IShoppingCart;
+use Zento\ShoppingCart\Model\ORM\ShoppingCartAddress;
 
 class SalesAddress extends \Illuminate\Database\Eloquent\Model
 {
@@ -22,7 +20,8 @@ class SalesAddress extends \Illuminate\Database\Eloquent\Model
         'phone',
     ];
 
-    public static function createFromCart(IShoppingCart $cart) {
+    public static function createFromCart(IShoppingCart $cart)
+    {
         $shipping_address = $cart->shipping_address;
         if (!$shipping_address) {
             $shipping_address = ShoppingCartAddress::find($cart->shipping_address_id);
@@ -42,7 +41,8 @@ class SalesAddress extends \Illuminate\Database\Eloquent\Model
         return null;
     }
 
-    protected function hashRecord() {
+    protected function hashRecord()
+    {
         $attrs = Arr::only($this->attributes, $this->fillable);
         return md5(implode(',', $attrs));
     }

@@ -2,12 +2,12 @@
 
 namespace Zento\Passport\Model;
 
-use ShareBucket;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
+use ShareBucket;
 
 class User extends Authenticatable
 {
@@ -31,23 +31,28 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getUsernameAttribute($value) {
+    public function getUsernameAttribute($value)
+    {
         return $this->attribute['email'];
     }
 
-    public function setUsernameAttribute($value) {
+    public function setUsernameAttribute($value)
+    {
         $this->attribute['email'] = $value;
     }
 
-    public function findForPassport($username) {
+    public function findForPassport($username)
+    {
         $key = sprintf('user_%s', md5($username));
         if ($user = ShareBucket::get($key)) {
             return $user;
@@ -57,11 +62,13 @@ class User extends Authenticatable
         return $user;
     }
 
-    public function randomPassword() {
+    public function randomPassword()
+    {
         return Str::random(16);
     }
 
-    public function applyRandomPassword() {
+    public function applyRandomPassword()
+    {
         $password = $this->randomPassword();
         $this->password = Hash::make($password);
         $this->save();
@@ -74,15 +81,18 @@ class User extends Authenticatable
      * @param boolean $isMe
      * @return boolean
      */
-    public function crossUserAcl($isMe = false) {
+    public function crossUserAcl($isMe = false)
+    {
         return $isMe;
     }
 
-    public function guest() {
+    public function guest()
+    {
         return false;
     }
 
-    public function isApi() {
+    public function isApi()
+    {
         return true;
     }
 }

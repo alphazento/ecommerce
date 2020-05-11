@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Zento\Acl\Consts;
 
 class CreateAclRoleRouteTable extends Migration
 {
-    protected function getBuilder() {
+    protected function getBuilder()
+    {
         return Schema::connection(\Zento\Acl\Consts::DB);
     }
     /**
@@ -37,7 +38,7 @@ class CreateAclRoleRouteTable extends Migration
                     ->on('acl_routes')
                     ->onDelete('cascade');
             });
-          
+
         }
     }
 

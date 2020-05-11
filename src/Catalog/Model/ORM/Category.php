@@ -8,7 +8,7 @@ use Zento\Contracts\Interfaces\Catalog\ICategory;
 class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
- 
+
     protected $fillable = [
         'name',
         'attribute_set_id',
@@ -18,51 +18,57 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
         'level',
         'children_count',
         'active',
-        'sort_by'
+        'sort_by',
     ];
 
-    public function getRichDataDefines() {
+    public function getRichDataDefines()
+    {
         return [
-           'children'
+            'children',
         ];
     }
 
-    public function getTableFields() {
+    public function getTableFields()
+    {
         return $this->fillable;
     }
 
-    public function children() {
+    public function children()
+    {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('position');
     }
 
     /**
      * direct parent
      */
-    public function parent() {
+    public function parent()
+    {
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
     /**
      * all parents in the path
      */
-    public function parents() {
+    public function parents()
+    {
         $instance = $this->newRelatedInstance(Category::class);
-        return (new HasManyInAggregatedField($instance->newQuery(), $this, $instance->getTable() . '.id',  'path'))
+        return (new HasManyInAggregatedField($instance->newQuery(), $this, $instance->getTable() . '.id', 'path'))
             ->orderBy('level')
-            ->whereInAggregatedField(function($field) {
+            ->whereInAggregatedField(function ($field) {
                 $data = explode('/', $field);
                 array_pop($data);
                 return $data;
             });
     }
- 
+
     /**
      * all its products
      */
-    public function products() {
+    public function products()
+    {
         return $this->hasManyThrough(Product::class, CategoryProduct::class, 'category_id', 'id', 'id', 'product_id');
     }
-    
+
     /**
      * Scope a query to only include active.
      *
@@ -71,10 +77,11 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
      */
     public function scopeActive($query, $activeOnly = true)
     {
-        return $query->whereIn('active', $activeOnly ? [1]:[0,1]);
+        return $query->whereIn('active', $activeOnly ? [1] : [0, 1]);
     }
 
-    public function getUrlAttribute() {
+    public function getUrlAttribute()
+    {
         return sprintf('/%s.html', $this->url_key);
     }
 }

@@ -42,7 +42,7 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-    ], function() {
+    ], function () {
         Route::get('/roles', 'AclRoleController@roles');
         Route::post('/roles', 'AclRoleController@store');
         Route::patch('/roles/{id}', 'AclRoleController@update');
@@ -63,7 +63,7 @@ Route::group(
         'namespace' => '\Zento\Acl\Http\Controllers',
         'middleware' => ['backend', 'auth:api'],
         'prefix' => '/api/v1/admin/acl/{scope}',
-    ], function() {
+    ], function () {
         Route::get('/routes', 'AclRouteController@routes');
     }
 );

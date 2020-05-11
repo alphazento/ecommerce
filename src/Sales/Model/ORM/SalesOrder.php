@@ -2,9 +2,6 @@
 
 namespace Zento\Sales\Model\ORM;
 
-use DB;
-use Illuminate\Support\Collection;
-
 class SalesOrder extends \Illuminate\Database\Eloquent\Model
 {
     use \Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
@@ -25,22 +22,26 @@ class SalesOrder extends \Illuminate\Database\Eloquent\Model
         'active',
         'subtotal',
         'total',
-        'tax_amount'
+        'tax_amount',
     ];
-    
-    public function payments() {
+
+    public function payments()
+    {
         return $this->hasMany(PaymentTransaction::class, 'order_id');
     }
 
-    public function shipments() {
+    public function shipments()
+    {
         return $this->hasMany(SalesShipment::class, 'order_id');
     }
 
-    public function products() {
+    public function products()
+    {
         return $this->hasMany(SalesOrderProduct::class, 'order_id');
     }
 
-    public function items() {
+    public function items()
+    {
         return $this->hasMany(SalesOrderItem::class, 'order_id');
     }
 }

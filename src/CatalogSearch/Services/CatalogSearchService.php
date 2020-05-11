@@ -2,21 +2,18 @@
 
 namespace Zento\CatalogSearch\Services;
 
-use DB;
-use Store;
 use Cache;
-use ShareBucket;
 use Closure;
-use Illuminate\Pagination\Paginator;
-use Zento\Kernel\Facades\DanamicAttributeFactory;
-use Zento\Catalog\Model\ORM\Product;
+use DB;
+use ShareBucket;
 use Zento\Catalog\Model\ORM\Category;
 use Zento\Catalog\Model\ORM\CategoryProduct;
+use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\ProductPrice;
 use Zento\Catalog\Providers\Facades\CategoryService;
-
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 use Zento\Kernel\Booster\Pagination\LengthAwarePaginator;
+use Zento\Kernel\Facades\DanamicAttributeFactory;
 
 class CatalogSearchService
 {
@@ -30,7 +27,7 @@ class CatalogSearchService
     protected $default_filters = [];
 
     protected $postSearchHandlers = [];
-    
+
     protected $under_categorId = 0;
 
     /**
@@ -43,42 +40,48 @@ class CatalogSearchService
         'category' => 'filterCategory',
         'sub_categories' => 'filterCategory',
         'price' => 'filterPrice',
-        'text' =>'filterText',
-        'name' =>'filterText',
+        'text' => 'filterText',
+        'name' => 'filterText',
     ];
- 
+
     protected $sort_bys = [
-        'position' => 'orderByPosition', 
+        'position' => 'orderByPosition',
         'price' => 'orderByPrice',
         'name' => 'orderByName',
     ];
 
     protected $categoryProductTable;
-    public function __construct() {
+    public function __construct()
+    {
         $this->categoryProductTable = (new CategoryProduct)->getTable();
     }
 
-    public function registerCriteriaFilter(string $name, Closure $callback) {
+    public function registerCriteriaFilter(string $name, Closure $callback)
+    {
         $this->criteria_filters[$name] = $callback;
         return $this;
     }
 
-    public function registerDefaultFilterLayer(Closure $callback) {
+    public function registerDefaultFilterLayer(Closure $callback)
+    {
         $this->default_filters[] = $callback;
         return $this;
     }
 
-    public function registerSortBy(string $name,Closure $callback) {
+    public function registerSortBy(string $name, Closure $callback)
+    {
         $this->sort_bys[$name] = $callback;
         return $this;
     }
 
-    public function registerPostSearchHandler(Closure $callback) {
+    public function registerPostSearchHandler(Closure $callback)
+    {
         $this->postSearchHandlers[] = $callback;
         return $this;
     }
 
-    protected function applyOrderByEavField($builder, $dyn_field, $direction) {
+    protected function applyOrderByEavField($builder, $dyn_field, $direction)
+    {
         $product_table = $builder->getModel()->getTable();
         if ($table = DanamicAttributeFactory::getTable($builder->getModel(), $dyn_field)) {
             $builder->join($table, $product_table . '.id', '=', $table . '.foreignkey')
@@ -86,18 +89,20 @@ class CatalogSearchService
         }
     }
 
-    protected function orderByPosition($builder, $field, $direction = 'asc') {
+    protected function orderByPosition($builder, $field, $direction = 'asc')
+    {
         $product_table = $builder->getModel()->getTable();
         $productPositions = DB::table($this->categoryProductTable)
             ->select('product_id', 'position')
             ->distinct();
         $builder->joinSub($productPositions, 'productPositions', function ($join) use ($product_table) {
-                $join->on($product_table.'.id', '=', 'productPositions.product_id');
-            });
+            $join->on($product_table . '.id', '=', 'productPositions.product_id');
+        });
         $builder->orderBy('productPositions.position', $direction);
     }
 
-    protected function orderByPrice($builder, $field, $direction = 'asc') {
+    protected function orderByPrice($builder, $field, $direction = 'asc')
+    {
         $table = (new ProductPrice)->getTable();
         if (!isset($this->joined_tables[$table])) {
             $product_table = $builder->getModel()->getTable();
@@ -107,7 +112,8 @@ class CatalogSearchService
         $builder->orderBy($table . '.price', $direction);
     }
 
-    protected function orderByName($builder, $field, $direction = 'asc') {
+    protected function orderByName($builder, $field, $direction = 'asc')
+    {
         $builder->orderBy('name', $direction);
     }
 
@@ -118,7 +124,8 @@ class CatalogSearchService
      * @param array $category_ids  [id1, id2]
      * @return void
      */
-    protected function filterCategory($builder, array $category_ids) {
+    protected function filterCategory($builder, array $category_ids)
+    {
         if (count($category_ids) > 0) {
             $product_table = $builder->getModel()->getTable();
             if (!isset($this->joined_tables[$this->categoryProductTable])) {
@@ -131,7 +138,8 @@ class CatalogSearchService
         }
     }
 
-    protected function filterText($builder, $text) {
+    protected function filterText($builder, $text)
+    {
         if (!empty($text)) {
             $engine = new \Zento\CatalogSearch\Model\FullTextSearchEngine();
             $ids = $engine->search($text);
@@ -147,13 +155,14 @@ class CatalogSearchService
      * @param array $conditions  [10, 20]
      * @return void
      */
-    protected function filterPrice($builder, array $conditions) {
+    protected function filterPrice($builder, array $conditions)
+    {
         if (count($conditions) > 0) {
             $table = (new ProductPrice)->getTable();
             $this->joined_tables[$table] = true;
             $product_table = $builder->getModel()->getTable();
             $builder->join($table, $product_table . '.id', '=', $table . '.product_id');
-            $builder->where(function($query) use($conditions, $table) {
+            $builder->where(function ($query) use ($conditions, $table) {
                 sort($conditions);
                 if ($conditions[0] ?? false) {
                     $query->where($table . '.price', '>=', $conditions[0]);
@@ -167,14 +176,15 @@ class CatalogSearchService
 
     /**
      * {
-        "criteria" : {
-            "category": [4],
-            "price": [0, 100]
-        },
-        "sort_by":"price,asc"
-        }
+    "criteria" : {
+    "category": [4],
+    "price": [0, 100]
+    },
+    "sort_by":"price,asc"
+    }
      */
-    public function search($under_categorId, $criteria, $per_page, $page, $withAggregate = true) {
+    public function search($under_categorId, $criteria, $per_page, $page, $withAggregate = true)
+    {
         if ($under_categorId) {
             $this->under_categorId = $under_categorId;
             $criteria['under_categorId'] = CategoryService::getCategoryIdsWithChildrenByIds([$under_categorId]);
@@ -184,7 +194,7 @@ class CatalogSearchService
         if (!empty($criteria['sort_by'])) {
             $this->applyOrderBy($builder, $criteria['sort_by']);
         }
-        
+
         $success = true;
         $code = 200;
         $paginator = $builder->distinctPaginate('products.id', $per_page);
@@ -200,32 +210,33 @@ class CatalogSearchService
             $data = compact('criteria');
         } else {
             $aggregate = $withAggregate ? $this->aggregate($aggregateQuery, $criteria) : [];
-            foreach($this->postSearchHandlers as $handler) {
+            foreach ($this->postSearchHandlers as $handler) {
                 $handler($paginator->items());
             }
             $data = LengthAwarePaginator::fromPaginator(
-                    $paginator, 
-                    compact('aggregate', 'criteria')
-                );
+                $paginator,
+                compact('aggregate', 'criteria')
+            );
         }
 
         return compact('success', 'code', 'data');
     }
 
-    protected function applyFilter($criteria, $withAggregate = true) {
+    protected function applyFilter($criteria, $withAggregate = true)
+    {
         $model = new Product;
         $product_table = $model->getTable();
         $fields = $model->getTableFields();
         $fields[] = 'id';
-        $fields = array_map(function($field) use($product_table) {
+        $fields = array_map(function ($field) use ($product_table) {
             return $product_table . '.' . $field;
         }, $fields);
         //select must include morph_type for mutiple product type
         $builder = $model->newQuery()->select($fields);
-        $priceFilter = null;  // price's aggregate is special
+        $priceFilter = null; // price's aggregate is special
 
         //apply extra filter layer
-        foreach($this->default_filters as $callback) {
+        foreach ($this->default_filters as $callback) {
             if (is_callable($callback)) {
                 call_user_func_array($callback, [$builder]);
             }
@@ -234,15 +245,15 @@ class CatalogSearchService
 
         $searchLayerDynamicAttrs = $this->getSearchLayerDynAttributes();
         $dynAttrs = [];
-        foreach($searchLayerDynamicAttrs as $da) {
+        foreach ($searchLayerDynamicAttrs as $da) {
             $dynAttrs[] = $da['name'];
         }
 
-        foreach($criteria as $name => $filter) {
-            if ($name == 'sort_by') { continue; }
-            if ($name == 'price') { 
+        foreach ($criteria as $name => $filter) {
+            if ($name == 'sort_by') {continue;}
+            if ($name == 'price') {
                 $priceFilter = $filter;
-                continue; 
+                continue;
             }
             if (isset($this->criteria_filters[$name])) {
                 $callback = $this->criteria_filters[$name];
@@ -257,7 +268,7 @@ class CatalogSearchService
                     $values = [$filter];
                 }
                 // if (count($values) > 0 && in_array($name, $dynAttrs)) {
-                if (count($values) > 0 ) {
+                if (count($values) > 0) {
                     //filter column or dynamic column
                     if (in_array($name, $dynAttrs)) {
                         $builder->whereIn($name, $values);
@@ -281,7 +292,8 @@ class CatalogSearchService
         return [$builder, $aggregateQuery];
     }
 
-    protected function aggregate($builder, &$criteria) {
+    protected function aggregate($builder, &$criteria)
+    {
         $builder->thinMode();
         $priceItems = $this->aggregatePrice($builder, $criteria);
         $aggregation = [
@@ -290,8 +302,8 @@ class CatalogSearchService
                 'is_dynattr' => false,
                 'label' => 'Price',
                 'applied' => [],
-                'items' => $priceItems
-            ]
+                'items' => $priceItems,
+            ],
         ];
         list($cateFilters, $categoryItems) = $this->aggregateCategory($builder, $criteria);
         if (count($cateFilters) || $categoryItems->count()) {
@@ -300,7 +312,7 @@ class CatalogSearchService
                 'is_dynattr' => false,
                 'label' => 'Category',
                 'applied' => $cateFilters,
-                'items' => $categoryItems
+                'items' => $categoryItems,
             ];
         }
         $this->aggregateDynamicAttributes($builder, $aggregation, $criteria);
@@ -309,9 +321,10 @@ class CatalogSearchService
     }
 
     /**
-     * brand, price, category, country, new selection ... 
+     * brand, price, category, country, new selection ...
      */
-    protected function aggregateCategory($builder, &$criteria) {
+    protected function aggregateCategory($builder, &$criteria)
+    {
         //category aggregate
         $searchInCategoryIds = array_merge($criteria['category'] ?? [], $criteria['sub_category'] ?? []);
         $query = clone $builder;
@@ -328,7 +341,7 @@ class CatalogSearchService
             ->where('id', '!=', $this->under_categorId)
             ->get();
 
-        $aggregates = $categories->map(function ($category) use($items) {
+        $aggregates = $categories->map(function ($category) use ($items) {
             $item = $items[$category->id];
             return ['id' => $category->id, 'label' => ($category->name ?? ''), 'amount' => $item['amount']];
         });
@@ -336,7 +349,7 @@ class CatalogSearchService
         $filters = array_map(function ($id) {
             $category = Category::find($id);
             return ['id' => $id, 'label' => ($category->name ?? '')];
-          }, $searchInCategoryIds
+        }, $searchInCategoryIds
         );
         // $criteriaCategory = isset($criteria['category']) ? $criteria['category']:[];
         // if (count($criteriaCategory) >0) {
@@ -347,7 +360,8 @@ class CatalogSearchService
         return [$filters, $aggregates];
     }
 
-    protected function getSearchLayerDynAttributes() {
+    protected function getSearchLayerDynAttributes()
+    {
         $key = 'searchlayer-attribute';
         if (!ShareBucket::has($key)) {
             if (!Cache::has($key)) {
@@ -368,13 +382,14 @@ class CatalogSearchService
     }
 
     /**
-     * brand, price, category, country, new selection ... 
+     * brand, price, category, country, new selection ...
      */
-    protected function aggregateDynamicAttributes($builder, &$aggregation, &$criteria) {
+    protected function aggregateDynamicAttributes($builder, &$aggregation, &$criteria)
+    {
         $aggraegatableDAs = $this->getSearchLayerDynAttributes();
 
         $product_table = $builder->getModel()->getTable();
-        foreach($aggraegatableDAs as $da) {
+        foreach ($aggraegatableDAs as $da) {
             $query = clone $builder;
             $table = $da['attribute_table'];
             $attr_name = $da['name'];
@@ -384,50 +399,51 @@ class CatalogSearchService
             }
             $query->select([DB::raw($table . '.value as ' . $attr_name), $product_table . '.id']);
             $agg = $builder->getConnection()
-                ->table( DB::raw("({$query->toSql()}) as sub") )
+                ->table(DB::raw("({$query->toSql()}) as sub"))
                 ->mergeBindings($query->getQuery())
                 ->select([$attr_name, DB::raw('count(*) as amount')])
                 ->groupBy($attr_name)
                 ->get();
 
             $items = [];
-            if (count($agg) >0) {
+            if (count($agg) > 0) {
                 if ($da['with_value_map']) {
                     $attrDesc = DanamicAttributeFactory::getAttributeDesc($table);
                     $items = $agg->map(function ($row) use ($attr_name, $attrDesc) {
                         return [
-                            'id' => $row->{$attr_name}, 
-                            'value' => $attrDesc['options'][$row->{$attr_name}], 
-                            'amount' => $row->amount
+                            'id' => $row->{$attr_name},
+                            'value' => $attrDesc['options'][$row->{$attr_name}],
+                            'amount' => $row->amount,
                         ];
-                      });
+                    });
                 } else {
                     $items = $agg->map(function ($row) use ($attr_name) {
                         return [
-                            'value' => $row->{$attr_name}, 
-                            'amount' => $row->amount
+                            'value' => $row->{$attr_name},
+                            'amount' => $row->amount,
                         ];
-                      });
+                    });
                 }
             }
             if (count($items)) {
                 $applied = $criteria[$attr_name] ?? [];
-                $aggregation[$attr_name] =[
+                $aggregation[$attr_name] = [
                     'filter' => $attr_name,
                     'is_dynattr' => true,
                     'label' => empty($da['front_label']) ? $attr_name : $da['front_label'],
                     'items' => $items,
-                    'applied' => $applied
+                    'applied' => $applied,
                 ];
             }
-            
+
         }
     }
 
     /**
-     * brand, price, category, country, new selection ... 
+     * brand, price, category, country, new selection ...
      */
-    protected function aggregatePrice($builder, &$criteria) {
+    protected function aggregatePrice($builder, &$criteria)
+    {
         //category aggregate
         $query = clone $builder;
 
@@ -448,7 +464,8 @@ class CatalogSearchService
         return [$minValue, $maxValue];
     }
 
-    protected function applyOrderBy($builder, $order_by) {
+    protected function applyOrderBy($builder, $order_by)
+    {
         list($order_by_field, $dir) = explode(',', $order_by);
         if (isset($this->sort_bys[$order_by_field])) {
             $builder->addSelect($order_by_field);
@@ -460,7 +477,7 @@ class CatalogSearchService
             }
         } else {
             $dynAttrs = DanamicAttributeFactory::getAttributeDesc('products');
-            foreach($dynAttrs as $attr) {
+            foreach ($dynAttrs as $attr) {
                 if ($attr->name === $order_by_field) {
                     $this->applyOrderByEavField($builder, $order_by_field, $dir);
                     return;

@@ -1,11 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use Zento\Catalog\Model\ORM\Category;
-use Zento\Catalog\Model\ORM\Product;
 use Zento\Catalog\Model\ORM\CategoryProduct;
 
-class Seeder extends \Illuminate\Database\Seeder {
+class Seeder extends \Illuminate\Database\Seeder
+{
     public function run()
     {
         // $collection = DB::table('catalog_category_entity')->get();
@@ -25,7 +24,7 @@ class Seeder extends \Illuminate\Database\Seeder {
         //     $category->description = '';
         //     $category->save();
         // }
-        
+
         // $collection = DB::table('catalog_product_entity')->get();
         // foreach($collection as $item) {
         //     $product = new Product();
@@ -42,7 +41,7 @@ class Seeder extends \Illuminate\Database\Seeder {
         // }
 
         $collection = DB::table('catalog_category_product')->get();
-        foreach($collection as $item) {
+        foreach ($collection as $item) {
             $product = new CategoryProduct();
             $product->category_id = $item->category_id;
             $product->product_id = $item->product_id;

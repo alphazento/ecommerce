@@ -2,7 +2,7 @@
 
 namespace Zento\Passport\Http\Middleware;
 
-class CORS 
+class CORS
 {
     /**
      * Handle an incoming request.

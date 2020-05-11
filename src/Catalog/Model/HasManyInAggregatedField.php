@@ -7,12 +7,14 @@ class HasManyInAggregatedField extends \Illuminate\Database\Eloquent\Relations\H
 {
     protected $aggregatedFieldHanler;
 
-    public function whereInAggregatedField(\Closure $aggregatedFieldHanler) {
+    public function whereInAggregatedField(\Closure $aggregatedFieldHanler)
+    {
         $this->aggregatedFieldHanler = $aggregatedFieldHanler;
         return $this;
     }
 
-    protected function handleAggregatedField($data) {
+    protected function handleAggregatedField($data)
+    {
         if ($this->aggregatedFieldHanler) {
             return $this->aggregatedFieldHanler->call($this, $data);
         }
@@ -32,7 +34,8 @@ class HasManyInAggregatedField extends \Illuminate\Database\Eloquent\Relations\H
         }
     }
 
-    public function addEagerConstraints(array $models) {
+    public function addEagerConstraints(array $models)
+    {
         $data = [];
         $keys = $this->getKeys($models, $this->localKey);
         foreach ($keys as $key) {
@@ -42,14 +45,15 @@ class HasManyInAggregatedField extends \Illuminate\Database\Eloquent\Relations\H
         $this->query->whereIn($this->foreignKey, array_unique(array_map('trim', $data)));
     }
 
-    function matchOneOrMany(array $models, Collection $results, $relation, $type) {
+    public function matchOneOrMany(array $models, Collection $results, $relation, $type)
+    {
         $dictionary = $this->buildDictionary($results);
         foreach ($models as $model) {
             $keys = array_unique(array_map('trim', $this->handleAggregatedField($model->getAttribute($this->localKey))));
             $data = [];
             foreach ($keys as $key) {
                 if (isset($dictionary[$key])) {
-                    $data[] = $dictionary[$key][0]; 
+                    $data[] = $dictionary[$key][0];
                 }
             }
             if (count($data)) {

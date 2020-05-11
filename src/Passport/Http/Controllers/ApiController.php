@@ -3,12 +3,11 @@
 namespace Zento\Passport\Http\Controllers;
 
 use Auth;
-use Request;
 use Psr\Http\Message\ServerRequestInterface;
-use Zento\Passport\Model\GoogleOAuthConnect;
-use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
+use Request;
 use Zento\Kernel\Http\Controllers\TraitApiResponse;
 use Zento\Passport\Consts;
+use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
 
 class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenController
 {
@@ -16,10 +15,11 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
 
     protected $isRegistering = false;
 
-    public function apiHttpOptions(ServerRequestInterface $request) {
+    public function apiHttpOptions(ServerRequestInterface $request)
+    {
         return '';
     }
-    
+
     /**
      * issue client token
      * @group Passport
@@ -27,7 +27,7 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
      * @bodyParam password string required
      * @response {
      * "token_type": "Bearer",
-     * "expires_in": 1296000, 
+     * "expires_in": 1296000,
      * "access_token": ""
      * "refresh_token": ""
      * }
@@ -44,9 +44,9 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         }
         $response = parent::issueToken($request);
         return $this->response([
-                'code'=>$response->getStatusCode(),
-                'data'=>json_decode($response->getContent(), true)
-            ]
+            'code' => $response->getStatusCode(),
+            'data' => json_decode($response->getContent(), true),
+        ]
         );
     }
 
@@ -65,12 +65,12 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         }
         $response = parent::issueToken($request);
         return $this->response([
-                'code'=>$response->getStatusCode(),
-                'data'=>json_decode($response->getContent(), true)
-            ]
+            'code' => $response->getStatusCode(),
+            'data' => json_decode($response->getContent(), true),
+        ]
         );
     }
-    
+
     /**
      * register a Passport user
      * @group Passport
@@ -79,12 +79,13 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
      * @bodyParam name string required max 128
      * @response {
      * "token_type": "Bearer",
-     * "expires_in": 1296000, 
+     * "expires_in": 1296000,
      * "access_token": ""
      * "refresh_token": ""
      * }
      */
-    public function register(ServerRequestInterface $request) {
+    public function register(ServerRequestInterface $request)
+    {
         $this->isRegistering = true;
         $userModel = config('auth.providers.users.model', \Zento\Passport\Model\User::class);
 
@@ -93,9 +94,9 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
         $appRequest->validate([
             'name' => 'required|string|max:128',
             'username' => sprintf('required|string|email|max:255|unique:%s,email', (new $userModel)->getTable()),
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
         ]);
-     
+
         $customerAttrs = $appRequest->all();
         $customerAttrs['password'] = bcrypt($customerAttrs['password']);
         $customerAttrs['email'] = $customerAttrs['username'];
@@ -120,7 +121,8 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
      * get current passport user's profile
      * @group Passport
      */
-    public function profile() {
+    public function profile()
+    {
         return $this->withData(Auth::user());
     }
 
@@ -129,7 +131,8 @@ class ApiController extends \Laravel\Passport\Http\Controllers\AccessTokenContro
      * @group Passport
      * @return void
      */
-    public function guestToken() {
+    public function guestToken()
+    {
         if ($user = GuestTokenMiddleware::prepareGuestForApi(Request::instance())) {
             return $this->with('access_token', encrypt(json_encode($user->toArray())))
                 ->with('token_type', 'Guest');

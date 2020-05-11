@@ -3,21 +3,18 @@
 namespace Zento\Passport\Providers;
 
 use Gate;
+use Illuminate\Auth\RequestGuard;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Guards\TokenGuard;
+use Laravel\Passport\Passport;
+use Laravel\Passport\TokenRepository;
+use League\OAuth2\Server\ResourceServer;
 use ShareBucket;
 use Zento\Passport\Http\Middleware\GuestToken as GuestTokenMiddleware;
 use Zento\Passport\Policies\ApiAccessControlPolicy;
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\RequestGuard;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
-
-use League\OAuth2\Server\ResourceServer;
-use Laravel\Passport\Passport;
-use Laravel\Passport\TokenRepository;
-use Laravel\Passport\ClientRepository;
-use Laravel\Passport\Guards\TokenGuard;
-
 
 class Plugin extends AuthServiceProvider
 {
@@ -30,7 +27,7 @@ class Plugin extends AuthServiceProvider
         Request::class => ApiAccessControlPolicy::class,
     ];
 
-    public function register() 
+    public function register()
     {
         $this->registerGuard();
     }
@@ -59,12 +56,12 @@ class Plugin extends AuthServiceProvider
     {
         return new RequestGuard(function ($request) use ($config) {
             $user = (new TokenGuard(
-                    $this->app->make(ResourceServer::class),
-                    Auth::createUserProvider($config['provider']),
-                    $this->app->make(TokenRepository::class),
-                    $this->app->make(ClientRepository::class),
-                    $this->app->make('encrypter')
-                ))->user($request);
+                $this->app->make(ResourceServer::class),
+                Auth::createUserProvider($config['provider']),
+                $this->app->make(TokenRepository::class),
+                $this->app->make(ClientRepository::class),
+                $this->app->make('encrypter')
+            ))->user($request);
             if (!$user) {
                 if (env('APP_ENV') === 'local' && env('IGNORE_AUTH_API')) {
                     ShareBucket::put(GuestTokenMiddleware::ALLOW_GUEST_API, true);
@@ -77,11 +74,12 @@ class Plugin extends AuthServiceProvider
         }, $this->app['request']);
     }
 
-    public function boot() {
+    public function boot()
+    {
         Passport::routes();
         Passport::tokensCan([
             'Profile' => 'Access your profile',
-            'Email'   => 'Access your Email',
+            'Email' => 'Access your Email',
         ]);
         Passport::tokensExpireIn(now()->addDays(15));
         // Passport::tokensExpireIn(now()->addMinutes(60));
