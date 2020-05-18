@@ -5,13 +5,16 @@
         <v-hover v-slot:default="{ hover }">
           <v-card :class="{ 'on-hover': hover }">
             <v-img
-              :src="card.src"
+              :src="card.img"
               class="white--text align-end image-gallery-item"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="500px"
             >
               <v-card-title class="justify-center">
-                <div :class="{ 'hilight-title': hover }">{{card.title}}</div>
+                <a
+                  :href="card.url"
+                  :class="{ 'v-btn':true, 'white--text': true, 'hilight-title': hover }"
+                >{{card.title}}</a>
               </v-card-title>
             </v-img>
           </v-card>
@@ -24,41 +27,16 @@
 <script>
 export default {
   props: {
-    items: {
+    cards: {
       type: Object
+      // {
+      //       title: "Pre-fab homes",
+      //       img: "https://magento.r.worldssl.net/media/wysiwyg/home/home-pants.jpg",
+      //       flex: "md6 xs6",
+      //       url: ""
+      //     },
     }
-  },
-  data: () => ({
-    cards: [
-      {
-        title: "Pre-fab homes",
-        src: "https://magento.r.worldssl.net/media/wysiwyg/home/home-pants.jpg",
-        flex: { md4: true, xs6: true }
-      },
-      {
-        title: "Pre-fab homes",
-        src:
-          "https://magento.r.worldssl.net/media/wysiwyg/home/home-t-shirts.png",
-        flex: { md8: true, xs6: true }
-      },
-      {
-        title: "Favorite road trips",
-        src: "https://magento.r.worldssl.net/media/wysiwyg/home/home-erin.jpg",
-        flex: { md5: true, xs6: true }
-      },
-      {
-        title: "Favorite road trips",
-        src:
-          "https://magento.r.worldssl.net/media/wysiwyg/home/home-performance.jpg",
-        flex: { md4: true, xs6: true }
-      },
-      {
-        title: "Best airlines",
-        src: "https://magento.r.worldssl.net/media/wysiwyg/home/home-eco.jpg",
-        flex: { md3: true, xs12: true }
-      }
-    ]
-  })
+  }
 };
 </script>
 

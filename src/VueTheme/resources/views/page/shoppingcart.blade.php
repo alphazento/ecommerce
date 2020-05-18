@@ -6,7 +6,6 @@
 
 @section('pagecontent')
     <h1 class="index_h1">Shopping Cart | Alphazento</h1>
-    <spinner-layer></spinner-layer>
     <shopping-cart-card></shopping-cart-card>
 @endsection
 

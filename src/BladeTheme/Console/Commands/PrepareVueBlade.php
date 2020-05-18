@@ -49,6 +49,7 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
                 }
             }
         }
+        return 0;
     }
 
     protected function handleThemePackage($themeName)

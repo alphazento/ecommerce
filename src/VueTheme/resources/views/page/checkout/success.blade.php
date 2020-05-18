@@ -7,7 +7,7 @@
 @section('pagecontent')
     <v-layout class="row">
         <v-flex md12 text-center>
-            <h1 class="index_h1">Your order 
+            <h1 class="index_h1">Your order
                 <a href="/">{{ $order_number }} </a>
                 has been placed.
             </h1>
@@ -28,13 +28,11 @@
         vuetify: new Vuetify(),
         data: {
           user: @json($user),
-          cart: {},
-          consts: @json($consts)
+          cart: {}
         },
         created() {
-            this.$store.dispatch('setConsts', this.consts);
             this.$store.dispatch('updateCart', this.cart);
-            this.$store.dispatch('setUser', this.user);
+            this.$store.dispatch('setUser', window.appData.user);
         }
     });
     </script>

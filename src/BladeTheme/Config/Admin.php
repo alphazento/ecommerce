@@ -16,7 +16,7 @@ class Admin extends AbstractAdminConfig
     protected function _registerDynamicConfigItemMenus()
     {
         AdminConfigurationService::registerRootLevelMenuNode('Theme');
-        AdminConfigurationService::registerLevel1MenuNode('Theme', 'Themes');
+        AdminConfigurationService::registerLevel1MenuNode('Theme', 'All Themes');
     }
 
     protected function _registerDynamicConfigItemGroups(&$data)

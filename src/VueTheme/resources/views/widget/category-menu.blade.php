@@ -1,4 +1,4 @@
-@php 
+@php
   $level = 0;
   function _renderCategoryMenu_($category, $level) {
     $hasChildren = $category->children && $category->children->count();
@@ -25,7 +25,7 @@
       } else {
         $html[] = sprintf('<ul class="sub-nav level-%s">', $level);
       }
-      
+
       foreach($category->children as $subCate) {
         $html[] = _renderCategoryMenu_($subCate, $level+1);
       }

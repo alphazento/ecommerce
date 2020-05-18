@@ -7,9 +7,9 @@
 <script src=@asset("zento_vuetheme/js/" . ($appjs ?? 'app.js')) type="text/javascript"></script>
 <script src=@asset("zento_vuetheme/vendor/vuetify2.2.3.js") type="text/javascript"></script>
 <script>
-    window.appSettings = @json($appSettings);
+    window.appData = @json($appData);
     Vue.prototype.catalogMediaUrl = function(subType, url) {
-        var baseUrl = window.appSettings.mediaLibs.catalog;
+        var baseUrl = window.appData.mediaLibs.catalog;
         return `${baseUrl}/${subType}${url}`;
     };
     Vue.prototype.productUrl = function(url) {
@@ -39,6 +39,7 @@
                         @stub('sns_login')
                     </template>
                 </theme-toolbar>
+                <spinner-layer></spinner-layer>
                 @yield('pagecontent')
                 <theme-footer></theme-footer>
             </v-container>

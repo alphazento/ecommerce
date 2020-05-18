@@ -1,11 +1,6 @@
 <template>
   <v-footer dark padless>
-    <v-card
-      flat
-      tile
-      class="indigo lighten-1 white--text text-center"
-      style="width:100%"
-    >
+    <v-card flat tile class="indigo lighten-1 white--text text-center" style="width:100%">
       <v-card-text>
         <v-btn
           v-for="item in icons"
@@ -27,9 +22,7 @@
           rounded
           class="my-2"
           :href="link.link"
-        >
-          {{ link.title }}
-        </v-btn>
+        >{{ link.title }}</v-btn>
       </v-row>
       <v-divider></v-divider>
 
@@ -40,7 +33,8 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        @{{ copyright }} — <strong>{{ company.name }}</strong>
+        @{{ copyright }} —
+        <strong>{{ company.name }}</strong>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -55,12 +49,12 @@ import {
   faInstagram,
   faWeibo,
   faWeixin,
-  faGooglePlay,
+  faGooglePlay
 } from "@fortawesome/fontawesome-free-brands";
 
 export default {
   data: () => {
-    return window.appSettings.theme.footer;
-  },
+    return window.appData.theme.footer;
+  }
 };
 </script>

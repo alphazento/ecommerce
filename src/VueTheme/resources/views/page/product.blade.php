@@ -19,8 +19,8 @@
                     <z-product-stock-bullet :product="product"></z-product-stock-bullet>
                     <z-product-shipping-bullet :product="product"></z-product-shipping-bullet>
                     <z-configurable-product-bullet v-if="product.morph_type=='configurable'"
-                        :product="product" 
-                        @update_images="updateImages" 
+                        :product="product"
+                        @update_images="updateImages"
                         @update_price="updatePrice">
                     </z-configurable-product-bullet>
                 </template>
@@ -60,7 +60,6 @@
         data() {
             let product = @json($product->toArray());
             return {
-                user: @json($user),
                 product: product,
                 tabs: @json($tabs),
                 detailTabs: @json($jsonFields),
@@ -70,7 +69,7 @@
             }
         },
         created() {
-            this.$store.dispatch('setUser', this.user);
+            this.$store.dispatch('setUser', window.appData.user);
             this.$store.dispatch('setSwatches', this.swatches);
         },
         methods: {

@@ -2,7 +2,7 @@
   <v-form v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
       <v-expansion-panels accordion>
-        <v-expansion-panel v-for="(item,i) in consts['paymentmethods']" :key="i">
+        <v-expansion-panel v-for="(item,i) in appData.consts['paymentmethods']" :key="i">
           <v-expansion-panel-header text-left>
             <span>
               <v-img
@@ -50,12 +50,6 @@ export default {
     },
     estimatePayment() {
       axios.get(this.apiUrl).then(response => {});
-    }
-  },
-  computed: {
-    consts() {
-      console.log("consts", this.$store.state.consts);
-      return this.$store.state.consts;
     }
   }
 };

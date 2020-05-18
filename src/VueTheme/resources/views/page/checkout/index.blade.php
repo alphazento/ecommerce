@@ -8,7 +8,7 @@
 @section('pagecontent')
     <h1 class="index_h1">Checkout</h1>
     <spinner-layer></spinner-layer>
-    @if($user->guest()) 
+    @if($user->guest())
     <checkout-guest-card :cart="cart">
         <template v-slot:sns_login>
             @stub('sns_login')
@@ -28,14 +28,11 @@
         store,
         vuetify: new Vuetify(),
         data: {
-          user: @json($user),
           cart: @json($cart),
-          consts: @json($consts)
         },
         created() {
-            this.$store.dispatch('setConsts', this.consts);
             this.$store.dispatch('updateCart', this.cart);
-            this.$store.dispatch('setUser', this.user);
+            this.$store.dispatch('setUser', window.appData.user);
         }
     });
     </script>

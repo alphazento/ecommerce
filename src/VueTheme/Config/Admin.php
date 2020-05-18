@@ -52,6 +52,36 @@ class Admin extends AbstractAdminConfig
                         ],
                         'accessor' => Consts::CONFIG_KEY_FOOTER_DATA,
                     ],
+
+                    [
+                        'text' => 'Home Page Carousel',
+                        'ui' => 'config-json-item',
+                        'schema' => [
+                            'images' => [
+                                [
+                                    'img' => 'config-image-uploader-item::{"folder": "/", "accept": "image/png, image/jpeg, image/jpg", "fileType":"png,jpeg,jpg,bmp"}',
+                                    "title" => "config-text-item",
+                                ],
+                            ],
+                        ],
+                        'accessor' => 'vuetheme.hompage.carousel',
+                    ],
+
+                    [
+                        'text' => 'Home Page Collection Gallery',
+                        'ui' => 'config-json-item',
+                        'schema' => [
+                            'cards' => [
+                                [
+                                    'img' => 'config-image-uploader-item::{"folder": "/", "accept": "image/png, image/jpeg, image/jpg", "fileType":"png,jpeg,jpg,bmp"}',
+                                    'title' => 'config-text-item',
+                                    'flex' => "config-text-item",
+                                    'url' => "config-text-item",
+                                ],
+                            ],
+                        ],
+                        'accessor' => 'vuetheme.hompage.collection.gallery',
+                    ],
                 ],
             ]);
         };

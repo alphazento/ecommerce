@@ -58,8 +58,7 @@
                         aspect-ratio="1"
                         class="grey lighten-2 align-end"
                       >
-                        <v-card-title class="title white--text primary" v-text="item.name">
-                        </v-card-title>
+                        <v-card-title class="title white--text primary" v-text="item.name"></v-card-title>
                         <template v-slot:placeholder>
                           <v-row class="fill-height ma-0" align="center" justify="center">
                             <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>

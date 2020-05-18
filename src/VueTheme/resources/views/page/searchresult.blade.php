@@ -4,7 +4,6 @@
 @endpush
 
 @section('pagecontent')
-  <spinner-layer></spinner-layer>
   <router-view>
   </router-view>
 @endsection

@@ -133,7 +133,7 @@ export default {
       shoppingCartDrawer: false,
       searcher: false,
       signinDialog: false,
-      logo: window.appSettings.theme.logo
+      logo: window.appData.theme.logo
     };
   },
 

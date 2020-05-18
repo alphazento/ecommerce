@@ -7,7 +7,7 @@ export default {
         "navigation-drawer": "components/layout/NavigationDrawer.vue",
 
         "image-card": "components/image/ImageCard.vue",
-        "image-carsousel": "components/image/ImageCarousel.vue",
+        "image-carousel": "components/image/ImageCarousel.vue",
         "image-gallery": "components/image/ImageGallery.vue",
 
         'signin-signup': "components/account/SignInSignUp",

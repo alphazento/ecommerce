@@ -7,7 +7,6 @@ window.Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        consts: {},
         spinnerOverlay: {
             absolute: false,
             opacity: 0.76,
@@ -57,9 +56,7 @@ export default new Vuex.Store({
 
     },
     mutations: {
-        setConsts(state, consts) {
-            state.consts = consts;
-        },
+
         setSwatches(state, swatches) {
             state.swatches = swatches;
         },
@@ -88,12 +85,6 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        setConsts({
-            commit
-        }, consts) {
-            commit('setConsts', consts)
-        },
-
         setSwatches({
             commit
         }, swatches) {

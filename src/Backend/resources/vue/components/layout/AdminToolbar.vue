@@ -31,14 +31,10 @@
             <v-list-item>
               <v-list-item-avatar>
                 <v-btn icon>
-                  <v-icon large color="blue darken-2">
-                    {{ item.icon }}
-                  </v-icon>
+                  <v-icon large color="blue darken-2">{{ item.icon }}</v-icon>
                 </v-btn>
               </v-list-item-avatar>
-              <v-list-item-title>
-                {{ item.text }}
-              </v-list-item-title>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
             </v-list-item>
           </v-expansion-panel-header>
           <v-expansion-panel-content :class="hasSubItemSelected(item)">
@@ -47,12 +43,12 @@
               :key="i"
               :class="subMenuSelected(subItem)"
             >
-              <v-icon v-if="subItem.icon" color="blue darken-2">
-                {{ subItem.icon }}
-              </v-icon>
-              <router-link :to="subItem.url" class="white--text">{{
+              <v-icon v-if="subItem.icon" color="blue darken-2">{{ subItem.icon }}</v-icon>
+              <router-link :to="subItem.url" class="white--text">
+                {{
                 subItem.text
-              }}</router-link>
+                }}
+              </router-link>
             </v-list-item>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -63,13 +59,10 @@
 
     <!-- <v-app-bar hide-on-scroll> -->
     <v-app-bar app>
-      <v-app-bar-nav-icon
-        icon
-        @click.stop="drawer = !drawer"
-      ></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <!-- logo -->
       <a href="/admin">
-        <img :src="window.appSettings.theme.logo" style="max-height:60px" />
+        <img :src="logo" style="max-height:60px" />
       </a>
       <z-breadcrumbs divider=">"></z-breadcrumbs>
       <v-spacer></v-spacer>
@@ -86,17 +79,13 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: {
-    logo: {
-      type: String,
-    },
-  },
   data() {
     return {
       menus: {},
       drawer: true,
       mini: false,
       urlPath: "",
+      logo: window.appData.theme.logo
     };
   },
 
@@ -107,7 +96,7 @@ export default {
 
   methods: {
     fetchMenus() {
-      axios.get("/api/v1/admin/dashboard/menus").then((response) => {
+      axios.get("/api/v1/admin/dashboard/menus").then(response => {
         if (response.success) {
           this.menus = response.data;
         }
@@ -117,23 +106,23 @@ export default {
       // this.$vuetify.goTo(item.href);
     },
     hasSubItemSelected(item) {
-      let found = Object.values(item.items).find((subItem) => {
+      let found = Object.values(item.items).find(subItem => {
         return this.urlPath == subItem.url;
       });
       return found ? "cyan" : "";
     },
     subMenuSelected(subItem) {
       return this.urlPath == subItem.url ? "pink" : "";
-    },
+    }
   },
   computed: {
-    ...mapGetters(["userProfile"]),
+    ...mapGetters(["userProfile"])
   },
   watch: {
     $route() {
       this.urlPath = this.$route.path;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -45,7 +45,9 @@ class SyncRoute extends \Illuminate\Foundation\Console\RouteListCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $method = method_exists($this, 'handle') ? 'handle' : 'fire';
-        return $this->laravel->call([$this, $method]);
+        $this->laravel->call([$this, $method]);
+
+        return 0;
     }
 
     public function option($key = null)

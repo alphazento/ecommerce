@@ -13,7 +13,7 @@
                 <template v-slot:sns_login>
                     @stub('sns_login')
                 </template>
-            </z-admin-toolbar>            
+            </z-admin-toolbar>
             @yield('pagecontent')
             {{-- <admin-footer></admin-footer> --}}
         </v-content>
@@ -22,6 +22,11 @@
 
 <script src=@asset("zento_backend/js/app.js") type="text/javascript"></script>
 <script src=@asset("zento_backend/vendor/vuetify2.2.3.js") type="text/javascript"></script>
+
+<script>
+    window.appData = @json($appData);
+</script>
+
 @stack('admin.tail')
 
 </body>

@@ -5,26 +5,24 @@
 @endpush
 
 @section('pagecontent')
-    <?php 
-    $images = [
-        ['img'=> '/zento_vuetheme/image/banner.jpg', 'title' => "Image 1"],
-        ['img'=> '/zento_vuetheme/image/banner2.jpg', 'title' => "Image 2"]
-    ];
-    ?>
-    <spinner-layer></spinner-layer>
-    <section id="banner">
+    <?php
+
+?>
+    <section>
         <!-- This comp. can have a modal included. -->
-        <image-carsousel 
+        <image-carousel
             :speed="1"
-            :img-data="images"
+            :img-data="carousel"
             >
-        </image-carsousel>
-        <image-gallery>
+        </image-carousel>
+    </section>
+    <section>
+        <image-gallery :cards="gallery">
         </image-gallery>
     </section>
-    <section id="product_index">
+    <section>
         <h1 class="index_h1">HOT PRODUCTS</h1>
-        <product-grid :dataset="pagination" :gerneral-mode="true"></product-grid>
+        <product-grid :dataset="topsale" :gerneral-mode="true"></product-grid>
         <a href="/products" class="b_more">MORE</a>
     </section>
 @endsection
@@ -36,16 +34,13 @@
         el: '#app',
         store,
         vuetify: new Vuetify(),
-        data: {
-            user: @json($user),
-            images: @json($images),
-            pagination: @json($pagination),
-            consts: @json($consts)
+        data() {
+            var pageData = @json($pageData);
+            return pageData;
         },
         created() {
             console.log('data', this.$data)
-            this.$store.dispatch('setConsts', this.consts);
-            this.$store.dispatch('setUser', this.user);
+            this.$store.dispatch('setUser', window.appData.user);
         }
     });
 </script>

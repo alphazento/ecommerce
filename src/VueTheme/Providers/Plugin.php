@@ -40,11 +40,11 @@ class Plugin extends ServiceProvider
 
                 $bladeTheme->addGlobalViewData(
                     [
-                        'user' => Auth::user(),
                         'categoryTree' => $apiResp->data,
-                        'appSettings' => [
+                        'appData' => [
                             'theme' => compact('footer', 'logo'),
                             'mediaLibs' => $mediaLibs,
+                            'user' => Auth::user(),
                         ],
                     ]
                 );

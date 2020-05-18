@@ -7,15 +7,15 @@
           <template v-for="(subItem, subName) in item.items">
             <v-list-item :key="subName">
               <v-layout class="bottom-line">
-                <v-flex md3 class="v-middle">
+                <v-flex md2 class="v-middle">
                   <span>{{ subItem.text }}</span>
                 </v-flex>
-                <v-flex md6>
+                <v-flex md10>
                   <div class="component-container">
+                    <span>{{ subItem.description }}</span>
                     <component :is="subItem.ui" v-bind="subItem" @valueChanged="configValueChanged"></component>
                   </div>
                 </v-flex>
-                <v-flex md3>{{ subItem.description }}</v-flex>
               </v-layout>
             </v-list-item>
             <v-divider :key="subItem.text"></v-divider>
