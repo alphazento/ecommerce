@@ -88,6 +88,15 @@ export default {
     };
   },
   created() {
+    this.$store.dispatch("CLEAR_BREADCRUMBS");
+    this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
+      text: "ACL Backend",
+      href: "/admin/acl/backend"
+    });
+    this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
+      text: "Role",
+      href: "#"
+    });
     this.initData(false);
   },
   methods: {
@@ -100,6 +109,10 @@ export default {
         model: {}
       };
       this.editTab = newModel;
+      this.$store.dispatch("REPLACE_BREADCRUMB_LAST_ITEM", {
+        text: this.modelType,
+        href: this.uri
+      });
     },
     navToModel(modelType) {
       if (this.modelType != modelType) {

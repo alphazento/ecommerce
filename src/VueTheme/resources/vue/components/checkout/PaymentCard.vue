@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     step: {
@@ -43,6 +45,9 @@ export default {
       ],
       name: ""
     };
+  },
+  computed: {
+    ...mapGetters(["appData"])
   },
   methods: {
     childMessage() {

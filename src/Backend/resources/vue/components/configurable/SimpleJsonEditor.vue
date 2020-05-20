@@ -89,7 +89,6 @@ export default {
         return component;
       }
       var props = Object.assign({}, component, JSON.parse(parts.pop()));
-      console.log("props", props);
       return props;
     }
   }

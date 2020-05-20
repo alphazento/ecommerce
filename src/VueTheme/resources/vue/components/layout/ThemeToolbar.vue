@@ -32,18 +32,18 @@
       </v-btn>
 
       <!-- account -->
-      <v-btn icon @click.stop="signin" v-if="!!user.is_guest">
+      <v-btn icon @click.stop="signin" v-if="isGuest">
         <v-icon color="grey">mdi-account-circle</v-icon>
       </v-btn>
 
-      <v-menu bottom v-if="!user.is_guest">
+      <v-menu bottom v-else>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
             <v-icon color="purple">mdi-account</v-icon>
           </v-btn>
         </template>
         <v-card class="mx-auto" max-width="344" max-height="400">
-          <v-card-text>{{ user.name }}</v-card-text>
+          <v-card-text>{{ customer.name }}</v-card-text>
           <v-card-actions>
             <v-btn color="blue-grey" class="ma-2 white--text" href="/logout" @click="logout">Log out</v-btn>
           </v-card-actions>
@@ -57,11 +57,11 @@
         bordered
         offset-x="10"
         offset-y="10"
-        :value="cart && cart.items_quantity > 0"
+        :value="!quoteIsEmpty"
         @click.native="showShoppingCartDrawer"
       >
         <template v-slot:badge>
-          <span>{{ cart.items_quantity }}</span>
+          <span>{{ quote.items_quantity }}</span>
         </template>
         <v-btn icon>
           <v-icon color="grey">mdi-cart</v-icon>
@@ -78,7 +78,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer v-model="shoppingCartDrawer" temporary right floating fixed width="360px">
-      <mini-cart-card :cart="cart" v-model="shoppingCartDrawer"></mini-cart-card>
+      <mini-cart-card :cart="quote" v-model="shoppingCartDrawer"></mini-cart-card>
     </v-navigation-drawer>
 
     <!-- mobile search bar -->
@@ -120,6 +120,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     links: {
@@ -128,7 +130,7 @@ export default {
   },
   data() {
     return {
-      searchText: this.$store.state.searchResult.criteria.text,
+      searchText: this.searchKeyword,
       drawer: false,
       shoppingCartDrawer: false,
       searcher: false,
@@ -178,22 +180,23 @@ export default {
       if (this.shoppingCartDrawer) {
         this.shoppingCartDrawer = false;
       } else {
-        if (this.cart && this.cart.items_quantity > 0)
-          this.shoppingCartDrawer = true;
+        if (!this.quoteIsEmpty) this.shoppingCartDrawer = true;
       }
     }
   },
   computed: {
-    cart() {
-      return this.$store.state.cart;
-    },
-    user() {
-      return this.$store.state.user;
-    }
+    ...mapGetters([
+      "searchKeyword",
+      "searchResult",
+      "quote",
+      "quoteIsEmpty",
+      "customer",
+      "isGuest"
+    ])
   },
   created() {
-    if (!this.cart || !this.cart.uuid) {
-      this.$store.dispatch("loadCart");
+    if (!this.quoteInited) {
+      this.$store.dispatch("LOAD_QUOTE_REQUEST");
     }
   }
 };

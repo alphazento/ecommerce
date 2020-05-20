@@ -9,7 +9,7 @@ export default {
         'z-role-users-management': "components/RoleUserManagement.vue",
     },
     routes: [{
-        name: "catalog.category",
+        name: "acl.backend",
         path: "/admin/acl/backend",
         component: BackendACLRoutePage,
         meta: {

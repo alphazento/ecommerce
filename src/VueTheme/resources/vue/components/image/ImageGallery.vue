@@ -28,7 +28,7 @@
 export default {
   props: {
     cards: {
-      type: Object
+      type: Array
       // {
       //       title: "Pre-fab homes",
       //       img: "https://magento.r.worldssl.net/media/wysiwyg/home/home-pants.jpg",

@@ -32,7 +32,7 @@
         },
         created() {
             this.$store.dispatch('updateCart', this.cart);
-            this.$store.dispatch('setUser', window.appData.user);
+            this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
         }
     });
     </script>

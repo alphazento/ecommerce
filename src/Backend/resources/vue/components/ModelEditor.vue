@@ -57,6 +57,8 @@ export default {
             if (response && response.success) {
               this.model_data = response.data;
               this.$emit("fetchSchema", this.model_data);
+            } else {
+              this.model_data = { error: { text: response.message } };
             }
           });
       }

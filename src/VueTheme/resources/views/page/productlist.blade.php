@@ -29,7 +29,7 @@ const app = new Vue({
     }
   },
   created() {
-      this.$store.dispatch('setUser', this.user);
+      this.$store.dispatch('BIND_CUSTOMER', this.user);
   }
 });
 </script>

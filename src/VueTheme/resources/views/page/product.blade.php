@@ -69,7 +69,7 @@
             }
         },
         created() {
-            this.$store.dispatch('setUser', window.appData.user);
+            this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
             this.$store.dispatch('setSwatches', this.swatches);
         },
         methods: {

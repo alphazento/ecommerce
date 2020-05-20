@@ -10,7 +10,7 @@ Route::group(
         Route::post('/', 'ShoppingCartController@create');
         Route::delete('/', 'ShoppingCartController@delete');
         Route::post('/items', 'ShoppingCartController@addItem');
-        Route::post('/items/{item_id}', 'ShoppingCartController@deleteItem');
+        Route::delete('/items/{item_id}', 'ShoppingCartController@deleteItem');
         Route::patch('/items/{item_id}/quantity/{quantity}', 'ShoppingCartController@updateItemQuantity');
 
         Route::post('/email', 'ShoppingCartController@updateEmail');

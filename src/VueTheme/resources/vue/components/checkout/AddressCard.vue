@@ -91,7 +91,7 @@ export default {
         required: v => !!v || "Required Field.",
         max128: v => !v || v.length <= 128 || "Max 128 characters",
         max255: v => !v || v.length <= 64 || "Max 64 characters",
-        maxPhone: v => !v || v.length <= 15 || "Max 15 characters",
+        maxPhone: v => !v || v.length <= 15 || "Max 15 characters"
       }
     };
   },
@@ -100,16 +100,18 @@ export default {
     childMessage() {
       if (this.$refs.checkout_address_form.validate()) {
         if (this.dataChanged) {
-          this.$store.dispatch("setShippingAddress", this.addressData).then(
-            response => {
-              this.$emit("childMessage", this.step);
-            },
-            error => {
-              console.error(
-                "Got nothing from server. Prompt user to check internet connection and try again"
-              );
-            }
-          );
+          this.$store
+            .dispatch("QUOTE_ASSIGN_SHIPPING_ADDRESS_REQUEST", this.addressData)
+            .then(
+              response => {
+                this.$emit("childMessage", this.step);
+              },
+              error => {
+                console.error(
+                  "Got nothing from server. Prompt user to check internet connection and try again"
+                );
+              }
+            );
         } else {
           this.$emit("childMessage", this.step);
         }

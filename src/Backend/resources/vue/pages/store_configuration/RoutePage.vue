@@ -3,9 +3,13 @@
     <v-flex md3>
       <v-expansion-panels accordion v-if="menus" focusable>
         <v-expansion-panel v-for="(item, name) in menus" :key="name">
-          <v-expansion-panel-header text-left>{{ item.text }}</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-list-item v-for="(subItem, subName) in item.items" :key="subName">
+          <v-expansion-panel-header text-left :class="hasSubItemSelected(item)">{{ item.text }}</v-expansion-panel-header>
+          <v-expansion-panel-content :class="hasSubItemSelected(item)">
+            <v-list-item
+              v-for="(subItem, subName) in item.items"
+              :key="subName"
+              :class="subMenuSelected(item, subName, subItem)"
+            >
               <a @click.stop="navToGroup(name, subName)">{{ subItem.text }}</a>
             </v-list-item>
           </v-expansion-panel-content>
@@ -14,7 +18,7 @@
     </v-flex>
     <v-flex md9>
       <config-model-editor
-        :model="model"
+        :model="modelGroup"
         model-define-from="configs/groups"
         @configValueChanged="configValueChanged"
       ></config-model-editor>
@@ -29,7 +33,7 @@ export default {
       dataKey: "store_config_menus",
       menus: undefined,
       baseRoute: "/admin/store-configurations",
-      model: ""
+      modelGroup: ""
     };
   },
   created() {
@@ -65,7 +69,7 @@ export default {
           sessionStorage.setItem("config_menus", JSON.stringify(response.data));
           this.calcMenus();
         } else {
-          this.model = "";
+          this.modelGroup = "";
         }
       });
     },
@@ -90,8 +94,32 @@ export default {
 
     handleRoute() {
       if (this.$route.query["group"] !== undefined) {
-        this.model = this.$route.query["group"];
+        this.modelGroup = this.$route.query["group"];
+
+        this.$store.dispatch("REPLACE_BREADCRUMB_LAST_ITEM", {
+          text: this.modelGroup,
+          href: this.$route.fullPath
+        });
       }
+    },
+
+    hasSubItemSelected(item) {
+      let found = Object.keys(item.items).find(subName => {
+        return (
+          this.modelGroup.toLowerCase() ===
+          `${item.text}/${subName}`.toLowerCase()
+        );
+      });
+      return found ? "cyan" : "";
+    },
+    subMenuSelected(item, subName, subItem) {
+      if (
+        this.modelGroup.toLowerCase() ===
+        `${item.text}/${subName}`.toLowerCase()
+      ) {
+        return "pink";
+      }
+      return "";
     }
   },
   watch: {

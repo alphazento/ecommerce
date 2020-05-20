@@ -20,7 +20,7 @@
           cart: @json($cart)
         },
         created() {
-            this.$store.dispatch('updateCart', this.cart);
+            this.$store.dispatch('QUOTE_SUCCESS', this.cart);
         }
     });
     </script>

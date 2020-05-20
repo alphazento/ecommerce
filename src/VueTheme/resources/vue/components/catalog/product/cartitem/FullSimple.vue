@@ -2,11 +2,7 @@
   <v-layout>
     <v-flex md3 xs3>
       <a :href="product_url">
-        <v-img
-          :src="catalogMediaUrl('product', product_image)"
-          width="130"
-          height="130"
-        ></v-img>
+        <v-img :src="catalogMediaUrl('product', product_image)" width="130" height="130"></v-img>
       </a>
     </v-flex>
     <v-flex class="v-middle" md4 xs4>
@@ -18,7 +14,7 @@
       <quantity-selector
         :max="20"
         v-if="quantitive"
-        v-model="item.quantity"
+        v-model="quantity"
         v-on:change="quantityChange"
       ></quantity-selector>
     </v-flex>
@@ -33,8 +29,11 @@ export default {
   extends: MiniSimple,
   methods: {
     quantityChange() {
-      this.$emit("quantityChange", this.item);
-    },
-  },
+      this.$emit("quantityChange", {
+        id: this.item.id,
+        quantity: this.quantity
+      });
+    }
+  }
 };
 </script>

@@ -28,7 +28,7 @@ const app = new Vue({
     pageData: @json($page_data)
   },
   created() {
-    this.$store.dispatch('assignSearchResult', this.pagination);
+    this.$store.dispatch('CATALOG_SEARCH_SUCCESS', this.pagination);
     this.$store.dispatch('setSwatches', this.swatches);
     this.$store.dispatch('setPageData', this.pageData);
   }

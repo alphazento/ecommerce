@@ -1,8 +1,8 @@
 <template>
   <PayPal
     :env="configs.mode"
-    :amount="amount"
-    :currency="cart.currency"
+    :amount="quote.grand_total"
+    :currency="quote.currency"
     :client="configs.credentials"
     :button-style="configs.style"
     v-on:payment-authorized="authorized"
@@ -13,14 +13,13 @@
 
 <script>
 import PayPal from "vue-paypal-checkout";
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     configs: {
       type: Object
     }
-  },
-  data() {
-    return {};
   },
   methods: {
     childMessage() {
@@ -28,7 +27,7 @@ export default {
     },
     authorized(response) {},
     completed(response) {
-      this.$store.dispatch("showSpinner", "Placing order...");
+      this.$store.dispatch("SHOW_SPINNER", "Placing order...");
       const cartData = this.reducedCartData();
       axios
         .post("/api/v1/payment/capture/paypalexpress", {
@@ -37,17 +36,13 @@ export default {
           payment: response
         })
         .then(response => {
-          axios
-            .post("/ajax/sales/orders", {
-              pay_id: response.data.payment_transaction.pay_id
-            })
+          this.$store
+            .dispatch(
+              "PLACE_ORDER_REQUEST",
+              response.data.payment_transaction.pay_id
+            )
             .then(response => {
-              if (response.success) {
-                this.$store.dispatch("showSpinner", "Order placed");
-                window.location.href = "/checkout/success";
-              } else {
-                this.$store.dispatch("showSpinner", response.message);
-              }
+              window.location.href = "/checkout/success";
             });
         });
     },
@@ -55,7 +50,7 @@ export default {
       console.log("paypal cancelled", response);
     },
     reducedCartData() {
-      const cart = this.cart;
+      const cart = this.quote;
       const cartItems = [];
       cart.items.forEach(item => {
         let cartItem = {};
@@ -79,12 +74,7 @@ export default {
     }
   },
   computed: {
-    cart() {
-      return this.$store.state.cart;
-    },
-    amount() {
-      return "" + this.$store.state.cart.grand_total;
-    }
+    ...mapGetters(["quote"])
   },
   components: {
     PayPal

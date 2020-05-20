@@ -47,7 +47,7 @@ export default {
           this.$store.dispatch("showSpinner", "Authorization connecting ...");
           axios.post("/hellosns/connect", response).then(resp => {
             if (resp.data.success) {
-              this.$store.dispatch("setUser", resp.data.data.user);
+              this.$store.dispatch("BIND_CUSTOMER", resp.data.data.user);
               // axios.defaults.headers.common['Authorization'] = resp.data.data.apiGuestToken;
               this.$store.dispatch(
                 "showSpinner",
@@ -55,13 +55,12 @@ export default {
               );
               window.location.reload();
             } else {
-              this.$store.dispatch("keepSpinner", resp.data.message);
+              this.$store.dispatch("SNACK_MESSAGE", resp.data.message);
             }
           });
         },
         e => {
           console.error(e);
-          // this.$store.dispatch("keepSpinner", );
         }
       );
     }

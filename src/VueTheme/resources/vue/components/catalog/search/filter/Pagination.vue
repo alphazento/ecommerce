@@ -4,7 +4,7 @@
     :length="searchResult.last_page"
     v-model="page"
     :total-visible="7"
-    @input="updatePagination"
+    @input="paginateTo"
   ></v-pagination>
 </template>
 
@@ -22,8 +22,8 @@ export default {
     }
   },
   methods: {
-    updatePagination(val) {
-      this.$store.dispatch("updatePagination", { page: val });
+    paginateTo(page) {
+      this.$store.dispatch("CATALOG_SEARCH_PAGINATE_TO", page);
     }
   }
 };
