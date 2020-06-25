@@ -63,14 +63,13 @@
                 product: product,
                 tabs: @json($tabs),
                 detailTabs: @json($jsonFields),
-                swatches: @json($swatches),
                 price: product.price.final_price,
                 images: [product.image]
             }
         },
         created() {
             this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
-            this.$store.dispatch('setSwatches', this.swatches);
+            this.$store.dispatch('SET_PRODUCT_ATTR_CONTAINERS', @json($attrContainers));
         },
         methods: {
             updateImages(images) {

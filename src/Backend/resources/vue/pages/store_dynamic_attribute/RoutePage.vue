@@ -19,7 +19,11 @@
           </template>
           <v-list class="grey lighten-3">
             <v-list-item>
-              <v-btn color="error" @click="newAttribute" v-if="editMode != 'new' || !editorTab">
+              <v-btn
+                color="error"
+                @click="newAttribute"
+                v-if="editMode != 'new' || !editorTab"
+              >
                 <v-icon>mdi-plus-circle</v-icon>New Attribute
               </v-btn>
             </v-list-item>
@@ -55,10 +59,18 @@
                 <tbody>
                   <tr class="text-start" v-for="(row, i) of items" :key="i">
                     <td v-for="(col, ci) of headers" :key="ci">
-                      <v-btn v-if="ci == 0" icon @click="editAttribute(row)" color="primary">
+                      <v-btn
+                        v-if="ci == 0"
+                        icon
+                        @click="editAttribute(row)"
+                        color="primary"
+                      >
                         <v-icon>mdi-pencil-box-multiple-outline</v-icon>
                       </v-btn>
-                      <component :is="col.ui" v-bind="buildDynCompProps(col, row)"></component>
+                      <component
+                        :is="col.ui"
+                        v-bind="buildDynCompProps(col, row)"
+                      ></component>
                     </td>
                   </tr>
                 </tbody>
@@ -83,7 +95,7 @@
           <z-dyna-attr-value-map-manager
             v-if="selectedItem && selectedItem.with_value_map"
             :id="selectedItem.id"
-            :is-swatch="!!selectedItem.swatch"
+            :use-container="!!selectedItem.use_container"
           ></z-dyna-attr-value-map-manager>
         </v-tab-item>
       </v-tabs>
@@ -104,7 +116,7 @@ export default {
       selectedItem: null,
       editMode: "new",
       tab: 0,
-      editorTab: false
+      editorTab: false,
     };
   },
   created() {
@@ -117,11 +129,11 @@ export default {
       this.$store.dispatch("CLEAR_BREADCRUMBS", null);
       this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "Store Dyanmic Attributes",
-        href: this.baseRoute
+        href: this.baseRoute,
       });
       this.$store.dispatch("ADD_BREADCRUMB_ITEM", {
         text: "All",
-        href: this.baseRoute
+        href: this.baseRoute,
       });
     },
 
@@ -130,14 +142,14 @@ export default {
         this.editorTab = false;
         this.search = "";
       }
-      this.$router.push({ query: { model: `${model}` } }).catch(err => {});
+      this.$router.push({ query: { model: `${model}` } }).catch((err) => {});
     },
 
     fetchDefines() {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Defines...");
       axios
         .get("/api/v1/admin/metadata/datatable-schemas/dynamic-attributes")
-        .then(response => {
+        .then((response) => {
           this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
             this.defines = response.data;
@@ -150,11 +162,11 @@ export default {
       this.$store.dispatch("SHOW_SPINNER", "Fetching Dynamic Attributes...");
       this.$store.dispatch("REPLACE_BREADCRUMB_LAST_ITEM", {
         text: this.model,
-        href: `${this.baseRoute}?model=${modelName}`
+        href: `${this.baseRoute}?model=${modelName}`,
       });
       axios
         .get(`/api/v1/admin/dynamic-attributes/models/${modelName}`)
-        .then(response => {
+        .then((response) => {
           this.$store.dispatch("HIDE_SPINNER");
           if (response && response.success) {
             this.data = response.data;
@@ -196,13 +208,13 @@ export default {
     itemUpdated(item) {
       console.log("itemUpdated", item);
       Object.assign(this.selectedItem, item);
-    }
+    },
   },
   watch: {
     $route() {
       this.handleRoute();
-    }
-  }
+    },
+  },
 };
 </script>
 

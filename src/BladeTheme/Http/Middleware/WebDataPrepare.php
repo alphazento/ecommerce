@@ -22,8 +22,8 @@ class WebDataPrepare
             $bladeTheme = BladeTheme::breadcrumb('/', 'Home');
             BladeTheme::addGlobalViewData(['consts' => []]);
             $this->prepareApiGuestToken($request->user());
-            $swatches = ProductService::getProductSwatches();
-            $bladeTheme->addGlobalViewData(compact('swatches'))
+            $attrContainers = ProductService::getProductAttrContainers();
+            $bladeTheme->addGlobalViewData(compact('attrContainers'))
                 ->preRouteCallAction()
                 ->shareViewData();
         }

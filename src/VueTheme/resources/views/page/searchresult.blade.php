@@ -14,7 +14,12 @@ const store = window.vStore.default;
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { name:"search", path: "/{{ $path }}", component: SearchResultRoutePage }
+        {
+          name:"search",
+          path: "/{{ $path }}",
+          component: SearchResultRoutePage,
+          props: { pageData: @json($page_data) }
+        }
     ]
 });
 const app = new Vue({
@@ -22,15 +27,9 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   router: router,
-  data: {
-    pagination: @json($pagination),
-    swatches: @json($swatches),
-    pageData: @json($page_data)
-  },
   created() {
-    this.$store.dispatch('CATALOG_SEARCH_SUCCESS', this.pagination);
-    this.$store.dispatch('setSwatches', this.swatches);
-    this.$store.dispatch('setPageData', this.pageData);
+    this.$store.dispatch('CATALOG_SEARCH_SUCCESS', @json($pagination));
+    this.$store.dispatch('SET_PRODUCT_ATTR_CONTAINERS', @json($attrContainers));
   }
 });
 </script>

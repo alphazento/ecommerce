@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-card class="mx-auto" fill-width>
+      <v-card-title class="text-white text--left">
+        <a href="/shoppingcart">Edit</a>
+      </v-card-title>
       <v-list-item two-line v-for="(item, idx) in quote.items" :key="idx">
         <v-list-item-avatar tile size="80">
           <v-img :src="catalogMediaUrl('product', item.product.image)" eager></v-img>
@@ -11,7 +14,7 @@
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">{{ item.name }}</v-flex>
               <v-flex md5 xs5 class="v-middle text-right">
-                <v-btn icon @click="deleteCartItem(item)">
+                <v-btn v-if="editable" icon @click="deleteCartItem(item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-flex>
@@ -20,10 +23,12 @@
               <v-flex md3 xs2></v-flex>
               <v-flex md4 xs5 class="v-middle">
                 <quantity-selector
+                  v-if="editable"
                   :max="20"
                   v-model="item.quantity"
                   v-on:change="updateCartItemQty(item)"
                 ></quantity-selector>
+                <span v-else>Qty:{{item.quantity}}</span>
               </v-flex>
               <v-flex md5 xs5 class="v-middle text-right">${{ item.row_price }}</v-flex>
             </v-layout>
@@ -81,6 +86,12 @@ var mixin = require("../../mixin/catalogpollyfill");
 
 export default {
   mixins: [mixin.default],
+  props: {
+    editable: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       valid: false,
@@ -101,14 +112,10 @@ export default {
   },
   methods: {
     updateCartItemQty(item) {
-      this.$store.dispatch("updateCartItemQty", item).then(response => {
-        console.log("updateCartItemQty ", response);
-      });
+      this.$store.dispatch("UPDATE_QUOTE_ITEM_QTY_REQUEST", item);
     },
     deleteCartItem(item) {
-      this.$store.dispatch("deleteCartItem", item).then(response => {
-        console.log("deleteCartItem", response);
-      });
+      this.$store.dispatch("DELETE_QUOTE_ITEM_REQUEST", item);
     }
   }
 };

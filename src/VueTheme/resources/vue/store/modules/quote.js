@@ -53,16 +53,12 @@ const actions = {
         dispatch
     }, item) => {
         var url = `/api/v1/cart/items/${item.id}/quantity/${item.quantity}`;
-        return new Promise((resolve, reject) => {
-            dispatch(SHOW_SPINNER, "Updating shopping cart");
-            axios.patch(url).then(response => {
-                commit(QUOTE_SUCCESS, response.data);
-                resolve(response);
-                dispatch('HIDE_SPINNER');
-            }, error => {
-                dispatch('HIDE_SPINNER');
-                reject(error);
-            });
+        dispatch(SHOW_SPINNER, "Updating shopping cart");
+        axios.patch(url).then(response => {
+            commit(QUOTE_SUCCESS, response.data);
+            dispatch('HIDE_SPINNER');
+        }, error => {
+            dispatch('HIDE_SPINNER');
         });
     },
 
@@ -71,19 +67,14 @@ const actions = {
         dispatch
     }, itemId) => {
         var url = `/api/v1/cart/items/${itemId}`;
-        return new Promise((resolve, reject) => {
-            dispatch('SHOW_SPINNER', "Deleing shopping cart item")
-            axios.delete(url).then(response => {
-                commit(QUOTE_SUCCESS, response.data);
-                resolve(response);
-                dispatch('HIDE_SPINNER');
-            }, error => {
-                dispatch('HIDE_SPINNER');
-                reject(error);
-            });
+        dispatch('SHOW_SPINNER', "Deleing shopping cart item");
+        axios.delete(url).then(response => {
+            commit(QUOTE_SUCCESS, response.data);
+            dispatch('HIDE_SPINNER');
+        }, error => {
+            dispatch('HIDE_SPINNER');
         });
-    },
-
+    }
 };
 
 const mutations = {

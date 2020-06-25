@@ -2,9 +2,9 @@
 
 namespace Zento\Backend\Http\Controllers\Api;
 
-use Config;
 use Request;
 use Route;
+use StoreConfig;
 use Zento\Backend\Providers\Facades\AdminConfigurationService;
 use Zento\Kernel\Http\Controllers\ApiBaseController;
 
@@ -88,7 +88,7 @@ class StoreConfigController extends ApiBaseController
         if (Request::get('is_json', false)) {
             $value = json_decode($value, true);
         }
-        Config::save($key, $value);
+        StoreConfig::set($key, $value);
         return $this->with($key, $value);
     }
 }

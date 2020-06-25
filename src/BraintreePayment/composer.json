@@ -1,0 +1,23 @@
+{
+    "name": "alphazento/braintreepayment",
+    "description": "Zento ecommerce braintree payment gateway package",
+    "keywords": ["laravel", "zento", "payment", "gateway", "braintree"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Yongcheng.chen",
+        "email": "yongcheng.chen@live.com"
+    }],
+    "require": {
+        "php": ">=7.0",
+        "laravel/passport": "^7.0",
+        "alphazento/zento": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zento\\BraintreePayment\\": ""
+        },
+        "files": []
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

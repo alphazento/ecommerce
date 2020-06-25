@@ -99,6 +99,7 @@ class CatalogSearchService
             $join->on($product_table . '.id', '=', 'productPositions.product_id');
         });
         $builder->orderBy('productPositions.position', $direction);
+        return 'productPositions.position';
     }
 
     protected function orderByPrice($builder, $field, $direction = 'asc')
@@ -110,11 +111,13 @@ class CatalogSearchService
             $this->joined_tables[$table] = true;
         }
         $builder->orderBy($table . '.price', $direction);
+        return $table . '.price';
     }
 
     protected function orderByName($builder, $field, $direction = 'asc')
     {
         $builder->orderBy('name', $direction);
+        return 'name';
     }
 
     /**
@@ -468,12 +471,14 @@ class CatalogSearchService
     {
         list($order_by_field, $dir) = explode(',', $order_by);
         if (isset($this->sort_bys[$order_by_field])) {
-            $builder->addSelect($order_by_field);
             $callback = $this->sort_bys[$order_by_field];
             if (is_callable($callback)) {
-                call_user_func_array($callback, [$builder, $order_by_field, $dir]);
+                $field = call_user_func_array($callback, [$builder, $order_by_field, $dir]);
             } else {
-                $this->{$callback}($builder, $order_by_field, $dir);
+                $field = $this->{$callback}($builder, $order_by_field, $dir);
+            }
+            if ($field && is_string($field)) {
+                $builder->addSelect($field);
             }
         } else {
             $dynAttrs = DanamicAttributeFactory::getAttributeDesc('products');

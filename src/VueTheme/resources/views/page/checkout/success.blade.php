@@ -26,12 +26,7 @@
         el: '#app',
         store,
         vuetify: new Vuetify(),
-        data: {
-          user: @json($user),
-          cart: {}
-        },
         created() {
-            this.$store.dispatch('updateCart', this.cart);
             this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
         }
     });

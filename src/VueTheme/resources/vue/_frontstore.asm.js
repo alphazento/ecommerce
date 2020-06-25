@@ -12,8 +12,8 @@ export default {
 
         'signin-signup': "components/account/SignInSignUp",
 
-        "product-color-swatch": "components/catalog/product/variations/Color.vue",
-        "product-size-selector": "components/catalog/product/variations/Size.vue",
+        "z-product-color-container": "components/catalog/product/variations/ColorAttrContainer.vue",
+        "z-product-size-container": "components/catalog/product/variations/SizeAttrContainer.vue",
         "product-variations-block": "components/catalog/product/variations/ProductVariationsBlock.vue",
 
         "mini-simple-product-card": "components/catalog/product/minicard/Simple.vue",

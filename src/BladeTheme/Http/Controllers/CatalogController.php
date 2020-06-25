@@ -25,16 +25,16 @@ class CatalogController extends Controller
                 $request = Request::instance();
                 $path = $request->path();
                 $query = Str::after($request->getRequestUri(), $request->path());
-                $catalog_search_uri = BladeTheme::apiUrl(sprintf('catalog/search/categories/%s', $category_id));
+                $uri = BladeTheme::apiUrl(sprintf('catalog/search/categories/%s', $category_id));
                 $resp = BladeTheme::requestInnerApi('GET',
-                    sprintf('%s/%s', $catalog_search_uri, $query)
+                    sprintf('%s/%s', $uri, $query)
                 );
                 $pagination = $resp->success && is_object($resp->data) ? $resp->data->toArray() : $resp->data;
 
                 $page_data = ['type' => 'category',
                     'title' => $category->name,
                     'description' => $category->description,
-                    'catalog_search_uri' => $catalog_search_uri];
+                    'uri' => $uri];
                 foreach ($category->parents as $parent) {
                     if ($parent->id > 2) {
                         BladeTheme::breadcrumb($parent->url, $parent->name);
@@ -125,7 +125,7 @@ class CatalogController extends Controller
         $pagination = $resp->success ? $resp->data->toArray() : $resp->data;
         $page_data = [
             'type' => 'search',
-            'catalog_search_uri' => "/api/v1/catalog/search",
+            'uri' => "/api/v1/catalog/search",
             'title' => sprintf('Search Result for: "%s"', $pagination['criteria']['text'] ?? ''),
             'description' => '',
         ];

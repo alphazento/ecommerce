@@ -216,10 +216,10 @@ class Admin extends AbstractAdminConfig
                         'editable' => false, //only new item is editable
                     ],
                     [
-                        'text' => 'Swatch',
+                        'text' => 'Use Attribute Container',
                         'ui' => 'z-boolean-chip',
                         'edit_ui' => 'config-boolean-item',
-                        'value' => 'swatch',
+                        'value' => 'use_container',
                         'editable' => true,
                     ],
                     [

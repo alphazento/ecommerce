@@ -1,26 +1,13 @@
-import {
-    SHOW_SPINNER,
-    HIDE_SPINNER,
-    SNACK_MESSAGE,
-    BIND_CUSTOMER,
-    QUOTE_SUCCESS,
-    CHECKOUT_AS_GUEST_CUSTOMER,
-    QUOTE_ASSIGN_SHIPPING_ADDRESS_REQUEST,
-    PLACE_ORDER_REQUEST
-} from "../actions";
-
 const actions = {
-    [CHECKOUT_AS_GUEST_CUSTOMER]: ({
+    [FETCH_BRAINTREE_CLIENT_TOKEN]: ({
         commit,
         dispatch
     }, user) => {
         return new Promise((resolve, reject) => {
-            dispatch(SHOW_SPINNER, "Set guest details...");
-            axios.put('/ajax/checkout/guest/details', user).then(response => {
+            dispatch('SHOW_SPINNER', "Loading...");
+            axios.put('/api/v1/braintree/token').then(response => {
                 if (response && response.success) {
-                    dispatch(BIND_CUSTOMER, response.data)
                     dispatch(HIDE_SPINNER);
-                    resolve(response);
                 } else {
                     reject(response);
                     dispatch(SNACK_MESSAGE, "Set guest details failed");

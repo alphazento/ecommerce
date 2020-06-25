@@ -14,6 +14,7 @@ class Customer extends \Zento\Passport\Model\User
         'store_id',
         'name',
         'email',
+        'email_hash',
         'password',
         'is_guest',
     ];
@@ -38,7 +39,8 @@ class Customer extends \Zento\Passport\Model\User
 
     public static function findOrCreateByEmail($email, $name = null)
     {
-        $customer = static::where('email', $email)->first();
+        $hash = md5($email);
+        $customer = static::where('email_hash', $hash)->first();
         if (!$customer) {
             $name = $name ? $name : $email;
             $customer = static::create([
@@ -46,6 +48,7 @@ class Customer extends \Zento\Passport\Model\User
                 'store_id' => ShareBucket::get('store_id', 0),
                 'name' => $name,
                 'email' => $email,
+                'email_hash' => $hash,
                 'password' => bcrypt(Str::random(12)),
                 'is_guest' => 1,
             ]);

@@ -15,7 +15,7 @@ class CreateAdminCommentTable extends Migration
         if (!Schema::hasTable('admin_comments')) {
             Schema::create('admin_comments', function (Blueprint $table) {
                 $table->increments('id');
-                $table->tinyInteger('type')->unsigned();
+                $table->tinyInteger('type_id')->unsigned();
                 $table->integer('admin_id')->unsigned();
                 $table->integer('order_id')->unsigned();
                 $table->string('comment', 255)->default('');

@@ -1,16 +1,18 @@
 <template>
   <v-container>
     <component
-      v-for="(swatch, name) in swatches"
+      v-for="(attr, name) in attrs"
       :key="name"
-      :is="swatchCard(name)"
-      v-bind="swatch"
-      @swatchSelected="swatchSelected"
+      :is="attrContainerComponent(name)"
+      v-bind="attr"
+      @containerSelected="containerSelected"
     ></component>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     product: {
@@ -20,7 +22,7 @@ export default {
 
   data() {
     return {
-      swatches: {},
+      attrs: {},
       products: {},
       availables: [],
       priceRange: [],
@@ -31,51 +33,50 @@ export default {
     if (this.product.configurables && this.product.configurables.length > 0) {
       this.availables = this.product.configurables;
     }
-    this.initSwatches();
+    this.initAttrs();
     this.calc();
   },
   computed: {
-    swatchConsts() {
-      return this.$store.state.swatches;
-    },
+    ...mapGetters(["attrContainers"]),
   },
   methods: {
-    initSwatches() {
-      let keys = Object.keys(this.swatchConsts);
+    //init attrs which use container
+    initAttrs() {
+      let keys = Object.keys(this.attrContainers);
       if (keys.length > 0 && this.availables) {
-        keys.forEach((swatch) => {
-          this.swatches[swatch] = {
-            type: swatch,
+        keys.forEach((key) => {
+          this.attrs[key] = {
+            type: key,
             items: [],
             current: null,
           };
-          this.products[swatch] = [];
+          this.products[key] = [];
           this.product.configurables.forEach((product) => {
-            this.products[swatch].push(product);
-            if (!this.swatches[swatch].items.includes(product[swatch])) {
-              this.swatches[swatch].items.push(product[swatch]);
+            this.products[key].push(product);
+            if (!this.attrs[key].items.includes(product[key])) {
+              this.attrs[key].items.push(product[key]);
             }
           });
         });
       }
     },
-    swatchCard(name) {
+    attrContainerComponent(name) {
       switch (name) {
         case "color":
-          return "product-color-swatch";
+          return "z-product-color-container";
           break;
         case "size":
-          return "product-size-selector";
+          return "z-product-size-container";
           break;
       }
     },
     reduceResouces() {
       var reduced = this.product.configurables;
-      Object.keys(this.swatchConsts).forEach((key) => {
-        var swatch = this.swatches[key];
-        if (swatch.current && swatch.current !== undefined) {
+      Object.keys(this.attrContainers).forEach((key) => {
+        var attr = this.attrs[key];
+        if (attr.current && attr.current !== undefined) {
           reduced = reduced.filter((product) => {
-            return product[swatch.type] === swatch.current;
+            return product[attr.type] === attr.current;
           });
         }
       });
@@ -83,6 +84,7 @@ export default {
       this.availables = reduced;
     },
     calc() {
+      this.availables = this.availables.map((product) => product);
       var images = this.availables.map((v) => {
         return v.media_gallery;
       });
@@ -103,6 +105,7 @@ export default {
       this.availables.sort((a, b) =>
         a.price.final_price > b.price.final_price ? 1 : -1
       );
+
       let priceFrom = this.availables[0].price.final_price;
       let priceTo = this.availables[this.availables.length - 1].price
         .final_price;
@@ -116,8 +119,8 @@ export default {
         candidates: this.availables,
       });
     },
-    swatchSelected(item) {
-      this.swatches[item.swatch].current = item.value;
+    containerSelected(item) {
+      this.$store.dispatch("SELECT_ATTR_CONTAINER", item);
       this.reduceResouces();
       this.calc();
     },

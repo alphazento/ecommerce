@@ -1,36 +1,49 @@
 <template>
-  <v-card v-if="id>0">
+  <v-card v-if="id > 0">
     <v-card-title class="headline primary white--text">
-      Available Values 
+      Available Values
     </v-card-title>
     <v-card-subtitle class="error  white--text" v-if="error">
-      {{message}}
+      {{ message }}
     </v-card-subtitle>
 
     <v-card-text>
-       <v-data-table :headers="tableHeaders" :items="attribute.options">
-          <template v-slot:body="{ headers, items }">
-            <tbody>
-              <tr class="text-start" v-for="(row, i) of items" :key="i">
-                <td v-for="col of headers" :key="col.accessor">
-                  <v-btn v-if="col.accessor == '_action_'" icon @click="deleteValue(row)" color="error">
-                    <v-icon>mdi-minus-circle</v-icon>
-                  </v-btn>
-                  <component v-else :is="col.ui" v-bind="buildDynCompProps(col, row)"
-                    v-on:valueChanged="valueChanged"
-                  ></component>
-                </td>
-              </tr>
-            </tbody>
-          </template>
-        </v-data-table>
+      <v-data-table :headers="tableHeaders" :items="attribute.options">
+        <template v-slot:body="{ headers, items }">
+          <tbody>
+            <tr class="text-start" v-for="(row, i) of items" :key="i">
+              <td v-for="col of headers" :key="col.accessor">
+                <v-btn
+                  v-if="col.accessor == '_action_'"
+                  icon
+                  @click="deleteValue(row)"
+                  color="error"
+                >
+                  <v-icon>mdi-minus-circle</v-icon>
+                </v-btn>
+                <component
+                  v-else
+                  :is="col.ui"
+                  v-bind="buildDynCompProps(col, row)"
+                  v-on:valueChanged="valueChanged"
+                ></component>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-data-table>
     </v-card-text>
     <v-card-actions>
-      <div  v-if="addNew">
+      <div v-if="addNew">
         <v-btn @click="toggleNewValue" color="warning" large>
           <v-icon>mdi-minus-circle</v-icon>Cancel
         </v-btn>
-        <v-btn @click="saveNewValue" color="primary" large :disabled="!newValueDirty">
+        <v-btn
+          @click="saveNewValue"
+          color="primary"
+          large
+          :disabled="!newValueDirty"
+        >
           <v-icon dark>mdi-content-save</v-icon>Save
         </v-btn>
       </div>
@@ -39,17 +52,18 @@
       </v-btn>
     </v-card-actions>
     <v-container v-if="addNew">
-        <v-layout row v-for="item of tableHeaders.slice(2)" :key="item.accessor">
-            <v-flex md4 >
-              {{item.text}}
-            </v-flex>
-            <v-flex md8>
-              <component :is="item.ui"
-                v-on:valueChanged="newValueChanged"
-                v-bind="buildDynCompProps(item, newValue)"
-              ></component>
-            </v-flex>
-        </v-layout>
+      <v-layout row v-for="item of tableHeaders.slice(2)" :key="item.accessor">
+        <v-flex md4>
+          {{ item.text }}
+        </v-flex>
+        <v-flex md8>
+          <component
+            :is="item.ui"
+            v-on:valueChanged="newValueChanged"
+            v-bind="buildDynCompProps(item, newValue)"
+          ></component>
+        </v-flex>
+      </v-layout>
     </v-container>
   </v-card>
 </template>
@@ -57,50 +71,52 @@
 <script>
 export default {
   props: {
-   id: Number,
-   isSwatch: Boolean | Number
+    id: Number,
+    useContainer: Boolean | Number,
   },
   data() {
     return {
-      attribute: {options: []},
+      attribute: { options: [] },
       headerDefine: [
-         {text: "Action", ui: false, accessor: "_action_"},
-         {text: "ID", ui: "z-label", accessor: "id"},
-         {text: "Value", ui: "config-text-item", accessor: "value"}
+        { text: "Action", ui: false, accessor: "_action_" },
+        { text: "ID", ui: "z-label", accessor: "id" },
+        { text: "Value", ui: "config-text-item", accessor: "value" },
       ],
       error: false,
       message: "",
       addNew: false,
       newValue: {
-        value: '',
-        swatch: ''
+        value: "",
+        use_container: "",
       },
-      newValueDirty: false
+      newValueDirty: false,
     };
   },
   computed: {
     tableHeaders() {
-     let headerDefine = [...this.headerDefine];
-     if (this.attribute.swatch) {
-       headerDefine.push(
-         {text: "Swatch Value", ui: "config-text-item", accessor: "swatch_value"}
-       );
-     }
-     return headerDefine;
-    }
+      let headerDefine = [...this.headerDefine];
+      if (this.attribute.use_container) {
+        headerDefine.push({
+          text: "Value use in container",
+          ui: "config-text-item",
+          accessor: "value_in_container",
+        });
+      }
+      return headerDefine;
+    },
   },
   methods: {
     fetchAttributeWithOptions() {
-      this.$store.dispatch('showSpinner', 'Fetching mapping values...');
+      this.$store.dispatch("showSpinner", "Fetching mapping values...");
       return axios
-          .get(`/api/v1/admin/dynamic-attributes/${this.id}/values`)
-          .then(response => {
-            this.$store.dispatch("HIDE_SPINNER");
-            if (response && response.success) {
-              this.attribute = response.data;
-            }
-            this.$store.dispatch('hideSpinner');
-          });
+        .get(`/api/v1/admin/dynamic-attributes/${this.id}/values`)
+        .then((response) => {
+          this.$store.dispatch("HIDE_SPINNER");
+          if (response && response.success) {
+            this.attribute = response.data;
+          }
+          this.$store.dispatch("hideSpinner");
+        });
     },
     buildDynCompProps(define, rowItem) {
       var data = Object.assign({}, define);
@@ -110,7 +126,7 @@ export default {
     },
     checkValueDuplicate(data) {
       var value = data[data.accessor];
-      var foundItems = this.attribute.options.filter(item => {
+      var foundItems = this.attribute.options.filter((item) => {
         return item[data.accessor].toLowerCase() === value.toLowerCase();
       });
       var message = `Attribute[id=${data.idx}]'s ${data.accessor}="${value}" is duplicated. Change has been rollbacked.`;
@@ -131,18 +147,15 @@ export default {
       if (this.error) {
         data.rollback = true;
       } else {
-
       }
     },
     toggleNewValue() {
       this.addNew = !this.addNew;
       this.newValue.value = "";
-      this.newValue.swatch = "";
+      this.newValue.use_container = "";
       this.newValueDirty = false;
     },
-    deleteValue(item) {
-
-    },
+    deleteValue(item) {},
     newValueChanged(data) {
       this.newValue[data.accessor] = data.value;
       this.newValueDirty = true;
@@ -151,9 +164,7 @@ export default {
         this.newValueDirty = false;
       }
     },
-    saveNewValue() {
-      
-    }
+    saveNewValue() {},
   },
   mounted() {
     if (this.id) {
@@ -166,9 +177,9 @@ export default {
       this.toggleNewValue();
       this.fetchAttributeWithOptions();
     },
-    isSwatch(nV, oV) {
-      this.attribute.swatch = nV;
-    }
-  }
+    useContainer(nV, oV) {
+      this.attribute.useContainer = nV;
+    },
+  },
 };
 </script>

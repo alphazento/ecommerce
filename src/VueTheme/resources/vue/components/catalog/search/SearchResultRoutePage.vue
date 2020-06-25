@@ -1,13 +1,15 @@
 <template>
-    <search-result-card>
-        <template>
-            <filters-card></filters-card>
-        </template>
-    </search-result-card>
+  <search-result-card :page-data="pageData">
+    <template>
+      <filters-card :page-data="pageData"></filters-card>
+    </template>
+  </search-result-card>
 </template>
 
 <script>
 export default {
-    computed: {}
+  props: {
+    pageData: Object,
+  },
 };
 </script>

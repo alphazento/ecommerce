@@ -18,8 +18,8 @@ class PrepareVueBlade extends \Zento\Kernel\PackageManager\Console\Commands\Base
      *
      * @var string
      */
-    protected $signature = 'vueblade:prepare';
-    protected $description = 'prepare vue blade theme/package';
+    protected $signature = 'vueproject:prepare';
+    protected $description = 'prepare vue theme/package project';
 
     protected $aliases = [];
     protected $mix = [];

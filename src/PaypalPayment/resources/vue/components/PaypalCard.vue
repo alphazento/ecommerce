@@ -1,14 +1,16 @@
 <template>
-  <PayPal
-    :env="configs.mode"
-    :amount="quote.grand_total"
-    :currency="quote.currency"
-    :client="configs.credentials"
-    :button-style="configs.style"
-    v-on:payment-authorized="authorized"
-    v-on:payment-completed="completed"
-    v-on:payment-cancelled="cancelled"
-  ></PayPal>
+  <v-container>
+    <PayPal
+      :env="configs.mode"
+      :amount="quote.grand_total"
+      :currency="quote.currency"
+      :client="configs.credentials"
+      :button-style="configs.style"
+      v-on:payment-authorized="authorized"
+      v-on:payment-completed="completed"
+      v-on:payment-cancelled="cancelled"
+    ></PayPal>
+  </v-container>
 </template>
 
 <script>

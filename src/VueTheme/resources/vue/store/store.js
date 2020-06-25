@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 
 import app from "./modules/app";
-import catalogSearch from "./modules/catalogSearch";
+import catalog from "./modules/catalog";
 import checkout from "./modules/checkout";
 import customer from "./modules/customer";
 import quote from "./modules/quote";
@@ -12,7 +12,7 @@ window.Vue.use(Vuex)
 export default new Vuex.Store({
     modules: {
         app,
-        catalogSearch,
+        catalog,
         checkout,
         customer,
         quote,

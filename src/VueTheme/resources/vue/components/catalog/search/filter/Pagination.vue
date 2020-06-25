@@ -9,22 +9,23 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      page: this.$store.state.searchResult.current_page
+      page: 1,
     };
   },
-
+  created() {
+    this.page = this.searchResult.current_page;
+  },
   computed: {
-    searchResult() {
-      return this.$store.state.searchResult;
-    }
+    ...mapGetters(["searchResult"]),
   },
   methods: {
     paginateTo(page) {
       this.$store.dispatch("CATALOG_SEARCH_PAGINATE_TO", page);
-    }
-  }
+    },
+  },
 };
 </script>

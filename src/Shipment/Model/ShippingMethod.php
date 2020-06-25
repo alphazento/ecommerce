@@ -35,7 +35,7 @@ abstract class ShippingMethod implements \Zento\Contracts\Interfaces\Shipment\IM
     public function __set($key, $value)
     {
         if (in_array($key, self::PROPERTIES) || in_array($key, $this->extraAttributes)) {
-            Config::save(sprintf('shipment.%s.%s', $this->uqiue_method_name, $key), $value);
+            Config::set(sprintf('shipment.%s.%s', $this->uqiue_method_name, $key), $value);
         }
     }
 

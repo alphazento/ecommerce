@@ -11,7 +11,6 @@ class SalesOrderProduct extends \Illuminate\Database\Eloquent\Model
         'name',
         'product_id',
         'sku',
-        'price',
         'custom_price',
         'quantity',
         'shippable',
@@ -29,7 +28,7 @@ class SalesOrderProduct extends \Illuminate\Database\Eloquent\Model
         foreach ($quote->items ?? [] as $item) {
             $data = $item->toArray();
             $data['options'] = isset($data['options']) ? json_encode($data['options']) : '';
-            $data = Arr::except($data, ['id', 'cart_id']);
+            $data = Arr::except($data, ['id', 'cart_id', 'custom_price']);
             $data['order_id'] = $order_id;
             $data['actuals'] = isset($data['actuals']) ? json_encode($data['actuals']) : '';
             static::create($data);

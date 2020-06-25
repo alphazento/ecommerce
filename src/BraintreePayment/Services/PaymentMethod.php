@@ -1,29 +1,26 @@
 <?php
 
-namespace Zento\PaypalPayment\Services;
+namespace Zento\BraintreePayment\Services;
 
+use Zento\BraintreePayment\Consts;
+use Zento\BraintreePayment\Model\PaymentCapturerV1;
 use Zento\PaymentGateway\Interfaces\CapturePaymentResult;
-use Zento\PaypalPayment\Consts;
-use Zento\PaypalPayment\Model\PaymentCapturerV1;
-use Zento\PaypalPayment\Model\PaymentCapturerV2;
-use Zento\PaypalPayment\Model\PaymentPrimer;
-use Zento\ShoppingCart\Providers\Facades\ShoppingCartService;
 
 class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod
 {
     public function getCode()
     {
-        return 'paypalexpress';
+        return 'braintree';
     }
 
     public function getTitle()
     {
-        return config(Consts::CONFIG_KEY_TITLE, 'Paypal Express Checkout');
+        return config(Consts::CONFIG_KEY_TITLE, 'Braintree Checkout');
     }
 
     public function getIcon()
     {
-        return config(Consts::CONFIG_KEY_ICON, '/images/payment/paypal.png');
+        return config(Consts::CONFIG_KEY_ICON, '/images/payment/mixcard.png');
     }
 
     public function canOrder()
@@ -113,8 +110,7 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod
 
     public function prepare($params)
     {
-        // return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart("104b47b8-0f10-4669-9e02-b04c0daacf58"));
-        return (new PaymentPrimer)->getPaymentData(ShoppingCartService::cart($params['cart_id']));
+        return [];
     }
 
     /**
@@ -129,17 +125,16 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod
         $returns = [];
         switch ($version) {
             case 'v1':
-                $returns = (new PaymentCapturerV1)->execute($payment_data['payment']);
+                $returns = (new PaymentCapturerV1)->execute($payment_data);
                 break;
-            case 'v2':
-                $returns = (new PaymentCapturerV2)->execute($payment_data['payment']);
+            default:
+                break;
         }
-
         $success = $returns['success'] ?? false;
         $extTransactionId = $success ? $returns['transaction_id'] : 0;
         $totalAmount = 0;
-        if ($success && ($returns['data']['transactions'] ?? false)) {
-            $totalAmount = $returns['data']['transactions'][0]['amount']['total'];
+        if ($success && ($returns['data']->transaction ?? false)) {
+            $totalAmount = $returns['data']->transaction->amount;
         } else {
             $success = false;
         }
@@ -162,27 +157,13 @@ class PaymentMethod implements \Zento\PaymentGateway\Interfaces\IMethod
 
     protected function prepareForVue()
     {
-        $url = (string) (route('payment.capture', ['method' => $this->getCode()]));
-        $mode = config(Consts::PAYMENT_GATEWAY_PAYPAL_MODE);
-        $clientId = config(sprintf(Consts::PAYMENT_GATEWAY_PAYPAL_CLIENT_ID_BY_MODE, $mode));
+        // $url = (string) (route('payment.capture', ['method' => $this->getCode()]));
         return [
             'name' => $this->getCode(),
             'title' => $this->getTitle(),
-            'component' => 'paypal-card',
+            'component' => 'braintree-card',
             'withCards' => false,
             'image' => $this->getIcon(),
-            'configs' => [
-                'mode' => $mode,
-                'currency' => config(\Zento\StoreFront\Consts::CURRENCY),
-                'credentials' => [
-                    'sandbox' => $mode === 'sandbox' ? $clientId : '',
-                    'production' => $mode === 'sandbox' ? '' : $clientId,
-                ],
-                'style' => config(Consts::CONFIG_KEY_BUTTON_STYLE, []),
-                'params' => [
-                    'capture_url' => str_replace('https:', 'http:', $url),
-                ],
-            ],
         ];
     }
 }

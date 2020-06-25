@@ -10,7 +10,7 @@ export default new Vuex.Store({
         swatches: {},
 
         pageData: {
-            catalog_search_uri: "",
+            uri: "",
             title: ""
         },
     },

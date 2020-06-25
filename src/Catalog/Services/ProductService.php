@@ -62,10 +62,10 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
         return Product::{$method}(...$args);
     }
 
-    public function getProductSwatches()
+    public function getProductAttrContainers()
     {
         $attributes = DynamicAttribute::with(['options'])
-            ->where('swatch', '>', 0)
+            ->where('use_container', '>', 0)
             ->where('active', 1)
             ->get();
 
@@ -73,7 +73,7 @@ class ProductService implements \Zento\Contracts\Interfaces\Service\ProductServi
         foreach ($attributes as $attr) {
             $options = [];
             foreach ($attr->options as $option) {
-                $options[$option->value] = $option->swatch_value;
+                $options[$option->value] = $option->value_in_container;
             }
             $results[$attr->name] = $options;
         }

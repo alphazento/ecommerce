@@ -21,7 +21,6 @@ const app = new Vue({
   data: {
     user: @json($user),
     pagination: @json($pageData['products']),
-    swatches: @json($swatches)
   },
   methods: {
     closeFilter() {
@@ -30,6 +29,7 @@ const app = new Vue({
   },
   created() {
       this.$store.dispatch('BIND_CUSTOMER', this.user);
+      this.$store.dispatch('SET_PRODUCT_ATTR_CONTAINERS', @json($attrContainers));
   }
 });
 </script>
