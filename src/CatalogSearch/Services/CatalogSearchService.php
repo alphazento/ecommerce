@@ -7,9 +7,9 @@ use Closure;
 use DB;
 use ShareBucket;
 use Zento\Catalog\Model\ORM\Category;
-use Zento\Catalog\Model\ORM\CategoryProduct;
+use Zento\Catalog\Model\ORM\Category\CategoryProductLink;
 use Zento\Catalog\Model\ORM\Product;
-use Zento\Catalog\Model\ORM\ProductPrice;
+use Zento\Catalog\Model\ORM\Product\ProductPrice;
 use Zento\Catalog\Providers\Facades\CategoryService;
 use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 use Zento\Kernel\Booster\Pagination\LengthAwarePaginator;
@@ -53,7 +53,7 @@ class CatalogSearchService
     protected $categoryProductTable;
     public function __construct()
     {
-        $this->categoryProductTable = (new CategoryProduct)->getTable();
+        $this->categoryProductTable = (new CategoryProductLink)->getTable();
     }
 
     public function registerCriteriaFilter(string $name, Closure $callback)

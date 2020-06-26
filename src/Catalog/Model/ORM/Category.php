@@ -66,7 +66,7 @@ class Category extends \Illuminate\Database\Eloquent\Model implements ICategory
      */
     public function products()
     {
-        return $this->hasManyThrough(Product::class, CategoryProduct::class, 'category_id', 'id', 'id', 'product_id');
+        return $this->hasManyThrough(Product::class, Category\CategoryProductLink::class, 'category_id', 'id', 'id', 'product_id');
     }
 
     /**

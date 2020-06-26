@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCategoryProductTable extends Migration
+class CreateProductTagLinkTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class CreateCategoryProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_products', function (Blueprint $table) {
+        Schema::create('product_tag_links', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unsigned();
-            $table->integer('product_id')->unsigned();
-            $table->boolean('direct_relation')->default(0);
-            $table->integer('position');
+            $table->integer('tag_id')->unsigned()->index();
+            $table->integer('product_id')->unsigned()->index();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateCategoryProductTable extends Migration
      */
     public function down()
     {
-        Schema::drop('category_products');
+        Schema::drop('product_tag_links');
     }
 }

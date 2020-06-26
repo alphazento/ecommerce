@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Catalog\Model\ORM;
+namespace Zento\Catalog\Model\ORM\Category;
 
 class CategoryDescription extends \Illuminate\Database\Eloquent\Model
 {

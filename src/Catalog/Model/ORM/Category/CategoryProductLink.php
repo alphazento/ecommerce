@@ -1,8 +1,8 @@
 <?php
 
-namespace Zento\Catalog\Model\ORM;
+namespace Zento\Catalog\Model\ORM\Category;
 
-class CategoryProduct extends \Illuminate\Database\Eloquent\Model
+class CategoryProductLink extends \Illuminate\Database\Eloquent\Model
 {
     public function getForeignKeyName()
     {

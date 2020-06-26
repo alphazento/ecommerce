@@ -10,6 +10,7 @@ return [
         "depends" => [
             "Zento_Backend",
             "Zento_RouteAndRewriter",
+            'Zento_CatalogTag',
         ],
     ],
 ];

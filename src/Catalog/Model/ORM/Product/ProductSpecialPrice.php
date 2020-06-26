@@ -1,6 +1,6 @@
 <?php
 
-namespace Zento\Catalog\Model\ORM;
+namespace Zento\Catalog\Model\ORM\Product;
 
 class ProductSpecialPrice extends \Illuminate\Database\Eloquent\Model
 {
