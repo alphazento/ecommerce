@@ -2,7 +2,6 @@
 
 namespace Zento\Catalog\Model\ORM;
 
-use Illuminate\Database\Eloquent\Concerns\SelfMorphModel;
 use Illuminate\Database\Eloquent\Model;
 use ShareBucket;
 use Zento\Catalog\Model\ORM\Concerns\TraitCartProduct;
@@ -10,6 +9,7 @@ use Zento\Catalog\Model\ORM\Concerns\TraitProductPrice;
 use Zento\Catalog\Model\ORM\Concerns\TraitProductTag;
 use Zento\Contracts\Interfaces\Catalog\IProduct;
 use Zento\Kernel\Booster\Database\Eloquent\DA\DynamicAttributeAbility;
+use Zento\Kernel\Support\Traits\SelfMorphModel;
 
 class Product extends Model implements IProduct
 {

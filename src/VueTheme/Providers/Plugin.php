@@ -7,19 +7,23 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Storage;
 use Zento\BladeTheme\Facades\BladeTheme;
+use Zento\BladeTheme\Http\Controllers\CatalogController;
+use Zento\BladeTheme\Http\Controllers\GeneralController;
 use Zento\Kernel\Facades\PackageManager;
 use Zento\Kernel\Facades\ThemeManager;
 use Zento\StoreFront\Consts as StoreFrontConsts;
 use Zento\VueTheme\Consts as VueThemeConsts;
+use Zento\VueTheme\Http\Controllers\CatalogController as VueThemeCatalogController;
+use Zento\VueTheme\Http\Controllers\GeneralController as VueThemeGeneralController;
 
 class Plugin extends ServiceProvider
 {
     public function register()
     {
-        ThemeManager::whenSetTheme('Zento_VueTheme', function ($app) {
-            \Zento\BladeTheme\Http\Controllers\CatalogController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\CatalogController';
-            \Zento\BladeTheme\Http\Controllers\GeneralController::$OverwriteBy = '\Zento\VueTheme\Http\Controllers\GeneralController';
+        $this->app->bind(CatalogController::class, VueThemeCatalogController::class);
+        $this->app->bind(GeneralController::class, VueThemeGeneralController::class);
 
+        ThemeManager::whenSetTheme('Zento_VueTheme', function ($app) {
             $viewLocation = sprintf('%s/notifications', PackageManager::packageViewsPath('Zento_VueTheme'));
             $app['view']->addNamespace('notifications', $viewLocation);
         });

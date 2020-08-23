@@ -6,14 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use ShareBucket;
 use Zento\BladeTheme\Facades\BladeTheme;
-use Zento\BladeTheme\Http\Controllers\TraitThemeRouteOverwritable;
 use Zento\Customer\Model\ORM\Customer;
 use Zento\Kernel\Http\Controllers\TraitApiResponse;
 
 class RegisterController extends \App\Http\Controllers\Auth\RegisterController
 {
     use TraitApiResponse;
-    use TraitThemeRouteOverwritable;
 
     /**
      * Show the application registration form.

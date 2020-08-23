@@ -11,7 +11,7 @@ use Zento\Kernel\Booster\Database\Eloquent\DA\ORM\DynamicAttribute;
 
 class CatalogController extends Controller
 {
-    use TraitThemeRouteOverwritable;
+    use TraitCartHelper;
     protected $allCategories;
 
     /**

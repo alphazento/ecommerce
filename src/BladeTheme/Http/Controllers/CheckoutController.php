@@ -10,7 +10,7 @@ use Route;
 
 class CheckoutController extends \App\Http\Controllers\Controller
 {
-    use TraitThemeRouteOverwritable;
+    use TraitCartHelper;
 
     /**
      * Render shopping cart page

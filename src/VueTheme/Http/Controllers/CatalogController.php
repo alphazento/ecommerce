@@ -28,12 +28,6 @@ class CatalogController extends \Zento\BladeTheme\Http\Controllers\CatalogContro
             $category = $data['category'];
             $view->with('currentCateId', $category->id)
                 ->with('jsonFields', [
-                    'physic' => '物理参数',
-                    'electronic' => '电学参数',
-                    'environment' => '环境参数',
-                    'safe' => '安全认证',
-                    'wireless' => '无线性能参数',
-                    'rfid' => 'RFID',
                 ]);
             return $view;
         }

@@ -29,7 +29,7 @@ class RouteAnalyzer
 
         $dockBlock = $this->retrieveRouteDockBlock($route);
         $tags = $dockBlock->tags;
-        $acl = false;
+        $acl = true;
         $scope = Consts::FRONTEND_SCOPE;
 
         $parts = explode('/', $route->uri);
@@ -40,7 +40,7 @@ class RouteAnalyzer
                 $acl = !isset($tags['no-acl']);
             }
         } else {
-            //admin default will not need acl, if there's a tag 'acl', it will be true
+            //admin default will need acl, if there's a tag 'acl', it will be true
             $acl = isset($tags['acl']);
         }
 

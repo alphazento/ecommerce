@@ -7,7 +7,7 @@ use Route;
 
 class GeneralController extends \App\Http\Controllers\Controller
 {
-    use TraitThemeRouteOverwritable;
+    use TraitCartHelper;
 
     /**
      * Render home page

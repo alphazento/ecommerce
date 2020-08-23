@@ -9,7 +9,7 @@ use Route;
 
 class ShoppingCartController extends \App\Http\Controllers\Controller
 {
-    use TraitThemeRouteOverwritable;
+    use TraitCartHelper;
 
     protected function createCart()
     {
