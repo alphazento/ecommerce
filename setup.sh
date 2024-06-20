@@ -20,11 +20,8 @@ php artisan package:enable Zento_Acl
 php artisan package:enable Zento_SalesAdmin
 php artisan package:enable Zento_DownloadableProduct
 php artisan package:enable Zento_ConfigurableProduct
+php artisan package:enable Zento_PaypalPayment
+php artisan package:enable Zento_EWayPayment
 php artisan package:enable Zento_VueTheme
-
-
- [WARNING] [Zento_EWayPayment] not actived.
-
- [WARNING] [Zento_PaypalPayment] not actived.
 
 php artisan vendor:publish --tag=Zento
