@@ -27,9 +27,16 @@ const app = new Vue({
   store,
   vuetify: new Vuetify(),
   router: router,
+  data() {
+    return {
+      loaded: false
+    }
+  },
   created() {
     this.$store.dispatch('CATALOG_SEARCH_SUCCESS', @json($pagination));
     this.$store.dispatch('SET_PRODUCT_ATTR_CONTAINERS', @json($attrContainers));
+    this.loaded = true;
+    window.hidePageLoader();
   }
 });
 </script>

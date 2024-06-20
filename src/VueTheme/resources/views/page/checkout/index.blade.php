@@ -29,10 +29,13 @@
         vuetify: new Vuetify(),
         data: {
           quote: @json($cart),
+          loaded: false
         },
         created() {
             this.$store.dispatch('QUOTE_SUCCESS', this.quote);
             this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
+            this.loaded = true;
+            window.hidePageLoader();
         }
     });
     </script>

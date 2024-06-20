@@ -60,6 +60,7 @@
         data() {
             let product = @json($product->toArray());
             return {
+                loaded: false,
                 product: product,
                 tabs: @json($tabs),
                 detailTabs: @json($jsonFields),
@@ -70,6 +71,8 @@
         created() {
             this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
             this.$store.dispatch('SET_PRODUCT_ATTR_CONTAINERS', @json($attrContainers));
+            this.loaded = true;
+            window.hidePageLoader();
         },
         methods: {
             updateImages(images) {

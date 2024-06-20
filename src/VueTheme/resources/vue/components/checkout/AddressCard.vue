@@ -1,8 +1,8 @@
 <template>
   <v-form ref="checkout_address_form" v-model="valid" lazy-validation>
     <v-card color="lighten-1" class="mb-12" flat>
-      <v-container>
-        <v-layout row>
+      <v-card-text>
+        <v-layout row class="container">
           <v-flex md6 xs12>
             <v-text-field
               v-model="addressData.name"
@@ -44,9 +44,11 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-      </v-container>
+      </v-card-text>
+      <v-card-actions class="container">
+        <v-btn style="width:100%" color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
+      </v-card-actions>
     </v-card>
-    <v-btn color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
   </v-form>
 </template>
 
@@ -56,17 +58,17 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
   props: {
     step: {
-      type: Number
+      type: Number,
     },
     complete: {
-      type: Boolean
+      type: Boolean,
     },
     fullname: {
-      type: String
+      type: String,
     },
     address: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   data() {
@@ -82,17 +84,17 @@ export default {
             country: "",
             postal_code: "",
             state: "",
-            phone: ""
+            phone: "",
           },
       dataChanged: false,
       valid: false,
-      addressRules: [v => !!v || "Address is required"],
+      addressRules: [(v) => !!v || "Address is required"],
       rules: {
-        required: v => !!v || "Required Field.",
-        max128: v => !v || v.length <= 128 || "Max 128 characters",
-        max255: v => !v || v.length <= 64 || "Max 64 characters",
-        maxPhone: v => !v || v.length <= 15 || "Max 15 characters"
-      }
+        required: (v) => !!v || "Required Field.",
+        max128: (v) => !v || v.length <= 128 || "Max 128 characters",
+        max255: (v) => !v || v.length <= 64 || "Max 64 characters",
+        maxPhone: (v) => !v || v.length <= 15 || "Max 15 characters",
+      },
     };
   },
 
@@ -103,10 +105,10 @@ export default {
           this.$store
             .dispatch("QUOTE_ASSIGN_SHIPPING_ADDRESS_REQUEST", this.addressData)
             .then(
-              response => {
+              (response) => {
                 this.$emit("childMessage", this.step);
               },
-              error => {
+              (error) => {
                 console.error(
                   "Got nothing from server. Prompt user to check internet connection and try again"
                 );
@@ -137,7 +139,7 @@ export default {
       this.addressData.postal_code = googleAddress.postal_code;
       this.addressData.address1 = googleAddress.street_number;
       this.addressData.address2 = googleAddress.route;
-    }
+    },
   },
 
   computed: {
@@ -148,17 +150,17 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
 
   components: { VueGoogleAutocomplete },
   watch: {
-    fullname: function(newVal, oldVal) {
+    fullname: function (newVal, oldVal) {
       // watch it
       if ("" === this.addressData.name) {
         this.addressData.name = newVal;
       }
-    }
-  }
+    },
+  },
 };
 </script>

@@ -4,6 +4,7 @@ namespace Zento\Catalog\Model\ORM;
 
 use Illuminate\Database\Eloquent\Model;
 use ShareBucket;
+use Zento\Catalog\Model\ORM\Category\CategoryProductLink;
 use Zento\Catalog\Model\ORM\Concerns\TraitCartProduct;
 use Zento\Catalog\Model\ORM\Concerns\TraitProductPrice;
 use Zento\Catalog\Model\ORM\Concerns\TraitProductTag;

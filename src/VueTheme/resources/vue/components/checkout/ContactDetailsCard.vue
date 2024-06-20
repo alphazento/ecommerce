@@ -11,8 +11,8 @@
           required
         ></v-text-field>
       </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
+      <v-card-actions class="container">
+        <v-btn style="width:100%" color="primary" :disabled="!valid" @click="childMessage">Continue</v-btn>
       </v-card-actions>
       <slot></slot>
     </v-card>
@@ -25,47 +25,47 @@ import { mapGetters } from "vuex";
 export default {
   props: {
     step: {
-      type: Number
+      type: Number,
     },
     complete: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   data() {
     return {
       guest: {},
       valid: false,
       nameRules: [
-        v => !!v || "Name is required",
-        v => (v && v.length <= 60) || "Name must be less than 10 characters"
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length <= 60) || "Name must be less than 10 characters",
       ],
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-      ]
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
     };
   },
   created() {
     this.guest = Object.assign({}, this.customer);
   },
   computed: {
-    ...mapGetters(["customer"])
+    ...mapGetters(["customer"]),
   },
   methods: {
     childMessage() {
       if (this.$refs.checkout_user_form.validate()) {
         this.$store
           .dispatch("CHECKOUT_AS_GUEST_CUSTOMER", this.guest)
-          .then(response => {
+          .then((response) => {
             this.$emit("childMessage", this.step);
           });
       }
-    }
+    },
   },
   watch: {
     customer() {
       this.guest = Object.assign({}, this.customer);
-    }
-  }
+    },
+  },
 };
 </script>

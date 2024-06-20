@@ -23,17 +23,17 @@ export default {
   mixins: [mixin.default],
   props: {
     item: {
-      type: Object
+      type: Object,
     },
     productImage: {
-      type: String
+      type: String,
     },
     notQuantitive: {
-      type: Boolean
+      type: Boolean,
     },
     productUrl: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -44,8 +44,13 @@ export default {
         : this.item.product.image,
       product_url: this.productUrl
         ? this.productUrl
-        : this.getProductUrl(this.item.product)
+        : this.getProductUrl(this.item.product),
     };
-  }
+  },
+  methods: {
+    deleteCartItem(item) {
+      this.$store.dispatch("DELETE_QUOTE_ITEM_REQUEST", item.id);
+    },
+  },
 };
 </script>

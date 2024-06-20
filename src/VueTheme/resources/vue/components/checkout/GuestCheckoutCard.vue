@@ -40,7 +40,7 @@
             </checkout-contact-card>
           </v-stepper-content>
 
-          <v-stepper-step :complete="step > 2" step="2">
+          <v-stepper-step :complete="step > 2" step="2" class="step-header-container">
             <v-layout class="step-header">
               <v-flex md8>Delivery Address</v-flex>
               <v-flex v-if="step > 2" md4 class="text-right">
@@ -58,7 +58,11 @@
             ></checkout-address-card>
           </v-stepper-content>
 
-          <v-stepper-step :complete="step > 3" step="3">Payment Options</v-stepper-step>
+          <v-stepper-step
+            :complete="step > 3"
+            step="3"
+            class="step-header-container"
+          >Payment Options</v-stepper-step>
           <v-stepper-content step="3">
             <checkout-payment-card
               :complete="step > 3"
@@ -82,20 +86,20 @@ export default {
       valid: false,
       step: 1,
       nameRules: [
-        v => !!v || "Name is required",
-        v => (v && v.length <= 10) || "Name must be less than 10 characters"
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
       ],
       email: "",
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
-      address: ""
+      address: "",
     };
   },
 
   computed: {
-    ...mapGetters(["customer", "quote", "quoteIsEmpty"])
+    ...mapGetters(["customer", "quote", "quoteIsEmpty"]),
   },
 
   methods: {
@@ -104,8 +108,8 @@ export default {
         this.fullname = this.customer.name;
       }
       this.step = step + 1;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -115,5 +119,12 @@ export default {
   .step-header {
     width: 100%;
   }
+}
+.step-header-container {
+  padding: 12px 4px 0 4px !important;
+}
+.v-stepper__content {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 </style>

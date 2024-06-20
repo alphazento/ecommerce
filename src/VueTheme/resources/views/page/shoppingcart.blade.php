@@ -5,7 +5,7 @@
 @endpush
 
 @section('pagecontent')
-    <h1 class="index_h1">Shopping Cart | Alphazento</h1>
+    <h1 class="index_h1">Shopping Cart</h1>
     <shopping-cart-card></shopping-cart-card>
 @endsection
 
@@ -17,10 +17,13 @@
         store,
         vuetify: new Vuetify(),
         data: {
+          loaded: false,
           cart: @json($cart)
         },
         created() {
             this.$store.dispatch('QUOTE_SUCCESS', this.cart);
+            this.loaded = true;
+            window.hidePageLoader();
         }
     });
     </script>

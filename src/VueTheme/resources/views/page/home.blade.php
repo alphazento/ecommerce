@@ -5,9 +5,6 @@
 @endpush
 
 @section('pagecontent')
-    <?php
-
-?>
     <section>
         <!-- This comp. can have a modal included. -->
         <image-carousel
@@ -36,11 +33,14 @@
         vuetify: new Vuetify(),
         data() {
             var pageData = @json($pageData);
+            pageData.loaded = false;
             return pageData;
         },
         created() {
             console.log('data', this.$data)
             this.$store.dispatch('BIND_CUSTOMER', window.appData.user);
+            this.loaded = true;
+            window.hidePageLoader();
         }
     });
 </script>
